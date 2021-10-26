@@ -1,0 +1,8 @@
+{
+    "python.linting.enabled": false,
+
+    "problems.decorations.enabled": false,
+    "files.associations": {
+        ".groovy": "groovy"
+     }
+}
