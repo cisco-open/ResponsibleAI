@@ -1,4 +1,3 @@
-
 __all__ = ['Model', 'model_caps']
 
 model_caps = ['predict', 'prob']

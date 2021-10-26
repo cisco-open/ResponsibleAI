@@ -1,31 +1,26 @@
-
 from .metric import Metric
 from RAI.metrics.registry import register_class
-
 
 __all__ = ['MetricGroup']
 
 all_complexity_classes = {  "constant",  "linear" ,  "multi_linear", "polinomial", "exponential" }
 
 
-
-class MetricGroup(object):
-    
+class MetricGroup(object):    
     name = ""
     def __init_subclass__(cls, name=None, **kwargs):
         super().__init_subclass__(**kwargs)
         cls.name = name
         register_class(name, cls)
 
-    def __init__(self,ai_system, config) -> None:
-        
+
+    def __init__(self,ai_system, config) -> None:        
         self.ai_system = ai_system
         self.persistent_data = {}
         self.dependency_list = []
         self.metrics = {}
         self.tags = []
         self.complexity_class = None
-    
         self.status = "OK"
         self.reset()
         
@@ -33,8 +28,6 @@ class MetricGroup(object):
             self.status = "OK"
         else:
             self.status = "BAD"
-        
-        
 
 
     def reset(self):
@@ -43,7 +36,7 @@ class MetricGroup(object):
         self.persistent_data = {}
         self.value = None
         self.status = "OK"
-        
+
     
     def load_config(self, config):
     
@@ -70,9 +63,11 @@ class MetricGroup(object):
         for metric_name in self.metrics:
             results[metric_name] = self.metrics[metric_name].value
         return results
-        
+
+     
     def compute(self, data):
         pass
+
 
     def update(self, data):
         pass

@@ -1,6 +1,6 @@
-
 __all__ = ['Feature', 'MetaDatabase', 'Data', 'Dataset']
 import numpy as np
+
 
 class Feature:
     def __init__(self, name, dtype, description) -> None:
@@ -25,8 +25,8 @@ class Data:
             return 1
         return shape[0]
     
-    def __getitem__(self, key):      
-        
+
+    def __getitem__(self, key):              
         shape = np.shape(self.X)
         if len(shape)==1:
             if key!=0:

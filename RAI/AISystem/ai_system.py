@@ -2,20 +2,9 @@ import numpy as np
 import pandas as pd
 import sklearn as sk
 import time
-
 from RAI.metrics.registry import registry
 from .task import *
 from RAI.dataset import *
-
-
-
-
-
- 
-
-
-
-
 
 
 class AISystem:
@@ -38,10 +27,9 @@ class AISystem:
             self.metric_groups[metric_group_name] = registry[metric_group_name](self)
             print("metric group : {} was created".format(metric_group_name))
 
-        
 
-   
-    def get_metric(self, metric_group_name, metric_name):
+# May be more convinient to just accept metric name (or add funcitonality to detect group names and return a dictionary)
+    def get_metric(self, metric_group_name, metric_name): 
         print("request for metric group : {}, metric_name : {}".format(metric_group_name,metric_name))
         return self.metric_groups[metric_group_name].metrics[metric_name].value
 
@@ -50,7 +38,8 @@ class AISystem:
         for metric_group_name in self.metric_groups:
            self.metric_groups[metric_group_name].reset()
         self.sample_count = 0
-        self.time_stamp = None
+        self.time_stamp = None  # Replace by registering a time metric in metric_groups? 
+
 
     def get_data(self, data_type) :
         if data_type == "train":
@@ -60,6 +49,7 @@ class AISystem:
         if data_type == "test":
             return self.dataset.test_data
         raise Exception("unknown data type : {}".format(data_type))
+
 
     def compute_metrics(self, reset_metrics=False, data_type = "train"):
         if reset_metrics:
@@ -71,12 +61,14 @@ class AISystem:
         self.time_stamp = time.time()
         self.sample_count += len(data)
 
+
     def update_metrics(self, data):
         for i in range(len(data)):
             for metric_group_name in self.metric_groups:
                 self.metric_groups[metric_group_name].update(data[i])
         self.time_stamp = time.time()
         self.sample_count += 1
+
 
     def export_metrics_values(self):
         result = {}

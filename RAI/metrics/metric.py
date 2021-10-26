@@ -6,7 +6,6 @@ from RAI.metrics.registry import register_class
 metric_types = {  "numeric" , "multivalued", "other"}
 
 
-
 class Metric:
     def __init__(self, name, config) -> None:
         self.name = name
@@ -15,12 +14,10 @@ class Metric:
         self.has_range = False
         self.range = None
         self.value_list = None
-
         self.load_config(config)
         
     
     def load_config(self, config):
-        
         if "type" in config:
             if config["type"] in metric_types:
                 self.type = config["type"]

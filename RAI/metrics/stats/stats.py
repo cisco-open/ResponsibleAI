@@ -3,6 +3,7 @@ import math
 import numpy as np
 
 
+# Move config to external .json? 
 _config = {
     "dependency_list":[],
     "tags":["stats"],
@@ -32,9 +33,7 @@ _config = {
             "has_range":True,
             "range":[0,1],
         },
-        
     }
-
 }
 
 
@@ -45,6 +44,7 @@ class StatMetricGroup(MetricGroup, name = "stat"):
     
     def update(self, data):
         pass
+
     
     def compute(self, data):
         self.metrics["mean"].value = np.mean ( data.X )

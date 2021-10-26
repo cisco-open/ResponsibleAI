@@ -4,8 +4,8 @@ __all__ = ['Task', 'task_types' ]
 from .model import *
 task_types = ["binary_classification", "multiclass_classification", "regression" ] 
 
-# task is an abstraction for general machine learning tasks, 
 
+# task is an abstraction for general machine learning tasks, 
 class Task:
     def __init__(self, model, type, description="") -> None:
         self.model = model
