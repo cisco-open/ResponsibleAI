@@ -82,9 +82,10 @@ class ClassBiasMetricGroup(MetricGroup, name="class_bias"):
         if "data" and "predictions" in data_dict:
             data = data_dict["data"]
             preds = data_dict["predictions"]
-            args = None
-            if "args" in self.ai_system.user_config["bias"]:
+            args = {}
+            if "bias" in self.ai_system.user_config and "args" in self.ai_system.user_config["bias"]:
                 args = self.ai_system.user_config["bias"]["args"]
+
             self.metrics["accuracy"].value = sklearn.metrics.accuracy_score(data.y, preds, **args.get("accuracy", {}))
             self.metrics["balanced_accuracy"].value = sklearn.metrics.balanced_accuracy_score(data.y, preds, **args.get("balanced_accuracy", {}))
             self.metrics["confusion_matrix"].value = sklearn.metrics.confusion_matrix(data.y, preds, **args.get("confusion_matrix", {}))

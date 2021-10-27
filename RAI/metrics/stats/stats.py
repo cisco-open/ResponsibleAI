@@ -37,36 +37,23 @@ _config = {
     }
 }
 
-
-_data_dependent = {
-    "disparate-impact": {
-        "type": "numeric",
-        "tags": [],
-        "has_range": True,
-        "range": [0, 1]
-    }
-}
-
-
 class StatMetricGroup(MetricGroup, name="stat"):
     def __init__(self, ai_system, config=_config) -> None:
-        new_config = _generate_config(config, ai_system.user_config)
-        super().__init__(ai_system, new_config)
+        super().__init__(ai_system, config)
+        self.ai_system = ai_system
 
     def update(self, data):
         pass
 
     def compute(self, data_dict):
         if "data" in data_dict:
+            args = {}
+            if "stats" in self.ai_system.user_config and "args" in self.ai_system.user_config["stats"]:
+                args = self.ai_system.user_config["stats"]["args"]
+
             data = data_dict["data"]
-            self.metrics["mean"].value = np.mean(data.X)
-            self.metrics["covariance"].value = np.cov(data.X)
+            self.metrics["mean"].value = np.mean(data.X, **args.get("mean", {}))
+            self.metrics["covariance"].value = np.cov(data.X, **args.get("covariance", {}))
             self.metrics["num-Nan-rows"].value = np.count_nonzero(np.isnan(data.X).any(axis=1))
             self.metrics["percent-Nan-rows"].value = self.metrics["num-Nan-rows"].value/np.shape(np.asarray(data.X))[0]
-
-def _generate_config(config, user_config):
-    if config["src"] != "stats":
-        return config
-    res = config
-    return res
 

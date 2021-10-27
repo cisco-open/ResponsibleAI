@@ -32,7 +32,6 @@ class MomentMetricGroup(StatMetricGroup, name="moment"):
         pass
     
     def compute(self, data_dict):
-        data = data_dict["data"]
         # these are just for feature test, not really correct
         self.metrics["second-moment"].value = 2* self.ai_system.get_metric("stat", "mean")
         self.metrics["third-moment"].value = 3* 2* self.ai_system.get_metric("stat", "mean")
