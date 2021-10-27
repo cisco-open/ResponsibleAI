@@ -3,7 +3,7 @@ from RAI.metrics.registry import register_class
 
 __all__ = ['MetricGroup']
 
-all_complexity_classes = {  "constant",  "linear" ,  "multi_linear", "polinomial", "exponential" }
+all_complexity_classes = {"constant",  "linear",  "multi_linear", "polynomial", "exponential"}
 
 
 class MetricGroup(object):    
@@ -13,7 +13,7 @@ class MetricGroup(object):
         cls.name = name
         register_class(name, cls)
 
-    def __init__(self,ai_system, config) -> None:        
+    def __init__(self, ai_system, config) -> None:
         self.ai_system = ai_system
         self.persistent_data = {}
         self.dependency_list = []
@@ -46,9 +46,9 @@ class MetricGroup(object):
             self.create_metrics(config["metrics"])
 
     def create_metrics(self, metrics_config):
-        print("METRIC GROUP, CREATING METRICS")
+        # print("METRIC GROUP, CREATING METRICS")
         for metric_name in metrics_config:
-            print("CREATING METRIC: ", metric_name)
+            # print("CREATING METRIC: ", metric_name)
             self.metrics[metric_name] = Metric(metric_name, metrics_config[metric_name])
 
     def export_metrics_values(self):

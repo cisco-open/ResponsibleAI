@@ -33,7 +33,7 @@ class AISystem:
         self.sample_count = 0
         self.time_stamp = None  # Replace by registering a time metric in metric_groups? 
 
-    def get_data(self, data_type) :
+    def get_data(self, data_type):
         if data_type == "train":
             return self.dataset.train_data
         if data_type == "val":
@@ -42,14 +42,16 @@ class AISystem:
             return self.dataset.test_data
         raise Exception("unknown data type : {}".format(data_type))
 
-    def compute_metrics(self, reset_metrics=False, data_type="train"):
+    def compute_metrics(self, preds=None, reset_metrics=False, data_type="train"):
         if reset_metrics:
             self.reset_metrics()
-        data = self.get_data(data_type)
+        data_dict = {"data": self.get_data(data_type)}
+        if preds is not None:
+            data_dict["predictions"] = preds
         for metric_group_name in self.metric_groups:
-            self.metric_groups[metric_group_name].compute(data)
+            self.metric_groups[metric_group_name].compute(data_dict)
         self.time_stamp = time.time()
-        self.sample_count += len(data)
+        self.sample_count += len(data_dict)
 
     def update_metrics(self, data):
         for i in range(len(data)):

@@ -2,6 +2,7 @@ import RAI
 from RAI.dataset import Feature, Data, MetaDatabase, Dataset
 from RAI.AISystem import AISystem, Model, Task
 
+print("START")
 
 # defining metadata, this should also be possible by loading a dictionary or reading from a json file later
 # Some do this through pandas DF.
@@ -37,7 +38,15 @@ ai = AISystem(meta_database=meta, dataset=dataset, task=task, user_config=config
 ai.initialize()
 
 
-ai.compute_metrics()
-print(ai.export_metrics_values())
+# dataset_y = [0, 2, 1, 0, 1]
+model_preds = [0, 1, 1, 0, 2]
+
+ai.compute_metrics(preds=model_preds)
+res = ai.export_metrics_values()
+for group in res:
+    print(group)
+    for metric in res[group]:
+        print("\t" + metric + ": " + str(res[group][metric]))
+
 
 
