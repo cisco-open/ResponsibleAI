@@ -70,9 +70,10 @@ _config = {
 }
 
 
-class BiasMetricGroup(MetricGroup, name="bias"):
+class ClassBiasMetricGroup(MetricGroup, name="class_bias"):
     def __init__(self, ai_system, config=_config) -> None:
         super().__init__(ai_system, config)
+        self.ai_system = ai_system
 
     def update(self, data):
         pass
@@ -81,16 +82,20 @@ class BiasMetricGroup(MetricGroup, name="bias"):
         if "data" and "predictions" in data_dict:
             data = data_dict["data"]
             preds = data_dict["predictions"]
-            self.metrics["accuracy"].value = sklearn.metrics.accuracy_score(data.y, preds)
-            self.metrics["balanced_accuracy"].value = sklearn.metrics.balanced_accuracy_score(data.y, preds)
-            self.metrics["confusion_matrix"].value = sklearn.metrics.confusion_matrix(data.y, preds)
+            args = None
+            if "args" in self.ai_system.user_config["bias"]:
+                args = self.ai_system.user_config["bias"]["args"]
+            self.metrics["accuracy"].value = sklearn.metrics.accuracy_score(data.y, preds, **args.get("accuracy", {}))
+            self.metrics["balanced_accuracy"].value = sklearn.metrics.balanced_accuracy_score(data.y, preds, **args.get("balanced_accuracy", {}))
+            self.metrics["confusion_matrix"].value = sklearn.metrics.confusion_matrix(data.y, preds, **args.get("confusion_matrix", {}))
             fptn = get_fptn(self.metrics["confusion_matrix"].value)  # TP, TN, FP, FN values. Used quite a bit.
-            self.metrics["fp_rate"].value = _fp_rate(fptn)
-            self.metrics["f1"].value = sklearn.metrics.f1_score(data.y, preds, average=None)
-            self.metrics["jaccard_score"].value = sklearn.metrics.jaccard_score(data.y, preds, average=None)
-            self.metrics["precision_score"].value = _precision_score(fptn)
-            self.metrics["recall_score"].value = _recall_score(fptn)
-            self.metrics["tp_rate"].value = _tp_rate(fptn)
+            self.metrics["fp_rate"].value = _fp_rate(fptn, **args.get("fp_rate", {}))
+            self.metrics["f1"].value = sklearn.metrics.f1_score(data.y, preds, average=None, **args.get("f1", {}))
+            self.metrics["jaccard_score"].value = sklearn.metrics.jaccard_score(data.y, preds, average=None, **args.get("jaccard_score", {}))
+            self.metrics["precision_score"].value = _precision_score(fptn, **args.get("precision_score", {}))
+            self.metrics["recall_score"].value = _recall_score(fptn, **args.get("recall_score", {}))
+            self.metrics["tp_rate"].value = _tp_rate(fptn, **args.get("tp_rate", {}))
+
 
 def get_fptn(confusion_matrix):
     result = {'fp': confusion_matrix.sum(axis=0) - np.diag(confusion_matrix),

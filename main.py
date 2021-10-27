@@ -11,7 +11,7 @@ features = [
     Feature("x3", 'float32', "third column") 
 ]
 meta = MetaDatabase(features)
-configuration = {"bias": {"sensitive_features": ["second column"]}}
+configuration = {"bias": {"args": {"accuracy": {"normalize": True}}, "sensitive_features": ["second column"]}}
 
 # creating data record for training
 
