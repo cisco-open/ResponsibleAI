@@ -72,7 +72,6 @@ _config = {
 
 class BiasMetricGroup(MetricGroup, name="bias"):
     def __init__(self, ai_system, config=_config) -> None:
-        print("THIS PART RAN")
         super().__init__(ai_system, config)
 
     def update(self, data):

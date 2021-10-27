@@ -50,7 +50,6 @@ _data_dependent = {
 
 class StatMetricGroup(MetricGroup, name="stat"):
     def __init__(self, ai_system, config=_config) -> None:
-        print("THIS PART RAN!")
         new_config = _generate_config(config, ai_system.user_config)
         super().__init__(ai_system, new_config)
 

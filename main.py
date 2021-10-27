@@ -2,7 +2,6 @@ import RAI
 from RAI.dataset import Feature, Data, MetaDatabase, Dataset
 from RAI.AISystem import AISystem, Model, Task
 
-print("START")
 
 # defining metadata, this should also be possible by loading a dictionary or reading from a json file later
 # Some do this through pandas DF.
@@ -33,7 +32,6 @@ clf = LogisticRegression(random_state=0).fit(dataset_x, dataset_y)
 # creating a task
 task = Task(model=clf, type='regression')
 
-print("Creating AI System")
 ai = AISystem(meta_database=meta, dataset=dataset, task=task, user_config=configuration)
 ai.initialize()
 
@@ -43,8 +41,9 @@ model_preds = [0, 1, 1, 0, 2]
 
 ai.compute_metrics(preds=model_preds)
 res = ai.export_metrics_values()
+print("Computed Metrics: \n\n")
 for group in res:
-    print(group)
+    print("\n" + group)
     for metric in res[group]:
         print("\t" + metric + ": " + str(res[group][metric]))
 
