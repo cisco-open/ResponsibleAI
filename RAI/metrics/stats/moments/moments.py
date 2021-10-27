@@ -2,20 +2,21 @@ from ..stats import StatMetricGroup
 import math
 
 _config = {
-    "dependency_list":["stat"],
-    "tags":["moments"],
-    "complexity_class":"linear",
+    "src": "moments",
+    "dependency_list": ["stat"],
+    "tags": ["moments"],
+    "complexity_class": "linear",
     "metrics": {
-        "second-moment":{
-            "type":"other",
-            "tags":[],
-            "has_range":False,
+        "second-moment": {
+            "type": "other",
+            "tags": [],
+            "has_range": False,
 
         },
-        "third-moment":{
-            "type":"other",
-            "tags":[],
-            "has_range":False,
+        "third-moment": {
+            "type": "other",
+            "tags": [],
+            "has_range": False,
         },
  
     }
@@ -24,7 +25,7 @@ _config = {
 
 
 class MomentMetricGroup(StatMetricGroup, name="moment"):
-    def __init__(self, ai_system, config = _config) -> None:
+    def __init__(self, ai_system, config=_config) -> None:
         super().__init__(ai_system, config)
 
     

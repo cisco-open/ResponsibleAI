@@ -3,7 +3,7 @@ __all__ = ['Metric', 'metric_types']
 import os.path
 from RAI.metrics.registry import register_class
 
-metric_types = {  "numeric" , "multivalued", "other"}
+metric_types = {"numeric", "multivalued", "other"}
 
 
 class Metric:
@@ -15,8 +15,8 @@ class Metric:
         self.range = None
         self.value_list = None
         self.load_config(config)
-        
-    
+        self.type = None
+
     def load_config(self, config):
         if "type" in config:
             if config["type"] in metric_types:
@@ -24,12 +24,10 @@ class Metric:
             else:
                 self.type = "numeric"
 
-
         if "tags" in config:
             self.tags = config["tags"]
         else:
             self.tags = set()
-
 
         #load other attributes
 

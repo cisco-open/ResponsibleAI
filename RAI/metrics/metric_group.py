@@ -13,7 +13,6 @@ class MetricGroup(object):
         cls.name = name
         register_class(name, cls)
 
-
     def __init__(self,ai_system, config) -> None:        
         self.ai_system = ai_system
         self.persistent_data = {}
@@ -29,7 +28,6 @@ class MetricGroup(object):
         else:
             self.status = "BAD"
 
-
     def reset(self):
         if self.status == "BAD":
             return
@@ -37,37 +35,30 @@ class MetricGroup(object):
         self.value = None
         self.status = "OK"
 
-    
     def load_config(self, config):
-    
         if "tags" in config:
             self.tags = config["tags"]
-
         if "dependency_list" in config:
             self.dependency_list = config["dependency_list"]
-
         if "complexity_class" in config:
             self.complity_class = config["complexity_class"]
-        
         if "metrics" in config:
             self.create_metrics(config["metrics"])
-            
 
     def create_metrics(self, metrics_config):
+        print("METRIC GROUP, CREATING METRICS")
         for metric_name in metrics_config:
-                self.metrics[metric_name] = Metric(metric_name, metrics_config[metric_name]) 
-
+            print("CREATING METRIC: ", metric_name)
+            self.metrics[metric_name] = Metric(metric_name, metrics_config[metric_name])
 
     def export_metrics_values(self):
         results={}
         for metric_name in self.metrics:
             results[metric_name] = self.metrics[metric_name].value
         return results
-
      
     def compute(self, data):
         pass
-
 
     def update(self, data):
         pass

@@ -1,0 +1,23 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredPackages">
+        <value>
+          <list size="10">
+            <item index="0" class="java.lang.String" itemvalue="flask_login" />
+            <item index="1" class="java.lang.String" itemvalue="flask_wtf" />
+            <item index="2" class="java.lang.String" itemvalue="jinja2" />
+            <item index="3" class="java.lang.String" itemvalue="flask_migrate" />
+            <item index="4" class="java.lang.String" itemvalue="email_validator" />
+            <item index="5" class="java.lang.String" itemvalue="python-decouple" />
+            <item index="6" class="java.lang.String" itemvalue="flask" />
+            <item index="7" class="java.lang.String" itemvalue="gunicorn" />
+            <item index="8" class="java.lang.String" itemvalue="sqlalchemy" />
+            <item index="9" class="java.lang.String" itemvalue="flask_sqlalchemy" />
+          </list>
+        </value>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>
