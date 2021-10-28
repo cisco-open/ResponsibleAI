@@ -17,10 +17,13 @@ class AISystem:
         self.sample_count = 0
         self.user_config = user_config
 
+    def _is_compatible(self, reqs):
+        return reqs["type_restriction"] is None or reqs["type_restriction"] == self.task.type
+
     def initialize(self, metric_groups=None, metric_group_re=None, max_complexity="linear"):
         for metric_group_name in registry:
             temp = registry[metric_group_name](self)
-            if temp.is_compatible(self):
+            if self._is_compatible(temp.compatibility):
                 self.metric_groups[metric_group_name] = temp
                 print("metric group : {} was created".format(metric_group_name))
 

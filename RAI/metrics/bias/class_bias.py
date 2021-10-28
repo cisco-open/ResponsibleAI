@@ -80,9 +80,6 @@ class ClassBiasMetricGroup(MetricGroup, name="class_bias"):
         self.config = config
         self.compatibility = {"type_restriction": "classification", "output_restriction": "choice"}
 
-    def is_compatible(self, ai_system):
-        return self.compatibility["type_restriction"] is None or self.compatibility["type_restriction"] == ai_system.task.type
-
     def update(self, data):
         pass
 
