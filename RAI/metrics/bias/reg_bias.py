@@ -4,8 +4,6 @@ import numpy as np
 import sklearn
 
 
-# Log loss, roc and brier score have been removed.
-
 _config = {
     "src": "stats",
     "dependency_list": [],
@@ -72,7 +70,7 @@ _config = {
 class RegBiasMetricGroup(MetricGroup, name="reg_bias"):
     def __init__(self, ai_system, config=_config) -> None:
         super().__init__(ai_system, config)
-        self._bias_config = None
+        self._ai_system = ai_system
 
     def update(self, data):
         pass
@@ -81,27 +79,16 @@ class RegBiasMetricGroup(MetricGroup, name="reg_bias"):
         if "data" and "predictions" in data_dict:
             data = data_dict["data"]
             preds = data_dict["predictions"]
+            args = {}
+            if "bias" in self.ai_system.user_config and "args" in self.ai_system.user_config["bias"]:
+                args = self.ai_system.user_config["bias"]["args"]
 
-def get_fptn(confusion_matrix):
-    result = {'fp': confusion_matrix.sum(axis=0) - np.diag(confusion_matrix),
-              'fn': confusion_matrix.sum(axis=1) - np.diag(confusion_matrix),
-              'tp': np.diag(confusion_matrix)}
-    result['tn'] = confusion_matrix.sum() - result['fp'] - result['fn'] - result['tp']
-    return result
-
-
-def _fp_rate(fptn):
-        return fptn['fp'] / (fptn['fp'] + fptn['tn'])
-
-
-def _tp_rate(fptn):
-    return fptn['tp'] / (fptn['tp'] + fptn['fn'])
-
-
-def _precision_score(fptn):
-    return fptn['tp'] / (fptn['tp'] + fptn['fp'])
-
-
-def _recall_score(fptn):
-    return fptn['tp'] / (fptn['tp'] + fptn['fn'])
-
+            self.metrics["explained_variance"].value = sklearn.metrics.explained_variance_score(data.y, preds, **args.get("explained_variance", {}))
+            self.metrics["mean_absolute_error"].value = sklearn.metrics.mean_absolute_error(data.y, preds, **args.get("mean_absolute_error", {}))
+            self.metrics["mean_absolute_percentage_error"].value = sklearn.metrics.accuracy_score(data.y, preds, **args.get("accuracy", {}))
+            self.metrics["mean_gamma_deviance"].value = sklearn.metrics.accuracy_score(data.y, preds, **args.get("mean_gamma_deviance", {}))
+            self.metrics["mean_poisson_deviance"].value = sklearn.metrics.accuracy_score(data.y, preds, **args.get("mean_poisson_deviance", {}))
+            self.metrics["mean_squared_error"].value = sklearn.metrics.mean_squared_error(data.y, preds, **args.get("mean_squared_error", {}))
+            self.metrics["mean_squared_log_error"].value = sklearn.metrics.accuracy_score(data.y, preds, **args.get("mean_squared_log_error", {}))
+            self.metrics["median_absolute_error"].value = sklearn.metrics.accuracy_score(data.y, preds, **args.get("median_absolute_error", {}))
+            self.metrics["r2"].value = sklearn.metrics.accuracy_score(data.y, preds, **args.get("r2", {}))
