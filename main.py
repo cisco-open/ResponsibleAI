@@ -30,7 +30,7 @@ clf = LogisticRegression(random_state=0).fit(dataset_x, dataset_y)
 
 
 # creating a task
-task = Task(model=clf, type='regression')
+task = Task(model=clf, type='classification')
 
 ai = AISystem(meta_database=meta, dataset=dataset, task=task, user_config=configuration)
 ai.initialize()

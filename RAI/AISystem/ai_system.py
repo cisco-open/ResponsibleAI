@@ -19,12 +19,14 @@ class AISystem:
 
     def initialize(self, metric_groups=None, metric_group_re=None, max_complexity="linear"):
         for metric_group_name in registry:
-            self.metric_groups[metric_group_name] = registry[metric_group_name](self)
-            print("metric group : {} was created".format(metric_group_name))
+            temp = registry[metric_group_name](self)
+            if temp.is_compatible(self):
+                self.metric_groups[metric_group_name] = temp
+                print("metric group : {} was created".format(metric_group_name))
 
 # May be more convenient to just accept metric name (or add functionality to detect group names and return a dictionary)
     def get_metric(self, metric_group_name, metric_name): 
-        print("request for metric group : {}, metric_name : {}".format(metric_group_name,metric_name))
+        print("request for metric group : {}, metric_name : {}".format(metric_group_name, metric_name))
         return self.metric_groups[metric_group_name].metrics[metric_name].value
 
     def reset_metrics(self):
@@ -65,6 +67,7 @@ class AISystem:
         for metric_group_name in self.metric_groups:
             result[metric_group_name] = self.metric_groups[metric_group_name].export_metrics_values()
         return result
+
 
 
 

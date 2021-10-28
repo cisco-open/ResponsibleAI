@@ -27,6 +27,10 @@ _config = {
 class MomentMetricGroup(StatMetricGroup, name="moment"):
     def __init__(self, ai_system, config=_config) -> None:
         super().__init__(ai_system, config)
+        self.compatibility = {"type_restriction": None, "output_restriction": None}
+
+    def is_compatible(self, ai_system):
+        return self.compatibility["type_restriction"] is None or self.compatibility["type_restriction"] == ai_system.task.type
 
     def update(self, data):
         pass

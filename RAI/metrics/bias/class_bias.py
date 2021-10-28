@@ -3,6 +3,9 @@ import math
 import numpy as np
 import sklearn
 
+__all__ = ['compatibility']
+
+compatibility = {"type_restriction": "classification", "output_restriction": "choice"}
 
 # Log loss, roc and brier score have been removed. s
 
@@ -74,9 +77,17 @@ class ClassBiasMetricGroup(MetricGroup, name="class_bias"):
     def __init__(self, ai_system, config=_config) -> None:
         super().__init__(ai_system, config)
         self.ai_system = ai_system
+        self.config = config
+        self.compatibility = {"type_restriction": "classification", "output_restriction": "choice"}
+
+    def is_compatible(self, ai_system):
+        return self.compatibility["type_restriction"] is None or self.compatibility["type_restriction"] == ai_system.task.type
 
     def update(self, data):
         pass
+
+    def getConfig(self):
+        return self.config
 
     def compute(self, data_dict):
         if "data" and "predictions" in data_dict:
