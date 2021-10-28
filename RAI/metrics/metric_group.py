@@ -8,6 +8,7 @@ all_complexity_classes = {"constant",  "linear",  "multi_linear", "polynomial", 
 
 class MetricGroup(object):    
     name = ""
+
     def __init_subclass__(cls, name=None, **kwargs):
         super().__init_subclass__(**kwargs)
         cls.name = name
@@ -19,6 +20,7 @@ class MetricGroup(object):
         self.dependency_list = []
         self.metrics = {}
         self.tags = []
+        self.category = None
         self.complexity_class = None
         self.status = "OK"
         self.reset()
@@ -44,6 +46,8 @@ class MetricGroup(object):
             self.complity_class = config["complexity_class"]
         if "metrics" in config:
             self.create_metrics(config["metrics"])
+        if "category" in config:
+            self.category = config["category"]
 
     def create_metrics(self, metrics_config):
         # print("METRIC GROUP, CREATING METRICS")

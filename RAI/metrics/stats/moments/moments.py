@@ -3,6 +3,7 @@ import math
 
 _config = {
     "src": "moments",
+    "category": "bias",
     "dependency_list": ["stat"],
     "tags": ["moments"],
     "complexity_class": "linear",
@@ -11,16 +12,17 @@ _config = {
             "type": "other",
             "tags": [],
             "has_range": False,
-
+            "range": None,
+            "explanation": "Custom Test Metric",
         },
         "third-moment": {
             "type": "other",
             "tags": [],
             "has_range": False,
+            "range": None,
+            "explanation": "Custom Test Metric",
         },
- 
     }
-
 }
 
 

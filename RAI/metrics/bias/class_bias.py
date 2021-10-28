@@ -11,6 +11,7 @@ compatibility = {"type_restriction": "classification", "output_restriction": "ch
 
 _config = {
     "src": "stats",
+    "category": "bias",
     "dependency_list": [],
     "tags": ["bias"],
     "complexity_class": "linear",
@@ -19,55 +20,64 @@ _config = {
             "type": "numeric",
             "tags": [],
             "has_range": True,
-            "range": [0, 1]
-
+            "range": [0, 1],
+            "explanation": "Accuracy describes how well a model performed at classifying data."
         },
         "balanced_accuracy": {
             "type": "numeric",
             "tags": [],
             "has_range": True,
-            "range": [0, 1]
+            "range": [0, 1],
+            "explanation": "Balanced Accuracy describes how well a performed by taking the average recall across each class."
         },
         "confusion_matrix": {
             "type": "other",
             "tags": [],
             "has_range": False,
+            "range": None,
+            "explanation": "The Confusion Matrix summarizes performance and can highlight areas of weakness where incorrect classification is common."
         },
         "f1": {
             "type": "numeric",
             "tags": [],
             "has_range": True,
             "range": [0, 1],
+            "explanation": "The F1 score is a weighted average between a models precision and recall scores",
         },
         "fp_rate": {
             "type": "other",
             "tags": [],
             "has_range": True,
             "range": [0, 1],
+            "explanation": "FP Rate describes what percentage of wrong predictions were false positives.",
         },
         "jaccard_score": {
             "type": "numeric",
             "tags": [],
             "has_range": True,
             "range": [0, 1],
+            "explanation": "Jaccard Score measures the similarity of two two sets of data, and returns a result from 0 to 100%.",
         },
         "precision_score": {
             "type": "numeric",
             "tags": [],
             "has_range": True,
             "range": [0, 1],
+            "explanation": "Precision Scores indicates a models ability to not label a positive sample as negative.",
         },
         "recall_score": {
             "type": "numeric",
             "tags": [],
             "has_range": True,
             "range": [0, 1],
+            "explanation": "Recall Scores indicates a models ability to classify all positive image samples",
         },
         "tp_rate": {
             "type": "numeric",
             "tags": [],
             "has_range": True,
             "range": [0, 1],
+            "explanation": "True Positive Rate is the probability that a positive example will be predicted to be positive.",
         },
     }
 }

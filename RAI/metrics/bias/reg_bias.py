@@ -6,6 +6,7 @@ import sklearn
 
 _config = {
     "src": "stats",
+    "category": "bias",
     "dependency_list": [],
     "tags": ["bias"],
     "complexity_class": "linear",
@@ -14,54 +15,64 @@ _config = {
             "type": "numeric",
             "tags": [],
             "has_range": True,
-            "range": [0, 1]
+            "range": [0, 1],
+            "explanation": "Measures discrepancy between a model and actual data, higher values are better",
         },
         "mean_absolute_error": {
             "type": "numeric",
             "tags": [],
             "has_range": True,
-            "range": [0, 1]
+            "range": [0, None],
+            "explanation": "Indicates the average residual error, lower is better.",
         },
         "mean_absolute_percentage_error": {
             "type": "other",
             "tags": [],
-            "has_range": False,
+            "has_range": True,
+            "range": [0, None],
+            "explanation": "Indicates the how inaccurate predictions were from actual values, lower is better.",
         },
         "mean_gamma_deviance": {
             "type": "numeric",
             "tags": [],
             "has_range": True,
-            "range": [0, 1],
+            "range": [0, None],
+            "explanation": "Calculated by taking the Tweedie Deviance with a power of 2.",
         },
         "mean_poisson_deviance": {
             "type": "other",
             "tags": [],
             "has_range": True,
-            "range": [0, 1],
+            "range": [0, None],
+            "explanation": "Calculated by taking the Tweedie Deviance with a power of 1.",
         },
         "mean_squared_error": {
             "type": "numeric",
             "tags": [],
             "has_range": True,
-            "range": [0, 1],
+            "range": [0, None],
+            "explanation": "Mean Squared Error indicates the the performance of a model, lower is better.",
         },
         "mean_squared_log_error": {
             "type": "numeric",
             "tags": [],
             "has_range": True,
-            "range": [0, 1],
+            "range": [0, None],
+            "explanation": "Mean Squared Log Error indicates the average squared logarithmic residual error, lower is better.",
         },
         "median_absolute_error": {
             "type": "numeric",
             "tags": [],
             "has_range": True,
-            "range": [0, 1],
+            "range": [0, None],
+            "explanation": "Median Absolute Error indicates the median value for absolute residual error, lower is better.",
         },
         "r2": {
             "type": "numeric",
             "tags": [],
             "has_range": True,
             "range": [0, 1],
+            "explanation": "Indicates how well a model fits the data, higher is better.",
         },
     }
 }

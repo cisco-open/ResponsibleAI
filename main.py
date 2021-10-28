@@ -26,11 +26,11 @@ dataset = Dataset(training_data)
 # creating a model
 from sklearn.linear_model import LogisticRegression
 clf = LogisticRegression(random_state=0).fit(dataset_x, dataset_y)
-# model = Model(clf)
+model = Model(agent=clf, name="Cisco Financial AI", model_class="Logistic Regression", adaptive=False)
 
 
 # creating a task
-task = Task(model=clf, type='classification')
+task = Task(model=model, type='classification')
 
 ai = AISystem(meta_database=meta, dataset=dataset, task=task, user_config=configuration)
 ai.initialize()
@@ -48,4 +48,17 @@ for group in res:
         print("\t" + metric + ": " + str(res[group][metric]))
 
 
+print("\nMetric Info:")
+res = ai.get_metric_info()
+metrics = res["metrics"]
+for metric in metrics:
+    print(metrics[metric])
 
+print("\nMetric Categories")
+categories = res["categories"]
+for category in categories:
+    print(category, " ", categories[category])
+
+print("\n\nModel Info:")
+res = ai.get_model_info()
+print(res)

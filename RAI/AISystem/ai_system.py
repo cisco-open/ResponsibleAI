@@ -47,6 +47,22 @@ class AISystem:
             return self.dataset.test_data
         raise Exception("unknown data type : {}".format(data_type))
 
+    def get_model_info(self):
+        result = {"id": self.task.model.name, "model": self.task.model.model_class, "adaptive": self.task.model.adaptive}
+        return result
+
+    def get_metric_info(self):
+        result = {}
+        lists = {}
+        for group in self.metric_groups:
+            for metric in self.metric_groups[group].metrics:
+                metric_obj = self.metric_groups[group].metrics[metric]
+                result[metric] = {"name": metric_obj.name, "has_range": metric_obj.has_range, "range": metric_obj.range, "explanation": metric_obj.explanation}
+                if self.metric_groups[group].category not in lists:
+                    lists[self.metric_groups[group].category] = []
+                lists[self.metric_groups[group].category].append(metric_obj.name)
+        return {"metrics": result, "categories": lists}
+
     def compute_metrics(self, preds=None, reset_metrics=False, data_type="train"):
         if reset_metrics:
             self.reset_metrics()
