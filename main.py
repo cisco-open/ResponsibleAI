@@ -40,7 +40,7 @@ ai.initialize()
 model_preds = [0, 1, 1, 0, 2]
 
 ai.compute_metrics(preds=model_preds)
-res = ai.export_metrics_values()
+res = ai.get_metric_values()
 print("Computed Metrics: \n\n")
 for group in res:
     print("\n" + group)
@@ -62,3 +62,5 @@ for category in categories:
 print("\n\nModel Info:")
 res = ai.get_model_info()
 print(res)
+
+ai.export_data('.')

@@ -1,10 +1,14 @@
 import numpy as np
 import pandas as pd
 import sklearn as sk
-import time
+import datetime
 from RAI.metrics.registry import registry
 from .task import *
 from RAI.dataset import *
+import os
+import csv
+import json
+
 
 
 class AISystem:
@@ -13,7 +17,7 @@ class AISystem:
         self.task = task
         self.dataset = dataset
         self.metric_groups = {}
-        self.timestamp = None
+        self.timestamp = ""
         self.sample_count = 0
         self.user_config = user_config
 
@@ -71,21 +75,51 @@ class AISystem:
             data_dict["predictions"] = preds
         for metric_group_name in self.metric_groups:
             self.metric_groups[metric_group_name].compute(data_dict)
-        self.time_stamp = time.time()
+        self.timestamp = self._get_time()
         self.sample_count += len(data_dict)
 
     def update_metrics(self, data):
         for i in range(len(data)):
             for metric_group_name in self.metric_groups:
                 self.metric_groups[metric_group_name].update(data[i])
-        self.time_stamp = time.time()
+        self.timestamp = self._get_time()
         self.sample_count += 1
 
-    def export_metrics_values(self):
+    def get_metric_values(self):
         result = {}
         for metric_group_name in self.metric_groups:
             result[metric_group_name] = self.metric_groups[metric_group_name].export_metrics_values()
         return result
+
+    def _get_time(self):
+        now = datetime.datetime.now()
+        return str(now.year) + "-" + str(now.month) + "-" + str(now.day) + "-" + str(now.hour) + ":" + str(now.minute) + ":" + str(now.second)
+
+    def export_data(self, dir=None):
+        if not os.path.exists(os.getcwd() + '\output'):
+            os.mkdir(os.getcwd() + "\output")
+        data_exists = os.path.exists(os.getcwd() + "\output\metric_values.csv")
+        metric_values = self.get_metric_values()
+        model_info = self.get_model_info()
+        metric_info = self.get_metric_info()
+
+        self._dict_to_csv(os.getcwd() + "\output\metric_values.csv", metric_values, not data_exists)
+        with open(os.getcwd() + "\output\metric_info.json", 'w') as f:
+            json.dump(metric_info["metrics"], f)
+        with open(os.getcwd() + "\output\metric_list.json", 'w') as f:
+            json.dump(metric_info["categories"], f)
+        with open(os.getcwd() + "\output\model_info.json", 'w') as f:
+            json.dump(model_info, f)
+
+    def _dict_to_csv(self, file, dict, write_headers=True):
+        newDict = {}
+        newDict['date'] = self.timestamp
+        for category in dict:
+            for metric in dict[category]:
+                newDict[metric] = dict[category][metric]
+        df = pd.DataFrame([newDict])
+        df.to_csv(file, header=write_headers, mode='a', index=False)
+
 
 
 
