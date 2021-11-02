@@ -10,8 +10,8 @@ import csv
 import json
 
 
-
 class AISystem:
+
     def __init__(self, meta_database, dataset, task, user_config) -> None:
         self.meta_database = meta_database
         self.task = task
@@ -61,7 +61,9 @@ class AISystem:
         for group in self.metric_groups:
             for metric in self.metric_groups[group].metrics:
                 metric_obj = self.metric_groups[group].metrics[metric]
-                result[metric] = {"name": metric_obj.name, "has_range": metric_obj.has_range, "range": metric_obj.range, "explanation": metric_obj.explanation}
+                result[metric] = {"name": metric_obj.name, "has_range": metric_obj.has_range, "range": metric_obj.range,
+                                  "explanation": metric_obj.explanation, "type": metric_obj.type, "display_name": metric_obj.display_name,
+                                  "tags": metric_obj.tags}
                 if self.metric_groups[group].category not in lists:
                     lists[self.metric_groups[group].category] = []
                 lists[self.metric_groups[group].category].append(metric_obj.name)
@@ -93,7 +95,7 @@ class AISystem:
 
     def _get_time(self):
         now = datetime.datetime.now()
-        return str(now.year) + "-" + str(now.month) + "-" + str(now.day) + "-" + str(now.hour) + ":" + str(now.minute) + ":" + str(now.second)
+        return "{:02d}".format(now.year) + "-" + "{:02d}".format(now.month) + "-" + "{:02d}".format(now.day) + " " + "{:02d}".format(now.hour) + ":" + "{:02d}".format(now.minute) + ":" + "{:02d}".format(now.second)
 
     def export_data(self, dir=None):
         if not os.path.exists(os.getcwd() + '\output'):

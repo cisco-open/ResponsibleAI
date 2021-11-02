@@ -3,21 +3,23 @@ import math
 
 _config = {
     "src": "moments",
-    "category": "bias",
+    "category": "dataset_quality",
     "dependency_list": ["stat"],
     "tags": ["moments"],
     "complexity_class": "linear",
     "metrics": {
         "second-moment": {
-            "type": "other",
-            "tags": [],
+            "display_name": "Second Moment",
+            "type": "numeric",
+            "tags": ["Moments"],
             "has_range": False,
             "range": None,
             "explanation": "Custom Test Metric",
         },
         "third-moment": {
-            "type": "other",
-            "tags": [],
+            "display_name": "Third Moment",
+            "type": "numeric",
+            "tags": ["Moments"],
             "has_range": False,
             "range": None,
             "explanation": "Custom Test Metric",

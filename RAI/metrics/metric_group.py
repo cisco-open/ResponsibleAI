@@ -1,5 +1,6 @@
 from .metric import Metric
 from RAI.metrics.registry import register_class
+import numpy as np
 
 __all__ = ['MetricGroup']
 
@@ -58,7 +59,14 @@ class MetricGroup(object):
     def export_metrics_values(self):
         results={}
         for metric_name in self.metrics:
-            results[metric_name] = self.metrics[metric_name].value
+            if self.metrics[metric_name].type == 'vector':
+                results[metric_name + "-single"] = self.metrics[metric_name].value[0]
+                results[metric_name + "-individual"] = self.metrics[metric_name].value[1] # Easily modify to export for each value.
+            elif self.metrics[metric_name].type == "matrix":
+                results[metric_name] = repr(self.metrics[metric_name].value)
+                print("OUTPUT FOR MATRIX: ", repr(self.metrics[metric_name].value))
+            else:
+                results[metric_name] = self.metrics[metric_name].value
         return results
      
     def compute(self, data):

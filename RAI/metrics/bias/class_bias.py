@@ -17,64 +17,73 @@ _config = {
     "complexity_class": "linear",
     "metrics": {
         "accuracy": {
+            "display_name": "Accuracy",
             "type": "numeric",
-            "tags": [],
+            "tags": ["Performance"],
             "has_range": True,
             "range": [0, 1],
             "explanation": "Accuracy describes how well a model performed at classifying data."
         },
         "balanced_accuracy": {
+            "display_name": "Balanced Accuracy",
             "type": "numeric",
-            "tags": [],
+            "tags": ["Performance"],
             "has_range": True,
             "range": [0, 1],
             "explanation": "Balanced Accuracy describes how well a performed by taking the average recall across each class."
         },
         "confusion_matrix": {
-            "type": "other",
-            "tags": [],
+            "display_name": "Confusion Matrix",
+            "type": "matrix",
+            "tags": ["Confusion Matrix"],
             "has_range": False,
             "range": None,
             "explanation": "The Confusion Matrix summarizes performance and can highlight areas of weakness where incorrect classification is common."
         },
         "f1": {
-            "type": "numeric",
-            "tags": [],
+            "display_name": "F1 Score",
+            "type": "vector",
+            "tags": ["Confusion Matrix"],
             "has_range": True,
             "range": [0, 1],
             "explanation": "The F1 score is a weighted average between a models precision and recall scores",
         },
         "fp_rate": {
-            "type": "other",
-            "tags": [],
+            "display_name": "False Positive Rate",
+            "type": "vector",
+            "tags": ["Confusion Matrix"],
             "has_range": True,
             "range": [0, 1],
             "explanation": "FP Rate describes what percentage of wrong predictions were false positives.",
         },
         "jaccard_score": {
-            "type": "numeric",
-            "tags": [],
+            "display_name": "Jaccard Score",
+            "type": "vector",
+            "tags": ["Performance"],
             "has_range": True,
             "range": [0, 1],
             "explanation": "Jaccard Score measures the similarity of two two sets of data, and returns a result from 0 to 100%.",
         },
         "precision_score": {
-            "type": "numeric",
-            "tags": [],
+            "display_name": "Precision Score",
+            "type": "vector",
+            "tags": ["Confusion Matrix"],
             "has_range": True,
             "range": [0, 1],
             "explanation": "Precision Scores indicates a models ability to not label a positive sample as negative.",
         },
         "recall_score": {
-            "type": "numeric",
-            "tags": [],
+            "display_name": "Recall Score",
+            "type": "vector",
+            "tags": ["Confusion Matrix"],
             "has_range": True,
             "range": [0, 1],
             "explanation": "Recall Scores indicates a models ability to classify all positive image samples",
         },
         "tp_rate": {
-            "type": "numeric",
-            "tags": [],
+            "display_name": "True Positive Rate",
+            "type": "vector",
+            "tags": ["Confusion Matrix"],
             "has_range": True,
             "range": [0, 1],
             "explanation": "True Positive Rate is the probability that a positive example will be predicted to be positive.",
@@ -108,12 +117,19 @@ class ClassBiasMetricGroup(MetricGroup, name="class_bias"):
             self.metrics["balanced_accuracy"].value = sklearn.metrics.balanced_accuracy_score(data.y, preds, **args.get("balanced_accuracy", {}))
             self.metrics["confusion_matrix"].value = sklearn.metrics.confusion_matrix(data.y, preds, **args.get("confusion_matrix", {}))
             fptn = get_fptn(self.metrics["confusion_matrix"].value)  # TP, TN, FP, FN values. Used quite a bit.
-            self.metrics["fp_rate"].value = _fp_rate(fptn, **args.get("fp_rate", {}))
-            self.metrics["f1"].value = sklearn.metrics.f1_score(data.y, preds, average=None, **args.get("f1", {}))
-            self.metrics["jaccard_score"].value = sklearn.metrics.jaccard_score(data.y, preds, average=None, **args.get("jaccard_score", {}))
-            self.metrics["precision_score"].value = _precision_score(fptn, **args.get("precision_score", {}))
-            self.metrics["recall_score"].value = _recall_score(fptn, **args.get("recall_score", {}))
-            self.metrics["tp_rate"].value = _tp_rate(fptn, **args.get("tp_rate", {}))
+            self.metrics["fp_rate"].value = [0, _fp_rate(fptn, **args.get("fp_rate", {}))]
+            self.metrics["fp_rate"].value[0] = np.mean(self.metrics["fp_rate"].value[0])
+            self.metrics["f1"].value = [0, sklearn.metrics.f1_score(data.y, preds, average=None, **args.get("f1", {}))]
+            # Determine whether it should be average between classes or weighted average
+            self.metrics["f1"].value[0] = np.mean(self.metrics["f1"].value[1])
+            self.metrics["jaccard_score"].value = [0, sklearn.metrics.jaccard_score(data.y, preds, average=None, **args.get("jaccard_score", {}))]
+            self.metrics["jaccard_score"].value[0] = np.mean(self.metrics["jaccard_score"].value[1])
+            self.metrics["precision_score"].value = [0, _precision_score(fptn, **args.get("precision_score", {}))]
+            self.metrics["precision_score"].value[0] = np.mean(self.metrics["precision_score"].value[1])
+            self.metrics["recall_score"].value = [0, _recall_score(fptn, **args.get("recall_score", {}))]
+            self.metrics["recall_score"].value[0] = np.mean(self.metrics["recall_score"].value[1])
+            self.metrics["tp_rate"].value = [0, _tp_rate(fptn, **args.get("tp_rate", {}))]
+            self.metrics["tp_rate"].value[0] = np.mean(self.metrics["tp_rate"].value[1])
 
 
 def get_fptn(confusion_matrix):

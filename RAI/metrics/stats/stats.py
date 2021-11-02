@@ -6,36 +6,40 @@ import numpy as np
 # Move config to external .json? 
 _config = {
     "src": "stats",
-    "category": "bias",
+    "category": "dataset_quality",
     "dependency_list": [],
     "tags": ["stats"],
     "complexity_class": "linear",
     "metrics": {
         "mean": {
-            "type": "other",
-            "tags": [],
+            "display_name": "Mean",
+            "type": "numeric",
+            "tags": ["Standard Metric"],
             "has_range": False,
             "range": None,
             "explanation": "Mean is the expected value of data.",
         },
         "covariance": {
-            "type": "other",
-            "tags": [],
+            "display_name": "Covariance Matrix",
+            "type": "matrix",
+            "tags": ["Standard Metric"],
             "has_range": False,
             "range": None,
             "explanation": "A Covariance Matrix shows the directional relationship between different data members.",
         },
 
         "num-Nan-rows": {
+            "display_name": "Number of NaN Rows",
             "type": "numeric",
-            "tags": [],
+            "tags": ["Dataset Values"],
             "has_range": True,
             "range": [0, None],
             "explanation": "Num Nan Rows indicates the number of NaN rows found in the data.",
         },
         "percent-Nan-rows": {
+            "display_name": "Percentage of NaN Rows",
             "type": "numeric",
-            "tags": [],
+            "tags": ["Dataset Values"],
             "has_range": True,
             "range": [0, 1],
             "explanation": "Percent Nan Rows indicates the percentage of rows that are NaN in the data.",
