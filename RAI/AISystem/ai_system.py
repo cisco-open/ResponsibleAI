@@ -5,9 +5,8 @@ import datetime
 from RAI.metrics.registry import registry
 from .task import *
 from RAI.dataset import *
-import os
-import csv
 import json
+import redis
 
 
 class AISystem:
@@ -98,20 +97,15 @@ class AISystem:
         return "{:02d}".format(now.year) + "-" + "{:02d}".format(now.month) + "-" + "{:02d}".format(now.day) + " " + "{:02d}".format(now.hour) + ":" + "{:02d}".format(now.minute) + ":" + "{:02d}".format(now.second)
 
     def export_data(self, dir=None):
-        if not os.path.exists(os.getcwd() + '\output'):
-            os.mkdir(os.getcwd() + "\output")
-        data_exists = os.path.exists(os.getcwd() + "\output\metric_values.csv")
         metric_values = self.get_metric_values()
+        newDict = {}
+        newDict['date'] = self.timestamp
+        for category in metric_values:
+            for metric in metric_values[category]:
+                newDict[metric] = metric_values[category][metric]
         model_info = self.get_model_info()
         metric_info = self.get_metric_info()
-
-        self._dict_to_csv(os.getcwd() + "\output\metric_values.csv", metric_values, not data_exists)
-        with open(os.getcwd() + "\output\metric_info.json", 'w') as f:
-            json.dump(metric_info["metrics"], f)
-        with open(os.getcwd() + "\output\metric_list.json", 'w') as f:
-            json.dump(metric_info["categories"], f)
-        with open(os.getcwd() + "\output\model_info.json", 'w') as f:
-            json.dump(model_info, f)
+        self._update_redis(newDict, model_info, metric_info)
 
     def _dict_to_csv(self, file, dict, write_headers=True):
         newDict = {}
@@ -122,7 +116,12 @@ class AISystem:
         df = pd.DataFrame([newDict])
         df.to_csv(file, header=write_headers, mode='a', index=False)
 
-
+    def _update_redis(self, metric_values, model_info, metric_info):
+        r = redis.Redis(host='localhost', port=6379, db=0)
+        r.rpush('metric_values', json.dumps(metric_values))  # True
+        r.set('model_info', json.dumps(model_info))
+        r.set('metric_info', json.dumps(metric_info))
+        r.save()
 
 
 

@@ -51,9 +51,7 @@ class MetricGroup(object):
             self.category = config["category"]
 
     def create_metrics(self, metrics_config):
-        # print("METRIC GROUP, CREATING METRICS")
         for metric_name in metrics_config:
-            # print("CREATING METRIC: ", metric_name)
             self.metrics[metric_name] = Metric(metric_name, metrics_config[metric_name])
 
     def export_metrics_values(self):
@@ -61,10 +59,12 @@ class MetricGroup(object):
         for metric_name in self.metrics:
             if self.metrics[metric_name].type == 'vector':
                 results[metric_name + "-single"] = self.metrics[metric_name].value[0]
-                results[metric_name + "-individual"] = self.metrics[metric_name].value[1] # Easily modify to export for each value.
+                val = self.metrics[metric_name].value[1]
+                if type(self.metrics[metric_name].value[1]) is np.ndarray:
+                    val = val.tolist()
+                results[metric_name + "-individual"] = val # Easily modify to export for each value.
             elif self.metrics[metric_name].type == "matrix":
                 results[metric_name] = repr(self.metrics[metric_name].value)
-                print("OUTPUT FOR MATRIX: ", repr(self.metrics[metric_name].value))
             else:
                 results[metric_name] = self.metrics[metric_name].value
         return results

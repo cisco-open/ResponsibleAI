@@ -34,7 +34,6 @@ class Metric:
         if "type" in config:
             if config["type"] in metric_types:
                 self.type = config["type"]
-                print("TYPE: ", self.type)
             else:
                 self.type = "numeric"
         if "display_name" in config:
