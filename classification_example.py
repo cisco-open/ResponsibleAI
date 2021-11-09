@@ -108,3 +108,11 @@ print("\nGetting Model Info:")
 res = ai.get_model_info()
 print(res)
 
+# Demonstrating Searching
+query = "Bias"
+print("\nSearching Metrics for ", query)
+result = ai.search(query)
+print(result)
+
+print("\nSummarizing Results")
+ai.summarize()

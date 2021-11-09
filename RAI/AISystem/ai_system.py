@@ -129,7 +129,38 @@ class AISystem:
         r.set('metric_info', json.dumps(metric_info))
         r.save()
 
+    # Searches all metrics. Queries based on Metric Name, Metric Group Name, Category, and Tags.
+    def search(self, query):
+        query = query.lower()
+        results = {}
+        for group in self.metric_groups:
+            add_group = group.lower() == query or self.metric_groups[group].category.lower() == query
+            for metric in self.metric_groups[group].metrics:
+                metric_obj = self.metric_groups[group].metrics[metric]
+                if add_group or metric.lower().find(query) > -1 or metric_obj.display_name.lower().find(query) > -1:
+                    results[metric] = metric_obj.value
+                elif metric_obj.tags is not None:
+                    for tag in metric_obj.tags:
+                        if tag.lower().find(query) > -1:
+                            results[metric] = metric_obj.value
+                            break
+        return results
 
+    def summarize(self):
+        categories = {}
+        # Separate Metric Groups by Category
+        for group in self.metric_groups:
+            if self.metric_groups[group].category.lower() not in categories:
+                categories[self.metric_groups[group].category.lower()] = []
+            categories[self.metric_groups[group].category.lower()].append(group)
 
-
+        for category in categories:
+            print("Category ", category, " Metrics")
+            for group in categories[category]:
+                print("\tGroup ", group)
+                metric_values = self.metric_groups[group].get_metric_values()
+                for metric in metric_values:
+                    print("\t\t", metric, " ", metric_values[metric])
+                # for metric in self.metric_groups[group].metrics:
+                #    print("{:<10} {:<10}".format(metric, self.metric_groups[group].metrics[metric].value))
 
