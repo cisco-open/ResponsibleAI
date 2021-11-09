@@ -110,7 +110,7 @@ class ClassBiasMetricGroup(MetricGroup, name="class_bias"):
             data = data_dict["data"]
             preds = data_dict["predictions"]
             args = {}
-            if "bias" in self.ai_system.user_config and "args" in self.ai_system.user_config["bias"]:
+            if self.ai_system.user_config is not None and "bias" in self.ai_system.user_config and "args" in self.ai_system.user_config["bias"]:
                 args = self.ai_system.user_config["bias"]["args"]
 
             self.metrics["accuracy"].value = sklearn.metrics.accuracy_score(data.y, preds, **args.get("accuracy", {}))

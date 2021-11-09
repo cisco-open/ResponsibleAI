@@ -54,7 +54,20 @@ class MetricGroup(object):
         for metric_name in metrics_config:
             self.metrics[metric_name] = Metric(metric_name, metrics_config[metric_name])
 
-    def export_metrics_values(self):
+    def get_metric_values(self):
+        results = {}
+        for metric_name in self.metrics:
+            if self.metrics[metric_name].type == 'vector':
+                results[metric_name + "-single"] = self.metrics[metric_name].value[0]
+                val = self.metrics[metric_name].value[1]
+                if type(self.metrics[metric_name].value[1]) is np.ndarray:
+                    val = val.tolist()
+                results[metric_name + "-individual"] = val  # Easily modify to export for each value.
+            else:
+                results[metric_name] = self.metrics[metric_name].value
+        return results
+
+    def export_metric_values(self):
         results={}
         for metric_name in self.metrics:
             if self.metrics[metric_name].type == 'vector':

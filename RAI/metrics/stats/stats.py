@@ -64,7 +64,7 @@ class StatMetricGroup(MetricGroup, name="stat"):
     def compute(self, data_dict):
         if "data" in data_dict:
             args = {}
-            if "stats" in self.ai_system.user_config and "args" in self.ai_system.user_config["stats"]:
+            if self.ai_system.user_config is not None and "stats" in self.ai_system.user_config and "args" in self.ai_system.user_config["stats"]:
                 args = self.ai_system.user_config["stats"]["args"]
 
             data = data_dict["data"]

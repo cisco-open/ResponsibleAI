@@ -89,7 +89,13 @@ class AISystem:
     def get_metric_values(self):
         result = {}
         for metric_group_name in self.metric_groups:
-            result[metric_group_name] = self.metric_groups[metric_group_name].export_metrics_values()
+            result[metric_group_name] = self.metric_groups[metric_group_name].get_metric_values()
+        return result
+
+    def export_metric_values(self):
+        result = {}
+        for metric_group_name in self.metric_groups:
+            result[metric_group_name] = self.metric_groups[metric_group_name].export_metric_values()
         return result
 
     def _get_time(self):
@@ -97,7 +103,7 @@ class AISystem:
         return "{:02d}".format(now.year) + "-" + "{:02d}".format(now.month) + "-" + "{:02d}".format(now.day) + " " + "{:02d}".format(now.hour) + ":" + "{:02d}".format(now.minute) + ":" + "{:02d}".format(now.second)
 
     def export_data(self, dir=None):
-        metric_values = self.get_metric_values()
+        metric_values = self.export_metric_values()
         newDict = {}
         newDict['date'] = self.timestamp
         for category in metric_values:

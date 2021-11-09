@@ -102,15 +102,15 @@ class RegBiasMetricGroup(MetricGroup, name="reg_bias"):
             data = data_dict["data"]
             preds = data_dict["predictions"]
             args = {}
-            if "bias" in self.ai_system.user_config and "args" in self.ai_system.user_config["bias"]:
+            if self.ai_system.user_config is not None and "bias" in self.ai_system.user_config and "args" in self.ai_system.user_config["bias"]:
                 args = self.ai_system.user_config["bias"]["args"]
 
             self.metrics["explained_variance"].value = sklearn.metrics.explained_variance_score(data.y, preds, **args.get("explained_variance", {}))
             self.metrics["mean_absolute_error"].value = sklearn.metrics.mean_absolute_error(data.y, preds, **args.get("mean_absolute_error", {}))
-            self.metrics["mean_absolute_percentage_error"].value = sklearn.metrics.accuracy_score(data.y, preds, **args.get("accuracy", {}))
-            self.metrics["mean_gamma_deviance"].value = sklearn.metrics.accuracy_score(data.y, preds, **args.get("mean_gamma_deviance", {}))
-            self.metrics["mean_poisson_deviance"].value = sklearn.metrics.accuracy_score(data.y, preds, **args.get("mean_poisson_deviance", {}))
+            self.metrics["mean_absolute_percentage_error"].value = sklearn.metrics.mean_absolute_percentage_error(data.y, preds, **args.get("mean_absolute_percentage_error", {}))
+            self.metrics["mean_gamma_deviance"].value = sklearn.metrics.mean_gamma_deviance(data.y, preds, **args.get("mean_gamma_deviance", {}))
+            self.metrics["mean_poisson_deviance"].value = sklearn.metrics.mean_poisson_deviance(data.y, preds, **args.get("mean_poisson_deviance", {}))
             self.metrics["mean_squared_error"].value = sklearn.metrics.mean_squared_error(data.y, preds, **args.get("mean_squared_error", {}))
-            self.metrics["mean_squared_log_error"].value = sklearn.metrics.accuracy_score(data.y, preds, **args.get("mean_squared_log_error", {}))
-            self.metrics["median_absolute_error"].value = sklearn.metrics.accuracy_score(data.y, preds, **args.get("median_absolute_error", {}))
-            self.metrics["r2"].value = sklearn.metrics.accuracy_score(data.y, preds, **args.get("r2", {}))
+            self.metrics["mean_squared_log_error"].value = sklearn.metrics.mean_squared_log_error(data.y, preds, **args.get("mean_squared_log_error", {}))
+            self.metrics["median_absolute_error"].value = sklearn.metrics.median_absolute_error(data.y, preds, **args.get("median_absolute_error", {}))
+            self.metrics["r2"].value = sklearn.metrics.r2_score(data.y, preds, **args.get("r2", {}))
