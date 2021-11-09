@@ -2,7 +2,7 @@ __all__ = ['Task', 'task_types' ]
 
 
 from .model import *
-task_types = ["binary_classification", "multiclass_classification", "regression" ] 
+task_types = ["binary_classification", "multiclass_classification", "regression"]
 
 
 # task is an abstraction for general machine learning tasks, 
