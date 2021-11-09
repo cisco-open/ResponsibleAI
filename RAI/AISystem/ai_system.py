@@ -161,6 +161,4 @@ class AISystem:
                 metric_values = self.metric_groups[group].get_metric_values()
                 for metric in metric_values:
                     print("\t\t", metric, " ", metric_values[metric])
-                # for metric in self.metric_groups[group].metrics:
-                #    print("{:<10} {:<10}".format(metric, self.metric_groups[group].metrics[metric].value))
 
