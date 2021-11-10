@@ -9,6 +9,9 @@ import numpy as np
 from sklearn.datasets import load_breast_cancer
 from sklearn.model_selection import train_test_split
 x, y = load_breast_cancer(return_X_y=True)
+xTrain, xTest, yTrain, yTest = train_test_split(x, y)
+
+# Set up features
 features_raw = ["id", "radius_mean", "texture_mean", "perimeter_mean", "area_mean", "smoothness_mean", "compactness_mean", "concavity_mean", "concave points_mean", "symmetry_mean",
             "fractal_dimension_mean", "radius_se", "texture_se", "perimeter_se", "area_se", "smoothness_se", "compactness_se", "concavity_se",
             "concave points_se", "symmetry_se", "fractal_dimension_se", "radius_worst", "texture_worst", "texture_worst", "perimeter_worst", "area_worst",
@@ -16,8 +19,6 @@ features_raw = ["id", "radius_mean", "texture_mean", "perimeter_mean", "area_mea
 features = []
 for feature in features_raw:
     features.append(Feature(feature, "float32", feature))
-
-xTrain, xTest, yTrain, yTest = train_test_split(x, y)
 
 # Hook data in with our Representation
 training_data = Data(xTest, yTest)  # Accepts Data and GT
@@ -67,7 +68,6 @@ def test_metric(metric_name, function, preds, actual, expected):
 
 
 # Compute Metrics Using our Engine
-ai.compute_metrics(preds=model_preds)
 res = ai.get_metric_values()
 
 # Test Metric Values
@@ -107,3 +107,6 @@ print(result)
 
 print("\nSummarizing Results")
 ai.summarize()
+
+print("\nViewing GUI")
+ai.viewGUI()
