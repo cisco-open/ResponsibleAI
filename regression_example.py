@@ -24,7 +24,7 @@ features = [
     Feature("Population", 'float32', "Block group population"),
     Feature("AveOccup", 'float32', "Average Number of Household members"),
     Feature("Latitude", 'float32', "Block group Latitude"),
-    Feature("Longitude", 'float32', "BLock group Longitude")
+    Feature("Longitude", 'float32', "Block group Longitude")
 ]
 meta = MetaDatabase(features)
 
@@ -36,6 +36,8 @@ model = Model(agent=reg, name="Cisco RealEstate AI", model_class="Random Forest 
 task = Task(model=model, type='regression')
 
 # Create AISystem from previous objects. AISystems are what users will primarily interact with.
+
+configuration = {"equal_treatment": {"priv_groups": [("Gender", 1)]}}
 ai = AISystem(meta_database=meta, dataset=dataset, task=task, user_config=None)
 ai.initialize()
 
