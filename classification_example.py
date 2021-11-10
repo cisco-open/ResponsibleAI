@@ -43,28 +43,27 @@ model_preds = reg.predict(xTest)
 
 # Make Predictions
 ai.compute_metrics(model_preds)
-
-# Dictionary used for testing metrics
-test_group = {"accuracy": [sklearn.metrics.accuracy_score, {}], "balanced_accuracy": [sklearn.metrics.balanced_accuracy_score, {}],
-             "f1-single": [sklearn.metrics.f1_score, {"average": "macro", "labels": [0, 1]}],
-             "jaccard_score-single": [sklearn.metrics.jaccard_score, {"average": "macro"}], "confusion_matrix": [sklearn.metrics.confusion_matrix, {}],
-             "explained_variance": [sklearn.metrics.explained_variance_score, {}], "mean_absolute_error": [sklearn.metrics.mean_absolute_error, {}],
-             "mean_absolute_percentage_error": [sklearn.metrics.mean_absolute_percentage_error, {}], "mean_gamma_deviance": [sklearn.metrics.mean_gamma_deviance, {}],
-             "mean_poisson_deviance": [sklearn.metrics.mean_poisson_deviance, {}], "mean_squared_error": [sklearn.metrics.mean_squared_error, {}],
-             "mean_squared_log_error": [sklearn.metrics.mean_squared_log_error, {}], "median_absolute_error": [sklearn.metrics.median_absolute_error, {}],
-             "r2": [sklearn.metrics.r2_score, {}]}
-
-
 # Function to compare our result to sklearn's result.
-def test_metric(metric_name, function, preds, actual, expected):
-    print("\tTesting ", metric_name)
-    if isinstance(expected, np.ndarray):
-        if not np.array_equal(function[0](actual, preds, **function[1]), expected):
-            print("Test Failed")
-    else:
-        # print("\t", expected, " = ", function[0](actual, preds, **function[1]))
-        if function[0](actual, preds, **function[1]) != expected:
-            print("Test Failed")
+
+def test_metric(res, actual, preds):
+    if 'class_bias' in res:
+        print("Testing class_bias metrics")
+        assert res['class_bias']['accuracy'] == sklearn.metrics.accuracy_score(actual, preds)
+        assert res['class_bias']['balanced_accuracy'] == sklearn.metrics.balanced_accuracy_score(actual, preds)
+        assert res['class_bias']['f1-single'] == sklearn.metrics.f1_score(actual, preds, average="macro")
+        assert res['class_bias']['jaccard_score-single'] == sklearn.metrics.jaccard_score(actual, preds, average="macro")
+        assert np.array_equal(res['class_bias']['confusion_matrix'], sklearn.metrics.confusion_matrix(actual, preds))
+    if 'reg_bias' in res:
+        print("Testing class_reg metrics")
+        assert res['reg_bias']['explained_variance'] == sklearn.metrics.explained_variance_score(actual, preds)
+        assert res['reg_bias']['mean_absolute_error'] == sklearn.metrics.mean_absolute_error(actual, preds)
+        assert res['reg_bias']['mean_absolute_percentage_error'] == sklearn.metrics.mean_absolute_percentage_error(actual, preds)
+        assert res['reg_bias']['mean_gamma_deviance'] == sklearn.metrics.mean_gamma_deviance(actual, preds)
+        assert res['reg_bias']['mean_poisson_deviance'] == sklearn.metrics.mean_poisson_deviance(actual, preds)
+        assert res['reg_bias']['mean_squared_error'] == sklearn.metrics.mean_squared_error(actual, preds)
+        assert res['reg_bias']['mean_squared_log_error'] == sklearn.metrics.mean_squared_log_error(actual, preds)
+        assert res['reg_bias']['median_absolute_error'] == sklearn.metrics.median_absolute_error(actual, preds)
+        assert res['reg_bias']['r2'] == sklearn.metrics.r2_score(actual, preds)
 
 
 # Compute Metrics Using our Engine
@@ -72,14 +71,7 @@ res = ai.get_metric_values()
 
 # Test Metric Values
 print("\nTESTING Metrics:")
-for group in res:
-    for metric in res[group]:
-        if metric in test_group:
-            ans = res[group][metric]  # Get the output of the metric value.
-            if isinstance(ans, list):
-                ans = ans[1]
-            test_metric(metric, test_group[metric], model_preds, yTest, res[group][metric]) # Compare our score to sklearns.
-
+test_metric(res, yTest, model_preds)
 
 # Getting Metric Information
 print("\nGetting Metric Information")
@@ -108,5 +100,5 @@ print(result)
 print("\nSummarizing Results")
 ai.summarize()
 
-print("\nViewing GUI")
-ai.viewGUI()
+# print("\nViewing GUI")
+# ai.viewGUI()
