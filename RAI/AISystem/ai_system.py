@@ -7,6 +7,7 @@ from .task import *
 from RAI.dataset import *
 import json
 import redis
+import subprocess
 
 
 class AISystem:
@@ -102,7 +103,7 @@ class AISystem:
         now = datetime.datetime.now()
         return "{:02d}".format(now.year) + "-" + "{:02d}".format(now.month) + "-" + "{:02d}".format(now.day) + " " + "{:02d}".format(now.hour) + ":" + "{:02d}".format(now.minute) + ":" + "{:02d}".format(now.second)
 
-    def export_data(self, dir=None):
+    def export_data(self):
         metric_values = self.export_metric_values()
         newDict = {}
         newDict['date'] = self.timestamp
@@ -161,6 +162,7 @@ class AISystem:
                 metric_values = self.metric_groups[group].get_metric_values()
                 for metric in metric_values:
                     print("\t\t", metric, " ", metric_values[metric])
-                # for metric in self.metric_groups[group].metrics:
-                #    print("{:<10} {:<10}".format(metric, self.metric_groups[group].metrics[metric].value))
 
+    def viewGUI(self):
+        subprocess.call("start /wait python GUI\\app.py", shell=True)
+        print("GUI can be viewed at localhost:5000")

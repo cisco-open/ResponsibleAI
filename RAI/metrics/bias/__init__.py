@@ -1,3 +1,4 @@
 from .class_bias import ClassBiasMetricGroup
 from .reg_bias import RegBiasMetricGroup
-
+from .group_fairness import GroupFairnessMetricGroup
+from .individual_fairness import IndividualFairnessMetricGroup
