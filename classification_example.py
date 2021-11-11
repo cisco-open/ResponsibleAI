@@ -83,7 +83,7 @@ for group in res:
     for metric in res[group]:
         print(metric, " = ", res[group][metric])
 
-'''
+
 # Test Metric Values
 print("\nTESTING Metrics:")
 test_metric(res, yTest, model_preds)
@@ -115,6 +115,5 @@ print(result)
 print("\nSummarizing Results")
 ai.summarize()
 
-# print("\nViewing GUI")
-# ai.viewGUI()
-'''
+print("\nViewing GUI")
+ai.viewGUI()
