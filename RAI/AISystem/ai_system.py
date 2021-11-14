@@ -114,6 +114,11 @@ class AISystem:
         metric_info = self.get_metric_info()
         self._update_redis(newDict, model_info, metric_info)
 
+    def reset_redis(self):
+        r = redis.Redis(host='localhost', port=6379, db=0)
+        for key in r.keys():
+            r.delete(key)
+            
     def _dict_to_csv(self, file, dict, write_headers=True):
         newDict = {}
         newDict['date'] = self.timestamp
