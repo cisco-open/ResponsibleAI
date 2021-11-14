@@ -115,5 +115,8 @@ print(result)
 print("\nSummarizing Results")
 ai.summarize()
 
+
+ai.export_data( )
+
 print("\nViewing GUI")
-ai.viewGUI()
+# ai.viewGUI()
