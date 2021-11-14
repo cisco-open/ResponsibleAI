@@ -7,11 +7,12 @@ import pandas as pd
 
 __all__ = ['compatibility']
 
-compatibility = {"type_restriction": "classification", "output_restriction": "choice"}
-
+ 
 # Log loss, roc and brier score have been removed. s
 
 _config = {
+    "name" : "individual_fairness",
+    "compatibility" : {"type_restriction": "classification", "output_restriction": "choice"},
     "src": "equal_treatment",
     "category": "bias",
     "dependency_list": [],
@@ -62,12 +63,9 @@ _config = {
 }
 
 
-class IndividualFairnessMetricGroup(MetricGroup, name="individual_fairness"):
-    def __init__(self, ai_system, config=_config) -> None:
-        super().__init__(ai_system, config)
-        self.ai_system = ai_system
-        self.config = config
-        self.compatibility = {"type_restriction": "classification", "output_restriction": "choice"}
+class IndividualFairnessMetricGroup(MetricGroup, config=_config):
+    def __init__(self, ai_system) -> None:
+        super().__init__(ai_system)
 
     def update(self, data):
         pass

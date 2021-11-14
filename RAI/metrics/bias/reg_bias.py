@@ -5,6 +5,8 @@ import sklearn
 
 
 _config = {
+    "name" : "reg_bias",
+    "compatibility" : {"type_restriction": "regression", "output_restriction": None},
     "src": "stats",
     "category": "bias",
     "dependency_list": [],
@@ -87,12 +89,16 @@ _config = {
 }
 
 
-class RegBiasMetricGroup(MetricGroup, name="reg_bias"):
+class RegBiasMetricGroup(MetricGroup, config=_config):
     def __init__(self, ai_system, config=_config) -> None:
-        super().__init__(ai_system, config)
-        self._ai_system = ai_system
-        self.config = config
-        self.compatibility = {"type_restriction": "regression", "output_restriction": None}
+        super().__init__(ai_system)
+
+    # this shows how to override the compatiblity requirement        
+    # @classmethod
+    # def is_compatible( cls,ai_system ):
+    #     print("handled in chid", cls.name,cls)
+    #     return cls.config["compatibility"]["type_restriction"] is None or cls.config["compatibility"]["type_restriction"] == ai_system.task.type
+ 
 
     def update(self, data):
         pass

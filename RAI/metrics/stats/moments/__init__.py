@@ -1,1 +1,0 @@
-from .moments import MomentMetricGroup

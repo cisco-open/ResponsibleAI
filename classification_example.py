@@ -115,8 +115,13 @@ print(result)
 print("\nSummarizing Results")
 ai.summarize()
 
+#reset all previous keys
+ai.reset_redis()
 
+#export to redis
 ai.export_data( )
 
+
+RAI.metrics.registry.registry['reg_bias'].is_compatible(ai)
 print("\nViewing GUI")
 # ai.viewGUI()

@@ -5,6 +5,8 @@ import numpy as np
 
 # Move config to external .json? 
 _config = {
+    "name" : "stat",
+    "compatibility" : {"type_restriction": None, "output_restriction": None},
     "src": "stats",
     "category": "dataset_quality",
     "dependency_list": [],
@@ -50,14 +52,12 @@ _config = {
 # Type (Regression, Classification, Data | probability, numeric)
 
 
-class StatMetricGroup(MetricGroup, name="stat"):
+class StatMetricGroup(MetricGroup, config = _config):
     compatibility = {"type_restriction": None, "output_restriction": None}
 
-    def __init__(self, ai_system, config=_config) -> None:
-        super().__init__(ai_system, config)
-        self.ai_system = ai_system
-        self.compatibility = {"type_restriction": None, "output_restriction": None}
-
+    def __init__(self, ai_system) -> None:
+        super().__init__(ai_system)
+        
     def update(self, data):
         pass
 

@@ -4,12 +4,12 @@ import numpy as np
 import sklearn
 
 __all__ = ['compatibility']
-
-compatibility = {"type_restriction": "classification", "output_restriction": "choice"}
-
+ 
 # Log loss, roc and brier score have been removed. s
 
 _config = {
+    "name" : "class_bias",
+    "compatibility" : {"type_restriction": "classification", "output_restriction": "choice"},
     "src": "stats",
     "category": "bias",
     "dependency_list": [],
@@ -92,13 +92,10 @@ _config = {
 }
 
 
-class ClassBiasMetricGroup(MetricGroup, name="class_bias"):
-    def __init__(self, ai_system, config=_config) -> None:
-        super().__init__(ai_system, config)
-        self.ai_system = ai_system
-        self.config = config
-        self.compatibility = {"type_restriction": "classification", "output_restriction": "choice"}
-
+class ClassBiasMetricGroup(MetricGroup, config=_config):
+    def __init__(self, ai_system) -> None:
+        super().__init__(ai_system)
+        
     def update(self, data):
         pass
 

@@ -9,13 +9,18 @@ all_complexity_classes = {"constant",  "linear",  "multi_linear", "polynomial", 
 
 class MetricGroup(object):    
     name = ""
+    config = None
+    @classmethod
+    def is_compatible( cls,ai_system ):
+        return cls.config["compatibility"]["type_restriction"] is None or cls.config["compatibility"]["type_restriction"] == ai_system.task.type
 
-    def __init_subclass__(cls, name=None, **kwargs):
+    def __init_subclass__(cls, config=None, **kwargs):
         super().__init_subclass__(**kwargs)
-        cls.name = name
-        register_class(name, cls)
+        cls.config = config
+        cls.name = config["name"]
+        register_class(cls.name, cls)
 
-    def __init__(self, ai_system, config) -> None:
+    def __init__(self, ai_system) -> None:
         self.ai_system = ai_system
         self.persistent_data = {}
         self.dependency_list = []
@@ -26,7 +31,7 @@ class MetricGroup(object):
         self.status = "OK"
         self.reset()
         
-        if self.load_config(config):
+        if self.load_config(self.config):
             self.status = "OK"
         else:
             self.status = "BAD"
