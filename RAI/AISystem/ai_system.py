@@ -8,6 +8,7 @@ from RAI.dataset import *
 import json
 import redis
 import subprocess
+from RAI import utils
 
 
 class AISystem:
@@ -80,7 +81,7 @@ class AISystem:
         for group in self.metric_groups:
             for metric in self.metric_groups[group].metrics:
                 metric_obj = self.metric_groups[group].metrics[metric]
-                result[metric_obj.unique_name] = self._jsonify(metric_obj.value)
+                result[metric_obj.unique_name] = utils.jsonify(metric_obj.value)
                
         return result
     def get_metric_values_dict(self):
@@ -89,22 +90,11 @@ class AISystem:
             result[ group ] = {}
             for metric in self.metric_groups[group].metrics:
                 metric_obj = self.metric_groups[group].metrics[metric]
-                result[group][metric] = self._jsonify(metric_obj.value)
+                result[group][metric] = utils.jsonify(metric_obj.value)
                  
         return result
 
-    def _jsonify(self, v):
-        if type(v) is np.ndarray:
-            return v.tolist()
-        return v
-    # def get_metric_values_flat(self):
-    #     result = {}
-    #     for metric_group_name in self.metric_groups:
-    #         result[metric_group_name] = self.metric_groups[metric_group_name].get_metric_values()
-    #     return result
-
-
-    
+     
     def compute_metrics(self, preds=None, reset_metrics=False, data_type="train"):
         if reset_metrics:
             self.reset_metrics()

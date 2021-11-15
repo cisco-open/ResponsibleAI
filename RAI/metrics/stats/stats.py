@@ -7,8 +7,6 @@ import numpy as np
 _config = {
     "name" : "stat",
     "compatibility" : {"type_restriction": None, "output_restriction": None},
-    "src": "stats",
-    "category": "dataset_quality",
     "dependency_list": [],
     "tags": ["stats"],
     "complexity_class": "linear",
