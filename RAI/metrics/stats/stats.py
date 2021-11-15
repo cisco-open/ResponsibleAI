@@ -16,7 +16,7 @@ _config = {
         "mean": {
             "display_name": "Mean",
             "type": "numeric",
-            "tags": ["Standard Metric"],
+            "tags": [],
             "has_range": False,
             "range": None,
             "explanation": "Mean is the expected value of data.",
@@ -24,7 +24,7 @@ _config = {
         "covariance": {
             "display_name": "Covariance Matrix",
             "type": "matrix",
-            "tags": ["Standard Metric"],
+            "tags": [],
             "has_range": False,
             "range": None,
             "explanation": "A Covariance Matrix shows the directional relationship between different data members.",
@@ -33,7 +33,7 @@ _config = {
         "num-Nan-rows": {
             "display_name": "Number of NaN Rows",
             "type": "numeric",
-            "tags": ["Dataset Values"],
+            "tags": [],
             "has_range": True,
             "range": [0, None],
             "explanation": "Num Nan Rows indicates the number of NaN rows found in the data.",
@@ -41,7 +41,7 @@ _config = {
         "percent-Nan-rows": {
             "display_name": "Percentage of NaN Rows",
             "type": "numeric",
-            "tags": ["Dataset Values"],
+            "tags": [],
             "has_range": True,
             "range": [0, 1],
             "explanation": "Percent Nan Rows indicates the percentage of rows that are NaN in the data.",
@@ -68,8 +68,8 @@ class StatMetricGroup(MetricGroup, config = _config):
                 args = self.ai_system.user_config["stats"]["args"]
 
             data = data_dict["data"]
-            self.metrics["mean"].value = np.mean(data.X, **args.get("mean", {}))
-            self.metrics["covariance"].value = np.cov(data.X, **args.get("covariance", {}))
+            self.metrics["mean"].value = np.mean(data.X, **args.get("mean", {}), axis=0)
+            self.metrics["covariance"].value = np.cov(data.X.T, **args.get("covariance", {}))
             self.metrics["num-Nan-rows"].value = np.count_nonzero(np.isnan(data.X).any(axis=1))
             self.metrics["percent-Nan-rows"].value = self.metrics["num-Nan-rows"].value/np.shape(np.asarray(data.X))[0]
 

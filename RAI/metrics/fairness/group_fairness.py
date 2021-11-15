@@ -13,15 +13,14 @@ _config = {
     "name" : "group_fairness",
     "compatibility" : {"type_restriction": "classification", "output_restriction": "choice"},
     "src": "equal_treatment",
-    "category": "bias",
     "dependency_list": [],
-    "tags": ["Equal Treatment"],
+    "tags": ["fairness", "Equal Treatment"],
     "complexity_class": "linear",
     "metrics": {
         "disparate_impact_ratio": {
             "display_name": "Disparate Impact",
             "type": "numeric",
-            "tags": ["Equal Treatment"],
+            "tags": [],
             "has_range": True,
             "range": [0, 2],
             "explanation": ""
@@ -29,7 +28,7 @@ _config = {
         "statistical_parity_difference": {
             "display_name": "Statistical Parity Difference",
             "type": "numeric",
-            "tags": ["Equal Treatment"],
+            "tags": [],
             "has_range": True,
             "range": [0, 2],
             "explanation": "Disparate Impact describes how preferential the treatment is for privileged groups when compared to unprivileged groups."
@@ -37,7 +36,7 @@ _config = {
         "equal_opportunity_difference": {
             "display_name": "Equal Opportunity Difference",
             "type": "numeric",
-            "tags": ["Equal Treatment"],
+            "tags": [],
             "has_range": True,
             "range": [0, 2],
             "explanation": ""
@@ -45,7 +44,7 @@ _config = {
         "average_odds_difference": {
             "display_name": "Average Odds Difference",
             "type": "numeric",
-            "tags": ["Equal Treatment"],
+            "tags": [],
             "has_range": True,
             "range": [0, 2],
             "explanation": ""
@@ -53,7 +52,7 @@ _config = {
         "average_odds_error": {
             "display_name": "Average Odds Error",
             "type": "numeric",
-            "tags": ["Equal Treatment"],
+            "tags": [],
             "has_range": True,
             "range": [0, 2],
             "explanation": ""

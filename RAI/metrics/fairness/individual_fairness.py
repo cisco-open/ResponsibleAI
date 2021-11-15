@@ -14,15 +14,14 @@ _config = {
     "name" : "individual_fairness",
     "compatibility" : {"type_restriction": "classification", "output_restriction": "choice"},
     "src": "equal_treatment",
-    "category": "bias",
     "dependency_list": [],
-    "tags": ["Equal Treatment"],
+    "tags": ["fairness","Equal Treatment"],
     "complexity_class": "linear",
     "metrics": {
         "generalized_entropy_error": {
             "display_name": "Generalized Entropy Error",
             "type": "numeric",
-            "tags": ["Equal Treatment"],
+            "tags": [],
             "has_range": True,
             "range": [0, 2],
             "explanation": ""
@@ -30,7 +29,7 @@ _config = {
         "between_group_generalized_entropy_error": {
             "display_name": "Between Group Generalized Entropy Error",
             "type": "numeric",
-            "tags": ["Equal Treatment"],
+            "tags": [],
             "has_range": True,
             "range": [0, 2],
             "explanation": ""
@@ -38,7 +37,7 @@ _config = {
         "theil_index": {
             "display_name": "Theil Index",
             "type": "numeric",
-            "tags": ["Equal Treatment"],
+            "tags": [],
             "has_range": True,
             "range": [0, 2],
             "explanation": ""
@@ -46,7 +45,7 @@ _config = {
         "coefficient_of_variation": {
             "display_name": "Coefficient of Variance",
             "type": "numeric",
-            "tags": ["Equal Treatment"],
+            "tags": [],
             "has_range": True,
             "range": [0, 2],
             "explanation": ""
@@ -54,7 +53,7 @@ _config = {
         "consistency_score": {
             "display_name": "Consistency Score",
             "type": "numeric",
-            "tags": ["Equal Treatment"],
+            "tags": [],
             "has_range": True,
             "range": [0, 2],
             "explanation": ""

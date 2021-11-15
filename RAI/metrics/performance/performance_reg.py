@@ -5,12 +5,11 @@ import sklearn
 
 
 _config = {
-    "name" : "reg_bias",
+    "name" : "performance_reg",
     "compatibility" : {"type_restriction": "regression", "output_restriction": None},
     "src": "stats",
-    "category": "bias",
     "dependency_list": [],
-    "tags": ["bias"],
+    "tags": ["performance"],
     "complexity_class": "linear",
     "metrics": {
         "explained_variance": {
@@ -89,7 +88,7 @@ _config = {
 }
 
 
-class RegBiasMetricGroup(MetricGroup, config=_config):
+class PerformanceRegMetricGroup(MetricGroup, config=_config):
     def __init__(self, ai_system, config=_config) -> None:
         super().__init__(ai_system)
 

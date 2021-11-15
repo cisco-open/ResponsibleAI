@@ -8,6 +8,7 @@ metric_types = {"numeric", "multivalued", "other", "vector", "matrix"}
 
 class Metric:
     def __init__(self, name, config) -> None:
+        self.config = config
         self.name = name
         self.type = None
         self.explanation = None
@@ -17,6 +18,8 @@ class Metric:
         self.range = None
         self.value_list = None
         self.display_name = None
+        self.unique_name = None
+
         self.load_config(config)
 
     def load_config(self, config):

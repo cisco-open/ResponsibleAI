@@ -53,20 +53,58 @@ class AISystem:
         result = {"id": self.task.model.name, "model": self.task.model.model_class, "adaptive": self.task.model.adaptive}
         return result
 
-    def get_metric_info(self):
+    def get_metric_info_flat(self):
         result = {}
-        lists = {}
         for group in self.metric_groups:
             for metric in self.metric_groups[group].metrics:
                 metric_obj = self.metric_groups[group].metrics[metric]
-                result[metric] = {"name": metric_obj.name, "has_range": metric_obj.has_range, "range": metric_obj.range,
-                                  "explanation": metric_obj.explanation, "type": metric_obj.type, "display_name": metric_obj.display_name,
-                                  "tags": metric_obj.tags}
-                if self.metric_groups[group].category not in lists:
-                    lists[self.metric_groups[group].category] = []
-                lists[self.metric_groups[group].category].append(metric_obj.name)
-        return {"metrics": result, "categories": lists}
+                result[metric_obj.unique_name] = metric_obj.config
+                # {"name": metric_obj.name, "has_range": metric_obj.has_range, "range": metric_obj.range,
+                #                   "explanation": metric_obj.explanation, "type": metric_obj.type, "display_name": metric_obj.display_name,
+                #                   "tags": metric_obj.tags}
+                 
+        return result
+    def get_metric_info_dict(self):
+        result = {}
+        for group in self.metric_groups:
+            result[ group ] = {}
+            for metric in self.metric_groups[group].metrics:
+                metric_obj = self.metric_groups[group].metrics[metric]
+                result[group][metric] = metric_obj.config
+                 
+        return result
 
+
+    def get_metric_values_flat(self):
+        result = {}
+        for group in self.metric_groups:
+            for metric in self.metric_groups[group].metrics:
+                metric_obj = self.metric_groups[group].metrics[metric]
+                result[metric_obj.unique_name] = self._jsonify(metric_obj.value)
+               
+        return result
+    def get_metric_values_dict(self):
+        result = {}
+        for group in self.metric_groups:
+            result[ group ] = {}
+            for metric in self.metric_groups[group].metrics:
+                metric_obj = self.metric_groups[group].metrics[metric]
+                result[group][metric] = self._jsonify(metric_obj.value)
+                 
+        return result
+
+    def _jsonify(self, v):
+        if type(v) is np.ndarray:
+            return v.tolist()
+        return v
+    # def get_metric_values_flat(self):
+    #     result = {}
+    #     for metric_group_name in self.metric_groups:
+    #         result[metric_group_name] = self.metric_groups[metric_group_name].get_metric_values()
+    #     return result
+
+
+    
     def compute_metrics(self, preds=None, reset_metrics=False, data_type="train"):
         if reset_metrics:
             self.reset_metrics()
@@ -85,11 +123,7 @@ class AISystem:
         self.timestamp = self._get_time()
         self.sample_count += 1
 
-    def get_metric_values(self):
-        result = {}
-        for metric_group_name in self.metric_groups:
-            result[metric_group_name] = self.metric_groups[metric_group_name].get_metric_values()
-        return result
+    
 
     def export_metric_values(self):
         result = {}
@@ -101,16 +135,18 @@ class AISystem:
         now = datetime.datetime.now()
         return "{:02d}".format(now.year) + "-" + "{:02d}".format(now.month) + "-" + "{:02d}".format(now.day) + " " + "{:02d}".format(now.hour) + ":" + "{:02d}".format(now.minute) + ":" + "{:02d}".format(now.second)
 
-    def export_data(self):
-        metric_values = self.export_metric_values()
-        newDict = {}
-        newDict['date'] = self.timestamp
-        for category in metric_values:
-            for metric in metric_values[category]:
-                newDict[metric] = metric_values[category][metric]
+    def export_data_flat(self):
+        metric_values = self.get_metric_values_flat()
+        metric_info = self.get_metric_info_flat()
         model_info = self.get_model_info()
-        metric_info = self.get_metric_info()
-        self._update_redis(newDict, model_info, metric_info)
+        self._update_redis(metric_values, model_info, metric_info)
+
+    def export_data_dict(self):
+        metric_values = self.get_metric_values_dict()
+        metric_info = self.get_metric_info_dict()
+        model_info = self.get_model_info()
+        self._update_redis(metric_values, model_info, metric_info)
+
 
     def reset_redis(self):
         r = redis.Redis(host='localhost', port=6379, db=0)
@@ -138,7 +174,7 @@ class AISystem:
         query = query.lower()
         results = {}
         for group in self.metric_groups:
-            add_group = group.lower() == query or self.metric_groups[group].category.lower() == query
+            add_group = group.lower() == query 
             for metric in self.metric_groups[group].metrics:
                 metric_obj = self.metric_groups[group].metrics[metric]
                 if add_group or metric.lower().find(query) > -1 or metric_obj.display_name.lower().find(query) > -1:
@@ -150,21 +186,21 @@ class AISystem:
                             break
         return results
 
-    def summarize(self):
-        categories = {}
-        # Separate Metric Groups by Category
-        for group in self.metric_groups:
-            if self.metric_groups[group].category.lower() not in categories:
-                categories[self.metric_groups[group].category.lower()] = []
-            categories[self.metric_groups[group].category.lower()].append(group)
+    # def summarize(self):
+    #     categories = {}
+    #     # Separate Metric Groups by Category
+    #     for group in self.metric_groups:
+    #         if self.metric_groups[group].category.lower() not in categories:
+    #             categories[self.metric_groups[group].category.lower()] = []
+    #         categories[self.metric_groups[group].category.lower()].append(group)
 
-        for category in categories:
-            print("Category ", category, " Metrics")
-            for group in categories[category]:
-                print("\tGroup ", group)
-                metric_values = self.metric_groups[group].get_metric_values()
-                for metric in metric_values:
-                    print("\t\t", metric, " ", metric_values[metric])
+    #     for category in categories:
+    #         print("Category ", category, " Metrics")
+    #         for group in categories[category]:
+    #             print("\tGroup ", group)
+    #             metric_values = self.metric_groups[group].get_metric_values()
+    #             for metric in metric_values:
+    #                 print("\t\t", metric, " ", metric_values[metric])
 
     def viewGUI(self):
         subprocess.call("start /wait python GUI\\app.py", shell=True)

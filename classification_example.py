@@ -77,30 +77,29 @@ def test_metric(res, actual, preds):
 
 
 # Compute Metrics Using our Engine
-res = ai.get_metric_values()
+resv_f = ai.get_metric_values_flat()
+resv_d = ai.get_metric_values_dict()
+resi_f = ai.get_metric_info_flat()
+resi_d = ai.get_metric_info_dict()
 
-for group in res:
-    for metric in res[group]:
-        print(metric, " = ", res[group][metric])
+for key in  resv_f:
+    if hasattr(resv_f[key], "__len__"): 
+        print( resi_f[key]['display_name'], " = ", 'list ...')
+    else:
+        print( resi_f[key]['display_name'], " = ", resv_f[key])
 
 
-# Test Metric Values
-print("\nTESTING Metrics:")
-test_metric(res, yTest, model_preds)
+
+# # Test Metric Values
+# print("\nTESTING Metrics:")
+# test_metric(res, yTest, model_preds)
 
 # Getting Metric Information
 print("\nGetting Metric Information")
-res = ai.get_metric_info()
-metrics = res["metrics"]
-for metric in metrics:
-    print(metrics[metric])
-
-# Get Metric Categories
-print("\nGetting Metric Categories")
-categories = res["categories"]
-for category in categories:
-    print(category, " ", categories[category])
-
+metric_info = ai.get_metric_info_flat()
+for metric in metric_info:
+    print(metric_info[metric])
+ 
 # Get Model Information
 print("\nGetting Model Info:")
 res = ai.get_model_info()
@@ -112,16 +111,15 @@ print("\nSearching Metrics for ", query)
 result = ai.search(query)
 print(result)
 
-print("\nSummarizing Results")
-ai.summarize()
+# print("\nSummarizing Results")
+# ai.summarize()
 
 #reset all previous keys
 ai.reset_redis()
 
 #export to redis
-ai.export_data( )
+ai.export_data_flat( )
 
 
-RAI.metrics.registry.registry['reg_bias'].is_compatible(ai)
 print("\nViewing GUI")
 # ai.viewGUI()
