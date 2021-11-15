@@ -54,26 +54,32 @@ ai.compute_metrics(model_preds)
 # Function to compare our result to sklearn's result.
 
 
-def test_metric(res, actual, preds):
-    # res is the result from ai_system.get_metric_values()
-    if 'class_bias' in res: # Check the metrics in the class_bias metric group
-        print("Testing class_bias metrics")
-        assert res['class_bias']['accuracy'] == sklearn.metrics.accuracy_score(actual, preds)
-        assert res['class_bias']['balanced_accuracy'] == sklearn.metrics.balanced_accuracy_score(actual, preds)
-        assert res['class_bias']['f1-single'] == sklearn.metrics.f1_score(actual, preds, average="macro")
-        assert res['class_bias']['jaccard_score-single'] == sklearn.metrics.jaccard_score(actual, preds, average="macro")
-        assert np.array_equal(res['class_bias']['confusion_matrix'], sklearn.metrics.confusion_matrix(actual, preds))
-    if 'reg_bias' in res:  # Check th emetrics in the reg_bias metric groups
-        print("Testing class_reg metrics")
-        assert res['reg_bias']['explained_variance'] == sklearn.metrics.explained_variance_score(actual, preds)
-        assert res['reg_bias']['mean_absolute_error'] == sklearn.metrics.mean_absolute_error(actual, preds)
-        assert res['reg_bias']['mean_absolute_percentage_error'] == sklearn.metrics.mean_absolute_percentage_error(actual, preds)
-        assert res['reg_bias']['mean_gamma_deviance'] == sklearn.metrics.mean_gamma_deviance(actual, preds)
-        assert res['reg_bias']['mean_poisson_deviance'] == sklearn.metrics.mean_poisson_deviance(actual, preds)
-        assert res['reg_bias']['mean_squared_error'] == sklearn.metrics.mean_squared_error(actual, preds)
-        assert res['reg_bias']['mean_squared_log_error'] == sklearn.metrics.mean_squared_log_error(actual, preds)
-        assert res['reg_bias']['median_absolute_error'] == sklearn.metrics.median_absolute_error(actual, preds)
-        assert res['reg_bias']['r2'] == sklearn.metrics.r2_score(actual, preds)
+# def test_metric(res, actual, preds):
+#     # res is the result from ai_system.get_metric_values()
+#     if 'class_bias' in res: # Check the metrics in the class_bias metric group
+#         print("Testing class_bias metrics")
+#         assert res['class_bias']['accuracy'] == sklearn.metrics.accuracy_score(actual, preds)
+#         assert res['class_bias']['balanced_accuracy'] == sklearn.metrics.balanced_accuracy_score(actual, preds)
+#         assert res['class_bias']['f1-single'] == sklearn.metrics.f1_score(actual, preds, average="macro")
+#         assert res['class_bias']['jaccard_score-single'] == sklearn.metrics.jaccard_score(actual, preds, average="macro")
+#         assert np.array_equal(res['class_bias']['confusion_matrix'], sklearn.metrics.confusion_matrix(actual, preds))
+#     if 'reg_bias' in res:  # Check th emetrics in the reg_bias metric groups
+#         print("Testing class_reg metrics")
+#         assert res['reg_bias']['explained_variance'] == sklearn.metrics.explained_variance_score(actual, preds)
+#         assert res['reg_bias']['mean_absolute_error'] == sklearn.metrics.mean_absolute_error(actual, preds)
+#         assert res['reg_bias']['mean_absolute_percentage_error'] == sklearn.metrics.mean_absolute_percentage_error(actual, preds)
+#         assert res['reg_bias']['mean_gamma_deviance'] == sklearn.metrics.mean_gamma_deviance(actual, preds)
+#         assert res['reg_bias']['mean_poisson_deviance'] == sklearn.metrics.mean_poisson_deviance(actual, preds)
+#         assert res['reg_bias']['mean_squared_error'] == sklearn.metrics.mean_squared_error(actual, preds)
+#         assert res['reg_bias']['mean_squared_log_error'] == sklearn.metrics.mean_squared_log_error(actual, preds)
+#         assert res['reg_bias']['median_absolute_error'] == sklearn.metrics.median_absolute_error(actual, preds)
+#         assert res['reg_bias']['r2'] == sklearn.metrics.r2_score(actual, preds)
+
+
+# # Test Metric Values
+# print("\nTESTING Metrics:")
+# test_metric(res, yTest, model_preds)
+
 
 
 # Compute Metrics Using our Engine
@@ -90,9 +96,6 @@ for key in  resv_f:
 
 
 
-# # Test Metric Values
-# print("\nTESTING Metrics:")
-# test_metric(res, yTest, model_preds)
 
 # Getting Metric Information
 print("\nGetting Metric Information")
