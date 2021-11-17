@@ -1,0 +1,13 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\static",
+    "\\static\\css",
+    "\\static\\js",
+    "\\static\\json",
+    "\\templates",
+    "\\templates\\admin"
+  ],
+  "SelectedNode": "\\templates\\admin\\dataset.html",
+  "PreviewInSolutionExplorer": false
+}

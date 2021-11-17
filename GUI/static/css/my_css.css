@@ -1,0 +1,357 @@
+h1.metricHeader {
+    text-align: center;
+    color: white;
+}
+
+p.chart-container {
+    color: black;
+    margin-top: 10px;
+    margin-bottom: 0px;
+}
+
+p.gauge-container {
+    color: black;
+}
+
+
+.morris-chart text {
+    fill: black;
+}
+
+div.biasMetric {
+    width: 32%;
+    margin-left: 1%;
+    margin-top: 2%;
+    background-color: #dce2ff;
+    fill: black;
+    height: 250px;
+}
+
+.bg-bias{
+    background-color: #dce2ff;
+}
+
+.bg-robust{
+    background-color: #c5dcd2;
+}
+
+.bg-explain{
+    background-color: #d8cfc1;
+}
+
+.bg-dataset{
+    background-color: #e2c5c5;
+}
+
+div.explainabilityMetric {
+    width: 32%;
+    margin-left: 1%;
+    margin-top: 2%;
+    background-color: #d8cfc1;
+    fill: black;
+    height: 250px;
+}
+
+
+div.robustnessMetric {
+    width: 32%;
+    margin-left: 1%;
+    margin-top: 2%;
+    background-color: #c5dcd2;
+    fill: black;
+    height: 250px;
+}
+
+
+div.dataset_qualityMetric {
+    width: 32%;
+    margin-left: 1%;
+    margin-top: 2%;
+    background-color: #e2c5c5;
+    fill: black;
+    height: 250px;
+}
+
+
+div.MetricPage {
+    width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 2%;
+    background-color: #f4f2ee;
+    fill: black;
+    height: 400px;
+}
+
+
+
+p.chartHeader {
+    text-align: center;
+    font-size: 25px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    color: black;
+}
+
+p.chartValue{
+    text-align: center;
+    font-size: 25px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    color: black;
+}
+
+.morris-chart {
+    height:75%;
+}
+
+
+.learnMore {
+    position: absolute;
+    top: 1px;
+    right: 30px;
+    width: 25px;
+    height: 25px;
+}
+
+.learnMoreLink {
+    position: absolute;
+    top: 1px;
+    color: black;
+    right: 1px;
+    width: 25px;
+    height: 25px;
+}
+
+
+.rai-desc {
+    color:white;
+}
+
+.title {
+    color:white;
+    text-align:center;
+}
+
+
+
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.grey td, th {
+    border: 1px solid #08012f;
+    font-size:16px;
+    text-align: left;
+    padding: 8px;
+    color:black;
+}
+
+
+
+.grey tr:nth-child(even) {
+    background-color: #f0f0f0;
+}
+
+.grey tr:nth-child(odd) {
+    background-color: #b4b4b4;
+}
+
+.displayMatrix {
+    border-color: black;
+    border-width: 2px;
+    margin-top: auto;
+    margin-bottom: auto;
+    background-color: transparent;
+}
+
+td.displayMatrix, th.displayMatrix {
+    border: 1px solid #000000;
+    text-align: center;
+    padding: 8px;
+    color:black;
+}
+
+
+.selector {
+    width: 200px;
+    background-color: #24284e;
+    color: white;
+    margin-left:40px;
+}
+
+.selectorHeader{
+    text-align:center;
+    font-size:15px;
+}
+
+.selectorButton {
+    background-color: #332c2c;
+    color:white;
+    margin:2px;
+}
+
+.selectorBox{
+    margin-left:5px;
+}
+
+.editView {
+    background-color: #24284e;
+    color:white;
+    margin-left: 100px;
+}
+
+.removeChart {
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    background-color: #24284e;
+    color:white;
+}
+
+input.biasBox {
+    margin-left:45px;
+}
+
+input.explainabilityBox {
+    margin-left: 45px;
+}
+
+input.dataset_qualityBox {
+    margin-left: 45px;
+}
+
+input.robustnessBox {
+    margin-left: 45px;
+}
+
+
+input.parentBox {
+    margin-left: 25px;
+}
+
+.dateChooser {
+    float:right;
+    margin-right:15px;
+}
+
+label.dateChooser {
+    margin-bottom: 0;
+    margin-right: 2px;
+    margin-top: 3px;
+    color: white;
+}
+
+
+
+.gauge-div{
+    margin-top:25px;
+}
+
+
+
+.knob-label {
+    color: black;
+    margin-top:18px;
+}
+
+
+
+
+.headerBoxStatic {
+    width: 292px;
+    margin-right: 50px;
+}
+
+
+.outerUpperHeader {
+}
+
+
+.chartScaler{
+    width:100%;
+    height:80%;
+}
+
+.chartScalerSmall {
+    width: 100%;
+    height: 70%;
+}
+
+
+.contentRow {
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.flex-wrapper {
+    display: flex;
+    flex-flow: row nowrap;
+}
+
+.single-chart {
+    width: 40%;
+    margin-left:auto;
+    margin-right:auto;
+    justify-content: space-around;
+    float:left;
+    margin-top:10px;
+}
+
+.circular-chart {
+    display: block;
+    margin: 10px auto;
+    max-width: 100%;
+    max-height: 250px;
+}
+
+.circle-bg {
+    fill: none;
+    stroke: #eee;
+    stroke-width: 3.8;
+}
+
+.circle {
+    fill: none;
+    stroke-width: 2.8;
+    stroke-linecap: round;
+}
+
+@keyframes progress {
+    0% {
+        stroke-dasharray: 0 100;
+    }
+}
+
+.circular-chart.black .circle {
+    stroke: #000000;
+}
+
+.circular-chart.green .circle {
+    stroke: #4CC790;
+}
+
+.circular-chart.blue .circle {
+    stroke: #3c9ee5;
+}
+
+.percentage {
+    fill: #000000;
+    font-family: sans-serif;
+    font-size: 0.5em;
+    text-anchor: middle;
+}
