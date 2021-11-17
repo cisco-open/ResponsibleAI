@@ -12,7 +12,7 @@ _config = {
     "compatibility" : {"type_restriction": "classification", "output_restriction": "choice"},
     "src": "stats",
     "dependency_list": [],
-    "tags": ["performance"],
+    "tags": ["performance", "Classification"],
     "complexity_class": "linear",
     "metrics": {
         "accuracy": {

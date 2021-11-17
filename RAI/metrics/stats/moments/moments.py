@@ -8,7 +8,7 @@ _config = {
     "name": "stat_moment_group",
     "compatibility": {"type_restriction": None, "output_restriction": None},
     "dependency_list": [],
-    "tags": ["stats"],
+    "tags": ["stats", "Moments"],
     "complexity_class": "linear",
     "metrics": {
         "moment-1": {

@@ -9,7 +9,7 @@ _config = {
     "compatibility" : {"type_restriction": "regression", "output_restriction": None},
     "src": "stats",
     "dependency_list": [],
-    "tags": ["performance"],
+    "tags": ["performance", "Regression"],
     "complexity_class": "linear",
     "metrics": {
         "explained_variance": {

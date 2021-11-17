@@ -8,7 +8,7 @@ _config = {
     "name": "summary_stats",
     "compatibility" : {"type_restriction": None, "output_restriction": None},
     "dependency_list": [],
-    "tags": ["stats"],
+    "tags": ["stats", "Summary Stats"],
     "complexity_class": "linear",
     "metrics": {
         "mean": {
