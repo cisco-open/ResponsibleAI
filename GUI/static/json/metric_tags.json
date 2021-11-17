@@ -1,5 +1,5 @@
 {
-  "Bias": [ "Accuracy", "True Positive Rate", "False Positive Rate", "F1 Score", "Area Under Curve", "Disparate Impact" ],
+  "Fairness": [ "Accuracy", "True Positive Rate", "False Positive Rate", "F1 Score", "Area Under Curve", "Disparate Impact" ],
   "Robustness": [ "SwayMetric1", "SwayMetric2", "SwayMetric3", "Generalization1", "Generalization2", "Generalization3", "Adversarial1", "Adversarial2", "Adversarial3" ],
   "Explainability": [ "Interpretibility", "Model Score", "Explanation Quality" ],
   "Dataset_Quality": [ "Fairness1", "Fairness2", "Bias1", "Bias2"],

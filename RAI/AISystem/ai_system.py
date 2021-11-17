@@ -10,7 +10,6 @@ from RAI import utils
 
 
 class AISystem:
-
     def __init__(self, meta_database, dataset, task, user_config) -> None:
         self.meta_database = meta_database
         self.task = task
@@ -90,7 +89,6 @@ class AISystem:
                  
         return result
 
-     
     def compute_metrics(self, preds=None, reset_metrics=False, data_type="train"):
         if reset_metrics:
             self.reset_metrics()

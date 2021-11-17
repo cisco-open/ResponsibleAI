@@ -15,7 +15,7 @@ var tags = {}
 
 // Queries Data
 function loadData(metric_name, metric_range_, metric_display_name_, metric_type_, metric_has_range_) {
-    console.log("load data dn: " + metric_display_name_)
+    metric_name = metric_name.replace('&gt;', '>')
     metric_range = metric_range_;
     metric_display_name = metric_display_name_;
     metric_type = metric_type_;
@@ -49,20 +49,17 @@ function createMetrics(metric_name, data) {
         var res = stringToMatrix(data, metric_name);
         addTable(metric_name, res);
     }
+    else if(metric_type == "boolean"){
+        addBoolChart(metric_name, data);
+    }
 }
 
 
 function stringToMatrix(data, name){
     var result = []
-    var data_start =  data[data.length -1][name].indexOf('[[')
-    var data_end = data[data.length -1][name].indexOf(']]') +1
-    var actualData =  data[data.length -1][name].substring(data_start, data_end)
-    actualData = actualData.replace(/\s+/g, '')
-    var split = actualData.split(']');
-    for(var j = 0; j<split.length-1; j++){
-        result.push(split[j].substring(2).split(","))
-    }
-    return result;
+    if (data.length >= 1)
+        result = data[data.length-1][name];
+    return result
 }
 
 
@@ -76,7 +73,7 @@ function addChart(metric_name, data, name_extension){
     writing.innerHTML = metric_display_name;
     writing.setAttribute("class", "chartHeader");
     var writing2 = document.createElement('p');
-    writing2.innerHTML = data[data.length -1][ metric_name + name_extension];
+    writing2.innerHTML = data[data.length -1][ metric_name + name_extension].toFixed(3);;
     writing2.setAttribute("class", "chartValue");
     writing2.setAttribute("id", metric_name + "LastValue");
     newDiv.appendChild(writing);
@@ -116,10 +113,37 @@ function addChart(metric_name, data, name_extension){
 }
 
 
+function addBoolChart(metric_name, data){
+    var body = document.getElementById('_row');
+    var newDiv = document.createElement('div');
+    newDiv.setAttribute("class", 'MetricPage chart-container main-panel');
+    newDiv.setAttribute("id", metric_name + "_chart");
+    var writing = document.createElement('p');
+    console.log("DN: " + metric_display_name)
+    writing.innerHTML = metric_display_name;
+    writing.setAttribute("class", "chartHeader");
+    var writing2 = document.createElement('p');
+    writing2.innerHTML = data[data.length -1][ metric_name];
+    writing2.setAttribute("class", "chartValue");
+    writing2.setAttribute("id", metric_name + "LastValue");
+
+    newDiv.appendChild(writing);
+    newDiv.appendChild(writing2);
+
+    var chart = document.createElement('div');
+    chart.id = metric_name;
+    chart.setAttribute("class", "morris-chart chartScalerSmall");
+    newDiv.appendChild(chart);
+
+
+    body.appendChild(newDiv);
+}
+
+
 function addTable(metric_name, data_array){
     var body = document.getElementById('_row');
     var newDiv = document.createElement('div');
-    newDiv.setAttribute("class", 'Metric chart-container main-panel');
+    newDiv.setAttribute("class", 'MetricPage chart-container main-panel');
     newDiv.setAttribute("id", metric_name + "_chart");
     var writing = document.createElement('p');
     writing.innerHTML = metric_display_name
@@ -127,6 +151,7 @@ function addTable(metric_name, data_array){
     newDiv.appendChild(writing);
 
     var chart = document.createElement('div');
+    chart.setAttribute("class", "overflow_table")
     chart.id = metric_name;
     newDiv.appendChild(chart);
     body.appendChild(newDiv);
@@ -140,10 +165,13 @@ function generateTableFromArray(data_array){
     var table = document.createElement('table');
     table.setAttribute('class', 'displayMatrix')
     var tableBody = document.createElement('tbody');
+    tableBody.setAttribute('class', 'displayMatrix');
     for(var r = 0; r < data_array.length; r++){
         var row = document.createElement('tr');
+        row.setAttribute('class', 'displayMatrix')
         for(var c = 0; c < data_array[r].length; c++){
             var col = document.createElement('td');
+            col.setAttribute('class', 'displayMatrix')
             col.appendChild(document.createTextNode(data_array[r][c]));
             row.appendChild(col);
         }
@@ -187,7 +215,11 @@ function redoMetrics2(data) {
         var new_data = createData(data, type + ext);
         graphs[type].setData(new_data);
         var writing = document.getElementById(type + "LastValue");
-        writing.innerHTML = new_data[new_data.length - 1]["value"];
+
+        if(new_data.length >= 1)
+            writing.innerHTML = new_data[new_data.length - 1]["value"].toFixed(3);
+        else
+            writing.innerHTML = ""
     }
     for (var type in matrices){
         var chart = document.getElementById(type + "_chart")

@@ -11,44 +11,50 @@ var graphs = {}; // list of all graphs
 var matrices = {};
 var metric_info;
 var tags = {}
+var tagOwner = {'fairness': [], 'performance': [], 'robust': [], 'stats': []}
+var categories = ['fairness', 'performance', 'robust', 'stats']
+
+
 
 // loads metrics. Contains lists of metrics, and metric tags.
-function loadMetrics(category) {
+function loadAll() {
     fetch('/getMetricList').then(function (response) {
         return response.json();
     }).then(function(text){
         metrics = text
-        loadExplanations(text, category);
+        loadExplanations(text);
     });
 }
 
 // Loads explanations.
-function loadExplanations(metrics, category) {
+function loadExplanations(metrics) {
     fetch('/getMetricInfo').then(function (response) {
         return response.json();
     }).then(function(text){
         metric_info = text;
-        load_data(metrics, text, category);
+        load_data(metrics, text);
     });
 }
 
 // Queries Data
-function load_data(metrics, data, category) {
+function load_data(metrics, data) {
     var date1 = document.getElementById("startDate").value;
     var date2 = document.getElementById("endDate").value;
     return fetch('/getData/' + date1 + '/' + date2)
         .then(function (response) {
             return response.json();
         }).then(function (text) {
-            callAllFunctions(metrics, data, text, category);
+            callAllFunctions(metrics, data, text);
         });
 }
 
 // Use collected data to create metrics, boxes and white list metrics by category
-function callAllFunctions(metrics, data, df_json, category) {
-    createMetrics(metrics, data, df_json, category);
-    createBoxes(metrics, category);
-    createWhiteList(metrics, category);
+function callAllFunctions(metrics, data, df_json) {
+    for(var i = 0; i<categories.length; i++){
+        createMetrics(metrics, data, df_json, categories[i]);
+    }
+    createBoxes(metrics);
+    createWhiteList(metrics);
 }
 
 // Create graphs
@@ -59,9 +65,7 @@ function createMetrics(metrics, explanations, data, category) {
             addChart(list[i], explanations, data, category, "");
         }
         else if(metric_info[list[i]]["type"] == "vector"){
-            if(list[i] + "_avg" in metric_info)
-                continue
-            else
+            if(list[i].indexOf("_avg") >= 0)
                 addChart(list[i], explanations, data, category, "-single")
         }
         else if(metric_info[list[i]]["type"] == "matrix"){
@@ -87,6 +91,15 @@ function addTags(metric_name){
         if (tags[metric_info[metric_name]["tags"][i]] == null)
             tags[metric_info[metric_name]["tags"][i]] = [];
         tags[metric_info[metric_name]["tags"][i]].push(metric_name);
+    }
+
+    for(var i = 0; i<categories.length; i++){
+        if(metric_info[metric_name]["tags"].includes(categories[i])){
+            for(var j = 0; j<metric_info[metric_name]["tags"].length; j++){
+                if(metric_info[metric_name]["tags"][j] != categories[i] && !tagOwner[categories[i]].includes(metric_info[metric_name]["tags"][j]))
+                    tagOwner[categories[i]].push(metric_info[metric_name]["tags"][j])
+           }
+        }
     }
 }
 
@@ -129,7 +142,6 @@ function addChart(metric_name, explanations, data, category, name_extension){
     newDiv.appendChild(removeBtn);
 
     var chart = document.createElement('div');
-    chart.setAttribute("class", "overflow_table")
     chart.id = metric_name;
     chart.setAttribute("class", "morris-chart chartScalerSmall");
     newDiv.appendChild(chart);
@@ -232,7 +244,7 @@ function addTable(metric_name, explanations, data_array, category){
     newDiv.appendChild(removeBtn);
 
     var link = document.createElement('a')
-    link.setAttribute('href', '/learnMore/'+metric_name)
+    link.setAttribute('href', 'learnMore/'+metric_name)
     link.setAttribute('class', 'learnMoreLink')
     var logo = document.createElement('i')
     logo.setAttribute('class', 'fa fa-external-link fa-lg')
@@ -240,6 +252,7 @@ function addTable(metric_name, explanations, data_array, category){
     newDiv.appendChild(link)
 
     var chart = document.createElement('div');
+    chart.setAttribute("class", "overflow_table")
     chart.id = metric_name;
     newDiv.appendChild(chart);
     body.appendChild(newDiv);
@@ -285,45 +298,53 @@ function createData(data, key) {
 }
 
 // Create the category searching of metrics
-function createBoxes(metrics, category) {
+function createBoxes(metrics) {
     var body = document.getElementById('selector');
     var list = tags
-    var topBox = document.createElement("input");
-    topBox.setAttribute("type", "checkbox");
-    topBox.setAttribute("id", category + "_mainBox");
-    topBox.setAttribute("value", true);
-    topBox.setAttribute("name", category + "_mainBox");
-    topBox.setAttribute("class", "selectorBox");
-    topBox.setAttribute("class", "parentBox");
-    topBox.setAttribute("checked", true);
-    topBox.setAttribute("onclick", "checkChlidren(this, '" + category.toString().toLowerCase() + "')");
-    var topLabel = document.createElement("label");
-    topLabel.setAttribute("for", category + "_mainBox");
-    topLabel.innerHTML = category;
-    var topBr = document.createElement("br");
-    body.appendChild(topBox);
-    body.appendChild(topLabel);
-    body.appendChild(topBr);
-    for (var i in tags) {
-        if (i == category.toLowerCase())
-            continue;
 
-        var newBox = document.createElement("input");
-        newBox.setAttribute("type", "checkbox");
-        newBox.setAttribute("id", i);
-        newBox.setAttribute("value", true);
-        newBox.setAttribute("name", i);
-        newBox.setAttribute("class", "selectorBox");
-        newBox.setAttribute("class", category.toString().toLowerCase() + "Box");
-        newBox.setAttribute("checked", true);
-        newBox.setAttribute("onclick", "checkParent(this, '" + category + "')");
-        var label = document.createElement("label");
-        label.setAttribute("for", i + category.toString().toLowerCase());
-        label.innerHTML = i;
-        var br = document.createElement("br")
-        body.appendChild(newBox);
-        body.appendChild(label);
-        body.appendChild(br);
+    console.log("TAG OWNERS: " + JSON.stringify(tagOwner))
+
+    for(var category in tagOwner){
+        var dividerDiv = document.createElement('div')
+        dividerDiv.setAttribute("id", category+"_parent")
+        body.appendChild(dividerDiv)
+        var topBox = document.createElement("input");
+        topBox.setAttribute("type", "checkbox");
+        topBox.setAttribute("id", category + "_mainBox");
+        topBox.setAttribute("value", true);
+        topBox.setAttribute("name", category + "_mainBox");
+        topBox.setAttribute("class", "selectorBox");
+        topBox.setAttribute("class", "parentBox");
+        topBox.setAttribute("checked", true);
+        topBox.setAttribute("onclick", "checkChlidren(this, '" + category.toString().toLowerCase() + "')");
+        var topLabel = document.createElement("label");
+        topLabel.setAttribute("for", category + "_mainBox");
+        topLabel.innerHTML = category;
+        var topBr = document.createElement("br");
+        dividerDiv.appendChild(topBox)
+        dividerDiv.appendChild(topLabel);
+        dividerDiv.appendChild(topBr);
+        console.log("ADDING PARENT DIV FOR " + category)
+        for (var i = 0; i< tagOwner[category].length; i++) {
+            var group = tagOwner[category][i]
+            console.log("LOOKING AT :" + group)
+            var newBox = document.createElement("input");
+            newBox.setAttribute("type", "checkbox");
+            newBox.setAttribute("id", group);
+            newBox.setAttribute("value", true);
+            newBox.setAttribute("name", group);
+            newBox.setAttribute("class", "selectorBox");
+            newBox.setAttribute("class", category.toString().toLowerCase() + "Box");
+            newBox.setAttribute("checked", true);
+            newBox.setAttribute("onclick", "checkParent(this, '" + category + "')");
+            var label = document.createElement("label");
+            label.setAttribute("for", group + category.toString().toLowerCase());
+            label.innerHTML = group;
+            var br = document.createElement("br")
+            body.appendChild(newBox);
+            body.appendChild(label);
+            body.appendChild(br);
+        }
     }
     var button = document.createElement("button");
     button.setAttribute("class", "selectorButton");
@@ -334,6 +355,7 @@ function createBoxes(metrics, category) {
 
 // white list metrics depending on what is checked in the categories
 function createWhiteList(metrics, category) {
+    console.log("Creating white list")
     for (var i in tags)
         for (var j = 0; j<tags[i].length; j++){
             whitelist.push(tags[i][j]);
@@ -494,7 +516,6 @@ function checkParent(check, type) {
     }
     generateWhiteList(type);
 }
-
 
 // Searches available metrics, changes display based on search results.
 function search(category) {

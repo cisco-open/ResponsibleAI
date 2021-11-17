@@ -110,11 +110,6 @@ class CustomView(BaseView):
     def index(self):
         return self.render('admin/custom_index.html')
 
-
-
-
-
-
 # Flask views
 @app.route('/')
 def index():
@@ -167,12 +162,23 @@ def getData(date1, date2):
 @app.route('/getMetricList', methods=['GET'])
 def getMetricList():
     data_test = r.get('metric_info')
-    return json.loads(data_test)['categories']
+    data = json.loads(data_test)
+    print("DATA: ", data)
+    result = {}
+
+    for metric in data:
+        for tag in data[metric]["tags"]:
+            if tag.lower() in result:
+                result[tag.lower()].append(metric)
+            else:
+                result[tag.lower()] = []
+                result[tag.lower()].append(metric)
+    return result
 
 
 @app.route('/getMetricInfo', methods=['GET'])
 def getMetricInfo():
-    return json.loads(r.get('metric_info'))['metrics']
+    return json.loads(r.get('metric_info'))
 
 
 @app.route('/getCertification/<date1>/<date2>', methods=['GET'])
@@ -200,10 +206,19 @@ def renderClassTemplate(category):
                            Functional=functional)
 
 
+@app.route('/viewAll')
+def renderAllMetrics():
+    return render_template('/admin/view_all.html',
+                           admin_base_template=admin.base_template,
+                           admin_view=admin.index_view,
+                           get_url=url_for,
+                           h=admin_helpers)
+
+
 @app.route('/learnMore/<metric>')
 def learnMore(metric):
     data_test = r.get('metric_info')
-    metric_info = json.loads(data_test)['metrics']
+    metric_info = json.loads(data_test)
     return render_template('/admin/metric_info.html',
                            admin_base_template=admin.base_template,
                            admin_view=admin.index_view,
@@ -215,7 +230,7 @@ def learnMore(metric):
                            metric_explanation=metric_info[metric]['explanation'],
                            metric_type=metric_info[metric]['type'],
                            metric_tags=metric_info[metric]['tags'],
-                           metric_hidden_name=metric_info[metric]['name']
+                           metric_hidden_name=metric
                            )
 
 

@@ -1,1 +1,1 @@
-{"bias": ["accuracy", "balanced_accuracy", "confusion_matrix", "f1", "fp_rate", "jaccard_score", "precision_score", "recall_score", "tp_rate"], "dataset_quality": ["mean", "covariance", "num-Nan-rows", "percent-Nan-rows", "second-moment", "third-moment"]}
+{"fairness": ["accuracy", "balanced_accuracy", "confusion_matrix", "f1", "fp_rate", "jaccard_score", "precision_score", "recall_score", "tp_rate"], "dataset_quality": ["mean", "covariance", "num-Nan-rows", "percent-Nan-rows", "second-moment", "third-moment"]}

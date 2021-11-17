@@ -18,20 +18,11 @@ p.gauge-container {
     fill: black;
 }
 
-div.biasMetric {
-    width: 32%;
-    margin-left: 1%;
-    margin-top: 2%;
-    background-color: #dce2ff;
-    fill: black;
-    height: 250px;
-}
-
-.bg-bias{
+.bg-fairness{
     background-color: #dce2ff;
 }
 
-.bg-robust{
+.bg-robustness{
     background-color: #c5dcd2;
 }
 
@@ -49,29 +40,45 @@ div.explainabilityMetric {
     margin-top: 2%;
     background-color: #d8cfc1;
     fill: black;
-    height: 250px;
+    height: 290px;
 }
 
 
-div.robustnessMetric {
+div.robustMetric {
     width: 32%;
     margin-left: 1%;
     margin-top: 2%;
     background-color: #c5dcd2;
     fill: black;
-    height: 250px;
+    height: 290px;
 }
 
+div.statsMetric {
+    width: 32%;
+    margin-left: 1%;
+    margin-top: 2%;
+    background-color: #e4ddb8;
+    fill: black;
+    height: 290px;
+}
 
-div.dataset_qualityMetric {
+div.performanceMetric {
     width: 32%;
     margin-left: 1%;
     margin-top: 2%;
     background-color: #e2c5c5;
     fill: black;
-    height: 250px;
+    height: 290px;
 }
 
+div.fairnessMetric {
+    width: 32%;
+    margin-left: 1%;
+    margin-top: 2%;
+    background-color: #dce2ff;
+    fill: black;
+    height: 290px;
+}
 
 div.MetricPage {
     width: 700px;
@@ -83,12 +90,16 @@ div.MetricPage {
     height: 400px;
 }
 
+div.overflow_table {
+    overflow: scroll;
+    height:75%;
+}
 
 
 p.chartHeader {
     text-align: center;
     font-size: 25px;
-    margin-top: 0px;
+    margin-top: 20px;
     margin-bottom: 0px;
     color: black;
 }
@@ -211,7 +222,7 @@ td.displayMatrix, th.displayMatrix {
     color:white;
 }
 
-input.biasBox {
+input.fairnessBox {
     margin-left:45px;
 }
 
@@ -219,11 +230,15 @@ input.explainabilityBox {
     margin-left: 45px;
 }
 
-input.dataset_qualityBox {
+input.performanceBox {
     margin-left: 45px;
 }
 
-input.robustnessBox {
+input.robustBox {
+    margin-left: 45px;
+}
+
+input.statsBox {
     margin-left: 45px;
 }
 

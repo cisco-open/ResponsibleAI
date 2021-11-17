@@ -40,10 +40,12 @@ function createData(data, key) {
 
 
 function createMetrics(data, explanations) {
-    var divs = ['bias', 'robustness', 'datasetQuality', 'explainability'];
-    var names = ["biased", "Robustness", "Dataset Quality", "Explainability"];
+    var divs = ['fairness', 'robustness', 'performance', 'explainability'];
+    var names = ["Fairness", "Robustness", "Performance", "Explainability"];
     for (var i in explanations) {
         var new_data = createData(data, i);
+
+        console.log(i + "Chart")
         var morrisLine = new Morris.Line({
             element: i + "Chart",
             data: new_data,
