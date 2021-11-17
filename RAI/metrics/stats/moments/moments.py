@@ -13,21 +13,21 @@ _config = {
     "metrics": {
         "moment-1": {
             "display_name": "First Moment",
-            "type": "numeric",
+            "type": "vector",
             "has_range": False,
             "range": None,
             "explanation": "Mean is the expected value of data.",
         },
         "moment-2": {
             "display_name": "Second Moment",
-            "type": "numeric",
+            "type": "vector",
             "has_range": False,
             "range": None,
             "explanation": "Mean is the expected value of data.",
         },
         "moment-3": {
             "display_name": "Third Moment",
-            "type": "numeric",
+            "type": "vector",
             "has_range": False,
             "range": None,
             "explanation": "Mean is the expected value of data.",
