@@ -15,7 +15,7 @@ _config = {
     "compatibility" : {"type_restriction": "classification", "output_restriction": "choice"},
     "src": "equal_treatment",
     "dependency_list": [],
-    "tags": ["fairness","Equal Treatment"],
+    "tags": ["fairness"],
     "complexity_class": "linear",
     "metrics": {
         "generalized_entropy_error": {
@@ -27,7 +27,7 @@ _config = {
             "explanation": ""
         },
         "between_group_generalized_entropy_error": {
-            "display_name": "Between Group Generalized Entropy Error",
+            "display_name": "BG Generalized Entropy Error",
             "type": "numeric",
             "tags": [],
             "has_range": True,

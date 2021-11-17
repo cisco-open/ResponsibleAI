@@ -14,7 +14,7 @@ _config = {
     "compatibility" : {"type_restriction": "classification", "output_restriction": "choice"},
     "src": "equal_treatment",
     "dependency_list": [],
-    "tags": ["fairness", "Equal Treatment"],
+    "tags": ["fairness"],
     "complexity_class": "linear",
     "metrics": {
         "disparate_impact_ratio": {
