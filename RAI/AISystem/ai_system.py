@@ -3,8 +3,6 @@ import pandas as pd
 import sklearn as sk
 import datetime
 from RAI.metrics.registry import registry
-from .task import *
-from RAI.dataset import *
 import json
 import redis
 import subprocess
@@ -60,17 +58,16 @@ class AISystem:
             for metric in self.metric_groups[group].metrics:
                 metric_obj = self.metric_groups[group].metrics[metric]
                 result[metric_obj.unique_name] = metric_obj.config
-                # {"name": metric_obj.name, "has_range": metric_obj.has_range, "range": metric_obj.range,
-                #                   "explanation": metric_obj.explanation, "type": metric_obj.type, "display_name": metric_obj.display_name,
-                #                   "tags": metric_obj.tags}
-                 
+                metric_obj.config["tags"] = self.metric_groups[group].tags  # Change this up after
         return result
+
     def get_metric_info_dict(self):
         result = {}
         for group in self.metric_groups:
             result[ group ] = {}
             for metric in self.metric_groups[group].metrics:
                 metric_obj = self.metric_groups[group].metrics[metric]
+                metric_obj.config["tags"] = self.metric_groups[group].tags  # Change this up after
                 result[group][metric] = metric_obj.config
                  
         return result
@@ -129,10 +126,15 @@ class AISystem:
         metric_values = self.get_metric_values_flat()
         metric_info = self.get_metric_info_flat()
         model_info = self.get_model_info()
+
+        metric_values["date"] = self._get_time()  # temporary solution
+        print("metric: values: ", metric_values)
         self._update_redis(metric_values, model_info, metric_info)
 
     def export_data_dict(self):
         metric_values = self.get_metric_values_dict()
+
+        metric_values["date"] = self._get_time()  # temporary solution
         metric_info = self.get_metric_info_dict()
         model_info = self.get_model_info()
         self._update_redis(metric_values, model_info, metric_info)

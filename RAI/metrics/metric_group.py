@@ -11,8 +11,11 @@ class MetricGroup(object):
     name = ""
     config = None
     @classmethod
-    def is_compatible( cls,ai_system ):
-        return cls.config["compatibility"]["type_restriction"] is None or cls.config["compatibility"]["type_restriction"] == ai_system.task.type
+    def is_compatible(cls, ai_system):
+        compatible = cls.config["compatibility"]["type_restriction"] is None \
+                    or ai_system.task.type == cls.config["compatibility"]["type_restriction"] \
+                    or ai_system.task.type == "binary_classification" and cls.config["compatibility"]["type_restriction"] == "classification"
+        return compatible
 
     def __init_subclass__(cls, config=None, **kwargs):
         super().__init_subclass__(**kwargs)
