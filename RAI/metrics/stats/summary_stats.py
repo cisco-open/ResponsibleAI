@@ -8,12 +8,12 @@ _config = {
     "name": "summary_stats",
     "compatibility" : {"type_restriction": None, "output_restriction": None},
     "dependency_list": [],
-    "tags": ["stats"],
+    "tags": ["stats", "Summary Stats"],
     "complexity_class": "linear",
     "metrics": {
         "mean": {
             "display_name": "Mean",
-            "type": "numeric",
+            "type": "vector",
             "has_range": False,
             "range": None,
             "explanation": "Mean is the expected value of data.",
@@ -145,7 +145,7 @@ _config = {
             "explanation": "",
         },
         "bayes-var-avg": {
-            "display_name": "Variance Confidence Interval Average",
+            "display_name": "Variance Confidence Interval Avg",
             "type": "numeric",
             "has_range": False,
             "range": [None, None],
@@ -201,7 +201,7 @@ _config = {
             "explanation": "",
         },
         "frozen-std-std": {
-            "display_name": "Frozen Standard Deviation Standard Deviation",
+            "display_name": "Frozen Stdev Standard Deviation",
             "type": "numeric",
             "has_range": False,
             "range": [None, None],

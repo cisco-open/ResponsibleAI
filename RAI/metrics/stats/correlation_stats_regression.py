@@ -8,7 +8,7 @@ _config = {
     "name": "correlation_stats_regression",
     "compatibility": {"type_restriction": "regression", "output_restriction": None},
     "dependency_list": [],
-    "tags": ["stats"],
+    "tags": ["stats", "Regression Correlation"],
     "complexity_class": "linear",
     "metrics": {
         "pearson-correlation": {

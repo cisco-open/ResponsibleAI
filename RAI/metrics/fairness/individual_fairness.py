@@ -15,7 +15,7 @@ _config = {
     "compatibility" : {"type_restriction": "classification", "output_restriction": "choice"},
     "src": "equal_treatment",
     "dependency_list": [],
-    "tags": ["fairness"],
+    "tags": ["fairness", "Individual Fairness"],
     "complexity_class": "linear",
     "metrics": {
         "generalized_entropy_error": {
