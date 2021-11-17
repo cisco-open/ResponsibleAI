@@ -14,7 +14,6 @@ _config = {
         "siegel-slopes": {
             "display_name": "Siegel Estimator",
             "type": "vector",
-            "tags": [],
             "has_range": False,
             "range": None,
             "explanation": "",
@@ -22,7 +21,6 @@ _config = {
         "theil-slopes": {
             "display_name": "Theil-Sen Estimator",
             "type": "vector",
-            "tags": [],
             "has_range": False,
             "range": None,
             "explanation": "",

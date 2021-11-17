@@ -14,7 +14,6 @@ _config = {
         "mean": {
             "display_name": "Mean",
             "type": "numeric",
-            "tags": [],
             "has_range": False,
             "range": None,
             "explanation": "Mean is the expected value of data.",
@@ -22,7 +21,6 @@ _config = {
         "covariance": {
             "display_name": "Covariance Matrix",
             "type": "matrix",
-            "tags": [],
             "has_range": False,
             "range": None,
             "explanation": "A Covariance Matrix shows the directional relationship between different data members.",
@@ -30,7 +28,6 @@ _config = {
         "num-Nan-rows": {
             "display_name": "Number of NaN Rows",
             "type": "numeric",
-            "tags": [],
             "has_range": True,
             "range": [0, None],
             "explanation": "Num Nan Rows indicates the number of NaN rows found in the data.",
@@ -38,7 +35,6 @@ _config = {
         "percent-Nan-rows": {
             "display_name": "Percentage of NaN Rows",
             "type": "numeric",
-            "tags": [],
             "has_range": True,
             "range": [0, 1],
             "explanation": "Percent Nan Rows indicates the percentage of rows that are NaN in the data.",
@@ -46,7 +42,6 @@ _config = {
         "geometric-mean": {
             "display_name": "Geometric Mean",
             "type": "vector",
-            "tags": [],
             "has_range": False,
             "range": [None, None],
             "explanation": "",
@@ -54,7 +49,6 @@ _config = {
         "kurtosis": {
             "display_name": "Kurtosis",
             "type": "vector",
-            "tags": [],
             "has_range": False,
             "range": [None, None],
             "explanation": "",
@@ -62,7 +56,6 @@ _config = {
         "mode": {
             "display_name": "Mode",
             "type": "vector",
-            "tags": [],
             "has_range": False,
             "range": [None, None],
             "explanation": "",
@@ -70,7 +63,6 @@ _config = {
         "skew": {
             "display_name": "Skew",
             "type": "vector",
-            "tags": [],
             "has_range": False,
             "range": [None, None],
             "explanation": "",
@@ -78,7 +70,6 @@ _config = {
         "kstat-1": {
             "display_name": "K-Statistic 1",
             "type": "numeric",
-            "tags": [],
             "has_range": False,
             "range": [None, None],
             "explanation": "",
@@ -86,7 +77,6 @@ _config = {
         "kstat-2": {
             "display_name": "K-Statistic 2",
             "type": "numeric",
-            "tags": [],
             "has_range": False,
             "range": [None, None],
             "explanation": "",
@@ -94,7 +84,6 @@ _config = {
         "kstat-3": {
             "display_name": "K-Statistic 3",
             "type": "numeric",
-            "tags": [],
             "has_range": False,
             "range": [None, None],
             "explanation": "",
@@ -102,7 +91,6 @@ _config = {
         "kstat-4": {
             "display_name": "K-Statistic 4",
             "type": "numeric",
-            "tags": [],
             "has_range": False,
             "range": [None, None],
             "explanation": "",
@@ -110,7 +98,6 @@ _config = {
         "kstatvar": {
             "display_name": "K-Statistic Variance",
             "type": "numeric",
-            "tags": [],
             "has_range": False,
             "range": [None, None],
             "explanation": "",
@@ -118,7 +105,6 @@ _config = {
         "variance": {
             "display_name": "Variance",
             "type": "vector",
-            "tags": [],
             "has_range": False,
             "range": [None, None],
             "explanation": "",
@@ -126,7 +112,6 @@ _config = {
         "iqr": {
             "display_name": "Interquartile Range",
             "type": "numeric",
-            "tags": [],
             "has_range": False,
             "range": [None, None],
             "explanation": "",
@@ -134,7 +119,6 @@ _config = {
         "sem": {
             "display_name": "Standard Error of the Mean",
             "type": "vector",
-            "tags": [],
             "has_range": False,
             "range": [None, None],
             "explanation": "",
@@ -142,7 +126,6 @@ _config = {
         "bayes-mean": {
             "display_name": "Mean Confidence Interval",
             "type": "vector",
-            "tags": [],
             "has_range": False,
             "range": [None, None],
             "explanation": "",
@@ -150,7 +133,6 @@ _config = {
         "bayes-mean-avg": {
             "display_name": "Mean Confidence Interval Average",
             "type": "numeric",
-            "tags": [],
             "has_range": False,
             "range": [None, None],
             "explanation": "",
@@ -158,7 +140,6 @@ _config = {
         "bayes-var": {
             "display_name": "Variance Confidence Interval",
             "type": "vector",
-            "tags": [],
             "has_range": False,
             "range": [None, None],
             "explanation": "",
@@ -166,7 +147,6 @@ _config = {
         "bayes-var-avg": {
             "display_name": "Variance Confidence Interval Average",
             "type": "numeric",
-            "tags": [],
             "has_range": False,
             "range": [None, None],
             "explanation": "",
@@ -174,7 +154,6 @@ _config = {
         "bayes-std": {
             "display_name": "Standard Deviation Confidence Interval",
             "type": "vector",
-            "tags": [],
             "has_range": False,
             "range": [None, None],
             "explanation": "",
@@ -182,7 +161,6 @@ _config = {
         "bayes-std-avg": {
             "display_name": "Standard Deviation Confidence Interval Average",
             "type": "vector",
-            "tags": [],
             "has_range": False,
             "range": [None, None],
             "explanation": "",
@@ -190,7 +168,6 @@ _config = {
         "frozen-mean-mean": {
             "display_name": "Frozen Mean Mean",
             "type": "numeric",
-            "tags": [],
             "has_range": False,
             "range": [None, None],
             "explanation": "",
@@ -198,7 +175,6 @@ _config = {
         "frozen-mean-std": {
             "display_name": "Frozen Mean Standard Deviation",
             "type": "numeric",
-            "tags": [],
             "has_range": False,
             "range": [None, None],
             "explanation": "",
@@ -206,7 +182,6 @@ _config = {
         "frozen-variance-mean": {
             "display_name": "Frozen Variance Mean",
             "type": "numeric",
-            "tags": [],
             "has_range": False,
             "range": [None, None],
             "explanation": "",
@@ -214,7 +189,6 @@ _config = {
         "frozen-variance-std": {
             "display_name": "Frozen Variance Standard Deviation",
             "type": "numeric",
-            "tags": [],
             "has_range": False,
             "range": [None, None],
             "explanation": "",
@@ -222,7 +196,6 @@ _config = {
         "frozen-std-mean": {
             "display_name": "Frozen Standard Deviation Mean",
             "type": "numeric",
-            "tags": [],
             "has_range": False,
             "range": [None, None],
             "explanation": "",
@@ -230,7 +203,6 @@ _config = {
         "frozen-std-std": {
             "display_name": "Frozen Standard Deviation Standard Deviation",
             "type": "numeric",
-            "tags": [],
             "has_range": False,
             "range": [None, None],
             "explanation": "",

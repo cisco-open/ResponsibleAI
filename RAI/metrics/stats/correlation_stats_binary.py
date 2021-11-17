@@ -14,7 +14,6 @@ _config = {
         "point-biserial-r": {
             "display_name": "Point Biserial Coefficient",
             "type": "numeric",
-            "tags": [],
             "has_range": False,
             "range": None,
             "explanation": "Mean is the expected value of data.",

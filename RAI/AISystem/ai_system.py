@@ -67,7 +67,6 @@ class AISystem:
             result[ group ] = {}
             for metric in self.metric_groups[group].metrics:
                 metric_obj = self.metric_groups[group].metrics[metric]
-                metric_obj.config["tags"] = self.metric_groups[group].tags  # Change this up after
                 result[group][metric] = metric_obj.config
                  
         return result
@@ -110,8 +109,6 @@ class AISystem:
         self.timestamp = self._get_time()
         self.sample_count += 1
 
-    
-
     def export_metric_values(self):
         result = {}
         for metric_group_name in self.metric_groups:
@@ -126,14 +123,11 @@ class AISystem:
         metric_values = self.get_metric_values_flat()
         metric_info = self.get_metric_info_flat()
         model_info = self.get_model_info()
-
         metric_values["date"] = self._get_time()  # temporary solution
-        print("metric: values: ", metric_values)
         self._update_redis(metric_values, model_info, metric_info)
 
     def export_data_dict(self):
         metric_values = self.get_metric_values_dict()
-
         metric_values["date"] = self._get_time()  # temporary solution
         metric_info = self.get_metric_info_dict()
         model_info = self.get_model_info()

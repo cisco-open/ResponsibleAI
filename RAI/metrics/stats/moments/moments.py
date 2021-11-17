@@ -14,7 +14,6 @@ _config = {
         "moment-1": {
             "display_name": "First Moment",
             "type": "numeric",
-            "tags": [],
             "has_range": False,
             "range": None,
             "explanation": "Mean is the expected value of data.",
@@ -22,7 +21,6 @@ _config = {
         "moment-2": {
             "display_name": "Second Moment",
             "type": "numeric",
-            "tags": [],
             "has_range": False,
             "range": None,
             "explanation": "Mean is the expected value of data.",
@@ -30,7 +28,6 @@ _config = {
         "moment-3": {
             "display_name": "Third Moment",
             "type": "numeric",
-            "tags": [],
             "has_range": False,
             "range": None,
             "explanation": "Mean is the expected value of data.",

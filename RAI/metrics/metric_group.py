@@ -59,6 +59,7 @@ class MetricGroup(object):
         for metric_name in metrics_config:
             self.metrics[metric_name] = Metric(metric_name, metrics_config[metric_name])
             self.metrics[metric_name].unique_name = self.name + " > " + metric_name
+            self.metrics[metric_name].tags = self.tags
 
     def get_metric_values(self):
         results = {}

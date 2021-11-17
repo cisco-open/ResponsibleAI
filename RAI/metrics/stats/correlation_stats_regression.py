@@ -14,7 +14,6 @@ _config = {
         "pearson-correlation": {
             "display_name": "Pearson's Correlation'",
             "type": "vector",
-            "tags": [],
             "has_range": False,
             "range": None,
             "explanation": "",
@@ -22,7 +21,6 @@ _config = {
         "spearman-correlation": {
             "display_name": "Spearman's Correlation",
             "type": "vector",
-            "tags": [],
             "has_range": False,
             "range": None,
             "explanation": "",
@@ -30,7 +28,6 @@ _config = {
         "lin-regress": {
             "display_name": "Linear Regression",
             "type": "vector",
-            "tags": [],
             "has_range": False,
             "range": None,
             "explanation": "",

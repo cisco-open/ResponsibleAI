@@ -14,7 +14,6 @@ _config = {
         "normalized_feature_01": {
             "display_name": "Normalized Features 0-1",
             "type": "numeric",
-            "tags": [],
             "has_range": True,
             "range": [0,1],
             "explanation": "Whether of not each training feature is normalized to 0/1.",
@@ -22,7 +21,6 @@ _config = {
         "normalized_feature_std": {
             "display_name": "Normalized Features Standard",
             "type": "numeric",
-            "tags": [],
             "has_range": True,
             "range": [0,1],
             "explanation": "Whether of not each training feature is normalized to standard.",

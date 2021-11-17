@@ -15,7 +15,6 @@ _config = {
         "explained_variance": {
             "display_name": "Explained Variance",
             "type": "numeric",
-            "tags": [],
             "has_range": True,
             "range": [0, 1],
             "explanation": "Measures discrepancy between a model and actual data, higher values are better",
@@ -23,7 +22,6 @@ _config = {
         "mean_absolute_error": {
             "display_name": "Mean Absolute Error",
             "type": "numeric",
-            "tags": [],
             "has_range": True,
             "range": [0, None],
             "explanation": "Indicates the average residual error, lower is better.",
@@ -31,7 +29,6 @@ _config = {
         "mean_absolute_percentage_error": {
             "display_name": "Mean Absolute Percentage Error",
             "type": "numeric",
-            "tags": [],
             "has_range": True,
             "range": [0, None],
             "explanation": "Indicates the how inaccurate predictions were from actual values, lower is better.",
@@ -39,7 +36,6 @@ _config = {
         "mean_gamma_deviance": {
             "display_name": "Mean Gamma Deviance",
             "type": "numeric",
-            "tags": [],
             "has_range": True,
             "range": [0, None],
             "explanation": "Calculated by taking the Tweedie Deviance with a power of 2.",
@@ -47,7 +43,6 @@ _config = {
         "mean_poisson_deviance": {
             "display_name": "Mean Poisson Deviance",
             "type": "numeric",
-            "tags": [],
             "has_range": True,
             "range": [0, None],
             "explanation": "Calculated by taking the Tweedie Deviance with a power of 1.",
@@ -55,7 +50,6 @@ _config = {
         "mean_squared_error": {
             "display_name": "Mean Squared Error",
             "type": "numeric",
-            "tags": [],
             "has_range": True,
             "range": [0, None],
             "explanation": "Mean Squared Error indicates the the performance of a model, lower is better.",
@@ -63,7 +57,6 @@ _config = {
         "mean_squared_log_error": {
             "display_name": "Mean Squared Log Error",
             "type": "numeric",
-            "tags": [],
             "has_range": True,
             "range": [0, None],
             "explanation": "Mean Squared Log Error indicates the average squared logarithmic residual error, lower is better.",
@@ -71,7 +64,6 @@ _config = {
         "median_absolute_error": {
             "display_name": "Median Absolute Error",
             "type": "numeric",
-            "tags": [],
             "has_range": True,
             "range": [0, None],
             "explanation": "Median Absolute Error indicates the median value for absolute residual error, lower is better.",
@@ -79,7 +71,6 @@ _config = {
         "r2": {
             "display_name": "R2 Score",
             "type": "numeric",
-            "tags": [],
             "has_range": True,
             "range": [0, 1],
             "explanation": "Indicates how well a model fits the data, higher is better.",
