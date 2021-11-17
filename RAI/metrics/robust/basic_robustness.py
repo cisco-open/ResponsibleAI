@@ -13,18 +13,16 @@ _config = {
     "metrics": {
         "normalized_feature_01": {
             "display_name": "Normalized Features 0-1",
-            "type": "numeric",
-            "tags": [],
-            "has_range": True,
-            "range": [0,1],
+            "type": "boolean",
+            "has_range": False,
+            "range": [None, None],
             "explanation": "Whether of not each training feature is normalized to 0/1.",
         },
         "normalized_feature_std": {
             "display_name": "Normalized Features Standard",
-            "type": "numeric",
-            "tags": [],
-            "has_range": True,
-            "range": [0,1],
+            "type": "boolean",
+            "has_range": False,
+            "range": [None, None],
             "explanation": "Whether of not each training feature is normalized to standard.",
         }, 
     }

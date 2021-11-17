@@ -51,50 +51,48 @@ ai.compute_metrics(model_preds)
 # Dictionary used for testing metrics
 # Function to compare our result to sklearn's result.
 
-def test_metric(res, actual, preds):
-    if 'class_bias' in res:
-        print("Testing class_bias metrics")
-        assert res['class_bias']['accuracy'] == sklearn.metrics.accuracy_score(actual, preds)
-        assert res['class_bias']['balanced_accuracy'] == sklearn.metrics.balanced_accuracy_score(actual, preds)
-        assert res['class_bias']['f1-single'] == sklearn.metrics.f1_score(actual, preds, average="macro")
-        assert res['class_bias']['jaccard_score-single'] == sklearn.metrics.jaccard_score(actual, preds, average="macro")
-        assert np.array_equal(res['class_bias']['confusion_matrix'], sklearn.metrics.confusion_matrix(actual, preds))
-    if 'reg_bias' in res:
-        print("Testing class_reg metrics")
-        assert res['reg_bias']['explained_variance'] == sklearn.metrics.explained_variance_score(actual, preds)
-        assert res['reg_bias']['mean_absolute_error'] == sklearn.metrics.mean_absolute_error(actual, preds)
-        assert res['reg_bias']['mean_absolute_percentage_error'] == sklearn.metrics.mean_absolute_percentage_error(actual, preds)
-        assert res['reg_bias']['mean_gamma_deviance'] == sklearn.metrics.mean_gamma_deviance(actual, preds)
-        assert res['reg_bias']['mean_poisson_deviance'] == sklearn.metrics.mean_poisson_deviance(actual, preds)
-        assert res['reg_bias']['mean_squared_error'] == sklearn.metrics.mean_squared_error(actual, preds)
-        assert res['reg_bias']['mean_squared_log_error'] == sklearn.metrics.mean_squared_log_error(actual, preds)
-        assert res['reg_bias']['median_absolute_error'] == sklearn.metrics.median_absolute_error(actual, preds)
-        assert res['reg_bias']['r2'] == sklearn.metrics.r2_score(actual, preds)
+# Compute Metrics Using our Engine
 
 
 # Compute Metrics Using our Engine
-res = ai.get_metric_values()
+resv_f = ai.get_metric_values_flat()
+resv_d = ai.get_metric_values_dict()
+resi_f = ai.get_metric_info_flat()
+resi_d = ai.get_metric_info_dict()
 
-# Test Metric Values
-print("\nTESTING Metrics:")
-test_metric(res, yTest, model_preds)
-
+for key in resv_f:
+    if hasattr(resv_f[key], "__len__"):
+        # print(resi_f[key]['display_name'], " = ", 'list ...')
+        print(resi_f[key]['display_name'], " = ", resv_f[key])
+    else:
+        print(resi_f[key]['display_name'], " = ", resv_f[key])
 
 # Getting Metric Information
 print("\nGetting Metric Information")
-res = ai.get_metric_info()
-metrics = res["metrics"]
-for metric in metrics:
-    print(metrics[metric])
-
-# Get Metric Categories
-print("\nGetting Metric Categories")
-categories = res["categories"]
-for category in categories:
-    print(category, " ", categories[category])
+metric_info = ai.get_metric_info_flat()
+for metric in metric_info:
+    print(metric_info[metric])
 
 # Get Model Information
 print("\nGetting Model Info:")
 res = ai.get_model_info()
 print(res)
 
+# Demonstrating Searching
+query = "Bias"
+print("\nSearching Metrics for ", query)
+result = ai.search(query)
+print(result)
+
+# print("\nSummarizing Results")
+# ai.summarize()
+
+# reset all previous keys
+# ai.reset_redis()
+
+# export to redis
+# ai.export_data_flat()
+
+
+print("\nViewing GUI")
+# ai.viewGUI()

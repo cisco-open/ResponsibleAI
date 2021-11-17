@@ -25,6 +25,8 @@ features_raw = ["id", "radius_mean", "texture_mean", "perimeter_mean", "area_mea
                 "smoothness_worst", "compactness_worst", "concavity_worst", "concave points_worst", "symmetry_worst", "fractal_dimension_worst", "diagnosis",
                 "race"]
 features = []
+
+print("FEATURE SIZE: ", len(features_raw))
 for feature in features_raw:
     features.append(Feature(feature, "float32", feature))
 
@@ -38,7 +40,7 @@ from sklearn.ensemble import RandomForestClassifier
 reg = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=0)
 model = Model(agent=reg, name="Cisco Breast Cancer AI", model_class="Random Forest Classifier", adaptive=False)
 # Indicate the task of the model
-task = Task(model=model, type='classification')
+task = Task(model=model, type='binary_classification')
 
 # Create AISystem from previous objects. AISystems are what users will primarily interact with.
 configuration = {"equal_treatment": {"priv_group": ("race", 1)}}
@@ -80,20 +82,19 @@ ai.compute_metrics(model_preds)
 # print("\nTESTING Metrics:")
 # test_metric(res, yTest, model_preds)
 
-
-
 # Compute Metrics Using our Engine
 resv_f = ai.get_metric_values_flat()
 resv_d = ai.get_metric_values_dict()
 resi_f = ai.get_metric_info_flat()
 resi_d = ai.get_metric_info_dict()
 
-for key in  resv_f:
-    if hasattr(resv_f[key], "__len__"): 
-        print( resi_f[key]['display_name'], " = ", 'list ...')
-    else:
-        print( resi_f[key]['display_name'], " = ", resv_f[key])
 
+for key in resv_f:
+    if hasattr(resv_f[key], "__len__"): 
+        # print(resi_f[key]['display_name'], " = ", 'list ...')
+        print(resi_f[key]['display_name'], " = ", resv_f[key])
+    else:
+        print(resi_f[key]['display_name'], " = ", resv_f[key])
 
 
 
@@ -117,11 +118,11 @@ print(result)
 # print("\nSummarizing Results")
 # ai.summarize()
 
-#reset all previous keys
+# reset all previous keys
 ai.reset_redis()
 
-#export to redis
-ai.export_data_flat( )
+# export to redis
+ai.export_data_flat()
 
 
 print("\nViewing GUI")
