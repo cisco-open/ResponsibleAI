@@ -366,11 +366,21 @@ class GeneralPredictionFairnessGroup(MetricGroup, config=_config):
         if "data" and "predictions" in data_dict:
             data = data_dict["data"]
             preds = data_dict["predictions"]
-            priv_group = None
-            if self.ai_system.user_config is not None and "equal_treatment" in self.ai_system.user_config and "priv_group" in self.ai_system.user_config["equal_treatment"]:
-                priv_group = self.ai_system.user_config["equal_treatment"]["priv_group"]
+            priv_group_list = []
+            unpriv_group_list = []
+            prot_attr = []
+            if self.ai_system.user_config is not None and "fairness" in self.ai_system.user_config and "priv_group" in \
+                    self.ai_system.user_config["fairness"]:
+                prot_attr = self.ai_system.user_config["fairness"]["protected_attributes"]
+                for group in self.ai_system.user_config["fairness"]["priv_group"]:
+                    priv_group_list.append({group: self.ai_system.user_config["fairness"]["priv_group"][group]["privileged"]})
+                    unpriv_group_list.append({group: self.ai_system.user_config["fairness"]["priv_group"][group]["unprivileged"]})
 
-            cd = get_class_dataset(self, data, preds, priv_group)
+            print("PROT ATTR: ", prot_attr)
+            print("PRIV_GROUP: ", priv_group_list)
+            print("UNPRIV_GROUP: ", unpriv_group_list)
+
+            cd = get_class_dataset(self, data, preds, prot_attr, priv_group_list, unpriv_group_list)
 
             self.metrics['average-abs-odds-difference'].value = cd.average_odds_difference()
             self.metrics['between-all-groups-coefficient-of-variation'].value = cd.between_all_groups_coefficient_of_variation()
@@ -415,12 +425,12 @@ class GeneralPredictionFairnessGroup(MetricGroup, config=_config):
             self.metrics['true-positive-rate-difference'].value = cd.true_positive_rate_difference()
 
 
-def get_class_dataset(metric_group, data, preds, priv_group):
+def get_class_dataset(metric_group, data, preds, prot_attr, priv_group_list, unpriv_group_list):
     names = [feature.name for feature in metric_group.ai_system.meta_database.features]
     df1 = pd.DataFrame(data.X, columns=names)
     df1['y'] = data.y
     df2 = pd.DataFrame(data.X, columns=names)
     df2['y'] = preds
-    binDataset1 = BinaryLabelDataset(df=df1, label_names=['y'], protected_attribute_names=['race'])
-    binDataset2 = BinaryLabelDataset(df=df2, label_names=['y'], protected_attribute_names=['race'])
-    return ClassificationMetric(binDataset1, binDataset2, unprivileged_groups=[{'race': 0}], privileged_groups=[{'race': 1}])
+    binDataset1 = BinaryLabelDataset(df=df1, label_names=['y'], protected_attribute_names=prot_attr)
+    binDataset2 = BinaryLabelDataset(df=df2, label_names=['y'], protected_attribute_names=prot_attr)
+    return ClassificationMetric(binDataset1, binDataset2, unprivileged_groups=unpriv_group_list, privileged_groups=priv_group_list)

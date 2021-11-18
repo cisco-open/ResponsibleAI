@@ -44,9 +44,11 @@ class SampleDistortionFairnessGroup(MetricGroup, config=_config):
         if "data" and "predictions" in data_dict:
             data = data_dict["data"]
             preds = data_dict["predictions"]
-            priv_group = None
-            if self.ai_system.user_config is not None and "equal_treatment" in self.ai_system.user_config and "priv_group" in self.ai_system.user_config["equal_treatment"]:
-                priv_group = self.ai_system.user_config["equal_treatment"]["priv_group"]
+            prot_attr = []
+            if self.ai_system.user_config is not None and "fairness" in self.ai_system.user_config and "priv_group" in \
+                    self.ai_system.user_config["fairness"]:
+                prot_attr = self.ai_system.user_config["fairness"]["protected_attributes"]
+                pos_label = self.ai_system.user_config["fairness"]["positive_label"]
 
             # bin_dataset = get_bin_dataset(self, data, priv_group)
 

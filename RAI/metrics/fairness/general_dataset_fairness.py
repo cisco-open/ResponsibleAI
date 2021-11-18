@@ -75,13 +75,12 @@ class GeneralDatasetFairnessGroup(MetricGroup, config=_config):
     def compute(self, data_dict):
         if "data" and "predictions" in data_dict:
             data = data_dict["data"]
-            preds = data_dict["predictions"]
-            priv_group = None
-            if self.ai_system.user_config is not None and "equal_treatment" in self.ai_system.user_config and "priv_group" in self.ai_system.user_config["equal_treatment"]:
-                priv_group = self.ai_system.user_config["equal_treatment"]["priv_group"]
+            priv_group = []
+            prot_attr = []
+            if self.ai_system.user_config is not None and "fairness" in self.ai_system.user_config and "priv_group" in self.ai_system.user_config["fairness"]:
+                prot_attr = self.ai_syste.user_config["fairness"]["protected_attributes"]
 
-            bin_dataset = get_bin_dataset(self, data, priv_group)
-
+            bin_dataset = get_bin_dataset(self, data, prot_attr)
             self.metrics['base-rate'].value = bin_dataset.base_rate()
             self.metrics['consistency'].value = bin_dataset.consistency()
             self.metrics['num-instances'].value = bin_dataset.num_instances()
@@ -89,9 +88,9 @@ class GeneralDatasetFairnessGroup(MetricGroup, config=_config):
             self.metrics['num-positives'].value = bin_dataset.num_positives()
 
 
-def get_bin_dataset(metric_group, data, priv_group):
+def get_bin_dataset(metric_group, data, prot_attr):
     names = [feature.name for feature in metric_group.ai_system.meta_database.features]
     df = pd.DataFrame(data.X, columns=names)
     df['y'] = data.y
-    binDataset = BinaryLabelDataset(df=df, label_names=['y'], protected_attribute_names=['race'])
+    binDataset = BinaryLabelDataset(df=df, label_names=['y'], protected_attribute_names=prot_attr)
     return BinaryLabelDatasetMetric(binDataset)
