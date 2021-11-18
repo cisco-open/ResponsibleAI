@@ -11,7 +11,7 @@ compatibility = {"type_restriction": "binary_classification", "output_restrictio
 # Log loss, roc and brier score have been removed. s
 
 _config = {
-    "name": "general_fairness",
+    "name": "dataset_fairness",
     "compatibility": {"type_restriction": "classification", "output_restriction": "choice"},
     "src": "equal_treatment",
     "dependency_list": [],
@@ -28,19 +28,11 @@ _config = {
         },
         "consistency": {
             "display_name": "Consistency",
-            "type": "numeric",
+            "type": "vector",
             "tags": [],
             "has_range": True,
             "range": [0, 1],
             "explanation": "Shows how similar labels are for similar instances"
-        },
-        "difference": {
-            "display_name": "Difference",
-            "type": "numeric",
-            "tags": [],
-            "has_range": True,
-            "range": [0, 1],
-            "explanation": "Calculates the difference between privileged and unprivileged groups."
         },
         "num-instances": {
             "display_name": "Num Instances",
@@ -70,7 +62,7 @@ _config = {
 }
 
 
-class GeneralFairnessGroup(MetricGroup, config=_config):
+class GeneralDatasetFairnessGroup(MetricGroup, config=_config):
     def __init__(self, ai_system) -> None:
         super().__init__(ai_system)
         
@@ -91,7 +83,11 @@ class GeneralFairnessGroup(MetricGroup, config=_config):
             bin_dataset = get_bin_dataset(self, data, priv_group)
 
             self.metrics['base-rate'].value = bin_dataset.base_rate()
-            # self.metrics['num-instances'].value = float("NaN")
+            self.metrics['consistency'].value = bin_dataset.consistency()
+            self.metrics['num-instances'].value = bin_dataset.num_instances()
+            self.metrics['num-negatives'].value = bin_dataset.num_negatives()
+            self.metrics['num-positives'].value = bin_dataset.num_positives()
+
 
 def get_bin_dataset(metric_group, data, priv_group):
     names = [feature.name for feature in metric_group.ai_system.meta_database.features]

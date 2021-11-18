@@ -1,3 +1,4 @@
 from .group_fairness import GroupFairnessMetricGroup
 from .individual_fairness import IndividualFairnessMetricGroup
-from .general_fairness import GeneralFairnessGroup
+from .general_dataset_fairness import GeneralDatasetFairnessGroup
+from .general_prediction_fairness import GeneralPredictionFairnessGroup

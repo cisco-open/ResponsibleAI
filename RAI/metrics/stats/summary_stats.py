@@ -251,6 +251,7 @@ class StatMetricGroup(MetricGroup, config=_config):
             self.metrics["bayes-var-avg"].value = bVar[0]
             self.metrics["bayes-std"].value = bStd[1]
             self.metrics["bayes-std-avg"].value = bStd[0]
+            self.metrics['kurtosis'].value = scipy.stats.kurtosis(data.X)
             fMean, fVar, fStd = scipy.stats.mvsdist(data.X)
             self.metrics["frozen-mean-mean"].value = fMean.mean()
             self.metrics["frozen-mean-std"].value = fMean.std()

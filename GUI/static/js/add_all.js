@@ -106,6 +106,7 @@ function addTags(metric_name){
 
 function addChart(metric_name, explanations, data, category, name_extension){
     addTags(metric_name)
+    console.log(metric_name)
     var body = document.getElementById('metric_row');
     var newDiv = document.createElement('div');
     newDiv.setAttribute("class", category.toLowerCase() + 'Metric col-sm-6 chart-container main-panel');

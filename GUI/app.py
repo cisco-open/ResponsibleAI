@@ -14,6 +14,7 @@ from flask_admin import helpers as admin_helpers
 from flask_admin import BaseView, expose
 from wtforms import PasswordField
 import redis
+import math
 
 # Create Flask application
 app = Flask(__name__)
@@ -154,9 +155,6 @@ def getData(date1, date2):
         if date1 <= item['date'] <= date2:
             res.append(item)
     return json.dumps(res)
-    # data_test = json.loads(data_test)
-    # mask = (df_measures['date'] >= date1) & (df_measures['date'] <= date2)
-    # return df_measures.loc[mask].to_json(orient='records')  # serialize and use JSON headers
 
 
 @app.route('/getMetricList', methods=['GET'])

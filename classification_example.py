@@ -126,4 +126,4 @@ ai.export_data_flat()
 
 
 print("\nViewing GUI")
-ai.viewGUI()
+# ai.viewGUI()
