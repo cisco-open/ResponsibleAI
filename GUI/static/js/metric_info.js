@@ -39,7 +39,6 @@ function callAllFunctions(metric_name, data) {
 // Create graphs
 function createMetrics(metric_name, data) {
     if(metric_type == 'numeric'){
-        console.log("NUMERIC")
         addChart(metric_name, data, "");
     }
     else if(metric_type == "vector"){
@@ -69,11 +68,13 @@ function addChart(metric_name, data, name_extension){
     newDiv.setAttribute("class", 'MetricPage chart-container main-panel');
     newDiv.setAttribute("id", metric_name + "_chart");
     var writing = document.createElement('p');
-    console.log("DN: " + metric_display_name)
     writing.innerHTML = metric_display_name;
     writing.setAttribute("class", "chartHeader");
     var writing2 = document.createElement('p');
-    writing2.innerHTML = data[data.length -1][ metric_name + name_extension].toFixed(3);;
+    if (typeof(data[data.length-1][metric_name + name_extension]) == 'number')
+        writing2.innerHTML = data[data.length -1][ metric_name + name_extension].toFixed(3);
+    else
+        writing2.innerHTML = "Null"
     writing2.setAttribute("class", "chartValue");
     writing2.setAttribute("id", metric_name + "LastValue");
     newDiv.appendChild(writing);
@@ -119,11 +120,13 @@ function addBoolChart(metric_name, data){
     newDiv.setAttribute("class", 'MetricPage chart-container main-panel');
     newDiv.setAttribute("id", metric_name + "_chart");
     var writing = document.createElement('p');
-    console.log("DN: " + metric_display_name)
     writing.innerHTML = metric_display_name;
     writing.setAttribute("class", "chartHeader");
     var writing2 = document.createElement('p');
-    writing2.innerHTML = data[data.length -1][ metric_name];
+    if(data[data.length-1][metric_name + name_extension] == null)
+        writing2.innerHTML = "Null"
+    else
+        writing2.innerHTML = data[data.length -1][ metric_name + name_extension];
     writing2.setAttribute("class", "chartValue");
     writing2.setAttribute("id", metric_name + "LastValue");
 
@@ -164,6 +167,8 @@ function addTable(metric_name, data_array){
 function generateTableFromArray(data_array){
     var table = document.createElement('table');
     table.setAttribute('class', 'displayMatrix')
+    if(data_array == null)
+        return table
     var tableBody = document.createElement('tbody');
     tableBody.setAttribute('class', 'displayMatrix');
     for(var r = 0; r < data_array.length; r++){
@@ -185,10 +190,12 @@ function generateTableFromArray(data_array){
 function createData(data, key) {
     var ret = [];
     for (var i = 0; i < data.length; i++) {
-        ret.push({
-            year: data[i]["date"],
-            value: data[i][key]
-        });
+        if(data[i][key] != null && !isNaN(data[i][key]) && isFinite(data[i][key])){
+            ret.push({
+                year: data[i]["date"],
+                value: data[i][key]
+            });
+        }
     }
     return ret;
 }

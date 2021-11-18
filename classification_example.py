@@ -115,9 +115,6 @@ print("\nSearching Metrics for ", query)
 result = ai.search(query)
 print(result)
 
-# print("\nSummarizing Results")
-# ai.summarize()
-
 # reset all previous keys
 ai.reset_redis()
 

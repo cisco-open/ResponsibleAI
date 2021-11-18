@@ -106,7 +106,7 @@ function addTags(metric_name){
 
 function addChart(metric_name, explanations, data, category, name_extension){
     addTags(metric_name)
-    console.log(metric_name)
+    // console.log(metric_name)
     var body = document.getElementById('metric_row');
     var newDiv = document.createElement('div');
     newDiv.setAttribute("class", category.toLowerCase() + 'Metric col-sm-6 chart-container main-panel');
@@ -115,7 +115,10 @@ function addChart(metric_name, explanations, data, category, name_extension){
     writing.innerHTML = metric_info[metric_name]["display_name"];
     writing.setAttribute("class", "chartHeader");
     var writing2 = document.createElement('p');
-    writing2.innerHTML = data[data.length -1][ metric_name + name_extension].toFixed(3);
+    if (typeof(data[data.length-1][metric_name + name_extension]) == 'number')
+        writing2.innerHTML = data[data.length -1][ metric_name + name_extension].toFixed(3);
+    else
+        writing2.innerHTML = "Null"
     writing2.setAttribute("class", "chartValue");
     writing2.setAttribute("id", metric_name + "LastValue");
     var img = document.createElement('img');
@@ -184,7 +187,10 @@ function addBoolChart(metric_name, explanations, data, category, name_extension)
     writing.innerHTML = metric_info[metric_name]["display_name"];
     writing.setAttribute("class", "chartHeader");
     var writing2 = document.createElement('p');
-    writing2.innerHTML = data[data.length -1][ metric_name + name_extension];
+    if(data[data.length-1][metric_name + name_extension] == null)
+        writing2.innerHTML = "Null"
+    else
+        writing2.innerHTML = data[data.length -1][ metric_name + name_extension];
     writing2.setAttribute("class", "chartValue");
     writing2.setAttribute("id", metric_name + "LastValue");
     var img = document.createElement('img');
@@ -267,6 +273,8 @@ function addTable(metric_name, explanations, data_array, category){
 function generateTableFromArray(data_array){
     var table = document.createElement('table');
     table.setAttribute('class', 'displayMatrix')
+    if(data_array == null)
+        return table
     var tableBody = document.createElement('tbody');
     tableBody.setAttribute('class', 'displayMatrix')
     for(var r = 0; r < data_array.length; r++){
@@ -290,10 +298,12 @@ function generateTableFromArray(data_array){
 function createData(data, key) {
     var ret = [];
     for (var i = 0; i < data.length; i++) {
-        ret.push({
-            year: data[i]["date"],
-            value: data[i][key]
-        });
+        if(data[i][key] != null && !isNaN(data[i][key]) && isFinite(data[i][key])){
+            ret.push({
+                year: data[i]["date"],
+                value: data[i][key]
+            });
+        }
     }
     return ret;
 }
@@ -302,8 +312,6 @@ function createData(data, key) {
 function createBoxes(metrics) {
     var body = document.getElementById('selector');
     var list = tags
-
-    console.log("TAG OWNERS: " + JSON.stringify(tagOwner))
 
     for(var category in tagOwner){
         var dividerDiv = document.createElement('div')
@@ -325,10 +333,8 @@ function createBoxes(metrics) {
         dividerDiv.appendChild(topBox)
         dividerDiv.appendChild(topLabel);
         dividerDiv.appendChild(topBr);
-        console.log("ADDING PARENT DIV FOR " + category)
         for (var i = 0; i< tagOwner[category].length; i++) {
             var group = tagOwner[category][i]
-            console.log("LOOKING AT :" + group)
             var newBox = document.createElement("input");
             newBox.setAttribute("type", "checkbox");
             newBox.setAttribute("id", group);
@@ -356,7 +362,6 @@ function createBoxes(metrics) {
 
 // white list metrics depending on what is checked in the categories
 function createWhiteList(metrics, category) {
-    console.log("Creating white list")
     for (var i in tags)
         for (var j = 0; j<tags[i].length; j++){
             whitelist.push(tags[i][j]);
@@ -390,10 +395,7 @@ function generateWhiteList(classtype) {
     var boxes = document.getElementsByClassName(classtype.toString().toLowerCase() + "Box");
     whitelist = [];
 
-    console.log("BOXES LENGTH: " + boxes.length)
-
     if(boxes.length == 0){
-        console.log("NO BOXES")
         var box = document.getElementById(classtype.toString().toLowerCase() + "_mainBox");
         if (box.checked){
             var id = box.id.toString();
@@ -415,7 +417,6 @@ function generateWhiteList(classtype) {
             }
         }
     }
-    console.log("White list: " + whitelist)
     displayWhiteList(classtype)
 }
 
@@ -423,12 +424,8 @@ function generateWhiteList(classtype) {
 function displayWhiteList(classtype) {
     var row = document.getElementById("metric_row");
     var divs = row.getElementsByClassName(classtype.toString().toLowerCase() + "Metric");
-    console.log("DIVS: " + divs.length)
-    console.log("WHITE LIST: " + whitelist)
-    console.log("BLACK LIST: " + blacklist)
     for (var i = 0; i < divs.length; i++) {
         var div = divs[i].getElementsByTagName("div")[0];
-        console.log("ID: " + div.id)
         if (whitelist.includes(div.id) && !blacklist.includes(div.id)) {
             divs[i].style.display = "";
         }
