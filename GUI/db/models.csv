@@ -1,3 +1,0 @@
-"id", "type", "pro_atb", "adaptive"
-cisco_ai_2, classification, gender:0, true
-cisco_ai_3, classification, age:>20, false

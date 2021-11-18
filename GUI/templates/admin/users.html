@@ -2,8 +2,6 @@
 {% block body %}
 {{ super() }}
 
-{% if current_user.is_authenticated %}
-
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
@@ -50,38 +48,5 @@
 
 </section>
 <!-- /.content -->
-{% else %}
-
-
-
-<center>
-  <section class="content" style="color: white">
-    <div class="col-sm-12">
-      <h1>Flask-Admin example</h1>
-      <p class="lead">
-        Authentication
-      </p>
-      <p>
-        This example shows how you can use Flask-Admin in an admin template, <br> here I used AdminLTE and <a href="https://pythonhosted.org/Flask-Security/index.html" target="_blank">Flask-Security</a> for authentication.
-      </p>
-      {% if not current_user.is_authenticated %}
-      <p>You can register as a regular user, or log in as a superuser with the following credentials: <br><br>
-
-        email: <b>admin</b> <br>
-        password: <b>admin</b> <br>
-        <br>
-      <p>
-        <a class="btn btn-primary" href="{{ url_for('security.login') }}">Login</a> <a class="btn btn-default" href="{{ url_for('security.register') }}">Register</a>
-      </p>
-      {% endif %}
-      <br>
-      <p>
-        <a class="btn btn-primary" href="/"><i class="glyphicon glyphicon-chevron-left"></i> Back</a>
-      </p>
-    </div>
-  </section>
-</center>
-
-{% endif %}
 
 {% endblock body %}

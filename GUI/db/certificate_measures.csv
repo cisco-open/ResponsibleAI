@@ -1,5 +1,0 @@
-Date,Robustness,Unbiased,Explainability,Dataset Quality,Accuracy,True Positive Rate,False Positive Rate,F1 Score,Area Under Curve,Disparate Impact,SwayMetric1,SwayMetric2,SwayMetric3,Generalization1,Generalization2,Generalization3,Adversarial1,Adversarial2,Adversarial3,Interpretibility,Model Score,Explanation Quality,Fairness1,Fairness2,Bias1,Bias2
-2021-10-09,70,78,20,63,0.6,0.33,0.57,0.5,0.619,0.761,0.3,0.2,0.4,0.7,0.6,0.7,0.2,0.4,0.7,0.2,0.3,0.2,0.7,0.6,0.3,0.4
-2021-10-11,65,75,26,90,0.7,0.4,0.71,0.571,0.69,0.95,0.4,0.2,0.5,0.7,0.7,0.8,0.3,0.4,0.7,0.2,0.3,0.2,0.8,0.5,0.5,0.5
-2021-10-13,85,80,26,90,0.7,0.33,0.57,0.6,0.5,1,0.4,0.3,0.4,0.8,0.8,0.7,0.3,0.3,0.6,0.2,0.3,0.2,0.8,0.7,0.6,0.6
-2021-10-16,80,76,26,90,0.8,0.33,0.57,0.62,0.59,1.5,0.6,0.2,0.6,0.8,0.9,0.8,0.4,0.2,0.6,0.2,0.3,0.2,0.8,0.7,0.7,0.7
