@@ -8,7 +8,7 @@ def jsonify(v):
             return v.tolist()
         if type(v) in (np.bool,'_bool'):
             return bool(v)
-        if type(v) is float and math.isinf(v):  # CURRENTLY REPLACING INF VALUES WITH NULL
+        if (isinstance(v, int) or isinstance(v, float)) and (math.isinf(v) or math.isnan(v)):  # CURRENTLY REPLACING INF VALUES WITH NULL
             return None
 
         return v

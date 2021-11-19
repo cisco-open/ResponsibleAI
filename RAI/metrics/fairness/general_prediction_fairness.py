@@ -84,7 +84,7 @@ _config = {
         },
         "consistency": {
             "display_name": "Consistency",
-            "type": "numeric",
+            "type": "vector",
             "tags": [],
             "has_range": False,
             "range": [None, None],

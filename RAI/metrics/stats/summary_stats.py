@@ -152,14 +152,14 @@ _config = {
             "explanation": "",
         },
         "bayes-std": {
-            "display_name": "Standard Deviation Confidence Interval",
+            "display_name": "Stdev Confidence Interval",
             "type": "vector",
             "has_range": False,
             "range": [None, None],
             "explanation": "",
         },
         "bayes-std-avg": {
-            "display_name": "Standard Deviation Confidence Interval Average",
+            "display_name": "Stdev Confidence Interval Avg",
             "type": "vector",
             "has_range": False,
             "range": [None, None],

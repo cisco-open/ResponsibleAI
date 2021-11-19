@@ -42,7 +42,14 @@ function createMetrics(metric_name, data) {
         addChart(metric_name, data, "");
     }
     else if(metric_type == "vector"){
-        addChart(metric_name, data, "-single")
+        if(metric_name.indexOf("_avg") >= 0)
+            addChart(metric_name, data, "-single")
+        else if (! (list[i]+"_avg" in metric_info)){
+                res = stringToMatrix(data, list[i])
+                if (!Array.isArray(res[0]))
+                    res = [res]
+                addTable(list[i], explanations, res, category)
+
     }
     else if(metric_type == "matrix"){
         var res = stringToMatrix(data, metric_name);
@@ -164,7 +171,7 @@ function addTable(metric_name, data_array){
     matrices[metric_name] = chart;
 }
 
-function generateTableFromArray(data_array){
+function generateTableFromArray(data_array, is_float=false){
     var table = document.createElement('table');
     table.setAttribute('class', 'displayMatrix')
     if(data_array == null)
@@ -177,7 +184,10 @@ function generateTableFromArray(data_array){
         for(var c = 0; c < data_array[r].length; c++){
             var col = document.createElement('td');
             col.setAttribute('class', 'displayMatrix')
-            col.appendChild(document.createTextNode(data_array[r][c]));
+            if(Number.isInteger(data_array[r][c]))
+                col.appendChild(document.createTextNode(data_array[r][c]));
+            else
+                col.appendChild(document.createTextNode(data_array[r][c].toFixed(2)));
             row.appendChild(col);
         }
         tableBody.appendChild(row);
