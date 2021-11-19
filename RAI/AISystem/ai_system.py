@@ -117,11 +117,11 @@ class AISystem:
         now = datetime.datetime.now()
         return "{:02d}".format(now.year) + "-" + "{:02d}".format(now.month) + "-" + "{:02d}".format(now.day) + " " + "{:02d}".format(now.hour) + ":" + "{:02d}".format(now.minute) + ":" + "{:02d}".format(now.second)
 
-    def export_data_flat(self):
+    def export_data_flat(self, description=""):
         metric_values = self.get_metric_values_flat()
         metric_info = self.get_metric_info_flat()
         model_info = self.get_model_info()
-        metric_values["date"] = self._get_time()  # temporary solution
+        metric_values['metadata > description'] = description
         self._update_redis(metric_values, model_info, metric_info)
 
     def export_data_dict(self):

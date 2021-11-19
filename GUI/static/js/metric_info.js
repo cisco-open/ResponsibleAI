@@ -49,7 +49,7 @@ function createMetrics(metric_name, data) {
                 if (!Array.isArray(res[0]))
                     res = [res]
                 addTable(list[i], explanations, res, category)
-
+        }
     }
     else if(metric_type == "matrix"){
         var res = stringToMatrix(data, metric_name);
@@ -93,17 +93,24 @@ function addChart(metric_name, data, name_extension){
     newDiv.appendChild(chart);
     body.appendChild(newDiv);
 
+    var result = createData(data, metric_name + name_extension)
+    var chart_data = result[0]
+    var chart_descriptions = result[1]
     var myValues  = {
         element: metric_name,
-        data: createData(data, metric_name + name_extension),
+        data: chart_data,
         xkey: 'year',
+        descriptions: chart_descriptions,
         ykey: metric_name,
         hideHover: true,
         smooth: false,
         lineColors: ['#000000'],
         pointFillColors: ['#000000'],
         ykeys: ['value'],
-        labels: ['Value']
+        labels: ['Value'],
+        hoverCallback: function (index, options, content, row) {
+                var description = options.descriptions[index];
+                return content + "\nDescription: " + description;}
     }
 
 
@@ -199,15 +206,17 @@ function generateTableFromArray(data_array, is_float=false){
 // Used to create the data for the morris chart
 function createData(data, key) {
     var ret = [];
+    var descriptions = []
     for (var i = 0; i < data.length; i++) {
         if(data[i][key] != null && !isNaN(data[i][key]) && isFinite(data[i][key])){
             ret.push({
-                year: data[i]["date"],
+                year: data[i]["metadata > date"],
                 value: data[i][key]
             });
+            descriptions.push(data[i]["metadata > description"])
         }
     }
-    return ret;
+    return [ret, descriptions];
 }
 
 
@@ -229,8 +238,12 @@ function redoMetrics2(data) {
         var ext = "";
         if(metric_type == "vector")
             ext = "-single"
-        var new_data = createData(data, type + ext);
+        var result = createData(data, type + ext);
+        var new_data = result[0]
+        var newExplanations = result[1]
         graphs[type].setData(new_data);
+        graphs[type].options.descriptions = newExplanations
+
         var writing = document.getElementById(type + "LastValue");
 
         if(new_data.length >= 1)

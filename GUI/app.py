@@ -62,7 +62,7 @@ def getData(date1, date2):
     res = []
     for i in range(len(data_test)):
         item = json.loads(data_test[i])
-        if date1 <= item['date'] <= date2:
+        if date1 <= item['metadata > date'] <= date2:
             res.append(item)
     return json.dumps(res)
 

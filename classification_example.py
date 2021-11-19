@@ -26,7 +26,6 @@ features_raw = ["id", "radius_mean", "texture_mean", "perimeter_mean", "area_mea
                 "race"]
 features = []
 
-print("FEATURE SIZE: ", len(features_raw))
 for feature in features_raw:
     features.append(Feature(feature, "float32", feature))
 
@@ -94,7 +93,7 @@ print(result)
 ai.reset_redis()
 
 # export to redis
-ai.export_data_flat()
+ai.export_data_flat("Testing New Features")
 
 
 print("\nViewing GUI")

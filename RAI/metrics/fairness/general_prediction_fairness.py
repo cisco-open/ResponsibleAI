@@ -376,12 +376,7 @@ class GeneralPredictionFairnessGroup(MetricGroup, config=_config):
                     priv_group_list.append({group: self.ai_system.user_config["fairness"]["priv_group"][group]["privileged"]})
                     unpriv_group_list.append({group: self.ai_system.user_config["fairness"]["priv_group"][group]["unprivileged"]})
 
-            print("PROT ATTR: ", prot_attr)
-            print("PRIV_GROUP: ", priv_group_list)
-            print("UNPRIV_GROUP: ", unpriv_group_list)
-
             cd = get_class_dataset(self, data, preds, prot_attr, priv_group_list, unpriv_group_list)
-
             self.metrics['average-abs-odds-difference'].value = cd.average_odds_difference()
             self.metrics['between-all-groups-coefficient-of-variation'].value = cd.between_all_groups_coefficient_of_variation()
             self.metrics['between-all-groups-generalized-entropy-index'].value = cd.between_all_groups_generalized_entropy_index()
