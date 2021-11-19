@@ -48,7 +48,10 @@ class AISystem:
         raise Exception("unknown data type : {}".format(data_type))
 
     def get_model_info(self):
-        result = {"id": self.task.model.name, "model": self.task.model.model_class, "adaptive": self.task.model.adaptive}
+        result = {"id": self.task.model.name, "model": self.task.model.model_class, "adaptive": self.task.model.adaptive,
+                  "task_type": self.task.type, "configuration": self.user_config, "features": [], "description": self.task.description}
+        for i in range(len(self.meta_database.features)):
+            result['features'].append(self.meta_database.features[i].name)
         return result
 
     def get_metric_info_flat(self):

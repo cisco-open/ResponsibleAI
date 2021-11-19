@@ -21,6 +21,8 @@ cert_measures = pandas.read_csv(os.path.dirname(os.path.realpath(__file__)) + "\
 cert_meta = json.load(open(os.path.dirname(os.path.realpath(__file__)) + "\\output\\certificate_metadata.json", "r"))
 r = redis.Redis(host='localhost', port=6379, db=0)
 
+cache = {'metric_info': json.loads(r.get('metric_info')), 'metric_values': r.lrange('metric_values', 0, -1)}
+
 
 # Flask views
 @app.route('/')
@@ -28,6 +30,7 @@ def index():
     return redirect(url_for('admin.index'))
 
 
+'''
 @app.route('/users')
 def users():
     return render_template('/admin/users.html',
@@ -35,14 +38,36 @@ def users():
                            admin_view=admin.index_view,
                            get_url=url_for,
                            h=admin_helpers)
+'''
+
 
 @app.route('/info')
 def info():
+    model_info = r.get('model_info')
+    data = json.loads(model_info)
+    print("DATA: " + str(data))
+    name = data['id']
+    description = data['description']
+    task_type = data['task_type']
+    prot_attr = ["None"]
+    model_type = data['model']
+    features = data['features']
+
+    if 'fairness' in data['configuration'] and 'protected_attributes' in data['configuration']['fairness']:
+        prot_attr = data['configuration']['fairness']['protected_attributes']
+
+
     return render_template('/admin/info.html',
                            admin_base_template=admin.base_template,
                            admin_view=admin.index_view,
                            get_url=url_for,
-                           h=admin_helpers)
+                           h=admin_helpers,
+                           name=name,
+                           description=description,
+                           task_type=task_type,
+                           protected_attributes=prot_attr,
+                           model_type=model_type,
+                           features=features)
 
 
 @app.route('/event')
@@ -59,6 +84,7 @@ def getData(date1, date2):
     date1 += "-00:00:00"
     date2 += "-00:00:00"
     data_test = r.lrange('metric_values', 0, -1)
+    # data_test = cache['metric_values']
     res = []
     for i in range(len(data_test)):
         item = json.loads(data_test[i])
@@ -71,6 +97,8 @@ def getData(date1, date2):
 def getMetricList():
     data_test = r.get('metric_info')
     data = json.loads(data_test)
+    # data = cache['metric_info']
+
     # print("DATA: ", data)
     result = {}
 
@@ -87,10 +115,11 @@ def getMetricList():
 @app.route('/getMetricInfo', methods=['GET'])
 def getMetricInfo():
     return json.loads(r.get('metric_info'))
+    # return cache['metric_info']
 
 
 @app.route('/getCertification/<date1>/<date2>', methods=['GET'])
-def getCertification(date1, date2): # NOT REAL DATA YET.
+def getCertification(date1, date2):  # NOT REAL DATA YET.
     date1 += "-00:00:00"
     date2 += "-00:00:00"
     mask = (cert_measures['date'] >= date1) & (cert_measures['date'] <= date2)
@@ -127,6 +156,8 @@ def renderAllMetrics():
 def learnMore(metric):
     data_test = r.get('metric_info')
     metric_info = json.loads(data_test)
+
+    # metric_info = cache['metric_info']
     return render_template('/admin/metric_info.html',
                            admin_base_template=admin.base_template,
                            admin_view=admin.index_view,

@@ -25,31 +25,23 @@
     <table class="grey" style="width:40%; margin-left:auto; margin-right:auto;">
         <tr>
             <th>Name</th>
-            <th>Cisco Financial AI</th>
+            <th>{{name}}</th>
         </tr>
         <tr>
             <td>Description</td>
-            <td>Identifies users who are likely to avoid payment.</td>
+            <td>{{description}}</td>
         </tr>
         <tr>
             <td>Type</td>
-            <td>Classification</td>
+            <td>{{task_type}}</td>
         </tr>
         <tr>
             <td>Protected Characteristics</td>
-            <td>Age, Gender, Race</td>
-        </tr>
-        <tr>
-            <td>Created</td>
-            <td>3/10/2021</td>
+            <td>{{protected_attributes}}</td>
         </tr>
         <tr>
             <td>Model Type</td>
-            <td>Random Forest Classifier</td>
-        </tr>
-        <tr>
-            <td>Input Type</td>
-            <td>Structured</td>
+            <td>{{model_type}}</td>
         </tr>
     </table>
 
@@ -57,48 +49,12 @@
     <table class="grey" style="width:40%; margin-left:auto; margin-right:auto;">
         <tr>
             <th>Input</th>
-            <th>Impact</th>
         </tr>
-        <tr>
-            <td>Credit Score</td>
-            <td>45%</td>
-        </tr>
-        <tr>
-            <td>Shoe Size</td>
-            <td>3%</td>
-        </tr>
-        <tr>
-            <td>History of Payment</td>
-            <td>16%</td>
-        </tr>
-        <tr>
-            <td>Age</td>
-            <td>3%</td>
-        </tr>
-        <tr>
-            <td>Gender</td>
-            <td>6%</td>
-        </tr>
-        <tr>
-            <td>Zip Code</td>
-            <td>10%</td>
-        </tr>
-    </table>
-
-    <h1 class="metricHeader">Outputs</h1>
-    <table class="grey" style="width:40%; margin-left:auto; margin-right:auto;">
-        <tr>
-            <th>Type</th>
-            <th>Value</th>
-        </tr>
-        <tr>
-            <td>Reliable</td>
-            <td>1</td>
-        </tr>
-        <tr>
-            <td>Unreliable</td>
-            <td>0</td>
-        </tr>
+        {% for v in features %}
+            <tr>
+                <td>{{v}}</td>
+            </tr>
+        {% endfor %}
     </table>
 
 </section>

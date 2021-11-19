@@ -7,6 +7,7 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
 <link rel="stylesheet" href="/static/css/my_css.css">
+<script type="text/javascript" src="/static/js/get_events.js"></script>
 
 <!-- Content Header (Page header) -->
 <section class="content-header">
@@ -22,54 +23,14 @@
 
 <section class="content">
     <h1 class="metricHeader">Cisco Financial AI - Event Log</h1>
-    <table class="grey" style="width:60%; margin-left:auto; margin-right:auto; margin-top:50px; text-align:center;">
+    <table class="grey" id="event_list" style="width:60%; margin-left:auto; margin-right:auto; margin-top:50px; text-align:center;">
         <tr>
-            <th>Time</th>
+            <th>Date</th>
             <th>Event</th>
-            <th>Class</th>
+            <th>Description</th>
         </tr>
-        <tr>
-            <td>10-13-15:03</td>
-            <td>Observation Added</td>
-            <td>Data Addition</td>
-        </tr>
-        <tr>
-            <td style="font-weight:bold;">10-11-01:31</td>
-            <td style="font-weight:bold;">Low Robustness Detected</td>
-            <td style="font-weight:bold;">Robustness Warning</td>
-        </tr>
-        <tr>
-            <td>10-11-01:25</td>
-            <td>Observation Added</td>
-            <td>Data Addition</td>
-        </tr>
-        <tr>
-            <td style="font-weight:bold;">10-09-09:31</td>
-            <td style="font-weight:bold;">Low Fairness Levels Detected</td>
-            <td style="font-weight:bold;">Fairness Warning</td>
-        </tr>
-        <tr>
-            <td>10-09-09:30</td>
-            <td>Observation Added</td>
-            <td>Data Addition</td>
-        </tr>
-        <tr>
-            <td>10-08-12:35</td>
-            <td>Project Shared with Bill from Business</td>
-            <td>Collaborative</td>
-        </tr>
-        <tr>
-            <td>10-08-12:30</td>
-            <td>Project Shared with Christopher Vattheuer</td>
-            <td>Collaborative</td>
-        </tr>
-        <tr>
-            <td>10-08-12:00</td>
-            <td>Cisco Financial AI Created</td>
-            <td>General</td>
-        </tr>
-
     </table>
+    <script>load_data()</script>
 
 </section>
 <!-- /.content -->

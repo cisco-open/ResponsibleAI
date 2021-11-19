@@ -39,7 +39,7 @@ from sklearn.ensemble import RandomForestClassifier
 reg = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=0)
 model = Model(agent=reg, name="Cisco Breast Cancer AI", model_class="Random Forest Classifier", adaptive=False)
 # Indicate the task of the model
-task = Task(model=model, type='binary_classification')
+task = Task(model=model, type='binary_classification', description="Detect Cancer in patients using skin measurements")
 
 # Create AISystem from previous objects. AISystems are what users will primarily interact with.
 configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}},
