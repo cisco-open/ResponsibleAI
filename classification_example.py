@@ -26,7 +26,6 @@ features_raw = ["id", "radius_mean", "texture_mean", "perimeter_mean", "area_mea
                 "race"]
 features = []
 
-print("FEATURE SIZE: ", len(features_raw))
 for feature in features_raw:
     features.append(Feature(feature, "float32", feature))
 
@@ -40,10 +39,11 @@ from sklearn.ensemble import RandomForestClassifier
 reg = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=0)
 model = Model(agent=reg, name="Cisco Breast Cancer AI", model_class="Random Forest Classifier", adaptive=False)
 # Indicate the task of the model
-task = Task(model=model, type='binary_classification')
+task = Task(model=model, type='binary_classification', description="Detect Cancer in patients using skin measurements")
 
 # Create AISystem from previous objects. AISystems are what users will primarily interact with.
-configuration = {"equal_treatment": {"priv_group": ("race", 1)}}
+configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}},
+                              "protected_attributes": ["race"], "positive_label": 1}}
 ai = AISystem(meta_database=meta, dataset=dataset, task=task, user_config=configuration)
 ai.initialize()
 
@@ -56,31 +56,6 @@ ai.compute_metrics(model_preds)
 # Function to compare our result to sklearn's result.
 
 
-# def test_metric(res, actual, preds):
-#     # res is the result from ai_system.get_metric_values()
-#     if 'class_bias' in res: # Check the metrics in the class_bias metric group
-#         print("Testing class_bias metrics")
-#         assert res['class_bias']['accuracy'] == sklearn.metrics.accuracy_score(actual, preds)
-#         assert res['class_bias']['balanced_accuracy'] == sklearn.metrics.balanced_accuracy_score(actual, preds)
-#         assert res['class_bias']['f1-single'] == sklearn.metrics.f1_score(actual, preds, average="macro")
-#         assert res['class_bias']['jaccard_score-single'] == sklearn.metrics.jaccard_score(actual, preds, average="macro")
-#         assert np.array_equal(res['class_bias']['confusion_matrix'], sklearn.metrics.confusion_matrix(actual, preds))
-#     if 'reg_bias' in res:  # Check th emetrics in the reg_bias metric groups
-#         print("Testing class_reg metrics")
-#         assert res['reg_bias']['explained_variance'] == sklearn.metrics.explained_variance_score(actual, preds)
-#         assert res['reg_bias']['mean_absolute_error'] == sklearn.metrics.mean_absolute_error(actual, preds)
-#         assert res['reg_bias']['mean_absolute_percentage_error'] == sklearn.metrics.mean_absolute_percentage_error(actual, preds)
-#         assert res['reg_bias']['mean_gamma_deviance'] == sklearn.metrics.mean_gamma_deviance(actual, preds)
-#         assert res['reg_bias']['mean_poisson_deviance'] == sklearn.metrics.mean_poisson_deviance(actual, preds)
-#         assert res['reg_bias']['mean_squared_error'] == sklearn.metrics.mean_squared_error(actual, preds)
-#         assert res['reg_bias']['mean_squared_log_error'] == sklearn.metrics.mean_squared_log_error(actual, preds)
-#         assert res['reg_bias']['median_absolute_error'] == sklearn.metrics.median_absolute_error(actual, preds)
-#         assert res['reg_bias']['r2'] == sklearn.metrics.r2_score(actual, preds)
-
-
-# # Test Metric Values
-# print("\nTESTING Metrics:")
-# test_metric(res, yTest, model_preds)
 
 # Compute Metrics Using our Engine
 resv_f = ai.get_metric_values_flat()
@@ -95,7 +70,6 @@ for key in resv_f:
         print(resi_f[key]['display_name'], " = ", resv_f[key])
     else:
         print(resi_f[key]['display_name'], " = ", resv_f[key])
-
 
 
 # Getting Metric Information
@@ -115,14 +89,11 @@ print("\nSearching Metrics for ", query)
 result = ai.search(query)
 print(result)
 
-# print("\nSummarizing Results")
-# ai.summarize()
-
 # reset all previous keys
 ai.reset_redis()
 
 # export to redis
-ai.export_data_flat()
+ai.export_data_flat("Testing New Features")
 
 
 print("\nViewing GUI")

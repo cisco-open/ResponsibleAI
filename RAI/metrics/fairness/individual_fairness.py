@@ -76,24 +76,27 @@ class IndividualFairnessMetricGroup(MetricGroup, config=_config):
         if "data" and "predictions" in data_dict:
             data = data_dict["data"]
             preds = data_dict["predictions"]
-            priv_group = None
-            if self.ai_system.user_config is not None and "equal_treatment" in self.ai_system.user_config and "priv_group" in self.ai_system.user_config["equal_treatment"]:
-                priv_group = self.ai_system.user_config["equal_treatment"]["priv_group"]
+            prot_attr = []
+            pos_label = 1
+            if self.ai_system.user_config is not None and "fairness" in self.ai_system.user_config and "priv_group" in \
+                    self.ai_system.user_config["fairness"]:
+                prot_attr = self.ai_system.user_config["fairness"]["protected_attributes"]
+                pos_label = self.ai_system.user_config["fairness"]["positive_label"]
 
-            y = _convert_to_ai360(self, data)
+            y = _convert_to_ai360(self, data, prot_attr)
             # MAY REQUIRE ADJUSTMENT DEPENDING ON AI360'S USE.
-            self.metrics['generalized_entropy_error'].value = _generalized_entropy_error(y, preds, pos_label=priv_group[1])
-            self.metrics['between_group_generalized_entropy_error'].value = _between_group_generalized_entropy_error(y, preds, prot_attr=priv_group[0], pos_label= priv_group[1])
+            self.metrics['generalized_entropy_error'].value = _generalized_entropy_error(y, preds, pos_label=pos_label)
+            self.metrics['between_group_generalized_entropy_error'].value = _between_group_generalized_entropy_error(y, preds, prot_attr=prot_attr[0], pos_label=pos_label)
             self.metrics['theil_index'].value = _theil_index(_get_b(y, preds, 1))
             self.metrics['coefficient_of_variation'].value = _coefficient_of_variation(_get_b(y, preds, 1))
             self.metrics['consistency_score'].value = _consistency_score(data.X, data.y)
 
 
-def _convert_to_ai360(metric_group, data):
+def _convert_to_ai360(metric_group, data, prot_attr):
     names = [feature.name for feature in metric_group.ai_system.meta_database.features]
     df = pd.DataFrame(data.X, columns=names)
     df['y'] = data.y
-    X, y = standardize_dataset(df, prot_attr=['race'], target='y')
+    X, y = standardize_dataset(df, prot_attr=prot_attr, target='y')
     return y
 
 

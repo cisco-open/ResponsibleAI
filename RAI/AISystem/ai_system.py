@@ -10,7 +10,6 @@ from RAI import utils
 
 
 class AISystem:
-
     def __init__(self, meta_database, dataset, task, user_config) -> None:
         self.meta_database = meta_database
         self.task = task
@@ -49,7 +48,10 @@ class AISystem:
         raise Exception("unknown data type : {}".format(data_type))
 
     def get_model_info(self):
-        result = {"id": self.task.model.name, "model": self.task.model.model_class, "adaptive": self.task.model.adaptive}
+        result = {"id": self.task.model.name, "model": self.task.model.model_class, "adaptive": self.task.model.adaptive,
+                  "task_type": self.task.type, "configuration": self.user_config, "features": [], "description": self.task.description}
+        for i in range(len(self.meta_database.features)):
+            result['features'].append(self.meta_database.features[i].name)
         return result
 
     def get_metric_info_flat(self):
@@ -90,7 +92,6 @@ class AISystem:
                  
         return result
 
-     
     def compute_metrics(self, preds=None, reset_metrics=False, data_type="train"):
         if reset_metrics:
             self.reset_metrics()
@@ -119,11 +120,11 @@ class AISystem:
         now = datetime.datetime.now()
         return "{:02d}".format(now.year) + "-" + "{:02d}".format(now.month) + "-" + "{:02d}".format(now.day) + " " + "{:02d}".format(now.hour) + ":" + "{:02d}".format(now.minute) + ":" + "{:02d}".format(now.second)
 
-    def export_data_flat(self):
+    def export_data_flat(self, description=""):
         metric_values = self.get_metric_values_flat()
         metric_info = self.get_metric_info_flat()
         model_info = self.get_model_info()
-        metric_values["date"] = self._get_time()  # temporary solution
+        metric_values['metadata > description'] = description
         self._update_redis(metric_values, model_info, metric_info)
 
     def export_data_dict(self):

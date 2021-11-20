@@ -1,0 +1,63 @@
+{% extends 'admin/master.html' %}
+{% block body %}
+{{ super() }}
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+<link rel="stylesheet" href="/static/css/my_css.css">
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <h1 class="rai-desc">
+    RAI
+    <small class="rai-desc">Tools for a Robust Future</small>
+  </h1>
+  <ol class="breadcrumb">
+    <li><a href="#"><i class="fa dashboard"></i>Home</a></li>
+    <li class="active">Info</li>
+  </ol>
+</section>
+
+<section class="content">
+    <h1 class="metricHeader">Cisco Financial AI - Model Info</h1>
+    <table class="grey" style="width:40%; margin-left:auto; margin-right:auto;">
+        <tr>
+            <th>Name</th>
+            <th>{{name}}</th>
+        </tr>
+        <tr>
+            <td>Description</td>
+            <td>{{description}}</td>
+        </tr>
+        <tr>
+            <td>Type</td>
+            <td>{{task_type}}</td>
+        </tr>
+        <tr>
+            <td>Protected Characteristics</td>
+            <td>{{protected_attributes}}</td>
+        </tr>
+        <tr>
+            <td>Model Type</td>
+            <td>{{model_type}}</td>
+        </tr>
+    </table>
+
+    <h1 class="metricHeader">Inputs</h1>
+    <table class="grey" style="width:40%; margin-left:auto; margin-right:auto;">
+        <tr>
+            <th>Input</th>
+        </tr>
+        {% for v in features %}
+            <tr>
+                <td>{{v}}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+</section>
+<!-- /.content -->
+
+{% endblock body %}

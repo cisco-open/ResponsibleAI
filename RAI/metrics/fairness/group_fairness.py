@@ -11,7 +11,7 @@ compatibility = {"type_restriction": "classification", "output_restriction": "ch
 
 _config = {
     "name" : "group_fairness",
-    "compatibility" : {"type_restriction": "classification", "output_restriction": "choice"},
+    "compatibility": {"type_restriction": "classification", "output_restriction": "choice"},
     "src": "equal_treatment",
     "dependency_list": [],
     "tags": ["fairness", "Group Fairness"],
@@ -75,24 +75,26 @@ class GroupFairnessMetricGroup(MetricGroup, config=_config):
         if "data" and "predictions" in data_dict:
             data = data_dict["data"]
             preds = data_dict["predictions"]
-            priv_group = None
-            if self.ai_system.user_config is not None and "equal_treatment" in self.ai_system.user_config and "priv_group" in self.ai_system.user_config["equal_treatment"]:
-                priv_group = self.ai_system.user_config["equal_treatment"]["priv_group"]
+            pos_label = 1
+            prot_attr = []
+            if self.ai_system.user_config is not None and "fairness" in self.ai_system.user_config and "priv_group" in self.ai_system.user_config["fairness"]:
+                prot_attr = self.ai_system.user_config["fairness"]["protected_attributes"]
+                pos_label = self.ai_system.user_config["fairness"]["positive_label"]
 
-            y = _convert_to_ai360(self, data)
-            self.metrics['disparate_impact_ratio'].value = _disparate_impact_ratio(y, preds, prot_attr=priv_group[0], pos_label=priv_group[1])
-            self.metrics['statistical_parity_difference'].value = _statistical_parity_difference(y, preds, prot_attr=priv_group[0], pos_label=priv_group[1])
-            self.metrics['equal_opportunity_difference'].value = _equal_opportunity_difference(y, preds, prot_attr=priv_group[0], pos_label=priv_group[1])
-            self.metrics['average_odds_difference'].value = _average_odds_difference(y, preds, prot_attr=priv_group[0], pos_label=priv_group[1])
-            self.metrics['average_odds_error'].value = _average_odds_error(y, preds, prot_attr=priv_group[0], pos_label=priv_group[1])
+            y = _convert_to_ai360(self, data, prot_attr)
+            self.metrics['disparate_impact_ratio'].value = _disparate_impact_ratio(y, preds, prot_attr=prot_attr[0], pos_label=pos_label)
+            self.metrics['statistical_parity_difference'].value = _statistical_parity_difference(y, preds, prot_attr=prot_attr[0], pos_label=pos_label)
+            self.metrics['equal_opportunity_difference'].value = _equal_opportunity_difference(y, preds, prot_attr=prot_attr[0], pos_label=pos_label)
+            self.metrics['average_odds_difference'].value = _average_odds_difference(y, preds, prot_attr=prot_attr[0], pos_label=pos_label)
+            self.metrics['average_odds_error'].value = _average_odds_error(y, preds, prot_attr=prot_attr[0], pos_label=pos_label)
 
 
 
-def _convert_to_ai360(metric_group, data):
+def _convert_to_ai360(metric_group, data, prot_attr):
     names = [feature.name for feature in metric_group.ai_system.meta_database.features]
     df = pd.DataFrame(data.X, columns=names)
     df['y'] = data.y
-    X, y = standardize_dataset(df, prot_attr=['race'], target='y')
+    X, y = standardize_dataset(df, prot_attr=prot_attr, target='y')
     return y
 
 

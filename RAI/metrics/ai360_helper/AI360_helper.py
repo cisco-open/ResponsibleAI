@@ -14,7 +14,7 @@ from sklearn.exceptions import UndefinedMetricWarning
 
 
 __all__ = [
-    'standardize_dataset', 'check_groups','check_already_dropped',
+    'standardize_dataset', 'check_groups', 'check_already_dropped',
     'difference', 'ratio',
     'make_scorer',
     # helpers

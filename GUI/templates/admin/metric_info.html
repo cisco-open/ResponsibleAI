@@ -1,0 +1,66 @@
+{% extends 'admin/master.html' %}
+{% block body %}
+{{ super() }}
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+<script type="text/javascript" src="/static/js/metric_info.js"></script>
+<link rel="stylesheet" href="/static/css/my_css.css">
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <h1 class="rai-desc">
+    RAI
+    <small class="rai-desc">Tools for a Robust Future</small>
+  </h1>
+  <ol class="breadcrumb">
+    <li><a href="#"><i class="fa fa-dashboard"></i>Home</a></li>
+    <li class="active"> {{metric_display_name}} Info </li>
+  </ol>
+</section>
+
+
+<section class="content">
+    <h1 class="metricHeader">Cisco Financial AI - {{metric_display_name}}</h1>
+    <div class="row">
+        <input class="dateChooser" type="date" id="endDate" value="{{end_date}}" onchange="redoMetrics()">
+        <label for="endDate" class="dateChooser">End Date:</label>
+        <input class="dateChooser" type="date" id="startDate" value="{{start_date}}" onchange="redoMetrics()">
+        <label for="startDate" class="dateChooser">Start Date:</label>
+
+        <div id="fairness_selector" class="selector" style="display:none">
+            <p class="selectorHeader">Metric Selector</p>
+        </div>
+    </div>
+
+    <div id="_row">
+    </div>
+
+    <table class="grey" style="width:40%; margin-left:auto; margin-right:auto; margin-top:25px; text-align:center">
+        <tr>
+            <th style="font-weight:bold;">Name</th>
+            <th style="font-weight:normal;"> {{metric_display_name}} </th>
+        </tr>
+        <tr>
+            <td style="font-weight:bold;">Range</td>
+            <td> {{metric_range}} </td>
+        </tr>
+        <tr>
+            <td style="font-weight:bold;">Explanation</td>
+            <td> {{metric_explanation}} </td>
+        </tr>
+        <tr>
+            <td style="font-weight:bold;">Type</td>
+            <td>{{metric_type}}</td>
+        </tr>
+        <tr>
+            <td style="font-weight:bold;">Tags</td>
+            <td> {{metric_tags}} </td>
+        </tr>
+    </table>
+    <script>loadData("{{metric_hidden_name}}", "{{metric_range}}", "{{metric_display_name}}", "{{metric_type}}", "{{metric_has_range}}")</script>
+</section>
+
+{% endblock body %}

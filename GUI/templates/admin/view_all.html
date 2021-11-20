@@ -1,0 +1,42 @@
+{% extends 'admin/master.html' %}
+{% block body %}
+{{ super() }}
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+<script type="text/javascript" src="/static/js/add_all.js"></script>
+<link rel="stylesheet" href="/static/css/my_css.css">
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1 class="rai-desc">
+        RAI
+        <small class="rai-desc">Tools for a Robust Future</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i>Home</a></li>
+        <li class="active">View All</li>
+    </ol>
+</section>
+
+<section class="content">
+    <h1 class="metricHeader">Cisco Financial AI - All Metrics</h1>
+    <div class="row">
+        <button id="edit_view" class="editView" onclick="displayMenu('{{Functional}}')">Filter</button>
+        <input type="text" id="myInput" onkeyup="search('{{Functional}}')" placeholder="Search metrics.." style="margin-left:50px">
+        <input class="dateChooser" type="date" id="endDate" value="{{end_date}}" onchange="redoMetrics()">
+        <label for="endDate" class="dateChooser">End Date:</label>
+        <input class="dateChooser" type="date" id="startDate" value="{{start_date}}" onchange="redoMetrics()">
+        <label for="startDate" class="dateChooser">Start Date:</label>
+        <div id="selector" class="selector" style="display:none">
+            <p class="selectorHeader">Metric Selector</p>
+        </div>
+    </div>
+    <div class="row" id="metric_row">
+    </div>
+    <script>loadAll()</script>
+</section>
+<!-- /.content -->
+{% endblock body %}
