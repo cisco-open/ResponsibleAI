@@ -26,9 +26,9 @@
     <div class="row">
         <button id="edit_view" class="editView" onclick="displayMenu('{{Functional}}')">Filter</button>
         <input type="text" id="myInput" onkeyup="search('{{Functional}}')" placeholder="Search metrics.." style="margin-left:50px">
-        <input class="dateChooser" type="date" id="endDate" value="2021-11-30" onchange="redoMetrics()">
+        <input class="dateChooser" type="date" id="endDate" value="{{end_date}}" onchange="redoMetrics()">
         <label for="endDate" class="dateChooser">End Date:</label>
-        <input class="dateChooser" type="date" id="startDate" value="2021-10-09" onchange="redoMetrics()">
+        <input class="dateChooser" type="date" id="startDate" value="{{start_date}}" onchange="redoMetrics()">
         <label for="startDate" class="dateChooser">Start Date:</label>
         <div id="selector" class="selector" style="display:none">
             <p class="selectorHeader">Metric Selector</p>
