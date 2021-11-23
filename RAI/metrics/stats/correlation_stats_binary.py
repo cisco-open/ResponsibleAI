@@ -3,7 +3,8 @@ import math
 import numpy as np
 import scipy.stats
 
-# Move config to external .json? 
+# Are these metrics meaningful?
+
 _config = {
     "name": "correlation_stats_binary",
     "compatibility": {"type_restriction": "classification", "output_restriction": None},

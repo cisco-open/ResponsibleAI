@@ -10,6 +10,7 @@ var metrics; // global variable contains all metrics on screen
 var graphs = {}; // list of all graphs
 var matrices = {};
 var metric_info;
+var model_info;
 var tags = {}
 var tagOwner = {'fairness': [], 'performance': [], 'robust': [], 'stats': []}
 var categories = ['fairness', 'performance', 'robust', 'stats']
@@ -32,12 +33,25 @@ function loadExplanations(metrics) {
         return response.json();
     }).then(function(text){
         metric_info = text;
-        load_data(metrics, text);
+        load_model_info(metrics, text);
     });
 }
 
+
+// Loads explanations.
+function load_model_info(metrics, explanations) {
+    fetch('/getModelInfo').then(function (response) {
+        return response.json();
+    }).then(function(text){
+        model_info = text;
+        load_data(metrics, explanations);
+    });
+}
+
+
+
 // Queries Data
-function load_data(metrics, data) {
+function load_data(metrics, data, modelInfo) {
     var date1 = document.getElementById("startDate").value;
     var date2 = document.getElementById("endDate").value;
     return fetch('/getData/' + date1 + '/' + date2)
@@ -82,7 +96,33 @@ function createMetrics(metrics, explanations, data, category) {
         else if(metric_info[list[i]]["type"] == "boolean"){
             addBoolChart(list[i], explanations, data, category, "");
         }
+        else if(metric_info[list[i]]["type"] == "vector-dict"){
+            addVectorDict(list[i], explanations, data, category, "");
+        }
     }
+}
+
+
+function addVectorDict(metric_name, explanations, data, category, name_extension){
+    var curData = data[data.length -1][metric_name]
+    var features = model_info['features']
+    var result = {}
+    for(var i = 0; i<curData.length; i++){
+        if(curData[i] != null){
+            var table = dict_to_table(curData[i])
+            addTable(metric_name, explanations, table, category, features[i]);
+        }
+    }
+}
+
+
+function dict_to_table(dict){
+    var result = [[], []]
+    for(var key in dict){
+        result[0].push(key)
+        result[1].push(dict[key])
+    }
+    return result
 }
 
 
@@ -240,7 +280,7 @@ function addBoolChart(metric_name, explanations, data, category, name_extension)
     body.appendChild(newDiv);
 }
 
-function addTable(metric_name, explanations, data_array, category){
+function addTable(metric_name, explanations, data_array, category, optionalName=""){
     addTags(metric_name)
     var body = document.getElementById('metric_row');
     var newDiv = document.createElement('div');
@@ -248,7 +288,13 @@ function addTable(metric_name, explanations, data_array, category){
     newDiv.setAttribute("id", metric_name + "_chart");
     var writing = document.createElement('p');
     writing.innerHTML = metric_info[metric_name]["display_name"]
+    if(optionalName != "")
+        writing.innerHTML += " - " + optionalName
     writing.setAttribute("class", "chartHeader");
+    //var writing2 = document.createElement('p');
+    //    if (optionalName != "")
+    //        writing2.innerHTML = optionalName;
+
     var img = document.createElement('img');
     img.setAttribute("title", explanations[metric_name]["explanation"]);
     img.setAttribute("src", "/static/img/questionMark.png");
@@ -256,6 +302,7 @@ function addTable(metric_name, explanations, data_array, category){
     img.setAttribute("class", "learnMore");
     newDiv.appendChild(img);
     newDiv.appendChild(writing);
+    // newDiv.appendChild(writing2);
 
     var removeBtn = document.createElement("button");
     removeBtn.innerHTML  = "X";
@@ -297,7 +344,7 @@ function generateTableFromArray(data_array, is_float=false){
         for(var c = 0; c < data_array[r].length; c++){
             var col = document.createElement('td');
             col.setAttribute('class', 'displayMatrix')
-            if(Number.isInteger(data_array[r][c]))
+            if(typeof data_array[r][c] == 'string' || data_array[r][c] instanceof String || Number.isInteger(data_array[r][c]))
                 col.appendChild(document.createTextNode(data_array[r][c]));
             else
                 col.appendChild(document.createTextNode(data_array[r][c].toFixed(2)));

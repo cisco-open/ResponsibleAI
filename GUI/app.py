@@ -132,6 +132,12 @@ def getMetricInfo():
     # return cache['metric_info']
 
 
+@app.route('/getModelInfo', methods=['GET'])
+def getModelInfo():
+    return json.loads(r.get('model_info'))
+    # return cache['metric_info']
+
+
 @app.route('/getCertification/<date1>/<date2>', methods=['GET'])
 def getCertification(date1, date2):  # NOT REAL DATA YET.
     date1 += " 00:00:00"

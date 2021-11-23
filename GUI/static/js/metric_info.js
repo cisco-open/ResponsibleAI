@@ -9,6 +9,7 @@ var metric_has_range;
 var metric_range;
 var metric_display_name;
 var metric_type;
+var model_info;
 
 var tags = {}
 
@@ -27,9 +28,20 @@ function loadData(metric_name, metric_range_, metric_display_name_, metric_type_
         .then(function (response) {
             return response.json();
         }).then(function (text) {
-            callAllFunctions(metric_name, text);
+            load_model_info(metric_name, text);
         });
 }
+
+// Loads explanations.
+function load_model_info(metric_name, data) {
+    fetch('/getModelInfo').then(function (response) {
+        return response.json();
+    }).then(function(text){
+        model_info = text;
+        callAllFunctions(metric_name, data);
+    });
+}
+
 
 // Use collected data to create metrics, boxes and white list metrics by category
 function callAllFunctions(metric_name, data) {
@@ -58,6 +70,34 @@ function createMetrics(metric_name, data) {
     else if(metric_type == "boolean"){
         addBoolChart(metric_name, data);
     }
+    else if(metric_type == "vector-dict"){
+        addVectorDict(metric_name, data);
+    }
+}
+
+
+
+function addVectorDict(metric_name, data){
+    console.log(data)
+    var curData = data[data.length -1][metric_name]
+    var features = model_info['features']
+    var result = {}
+    for(var i = 0; i<curData.length; i++){
+        if(curData[i] != null){
+            var table = dict_to_table(curData[i])
+            addTable(metric_name, table, features[i]);
+        }
+    }
+}
+
+
+function dict_to_table(dict){
+    var result = [[], []]
+    for(var key in dict){
+        result[0].push(key)
+        result[1].push(dict[key])
+    }
+    return result
 }
 
 
@@ -157,13 +197,15 @@ function addBoolChart(metric_name, data){
 }
 
 
-function addTable(metric_name, data_array){
+function addTable(metric_name, data_array, optionalName=""){
     var body = document.getElementById('_row');
     var newDiv = document.createElement('div');
     newDiv.setAttribute("class", 'MetricPage chart-container main-panel');
     newDiv.setAttribute("id", metric_name + "_chart");
     var writing = document.createElement('p');
     writing.innerHTML = metric_display_name
+    if(optionalName != "")
+        writing.innerHTML += " - " + optionalName
     writing.setAttribute("class", "chartHeader");
     newDiv.appendChild(writing);
 
@@ -191,7 +233,7 @@ function generateTableFromArray(data_array, is_float=false){
         for(var c = 0; c < data_array[r].length; c++){
             var col = document.createElement('td');
             col.setAttribute('class', 'displayMatrix')
-            if(Number.isInteger(data_array[r][c]))
+            if(typeof data_array[r][c] == 'string' || data_array[r][c] instanceof String || Number.isInteger(data_array[r][c]))
                 col.appendChild(document.createTextNode(data_array[r][c]));
             else
                 col.appendChild(document.createTextNode(data_array[r][c].toFixed(2)));

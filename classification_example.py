@@ -14,6 +14,16 @@ xTrain, xTest, yTrain, yTest = train_test_split(x, y)
 nums = np.ones((xTrain.shape[0], 1))
 nums[:int(xTrain.shape[0]/2)] = 0
 xTrain = np.hstack((xTrain, nums))
+
+nums = np.ones((xTrain.shape[0], 1))
+nums[:int(xTrain.shape[0]/2)] = 0
+xTrain = np.hstack((xTrain, nums))
+
+
+nums = np.ones((xTest.shape[0], 1))
+nums[:int(xTest.shape[0]/2)] = 0
+xTest = np.hstack((xTest, nums))
+
 nums = np.ones((xTest.shape[0], 1))
 nums[:int(xTest.shape[0]/2)] = 0
 xTest = np.hstack((xTest, nums))
@@ -22,12 +32,13 @@ xTest = np.hstack((xTest, nums))
 features_raw = ["id", "radius_mean", "texture_mean", "perimeter_mean", "area_mean", "smoothness_mean", "compactness_mean", "concavity_mean", "concave points_mean", "symmetry_mean",
                 "fractal_dimension_mean", "radius_se", "texture_se", "compactness_se", "concavity_se",
                 "concave points_se", "symmetry_se", "fractal_dimension_se", "radius_worst", "texture_worst", "texture_worst", "perimeter_worst", "area_worst",
-                "smoothness_worst", "compactness_worst", "concavity_worst", "concave points_worst", "symmetry_worst", "fractal_dimension_worst", "diagnosis",
-                "race"]
+                "smoothness_worst", "compactness_worst", "concavity_worst", "concave points_worst", "symmetry_worst", "fractal_dimension_worst", "diagnosis"]
 features = []
 
 for feature in features_raw:
     features.append(Feature(feature, "float32", feature))
+features.append(Feature("race", "integer", "race value", categorical=True, values=[{0:"black"}, {1:"white"}]))
+features.append(Feature("gender", "integer", "race value", categorical=True, values=[{1:"male"}, {0:"female"}]))
 
 # Hook data in with our Representation
 training_data = Data(xTest, yTest)  # Accepts Data and GT
