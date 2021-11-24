@@ -107,5 +107,11 @@ ai.reset_redis()
 ai.export_data_flat("Testing New Features")
 
 
+# TEMPORARY WAY TO EXPORT CERTIFICATE VALUES
+# Will be done in another file
+print("Exporting Certificate Data")
+ai.export_certificates()
+
+
 print("\nViewing GUI")
 # ai.viewGUI()

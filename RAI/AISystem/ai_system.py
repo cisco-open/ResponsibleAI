@@ -6,6 +6,7 @@ from RAI.metrics.registry import registry
 import json
 import redis
 import subprocess
+import random
 from RAI import utils
 
 
@@ -172,6 +173,41 @@ class AISystem:
                             results[metric] = metric_obj.value
                             break
         return results
+
+
+# TEMPORARY FUNCTION FOR PRODUCING DATA
+    def compute_certificates(self):
+        result = {}
+        for group in self.metric_groups:
+            if self.metric_groups[group].tags[0] not in result:
+                result[self.metric_groups[group].tags[0]] = {}
+                result[self.metric_groups[group].tags[0]]["list"] = {}
+                result[self.metric_groups[group].tags[0]]["score"] = 0
+            for metric in self.metric_groups[group].metrics:
+                passed = bool(random.getrandbits(1))
+                explanation = "filler"
+                if passed:
+                    result[self.metric_groups[group].tags[0]]["score"] += 1
+                result[self.metric_groups[group].tags[0]]["list"][self.metric_groups[group].metrics[metric].unique_name] \
+                    = {"score": passed, "explanation": explanation}
+        return result
+
+# TEMPORARY FUNCTION FOR PRODUCING DATA
+    def export_certificates(self):
+        values = self.compute_certificates()
+        r = redis.Redis(host='localhost', port=6379, db=0)
+        certificate_metadata = {"fairness": {"name": "fairness", "explanation": "Measures how fair a model's predictions are.", "display_name": "Fairness"}, "robust": {"name": "robustness", "explanation": "Measures a model's resiliance to time and sway.", "display_name": "Robustness"}, "explainability": {"name": "explainability", "explanation": "Measures how explainable the model is.", "display_name": "Explainability"}, "performance": {"name": "performance", "explanation": "Performance describes how well at predicting the model was.", "display_name": "Performance"}}
+
+        values["explainability"] = {"score": 1, "list": {"temp function:": {"score": True, "explanation": "filler function"}}}
+
+        values['metadata'] = {'date': self.metric_groups['metadata'].metrics['date'].value}
+        print("VALUES: ", values)
+
+
+        r.set('certificate_metadata', json.dumps(certificate_metadata))
+        r.rpush('certificate_values', json.dumps(values))  # True
+
+
 
     # def summarize(self):
     #     categories = {}

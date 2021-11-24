@@ -18,7 +18,7 @@ admin = flask_admin.Admin(
     template_mode='bootstrap4',
 )
 
-cert_measures = pandas.read_csv(os.path.dirname(os.path.realpath(__file__)) + "\\output\\certificate_measures.csv")
+# cert_measures = pandas.read_csv(os.path.dirname(os.path.realpath(__file__)) + "\\output\\certificate_measures.csv")
 cert_meta = json.load(open(os.path.dirname(os.path.realpath(__file__)) + "\\output\\certificate_metadata.json", "r"))
 r = redis.Redis(host='localhost', port=6379, db=0)
 
@@ -100,8 +100,6 @@ def getData(date1, date2):
     res = []
     for i in range(len(data_test)):
         item = json.loads(data_test[i])
-        print("DATE1: ", date1, ", DATE2:, ", date2, " DATE: ", item['metadata > date'])
-
         if date1 <= item['metadata > date'] <= date2:
             res.append(item)
     return json.dumps(res)
@@ -142,13 +140,22 @@ def getModelInfo():
 def getCertification(date1, date2):  # NOT REAL DATA YET.
     date1 += " 00:00:00"
     date2 += " 99:99:99"
-    mask = (cert_measures['date'] >= date1) & (cert_measures['date'] <= date2)
-    return cert_measures.loc[mask].to_json(orient='records')  # serialize and use JSON headers
+    data_test = r.lrange('certificate_values', 0, -1)
+    # data_test = cache['metric_values']
+    res = []
+    for i in range(len(data_test)):
+        item = json.loads(data_test[i])
+        print(item)
+        if date1 <= item['metadata']['date'] <= date2:
+            res.append(item)
+    return json.dumps(res)
 
 
 @app.route('/getCertificationMeta', methods=['GET'])
 def getCertificationMeta():
-    return cert_meta
+    model_info = r.get('certificate_metadata')
+    data = json.loads(model_info)
+    return data
 
 
 @app.route('/viewClass/<category>')
