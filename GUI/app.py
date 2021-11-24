@@ -32,7 +32,6 @@ def get_dates():
         date_start = json.loads(data_test[0])['metadata > date'][:10]
     now = datetime.datetime.now()
     date_end = "{:02d}".format(now.year) + "-" + "{:02d}".format(now.month) + "-" + "{:02d}".format(now.day)
-    print("START: " + date_start + " END: " + date_end)
     return date_start, date_end
 
 
@@ -53,11 +52,39 @@ def users():
 '''
 
 
+@app.route('/viewCertificate/<name>')
+def viewCertificate(name):
+    cert_info = r.lrange('certificate_values', 0, -1)
+    metric_info = r.get('metric_info')
+    data = json.loads(cert_info[-1])
+    date = data['metadata']['date']
+    data = data[name.lower()]
+    metric_info = json.loads(metric_info)
+    result = []
+    for item in data['list']:
+        dict_item = {}
+        if data['list'][item]["score"]:
+            dict_item['score'] = "Passed"
+        else:
+            dict_item['score'] = "Failed"
+        dict_item['explanation'] = data['list'][item]["explanation"]
+        dict_item['name'] = metric_info[item]['display_name']
+        result.append(dict_item)
+
+    return render_template('/admin/view_certificate.html',
+                           admin_base_template=admin.base_template,
+                           admin_view=admin.index_view,
+                           get_url=url_for,
+                           h=admin_helpers,
+                           certificate_name=name,
+                           features=result,
+                           date=date)
+
+
 @app.route('/info')
 def info():
     model_info = r.get('model_info')
     data = json.loads(model_info)
-    print("DATA: " + str(data))
     name = data['id']
     description = data['description']
     task_type = data['task_type']
@@ -109,9 +136,6 @@ def getData(date1, date2):
 def getMetricList():
     data_test = r.get('metric_info')
     data = json.loads(data_test)
-    # data = cache['metric_info']
-
-    # print("DATA: ", data)
     result = {}
 
     for metric in data:
@@ -145,7 +169,6 @@ def getCertification(date1, date2):  # NOT REAL DATA YET.
     res = []
     for i in range(len(data_test)):
         item = json.loads(data_test[i])
-        print(item)
         if date1 <= item['metadata']['date'] <= date2:
             res.append(item)
     return json.dumps(res)
