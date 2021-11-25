@@ -189,7 +189,7 @@ class AISystem:
                 if passed:
                     result[self.metric_groups[group].tags[0]]["score"] += 1
                 result[self.metric_groups[group].tags[0]]["list"][self.metric_groups[group].metrics[metric].unique_name] \
-                    = {"score": passed, "explanation": explanation}
+                    = {"score": passed, "explanation": explanation, "level": random.randint(1, 2)}
         return result
 
 # TEMPORARY FUNCTION FOR PRODUCING DATA
@@ -199,10 +199,7 @@ class AISystem:
         certificate_metadata = {"fairness": {"name": "fairness", "explanation": "Measures how fair a model's predictions are.", "display_name": "Fairness"}, "robust": {"name": "robustness", "explanation": "Measures a model's resiliance to time and sway.", "display_name": "Robustness"}, "explainability": {"name": "explainability", "explanation": "Measures how explainable the model is.", "display_name": "Explainability"}, "performance": {"name": "performance", "explanation": "Performance describes how well at predicting the model was.", "display_name": "Performance"}}
 
         values["explainability"] = {"score": 1, "list": {"temp function:": {"score": True, "explanation": "filler function"}}}
-
         values['metadata'] = {'date': self.metric_groups['metadata'].metrics['date'].value}
-        print("VALUES: ", values)
-
 
         r.set('certificate_metadata', json.dumps(certificate_metadata))
         r.rpush('certificate_values', json.dumps(values))  # True

@@ -6,7 +6,7 @@ import numpy as np
 # Move config to external .json? 
 _config = {
     "name" : "basic_robustness",
-    "compatibility" : {"type_restriction": None, "output_restriction": None},
+    "compatibility": {"type_restriction": None, "output_restriction": None},
     "dependency_list": [],
     "tags": ["robust", "Normalization"],
     "complexity_class": "linear",

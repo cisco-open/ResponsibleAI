@@ -23,13 +23,30 @@
 <section class="content">
     <h1 class="metricHeader">Cisco Financial AI - {{certificate_name}} Certification</h1>
     <h1 class="metricHeader">Tests From {{date}}</h1>
+    <h1 class="metricHeader">Level 1 Badges</h1>
     <table class="grey" style="width:40%; margin-left:auto; margin-right:auto;">
         <tr>
             <th>Test</th>
             <th>Score</th>
             <th>Explanation</th>
         </tr>
-        {% for v in features %}
+        {% for v in features1 %}
+            <tr>
+                <td>{{v.name}}</td>
+                <td>{{v.score}}</td>
+                <td>{{v.explanation}}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <h1 class="metricHeader">Level 2 Badges</h1>
+    <table class="grey" style="width:40%; margin-left:auto; margin-right:auto;">
+        <tr>
+            <th>Test</th>
+            <th>Score</th>
+            <th>Explanation</th>
+        </tr>
+        {% for v in features2 %}
             <tr>
                 <td>{{v.name}}</td>
                 <td>{{v.score}}</td>

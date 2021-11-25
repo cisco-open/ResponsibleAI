@@ -35,21 +35,28 @@ def get_dates():
     return date_start, date_end
 
 
-# Flask views
+def get_certificate_dates():
+    data_test = r.lrange('certificate_values', 0, -1)
+    date_start = "2020-10-01"
+    print(json.loads(data_test[0]))
+    if len(data_test) >= 1:
+        date_start = json.loads(data_test[0])['metadata']['date'][:10]
+    now = datetime.datetime.now()
+    date_end = "{:02d}".format(now.year) + "-" + "{:02d}".format(now.month) + "-" + "{:02d}".format(now.day)
+    return date_start, date_end
+
+
 @app.route('/')
 def index():
-    return redirect(url_for('admin.index'))
-
-
-'''
-@app.route('/users')
-def users():
-    return render_template('/admin/users.html',
+    start_date, end_date = get_certificate_dates()
+    return render_template('/admin/index.html',
                            admin_base_template=admin.base_template,
                            admin_view=admin.index_view,
                            get_url=url_for,
-                           h=admin_helpers)
-'''
+                           h=admin_helpers,
+                           end_date=end_date,
+                           start_date=start_date)
+    # return redirect(url_for('admin.index'))
 
 
 @app.route('/viewCertificate/<name>')
@@ -60,7 +67,8 @@ def viewCertificate(name):
     date = data['metadata']['date']
     data = data[name.lower()]
     metric_info = json.loads(metric_info)
-    result = []
+    result1 = []
+    result2 = []
     for item in data['list']:
         dict_item = {}
         if data['list'][item]["score"]:
@@ -69,7 +77,10 @@ def viewCertificate(name):
             dict_item['score'] = "Failed"
         dict_item['explanation'] = data['list'][item]["explanation"]
         dict_item['name'] = metric_info[item]['display_name']
-        result.append(dict_item)
+        if data['list'][item]['level'] == 1:
+            result1.append(dict_item)
+        elif data['list'][item]['level'] == 2:
+            result2.append(dict_item)
 
     return render_template('/admin/view_certificate.html',
                            admin_base_template=admin.base_template,
@@ -77,7 +88,8 @@ def viewCertificate(name):
                            get_url=url_for,
                            h=admin_helpers,
                            certificate_name=name,
-                           features=result,
+                           features1=result1,
+                           features2=result2,
                            date=date)
 
 
