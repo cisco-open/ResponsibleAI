@@ -59,8 +59,8 @@ def index():
     # return redirect(url_for('admin.index'))
 
 
-@app.route('/viewCertificate/<name>')
-def viewCertificate(name):
+@app.route('/viewCertificates/<name>')
+def viewCertificates(name):
     cert_info = r.lrange('certificate_values', 0, -1)
     metric_info = r.get('metric_info')
     data = json.loads(cert_info[-1])
@@ -73,16 +73,18 @@ def viewCertificate(name):
         dict_item = {}
         if data['list'][item]["score"]:
             dict_item['score'] = "Passed"
+            dict_item['score_class'] = 'fa-check'
         else:
             dict_item['score'] = "Failed"
+            dict_item['score_class'] = 'fa-times'
         dict_item['explanation'] = data['list'][item]["explanation"]
         dict_item['name'] = metric_info[item]['display_name']
+        dict_item['backend_name'] = item
         if data['list'][item]['level'] == 1:
             result1.append(dict_item)
         elif data['list'][item]['level'] == 2:
             result2.append(dict_item)
-
-    return render_template('/admin/view_certificate.html',
+    return render_template('/admin/view_certificates.html',
                            admin_base_template=admin.base_template,
                            admin_view=admin.index_view,
                            get_url=url_for,
@@ -91,6 +93,36 @@ def viewCertificate(name):
                            features1=result1,
                            features2=result2,
                            date=date)
+
+
+@app.route('/viewCertificate/<category>/<name>')
+def viewCertificate(category, name):
+    cert_info = r.lrange('certificate_values', 0, -1)
+    metric_info = r.get('metric_info')
+    metrics = json.loads(metric_info)
+    category = category.lower()
+    result = []
+    for i in range(len(cert_info)):
+        dict_item = {}
+        data = json.loads(cert_info[i])
+        dict_item['date'] = data['metadata']['date']
+        if data[category]['list'][name]["score"]:
+            dict_item['score'] = "Passed"
+            dict_item['score_class'] = 'fa-check'
+        else:
+            dict_item['score'] = "Failed"
+            dict_item['score_class'] = 'fa-times'
+
+        dict_item['score'] = data[category]['list'][name]['score']
+        dict_item['explanation'] = data[category]['list'][name]['explanation']
+        result.append(dict_item)
+    return render_template('/admin/view_certificate.html',
+                           admin_base_template=admin.base_template,
+                           admin_view=admin.index_view,
+                           get_url=url_for,
+                           h=admin_helpers,
+                           certificate_name=metrics[name]["display_name"],
+                           features=result)
 
 
 @app.route('/info')

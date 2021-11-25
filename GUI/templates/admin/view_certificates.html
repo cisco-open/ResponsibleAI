@@ -21,16 +21,34 @@
 </section>
 
 <section class="content">
-    <h1 class="metricHeader">Cisco Financial AI - {{certificate_name}} History</h1>
+    <h1 class="metricHeader">Cisco Financial AI - {{certificate_name}} Certification</h1>
+    <h1 class="metricHeader">Tests From {{date}}</h1>
+    <h1 class="metricHeader">Level 1 Badges</h1>
     <table class="grey" style="width:40%; margin-left:auto; margin-right:auto;">
         <tr>
-            <th>Date</th>
+            <th>Test</th>
             <th>Score</th>
             <th>Explanation</th>
         </tr>
-        {% for v in features %}
+        {% for v in features1 %}
             <tr>
-                <td>{{v.date}}</td>
+                <td>{{v.name}} <a href="/viewCertificate/{{certificate_name}}/{{v.backend_name}}" class="fa fa-external-link fa-lg" style="float:right; color:black"></a> </td>
+                <td><center><i class="fa {{v.score_class}} fa-lg"></i></center></td>
+                <td>{{v.explanation}}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <h1 class="metricHeader">Level 2 Badges</h1>
+    <table class="grey" style="width:40%; margin-left:auto; margin-right:auto;">
+        <tr>
+            <th>Test</th>
+            <th>Score</th>
+            <th>Explanation</th>
+        </tr>
+        {% for v in features2 %}
+            <tr>
+                <td>{{v.name}} <a href="/viewCertificate/{{certificate_name}}/{{v.backend_name}}" class="fa fa-external-link fa-lg" style="float:right; color:black"></a> </td>
                 <td><center><i class="fa {{v.score_class}} fa-lg"></i></center></td>
                 <td>{{v.explanation}}</td>
             </tr>
