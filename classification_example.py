@@ -101,7 +101,7 @@ result = ai.search(query)
 print(result)
 
 # reset all previous keys
-ai.reset_redis()
+# ai.reset_redis()
 
 # export to redis
 ai.export_data_flat("Testing New Features")

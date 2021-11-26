@@ -31,9 +31,6 @@ function createData(data, key) {
     var ret = [];
 
     for (var i = 0; i < data.length; i++) {
-        console.log(data[i])
-        console.log(data[i][key]["score"])
-        console.log(data[i][key]['list'].length)
         ret.push({
             year: data[i]["metadata"]["date"],
             value: (data[i][key]["score"] / Object.keys(data[i][key]['list']).length).toFixed(2)*100
@@ -46,13 +43,9 @@ function createData(data, key) {
 function createMetrics(data, explanations) {
     var divs = ['fairness', 'robust', 'performance', 'explainability'];
     var names = ["Fairness", "Robustness", "Performance", "Explainability"];
-    console.log("explanations: ")
-    console.log(explanations)
-
     for (var i in explanations) {
         var new_data = createData(data, i);
 
-        console.log(i + "Chart")
         var morrisLine = new Morris.Line({
             element: i + "Chart",
             data: new_data,
