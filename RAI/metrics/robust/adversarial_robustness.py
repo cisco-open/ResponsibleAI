@@ -1,5 +1,4 @@
 from RAI.metrics.metric_group import MetricGroup
-import math
 import numpy as np
 import sklearn
 
@@ -17,28 +16,28 @@ _config = {
             "type": "numeric",
             "has_range": True,
             "range": [0, 1],
-            "explanation": "Distortion metrics scale linearly with the log of inaccuracy.",
+            "explanation": "Distortion metrics scale linearly with the log of inaccuracy. Is Robustness the Cost of Accuracy? A comprehensive Study on the Robustness of 18 Deep Image Classification Models",
         },
         "l-inf-model-score": {
             "display_name": "L Infinity Model Score",
             "type": "numeric",
             "has_range": False,
             "range": [None, None],
-            "explanation": "Robustness Score determined by the type of model and depth.",
+            "explanation": "Robustness Score determined by the type of model and depth. Is Robustness the Cost of Accuracy? A comprehensive Study on the Robustness of 18 Deep Image Classification Models",
         },
         "l-2-model-score": {
             "display_name": "L2 Model Score",
             "type": "numeric",
             "has_range": False,
             "range": [None, None],
-            "explanation": "Robustness Score determined by the type of model and depth.",
+            "explanation": "Robustness Score determined by the type of model and depth. Is Robustness the Cost of Accuracy? A comprehensive Study on the Robustness of 18 Deep Image Classification Models",
         },
         "clever-model-score": {
             "display_name": "Clever Model Score",
             "type": "numeric",
             "has_range": False,
             "range": [None, None],
-            "explanation": "Robustness Score determined by the type of model and depth.",
+            "explanation": "Robustness Score determined by the type of model and depth. Is Robustness the Cost of Accuracy? A comprehensive Study on the Robustness of 18 Deep Image Classification Models",
         },
         "data-dimensionality": {
             "display_name": "Adversarial Data Dimensionality",
@@ -52,14 +51,55 @@ _config = {
             "type": "numeric",
             "has_range": False,
             "range": [None, None],
-            "explanation": "Clever Score.",
+            "explanation": "Evaluating the robustness of neural networks: An extreme value theory approach.",
         },
-
+        "brendel-bethge-attack": {
+            "display_name": "Brendel Bethge Score",
+            "type": "numeric",
+            "has_range": False,
+            "range": [None, None],
+            "explanation": "https://github.com/wielandbrendel/brendel_bethge_attack",
+        },
+        "robust-bench": {
+            "display_name": "Robust Bench Score",
+            "type": "numeric",
+            "has_range": False,
+            "range": [None, None],
+            "explanation": "https://github.com/RobustBench/robustbench",
+        },
+        "constraint-score": {
+            "display_name": "Robustness Constraint Score",
+            "type": "numeric",
+            "has_range": False,
+            "range": [None, None],
+            "explanation": "https://github.com/Microsoft/NeuralNetworkAnalysis",
+        },
+        "fool-box": {
+            "display_name": "Fool Box Score",
+            "type": "numeric",
+            "has_range": False,
+            "range": [None, None],
+            "explanation": "https://github.com/bethgelab/foolbox",
+        },
+        "adversarial-upper-bound": {
+            "display_name": "Upper Bound for Adversarial Robustness",
+            "type": "numeric",
+            "has_range": False,
+            "range": [None, None],
+            "explanation": "Adversarial vulnerability for any classifier. Fawzi.",
+        },
+        "adversarial-spheres-bound": {
+            "display_name": "Upper Bound for Adversarial Robustness",
+            "type": "numeric",
+            "has_range": False,
+            "range": [None, None],
+            "explanation": "The Relationship Between High-Dimensional Geometry and Adversarial Examples. Justin Gilmer",
+        },
     }
 }
 
-# Type (Regression, Classification, Data | probability, numeric)
 
+# Type (Regression, Classification, Data | probability, numeric)
 class AdversarialRobustnessMetricGroup(MetricGroup, config=_config):
     def __init__(self, ai_system) -> None:
         super().__init__(ai_system)
@@ -81,6 +121,8 @@ class AdversarialRobustnessMetricGroup(MetricGroup, config=_config):
             self.metrics["l-2-model-score"].value = None
             self.metrics["clever-model-score"].value = None
             self.metrics["clever-score"].value = None
+            self.metrics["clever-score"].value = None
+            self.metrics["brendel-bethge-attack"].value = None
 
             # Is Robustness the Cost of Accuracy? A Comprehensive Study on the Robustness of 18 Deep Image Classification Models. - Dong Su
             l_inf_distortions = {"alexnet": 3.5E-2, "vgg": 2.7E-2, "resnet": 1.5E-2, "inception": 1.5E-2, "mobilenet": 5E-3,

@@ -19,7 +19,6 @@ class Metric:
         self.value_list = None
         self.display_name = None
         self.unique_name = None
-
         self.load_config(config)
 
     def load_config(self, config):

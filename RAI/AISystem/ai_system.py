@@ -152,9 +152,9 @@ class AISystem:
 
     def _update_redis(self, metric_values, model_info, metric_info):
         r = redis.Redis(host='localhost', port=6379, db=0)
-        r.rpush('metric_values', json.dumps(metric_values))  # True
-        r.set('model_info', json.dumps(model_info))
-        r.set('metric_info', json.dumps(metric_info))
+        r.rpush(self.task.model.name + '|metric_values', json.dumps(metric_values))  # True
+        r.set(self.task.model.name + '|model_info', json.dumps(model_info))
+        r.set(self.task.model.name + '|metric_info', json.dumps(metric_info))
         r.save()
 
     # Searches all metrics. Queries based on Metric Name, Metric Group Name, Category, and Tags.
@@ -201,8 +201,8 @@ class AISystem:
         values["explainability"] = {"score": 1, "list": {"temp function:": {"score": True, "explanation": "filler function"}}}
         values['metadata'] = {'date': self.metric_groups['metadata'].metrics['date'].value}
 
-        r.set('certificate_metadata', json.dumps(certificate_metadata))
-        r.rpush('certificate_values', json.dumps(values))  # True
+        r.set(self.task.model.name + '|certificate_metadata', json.dumps(certificate_metadata))
+        r.rpush(self.task.model.name + '|certificate_values', json.dumps(values))  # True
 
 
 
@@ -222,6 +222,7 @@ class AISystem:
     #             for metric in metric_values:
     #                 print("\t\t", metric, " ", metric_values[metric])
 
+
     def viewGUI(self):
-        subprocess.call("start /wait python GUI\\app.py", shell=True)
-        print("GUI can be viewed at localhost:5000")
+        subprocess.call("start /wait python GUI\\app.py " + self.task.model.name, shell=True)
+        print("GUI can be viewed in new terminal")
