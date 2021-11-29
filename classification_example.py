@@ -104,14 +104,21 @@ print(result)
 # ai.reset_redis()
 
 # export to redis
-ai.export_data_flat("Testing New Features")
+# ai.export_data_flat("Testing New Features")
 
 
 # TEMPORARY WAY TO EXPORT CERTIFICATE VALUES
 # Will be done in another file
 print("Exporting Certificate Data")
-ai.export_certificates()
+# ai.export_certificates()
 
 
 print("\nViewing GUI")
 ai.viewGUI()
+print("DONE")
+
+print("\nSearching Metrics for ", query)
+result = ai.search(query)
+print(result)
+
+

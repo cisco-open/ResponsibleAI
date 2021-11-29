@@ -8,6 +8,8 @@ import redis
 import subprocess
 import random
 from RAI import utils
+import threading
+
 
 
 class AISystem:
@@ -224,5 +226,10 @@ class AISystem:
 
 
     def viewGUI(self):
+        gui_launcher = threading.Thread(target=self._view_gui_thread, args=[])
+        gui_launcher.start()
+
+    def _view_gui_thread(self):
         subprocess.call("start /wait python GUI\\app.py " + self.task.model.name, shell=True)
         print("GUI can be viewed in new terminal")
+
