@@ -9,14 +9,18 @@ var metric_has_range;
 var metric_range;
 var metric_display_name;
 var metric_type;
+var model_info;
 
+var bool_charts = {}
+var dict_charts = {}
 var tags = {}
+var use_date = true;
 
 
 // Queries Data
 function loadData(metric_name, metric_range_, metric_display_name_, metric_type_, metric_has_range_) {
     metric_name = metric_name.replace('&gt;', '>')
-    metric_range = metric_range_;
+    metric_range = metric_range_.replace("None", "null");
     metric_display_name = metric_display_name_;
     metric_type = metric_type_;
     metric_has_range = metric_has_range_;
@@ -27,9 +31,20 @@ function loadData(metric_name, metric_range_, metric_display_name_, metric_type_
         .then(function (response) {
             return response.json();
         }).then(function (text) {
-            callAllFunctions(metric_name, text);
+            load_model_info(metric_name, text);
         });
 }
+
+// Loads explanations.
+function load_model_info(metric_name, data) {
+    fetch('/getModelInfo').then(function (response) {
+        return response.json();
+    }).then(function(text){
+        model_info = text;
+        callAllFunctions(metric_name, data);
+    });
+}
+
 
 // Use collected data to create metrics, boxes and white list metrics by category
 function callAllFunctions(metric_name, data) {
@@ -44,11 +59,11 @@ function createMetrics(metric_name, data) {
     else if(metric_type == "vector"){
         if(metric_name.indexOf("_avg") >= 0)
             addChart(metric_name, data, "-single")
-        else if (! (list[i]+"_avg" in metric_info)){
-                res = stringToMatrix(data, list[i])
+        else {
+                res = stringToMatrix(data, metric_name)
                 if (!Array.isArray(res[0]))
                     res = [res]
-                addTable(list[i], explanations, res, category)
+                addTable(metric_name, res)
         }
     }
     else if(metric_type == "matrix"){
@@ -58,6 +73,33 @@ function createMetrics(metric_name, data) {
     else if(metric_type == "boolean"){
         addBoolChart(metric_name, data);
     }
+    else if(metric_type == "vector-dict"){
+        addVectorDict(metric_name, data);
+    }
+}
+
+
+
+function addVectorDict(metric_name, data){
+    var curData = data[data.length -1][metric_name]
+    var features = model_info['features']
+    var result = {}
+    for(var i = 0; i<curData.length; i++){
+        if(curData[i] != null){
+            var table = dict_to_table(curData[i])
+            addTable(metric_name, table, features[i], String(i));
+        }
+    }
+}
+
+
+function dict_to_table(dict){
+    var result = [[], []]
+    for(var key in dict){
+        result[0].push(key)
+        result[1].push(dict[key])
+    }
+    return result
 }
 
 
@@ -113,7 +155,6 @@ function addChart(metric_name, data, name_extension){
                 return content + "\nDescription: " + description;}
     }
 
-
     if(metric_has_range == 'True'){
         var range = JSON.parse(metric_range)
         if(range[0] != null){
@@ -152,18 +193,22 @@ function addBoolChart(metric_name, data){
     chart.setAttribute("class", "morris-chart chartScalerSmall");
     newDiv.appendChild(chart);
 
-
+    bool_charts[metric_name] = chart;
     body.appendChild(newDiv);
 }
 
 
-function addTable(metric_name, data_array){
+function addTable(metric_name, data_array, optionalName="", optionalNumber=""){
     var body = document.getElementById('_row');
     var newDiv = document.createElement('div');
     newDiv.setAttribute("class", 'MetricPage chart-container main-panel');
-    newDiv.setAttribute("id", metric_name + "_chart");
+    if(optionalNumber!="")
+        optionalNumber = "|"+optionalNumber;
+    newDiv.setAttribute("id", metric_name + "_chart"+optionalNumber);
     var writing = document.createElement('p');
     writing.innerHTML = metric_display_name
+    if(optionalName != "")
+        writing.innerHTML += " - " + optionalName
     writing.setAttribute("class", "chartHeader");
     newDiv.appendChild(writing);
 
@@ -191,7 +236,7 @@ function generateTableFromArray(data_array, is_float=false){
         for(var c = 0; c < data_array[r].length; c++){
             var col = document.createElement('td');
             col.setAttribute('class', 'displayMatrix')
-            if(Number.isInteger(data_array[r][c]))
+            if(typeof data_array[r][c] == 'string' || data_array[r][c] instanceof String || Number.isInteger(data_array[r][c]))
                 col.appendChild(document.createTextNode(data_array[r][c]));
             else
                 col.appendChild(document.createTextNode(data_array[r][c].toFixed(2)));
@@ -209,10 +254,18 @@ function createData(data, key) {
     var descriptions = []
     for (var i = 0; i < data.length; i++) {
         if(data[i][key] != null && !isNaN(data[i][key]) && isFinite(data[i][key])){
-            ret.push({
-                year: data[i]["metadata > date"],
-                value: data[i][key]
-            });
+            if(use_date){
+                ret.push({
+                    year: data[i]["metadata > date"],
+                    value: data[i][key]
+                });
+            }
+            else{
+                ret.push({
+                    year: String(i),
+                    value: data[i][key]
+                });
+            }
             descriptions.push(data[i]["metadata > description"])
         }
     }
@@ -232,7 +285,6 @@ function redoMetrics() {
         });
 }
 
-// Fill graphs with new data
 function redoMetrics2(data) {
     for (var type in graphs) {
         var ext = "";
@@ -241,25 +293,67 @@ function redoMetrics2(data) {
         var result = createData(data, type + ext);
         var new_data = result[0]
         var newExplanations = result[1]
+        graphs[type]['options'].parseTime = use_date
         graphs[type].setData(new_data);
         graphs[type].options.descriptions = newExplanations
 
         var writing = document.getElementById(type + "LastValue");
-
         if(new_data.length >= 1)
             writing.innerHTML = new_data[new_data.length - 1]["value"].toFixed(3);
         else
-            writing.innerHTML = ""
+            writing.innerHTML = "Null"
     }
     for (var type in matrices){
-        var chart = document.getElementById(type + "_chart")
-        var hiddenText = chart.id.substring(0, chart.id.indexOf("_chart"))
-        var internalDiv = chart.getElementsByTagName("div")[0]
-        var table = internalDiv.getElementsByTagName("table")[0]
-        table.remove()
-
-        var res = stringToMatrix(data, hiddenText)
-        var table = generateTableFromArray(res)
-        internalDiv.appendChild(table);
+        if(metric_type == 'matrix' || metric_type == 'vector'){
+            var chart = document.getElementById(type + "_chart")
+            var hiddenText = chart.id.substring(0, chart.id.indexOf("_chart"))
+            var internalDiv = chart.getElementsByTagName("div")[0]
+            var table = internalDiv.getElementsByTagName("table")[0]
+            table.remove()
+            var res = stringToMatrix(data, hiddenText)
+            if (!Array.isArray(res[0]))
+                        res = [res]
+            var table = generateTableFromArray(res)
+            internalDiv.appendChild(table);
+        }
+        if(metric_type == 'vector-dict'){
+            var curData = []
+            if (data.length >= 1){
+                curData = data[data.length -1][type]
+            }
+            var features = model_info['features']
+            var result = {}
+            for(var i = 0; i<features.length; i++){
+                var chart = document.getElementById(type + "_chart" + "|" + String(i))
+                if(chart != null){
+                    var hiddenText = chart.id.substring(0, chart.id.indexOf("_chart"))
+                    var internalDiv = chart.getElementsByTagName("div")[0]
+                    var table = internalDiv.getElementsByTagName("table")[0]
+                    table.remove()
+                    var table_data = dict_to_table(curData[i]);
+                    table_data = generateTableFromArray(table_data)
+                    internalDiv.appendChild(table_data);
+                }
+                else if(curData.length != 0 && curData[type] != null){  // Add elements which may have previously been null
+                    addVectorDict(type, metric_info, data, metric_info[type]["category"], "");
+                }
+            }
+        }
     }
+    for (var type in bool_charts){
+        var writing2 = document.getElementById(type + "LastValue");
+        if(data[data.length-1][type] == null){
+            writing2.innerHTML = "Null"
+        }
+        else{
+            writing2.innerHTML = data[data.length -1][type];
+        }
+    }
+}
+
+
+function date_slider(){
+    var slider = document.getElementById('slider_input')
+    use_date = !slider.checked;
+    redoMetrics()
 }

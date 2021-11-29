@@ -1,19 +1,30 @@
-# Dataset Requires Metrics as well 
+# Dataset Requires Metrics as well
 
 __all__ = ['Feature', 'MetaDatabase', 'Data', 'Dataset']
 import numpy as np
 
 
 class Feature:
-    def __init__(self, name, dtype, description) -> None:
+    def __init__(self, name, dtype, description, categorical=False, values=None) -> None:
         self.name = name
         self.dtype = dtype
         self.description = description
+        self.categorical = categorical
+        self.values = values
+        self.possibleValues = None
+        if values is not None:
+            self.possibleValues = []
+            for value in values:
+                self.possibleValues.append(value)
 
 
 class MetaDatabase:
     def __init__(self, features) -> None:
         self.features = features
+        self.scalar_mask = [0] * len(features)
+        for i in range(len(features)):
+            if features[i].categorical:
+                self.scalar_mask[i] = 1
 
         
 class Data:

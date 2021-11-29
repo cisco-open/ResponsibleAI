@@ -29,10 +29,11 @@ function load_explanations(data) {
 // Used to create the data for the morris chart
 function createData(data, key) {
     var ret = [];
+
     for (var i = 0; i < data.length; i++) {
         ret.push({
-            year: data[i]["date"],
-            value: data[i][key]
+            year: data[i]["metadata"]["date"],
+            value: (data[i][key]["score"] / Object.keys(data[i][key]['list']).length).toFixed(2)*100
         });
     }
     return ret;
@@ -40,12 +41,11 @@ function createData(data, key) {
 
 
 function createMetrics(data, explanations) {
-    var divs = ['fairness', 'robustness', 'performance', 'explainability'];
+    var divs = ['fairness', 'robust', 'performance', 'explainability'];
     var names = ["Fairness", "Robustness", "Performance", "Explainability"];
     for (var i in explanations) {
         var new_data = createData(data, i);
 
-        console.log(i + "Chart")
         var morrisLine = new Morris.Line({
             element: i + "Chart",
             data: new_data,
@@ -66,7 +66,10 @@ function createMetrics(data, explanations) {
         var circle = document.getElementById(i + "Circle");
         circle.setAttribute("stroke-dasharray", new_data[new_data.length - 1]['value'] + ", 100");
         var circleText = document.getElementById(i + "Text");
+
         circleText.innerHTML = new_data[new_data.length - 1]['value'];
+
+        // var percentage = new_data[new_data.length - 1]['value']/Object.keys(data[data.length-1][i]['list']).length).toFixed(2)*100
     }
 
 }

@@ -26,6 +26,14 @@
     <div class="row">
         <button id="edit_view" class="editView" onclick="displayMenu('{{Functional}}')">Filter</button>
         <input type="text" id="myInput" onkeyup="search('{{Functional}}')" placeholder="Search metrics.." style="margin-left:50px">
+        <div style="display:inline-block; margin-left:50px; color:white; vertical-align:top;">
+            <p style="display:inline-block; font-size:17px;">Use Dates:</p>
+            <label class="switch" style="vertical-align:top">
+                <input type="checkbox" id="slider_input" checked>
+                <span class="slider round" onclick="date_slider()"></span>
+            </label>
+        </div>
+
         <input class="dateChooser" type="date" id="endDate" value="{{end_date}}" onchange="redoMetrics()">
         <label for="endDate" class="dateChooser">End Date:</label>
         <input class="dateChooser" type="date" id="startDate" value="{{start_date}}" onchange="redoMetrics()">

@@ -53,7 +53,19 @@ class StatMomentGroup(MetricGroup, config=_config):
             if self.ai_system.user_config is not None and "stats" in self.ai_system.user_config and "args" in self.ai_system.user_config["stats"]:
                 args = self.ai_system.user_config["stats"]["args"]
             data = data_dict["data"]
-            self.metrics["moment-1"].value = scipy.stats.moment(data.X, 1)
-            self.metrics["moment-2"].value = scipy.stats.moment(data.X, 2)
-            self.metrics["moment-3"].value = scipy.stats.moment(data.X, 3)
 
+            scalar_data = _get_scalar_data(data.X, self.ai_system.meta_database.scalar_mask)
+
+            self.metrics["moment-1"].value = scipy.stats.moment(scalar_data, 1)
+            self.metrics["moment-2"].value = scipy.stats.moment(scalar_data, 2)
+            self.metrics["moment-3"].value = scipy.stats.moment(scalar_data, 3)
+
+
+def _get_scalar_data(X, mask):
+    result = np.copy(X)
+    i = len(mask)-1
+    while i >= 0:
+        if mask[i] == 1:
+            result = np.delete(result, i, axis=1)
+        i = i-1
+    return result

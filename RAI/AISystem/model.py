@@ -5,6 +5,8 @@ model_caps = ['predict', 'prob']
 # this is an abstract interface for models
 class Model:
     def __init__(self, agent=None, run_func=None, name=None, model_class=None, adaptive=None) -> None:
+        if ' ' in name:
+            raise Exception("Please enter a name with no spaces")
         self.name = name
         self.model_class = model_class
         self.adaptive = adaptive

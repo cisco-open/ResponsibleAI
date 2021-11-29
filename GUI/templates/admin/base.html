@@ -116,7 +116,7 @@
             {% block main_menu %}
             {% endblock %}
             <li>
-                <a href="{{ url_for('admin.index') }}">
+                <a href="{{ url_for('index') }}">
                     <i class="fa fa-home"></i> <span>Home</span>
                 </a>
             </li>
@@ -155,6 +155,32 @@
                     <i class="fa fa-globe"></i> <span>View All Metrics</span>
                 </a>
             </li>
+
+            <li class="treeview">
+              <a href="#">
+                <i class="fa fa-check"></i> <span>Certificates</span>
+                <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
+                </span>
+              </a>
+              <ul class="treeview-menu">
+                <li>
+                    <a href="/viewCertificates/Fairness"><i class="fa fa-balance-scale"></i>Fairness</a>
+                </li>
+                <li>
+                    <a href="/viewCertificates/Robust"><i class="fa fa-link"></i>Robustness</a>
+                </li>
+                <li>
+                    <a href="/viewCertificates/Explainability"><i class="fa fa-sticky-note"></i>Explainability</a>
+                </li>
+                <li>
+                    <a href="/viewCertificates/Performance"><i class="fa fa-table"></i>Performance</a>
+                </li>
+              </ul>
+            </li>
+
+
+
         </ul>
     </section>
     <!-- /.sidebar -->

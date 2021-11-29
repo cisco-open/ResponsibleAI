@@ -227,32 +227,27 @@ class StatMetricGroup(MetricGroup, config=_config):
             args = {}
             if self.ai_system.user_config is not None and "stats" in self.ai_system.user_config and "args" in self.ai_system.user_config["stats"]:
                 args = self.ai_system.user_config["stats"]["args"]
-
             data = data_dict["data"]
-            self.metrics["mean"].value = np.mean(data.X, **args.get("mean", {}), axis=0)
-            self.metrics["covariance"].value = np.cov(data.X.T, **args.get("covariance", {}))
+
+            mask = np.zeros_like(data.X)
+            mask = mask + self.ai_system.meta_database.scalar_mask
+            masked_data = np.ma.masked_array(data.X, mask)
+
+            self.metrics["mean"].value = np.mean(masked_data, **args.get("mean", {}), axis=0)
+            self.metrics["covariance"].value = np.cov(masked_data.T, **args.get("covariance", {}))
             self.metrics["num-Nan-rows"].value = np.count_nonzero(np.isnan(data.X).any(axis=1))
             self.metrics["percent-Nan-rows"].value = self.metrics["num-Nan-rows"].value/np.shape(np.asarray(data.X))[0]
-            self.metrics["geometric-mean"].value = scipy.stats.gmean(data.X)
-            self.metrics["mode"].value = scipy.stats.mode(data.X)[0]
-            self.metrics["skew"].value = scipy.stats.skew(data.X)
-            self.metrics["kstat-1"].value = scipy.stats.kstat(data.X, 1)
-            self.metrics["kstat-2"].value = scipy.stats.kstat(data.X, 2)
-            self.metrics["kstat-3"].value = scipy.stats.kstat(data.X, 3)
-            self.metrics["kstat-4"].value = scipy.stats.kstat(data.X, 4)
-            self.metrics["kstatvar"].value = scipy.stats.kstatvar(data.X)
-            self.metrics["variance"].value = scipy.stats.variation(data.X)
-            self.metrics["iqr"].value = scipy.stats.iqr(data.X)
-            self.metrics["sem"].value = scipy.stats.sem(data.X)
-            bMean, bVar, bStd = scipy.stats.bayes_mvs(data.X)
-            self.metrics["bayes-mean"].value = bMean[1]
-            self.metrics["bayes-mean-avg"].value = bMean[0]
-            self.metrics["bayes-var"].value = bVar[1]
-            self.metrics["bayes-var-avg"].value = bVar[0]
-            self.metrics["bayes-std"].value = bStd[1]
-            self.metrics["bayes-std-avg"].value = bStd[0]
-            self.metrics['kurtosis'].value = scipy.stats.kurtosis(data.X)
-            fMean, fVar, fStd = scipy.stats.mvsdist(data.X)
+            self.metrics["geometric-mean"].value = scipy.stats.mstats.gmean(masked_data)
+            self.metrics["mode"].value = scipy.stats.mstats.mode(data.X)[0]
+            self.metrics["skew"].value = scipy.stats.mstats.skew(masked_data)
+            self.metrics["variance"].value = scipy.stats.mstats.variation(masked_data)
+            self.metrics["sem"].value = scipy.stats.mstats.sem(masked_data)
+            self.metrics['kurtosis'].value = scipy.stats.mstats.kurtosis(masked_data)
+
+            scalar_data = _get_scalar_data(data.X, self.ai_system.meta_database.scalar_mask)
+
+            # Singular Valued
+            fMean, fVar, fStd = scipy.stats.mvsdist(scalar_data)
             self.metrics["frozen-mean-mean"].value = fMean.mean()
             self.metrics["frozen-mean-std"].value = fMean.std()
             self.metrics["frozen-variance-mean"].value = fVar.mean()
@@ -260,3 +255,28 @@ class StatMetricGroup(MetricGroup, config=_config):
             self.metrics["frozen-std-mean"].value = fStd.mean()
             self.metrics["frozen-std-std"].value = fStd.std()
 
+            # Singular Valued
+            self.metrics["kstat-1"].value = scipy.stats.kstat(scalar_data, 1)
+            self.metrics["kstat-2"].value = scipy.stats.kstat(scalar_data, 2)
+            self.metrics["kstat-3"].value = scipy.stats.kstat(scalar_data, 3)
+            self.metrics["kstat-4"].value = scipy.stats.kstat(scalar_data, 4)
+            self.metrics["kstatvar"].value = scipy.stats.kstatvar(scalar_data)
+            self.metrics["iqr"].value = scipy.stats.iqr(scalar_data)
+            bMean, bVar, bStd = scipy.stats.bayes_mvs(scalar_data)
+
+            # Singular Valued Based
+            self.metrics["bayes-mean"].value = bMean[1]
+            self.metrics["bayes-mean-avg"].value = bMean[0]
+            self.metrics["bayes-var"].value = bVar[1]
+            self.metrics["bayes-var-avg"].value = bVar[0]
+            self.metrics["bayes-std"].value = bStd[1]
+            self.metrics["bayes-std-avg"].value = bStd[0]
+
+def _get_scalar_data(X, mask):
+    result = np.copy(X)
+    i = len(mask)-1
+    while i >= 0:
+        if mask[i] == 1:
+            result = np.delete(result, i, axis=1)
+        i = i-1
+    return result

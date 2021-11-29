@@ -6,7 +6,17 @@ from flask import Flask, url_for, redirect, render_template, request, abort, jso
 import flask_admin
 from flask_admin import helpers as admin_helpers
 import redis
+import sys
 import datetime
+
+
+if len(sys.argv) <= 1:
+    raise Exception("Please Enter Model Name")
+
+if len(sys.argv) > 2:
+    raise Exception("Please Enter Model Name with no spaces")
+
+model_name = sys.argv[1]
 
 # Create Flask application
 app = Flask(__name__)
@@ -18,46 +28,117 @@ admin = flask_admin.Admin(
     template_mode='bootstrap4',
 )
 
-cert_measures = pandas.read_csv(os.path.dirname(os.path.realpath(__file__)) + "\\output\\certificate_measures.csv")
+# cert_measures = pandas.read_csv(os.path.dirname(os.path.realpath(__file__)) + "\\output\\certificate_measures.csv")
 cert_meta = json.load(open(os.path.dirname(os.path.realpath(__file__)) + "\\output\\certificate_metadata.json", "r"))
 r = redis.Redis(host='localhost', port=6379, db=0)
 
-cache = {'metric_info': json.loads(r.get('metric_info')), 'metric_values': r.lrange('metric_values', 0, -1)}
+cache = {'metric_info': json.loads(r.get(model_name + '|metric_info')), 'metric_values': r.lrange(model_name + '|metric_values', 0, -1)}
 
 
 def get_dates():
-    data_test = r.lrange('metric_values', 0, -1)
+    data_test = r.lrange(model_name + '|metric_values', 0, -1)
     date_start = "2020-10-01"
     if len(data_test) >= 1:
         date_start = json.loads(data_test[0])['metadata > date'][:10]
     now = datetime.datetime.now()
     date_end = "{:02d}".format(now.year) + "-" + "{:02d}".format(now.month) + "-" + "{:02d}".format(now.day)
-    print("START: " + date_start + " END: " + date_end)
     return date_start, date_end
 
 
-# Flask views
+def get_certificate_dates():
+    data_test = r.lrange(model_name + '|certificate_values', 0, -1)
+    date_start = "2020-10-01"
+    print(json.loads(data_test[0]))
+    if len(data_test) >= 1:
+        date_start = json.loads(data_test[0])['metadata']['date'][:10]
+    now = datetime.datetime.now()
+    date_end = "{:02d}".format(now.year) + "-" + "{:02d}".format(now.month) + "-" + "{:02d}".format(now.day)
+    return date_start, date_end
+
+
 @app.route('/')
 def index():
-    return redirect(url_for('admin.index'))
-
-
-'''
-@app.route('/users')
-def users():
-    return render_template('/admin/users.html',
+    start_date, end_date = get_certificate_dates()
+    return render_template('/admin/index.html',
                            admin_base_template=admin.base_template,
                            admin_view=admin.index_view,
                            get_url=url_for,
-                           h=admin_helpers)
-'''
+                           h=admin_helpers,
+                           end_date=end_date,
+                           start_date=start_date)
+    # return redirect(url_for('admin.index'))
+
+
+@app.route('/viewCertificates/<name>')
+def viewCertificates(name):
+    cert_info = r.lrange(model_name + '|certificate_values', 0, -1)
+    metric_info = r.get(model_name + '|metric_info')
+    data = json.loads(cert_info[-1])
+    date = data['metadata']['date']
+    data = data[name.lower()]
+    metric_info = json.loads(metric_info)
+    result1 = []
+    result2 = []
+    for item in data['list']:
+        dict_item = {}
+        if data['list'][item]["score"]:
+            dict_item['score'] = "Passed"
+            dict_item['score_class'] = 'fa-check'
+        else:
+            dict_item['score'] = "Failed"
+            dict_item['score_class'] = 'fa-times'
+        dict_item['explanation'] = data['list'][item]["explanation"]
+        dict_item['name'] = metric_info[item]['display_name']
+        dict_item['backend_name'] = item
+        if data['list'][item]['level'] == 1:
+            result1.append(dict_item)
+        elif data['list'][item]['level'] == 2:
+            result2.append(dict_item)
+    return render_template('/admin/view_certificates.html',
+                           admin_base_template=admin.base_template,
+                           admin_view=admin.index_view,
+                           get_url=url_for,
+                           h=admin_helpers,
+                           certificate_name=name,
+                           features1=result1,
+                           features2=result2,
+                           date=date)
+
+
+@app.route('/viewCertificate/<category>/<name>')
+def viewCertificate(category, name):
+    cert_info = r.lrange(model_name + '|certificate_values', 0, -1)
+    metric_info = r.get(model_name + '|metric_info')
+    metrics = json.loads(metric_info)
+    category = category.lower()
+    result = []
+    for i in range(len(cert_info)):
+        dict_item = {}
+        data = json.loads(cert_info[i])
+        dict_item['date'] = data['metadata']['date']
+        if data[category]['list'][name]["score"]:
+            dict_item['score'] = "Passed"
+            dict_item['score_class'] = 'fa-check'
+        else:
+            dict_item['score'] = "Failed"
+            dict_item['score_class'] = 'fa-times'
+
+        dict_item['score'] = data[category]['list'][name]['score']
+        dict_item['explanation'] = data[category]['list'][name]['explanation']
+        result.append(dict_item)
+    return render_template('/admin/view_certificate.html',
+                           admin_base_template=admin.base_template,
+                           admin_view=admin.index_view,
+                           get_url=url_for,
+                           h=admin_helpers,
+                           certificate_name=metrics[name]["display_name"],
+                           features=result)
 
 
 @app.route('/info')
 def info():
-    model_info = r.get('model_info')
+    model_info = r.get(model_name + '|model_info')
     data = json.loads(model_info)
-    print("DATA: " + str(data))
     name = data['id']
     description = data['description']
     task_type = data['task_type']
@@ -95,13 +176,11 @@ def event():
 def getData(date1, date2):
     date1 += " 00:00:00"
     date2 += " 99:99:99"
-    data_test = r.lrange('metric_values', 0, -1)
+    data_test = r.lrange(model_name + '|metric_values', 0, -1)
     # data_test = cache['metric_values']
     res = []
     for i in range(len(data_test)):
         item = json.loads(data_test[i])
-        print("DATE1: ", date1, ", DATE2:, ", date2, " DATE: ", item['metadata > date'])
-
         if date1 <= item['metadata > date'] <= date2:
             res.append(item)
     return json.dumps(res)
@@ -109,11 +188,8 @@ def getData(date1, date2):
 
 @app.route('/getMetricList', methods=['GET'])
 def getMetricList():
-    data_test = r.get('metric_info')
+    data_test = r.get(model_name + '|metric_info')
     data = json.loads(data_test)
-    # data = cache['metric_info']
-
-    # print("DATA: ", data)
     result = {}
 
     for metric in data:
@@ -128,7 +204,13 @@ def getMetricList():
 
 @app.route('/getMetricInfo', methods=['GET'])
 def getMetricInfo():
-    return json.loads(r.get('metric_info'))
+    return json.loads(r.get(model_name + '|metric_info'))
+    # return cache['metric_info']
+
+
+@app.route('/getModelInfo', methods=['GET'])
+def getModelInfo():
+    return json.loads(r.get(model_name + '|model_info'))
     # return cache['metric_info']
 
 
@@ -136,13 +218,21 @@ def getMetricInfo():
 def getCertification(date1, date2):  # NOT REAL DATA YET.
     date1 += " 00:00:00"
     date2 += " 99:99:99"
-    mask = (cert_measures['date'] >= date1) & (cert_measures['date'] <= date2)
-    return cert_measures.loc[mask].to_json(orient='records')  # serialize and use JSON headers
+    data_test = r.lrange(model_name + '|certificate_values', 0, -1)
+    # data_test = cache['metric_values']
+    res = []
+    for i in range(len(data_test)):
+        item = json.loads(data_test[i])
+        if date1 <= item['metadata']['date'] <= date2:
+            res.append(item)
+    return json.dumps(res)
 
 
 @app.route('/getCertificationMeta', methods=['GET'])
 def getCertificationMeta():
-    return cert_meta
+    model_info = r.get(model_name + '|certificate_metadata')
+    data = json.loads(model_info)
+    return data
 
 
 @app.route('/viewClass/<category>')
@@ -175,7 +265,7 @@ def renderAllMetrics():
 
 @app.route('/learnMore/<metric>')
 def learnMore(metric):
-    data_test = r.get('metric_info')
+    data_test = r.get(model_name + '|metric_info')
     metric_info = json.loads(data_test)
     start_date, end_date = get_dates()
     # metric_info = cache['metric_info']

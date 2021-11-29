@@ -6,7 +6,7 @@ import numpy as np
 # Move config to external .json? 
 _config = {
     "name" : "basic_robustness",
-    "compatibility" : {"type_restriction": None, "output_restriction": None},
+    "compatibility": {"type_restriction": None, "output_restriction": None},
     "dependency_list": [],
     "tags": ["robust", "Normalization"],
     "complexity_class": "linear",
@@ -47,17 +47,22 @@ class BasicRobustMetricGroup(MetricGroup, config = _config):
 
             data = data_dict["data"]
 
-            mean_v = np.mean(data.X, **args.get("mean", {}), axis=0, keepdims=True)
-            std_v = np.std(data.X, **args.get("covariance", {}), axis=0, keepdims= True )
-            max_v = np.max( data.X,axis=0, keepdims= True  )
-            min_v = np.min( data.X,axis=0, keepdims= True  )
+            # masked_data = np.ma.masked_array(data, self.ai_system.meta_database.scalar_mask)
+            mask = np.zeros_like(data.X)
+            mask = mask + self.ai_system.meta_database.scalar_mask
+            masked_data = np.ma.masked_array(data.X, mask)
+
+            mean_v = np.mean(masked_data, **args.get("mean", {}), axis=0, keepdims=True)
+            std_v = np.std(masked_data, **args.get("covariance", {}), axis=0, keepdims= True )
+            max_v = np.max(masked_data, axis=0, keepdims=True)
+            min_v = np.min(masked_data, axis=0, keepdims=True)
 
 
-            self.metrics["normalized_feature_std"].value = bool( np.all ( np.isclose( std_v, np.ones_like(std_v))) and \
-                                                    np.all ( np.isclose( mean_v, np.ones_like(mean_v))))
+            self.metrics["normalized_feature_std"].value = bool(np.all(np.isclose(std_v, np.ones_like(std_v))) and \
+                                                    np.all(np.isclose(mean_v, np.ones_like(mean_v))))
 
-            self.metrics["normalized_feature_01"].value = bool(np.all ( np.isclose( max_v, np.ones_like(max_v))) and \
-                                                    np.all ( np.isclose( min_v, np.zeros_like(min_v))))
+            self.metrics["normalized_feature_01"].value = bool(np.all(np.isclose(max_v, np.ones_like(max_v))) and \
+                                                    np.all(np.isclose(min_v, np.zeros_like(min_v))))
 
 
 
