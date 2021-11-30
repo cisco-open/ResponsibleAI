@@ -14,6 +14,7 @@ var dict_charts = {}
 var metric_info;
 var model_info;
 var tags = {}
+var data_types = []
 var use_date= true;
 var page_ready = false;
 
@@ -156,6 +157,11 @@ function addTags(metric_name){
             tags[metric_info[metric_name]["tags"][i]] = [];
         tags[metric_info[metric_name]["tags"][i]].push(metric_name);
     }
+    // console.log(metric_info[metric_name])
+    if (data_types[metric_info[metric_name]["type"]] == null){
+        data_types[metric_info[metric_name]["type"]] = []
+    }
+    data_types[metric_info[metric_name]["type"]].push(metric_name)
 }
 
 
@@ -164,7 +170,7 @@ function addChart(metric_name, explanations, data, category, name_extension){
     // console.log(metric_name)
     var body = document.getElementById('metric_row');
     var newDiv = document.createElement('div');
-    newDiv.setAttribute("class", category.toLowerCase() + 'Metric col-sm-6 chart-container main-panel');
+    newDiv.setAttribute("class", category.toLowerCase() + 'Metric Metric col-sm-6 chart-container main-panel');
     newDiv.setAttribute("id", metric_name + "_chart");
     var writing = document.createElement('p');
     writing.innerHTML = metric_info[metric_name]["display_name"];
@@ -246,7 +252,7 @@ function addBoolChart(metric_name, explanations, data, category, name_extension)
     // console.log("DATA: " + JSON.stringify(data))
     var body = document.getElementById('metric_row');
     var newDiv = document.createElement('div');
-    newDiv.setAttribute("class", category.toLowerCase() + 'Metric col-sm-6 chart-container main-panel');
+    newDiv.setAttribute("class", category.toLowerCase() + 'Metric Metric col-sm-6 chart-container main-panel');
     newDiv.setAttribute("id", metric_name + "_chart");
     var writing = document.createElement('p');
     writing.innerHTML = metric_info[metric_name]["display_name"];
@@ -295,7 +301,7 @@ function addTable(metric_name, explanations, data_array, category, optionalName=
     addTags(metric_name)
     var body = document.getElementById('metric_row');
     var newDiv = document.createElement('div');
-    newDiv.setAttribute("class", category.toLowerCase() + 'Metric col-sm-6 chart-container main-panel');
+    newDiv.setAttribute("class", category.toLowerCase() + 'Metric Metric col-sm-6 chart-container main-panel');
         if(optionalNumber!="")
         optionalNumber = "|"+optionalNumber;
     newDiv.setAttribute("id", metric_name + "_chart"+optionalNumber);
@@ -391,7 +397,7 @@ function createData(data, key) {
 
 // Create the category searching of metrics
 function createBoxes(metrics, category) {
-    var body = document.getElementById('selector');
+    var body = document.getElementById('tag_selection');
     var list = tags
     var topBox = document.createElement("input");
     topBox.setAttribute("type", "checkbox");
@@ -412,14 +418,13 @@ function createBoxes(metrics, category) {
     for (var i in tags) {
         if (i == category.toLowerCase())
             continue;
-
         var newBox = document.createElement("input");
         newBox.setAttribute("type", "checkbox");
         newBox.setAttribute("id", i);
         newBox.setAttribute("value", true);
         newBox.setAttribute("name", i);
         newBox.setAttribute("class", "selectorBox");
-        newBox.setAttribute("class", category.toString().toLowerCase() + "Box");
+        newBox.setAttribute("class", category.toString().toLowerCase() + "Box" + " innerBox");
         newBox.setAttribute("checked", true);
         newBox.setAttribute("onclick", "checkParent(this, '" + category + "')");
         var label = document.createElement("label");
@@ -430,11 +435,31 @@ function createBoxes(metrics, category) {
         body.appendChild(label);
         body.appendChild(br);
     }
+
+    body = document.getElementById("datatype_selection")
+    for (var i in data_types) {
+        var newBox = document.createElement("input");
+        newBox.setAttribute("type", "checkbox");
+        newBox.setAttribute("id", i);
+        newBox.setAttribute("value", true);
+        newBox.setAttribute("name", i);
+        newBox.setAttribute("class", "selectorBox");
+        newBox.setAttribute("class", i + "_Box");
+        newBox.setAttribute("checked", true);
+        newBox.setAttribute("onclick", "updateDatatypes('" + category +"')");
+        var label = document.createElement("label");
+        label.setAttribute("for", i);
+        label.innerHTML = i;
+        var br = document.createElement("br")
+        body.appendChild(newBox);
+        body.appendChild(label);
+        body.appendChild(br);
+    }
     var button = document.createElement("button");
     button.setAttribute("class", "selectorButton");
     button.innerHTML = "Done";
     button.setAttribute("onclick", "doneEdit('" + category + "');")
-    body.appendChild(button);
+    document.getElementById("selector").appendChild(button);
 }
 
 // white list metrics depending on what is checked in the categories
@@ -468,39 +493,48 @@ function doneEdit(classtype) {
 }
 
 // Generates the white list (what metrics should be shown, based on category) by looking at the checked boxes
-function generateWhiteList(classtype) {
-    var boxes = document.getElementsByClassName(classtype.toString().toLowerCase() + "Box");
+function generateWhiteList() {
     whitelist = [];
-
-    if(boxes.length == 0){
-        var box = document.getElementById(classtype.toString().toLowerCase() + "_mainBox");
-        if (box.checked){
-            var id = box.id.toString();
-            id = id.substring(0, id.indexOf("_"))
-            var list = tags[id];
-            for (var j = 0; j < list.length; j++) {
-                whitelist.push(list[j]);
-            }
+    data_types = []
+    var datatypeBox = document.getElementById("datatype_selection")
+    var boxes = datatypeBox.getElementsByTagName("input")
+    for (var i = 0; i<boxes.length; i++){
+        if (boxes[i].checked){
+            data_types.push(boxes[i].id.toString())
         }
     }
-    else{
-        for (var i = 0; i < boxes.length; i++) {
-            if (boxes[i].checked) {
-                var id = boxes[i].id.toString();
+
+    console.log("DATA_TYPES: " + data_types)
+
+    var boxes = document.getElementById("tag_selection").getElementsByTagName("input");
+    for (var i = 0; i < boxes.length; i++) {
+        if (boxes[i].checked) {
+            var id = boxes[i].id.toString();
+            if(id.indexOf("_mainBox") == -1){
+                console.log("ID: " + id)
                 var list = tags[id];
                 for (var j = 0; j < list.length; j++) {
-                    whitelist.push(list[j]);
+                    console.log("CHECKING FOR : " + metric_info[list[j]]["type"])
+                    console.log("IN : " + data_types)
+                    if(data_types.includes(metric_info[list[j]]["type"])){
+                        console.log("ADDING TO WHITE LIST")
+                        whitelist.push(list[j]);
+                    }
                 }
             }
         }
     }
-    displayWhiteList(classtype)
+    displayWhiteList()
 }
 
+
+
+
+
 // Display the white listed metrics
-function displayWhiteList(classtype) {
+function displayWhiteList() {
     var row = document.getElementById("metric_row");
-    var divs = row.getElementsByClassName(classtype.toString().toLowerCase() + "Metric");
+    var divs = row.getElementsByClassName("Metric");
     for (var i = 0; i < divs.length; i++) {
         var div = divs[i].getElementsByTagName("div")[0];
         if (whitelist.includes(div.id) && !blacklist.includes(div.id)) {
@@ -635,8 +669,14 @@ function checkParent(check, type) {
 }
 
 
+// Checks parent status in checkboxes, once all child checks are unchecked, or one is checked.
+function updateDatatypes(type) {
+    generateWhiteList(type);
+}
+
+
 // Searches available metrics, changes display based on search results.
-function search(category) {
+function search() {
     var input, filter, row, divs, i, text;
     input = document.getElementById("myInput");
     filter = input.value.toLowerCase();
@@ -657,7 +697,7 @@ function search(category) {
         if (p && hiddenDiv) {
             var text = p.innerText;
             var hiddenText = hiddenDiv.id;
-            if ((text.toLowerCase().indexOf(filter) > -1 || mustInclude.includes(hiddenText) && whitelist.includes(hiddenText)) && !blacklist.includes(hiddenText)) {
+            if ((text.toLowerCase().indexOf(filter) > -1 || mustInclude.includes(hiddenText)) && whitelist.includes(hiddenText) && !blacklist.includes(hiddenText)) {
                 divs[i].style.display = "";
             } else {
                 divs[i].style.display = "none";
