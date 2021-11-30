@@ -76,6 +76,7 @@ def index():
                            admin_view=admin.index_view,
                            get_url=url_for,
                            h=admin_helpers,
+                           model_name=model_name,
                            end_date=end_date,
                            start_date=start_date)
     # return redirect(url_for('admin.index'))
@@ -113,6 +114,7 @@ def viewCertificates(name):
                            get_url=url_for,
                            h=admin_helpers,
                            certificate_name=name,
+                           model_name=model_name,
                            features1=result1,
                            features2=result2,
                            date=date)
@@ -145,6 +147,7 @@ def viewCertificate(category, name):
                            admin_view=admin.index_view,
                            get_url=url_for,
                            h=admin_helpers,
+                           model_name=model_name,
                            certificate_name=metrics[name]["display_name"],
                            features=result)
 
@@ -171,6 +174,7 @@ def info():
                            get_url=url_for,
                            h=admin_helpers,
                            name=name,
+                           model_name=model_name,
                            description=description,
                            task_type=task_type,
                            protected_attributes=prot_attr,
@@ -184,6 +188,7 @@ def event():
                            admin_base_template=admin.base_template,
                            admin_view=admin.index_view,
                            get_url=url_for,
+                           model_name=model_name,
                            h=admin_helpers)
 
 
@@ -266,6 +271,7 @@ def renderClassTemplate(category):
                            admin_view=admin.index_view,
                            get_url=url_for,
                            h=admin_helpers,
+                           model_name=model_name,
                            Category=category,
                            Functional=functional,
                            start_date=start_date,
@@ -280,6 +286,7 @@ def renderAllMetrics():
                            admin_view=admin.index_view,
                            get_url=url_for,
                            h=admin_helpers,
+                           model_name=model_name,
                            start_date=start_date,
                            end_date=end_date)
 
@@ -296,6 +303,7 @@ def learnMore(metric):
                            admin_view=admin.index_view,
                            get_url=url_for,
                            h=admin_helpers,
+                           model_name=model_name,
                            metric_display_name=metric_info[metric]['display_name'],
                            metric_range=metric_info[metric]['range'],
                            metric_has_range=metric_info[metric]['has_range'],
