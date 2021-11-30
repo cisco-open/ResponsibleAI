@@ -712,4 +712,45 @@ function date_slider(){
     redoMetrics()
 }
 
+function view_slider(){
+    var slider = document.getElementById('view_input')
+    use_date = !slider.checked;
+    var style = ""
+    var svg_style = ""
+    var header_style = ""
+    var text_display = ""
+    var chart_scaler = ""
+    if(slider.checked){
+        style = "width:80%; margin-left:10%; margin-right:auto; height:200px;"
+        header_style = "margin-top:-1px;display:inline-block;"
+        svg_style = "width:100%;"
+        text_display = "display:inline-block; margin-left:8px;"
+        chart_scaler = "height:80%;"
+    }
+    var row = document.getElementById("metric_row");
+    var boxes = row.getElementsByClassName("Metric");
+    for(var i = 0; i<boxes.length; i++){
+        boxes[i].setAttribute("style", style);
+        var svgs = boxes[i].getElementsByTagName("svg")
+        if(svgs.length > 0)
+            svgs[0].setAttribute("width", "100%")
+
+        var text = boxes[i].getElementsByClassName("chartValue")
+        if(text.length > 0)
+            text[0].setAttribute("style", text_display)
+
+        var graph = boxes[i].getElementsByClassName("morris-chart")
+        if(graph.length > 0)
+            graph[0].setAttribute("style", chart_scaler)
+    }
+    var texts = row.getElementsByClassName("chartHeader");
+    for(var i = 0; i<texts.length; i++){
+        texts[i].setAttribute("style", header_style);
+    }
+
+    for(var chart in graphs){
+        graphs[chart].redraw()
+    }
+}
+
 

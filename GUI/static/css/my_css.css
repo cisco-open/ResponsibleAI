@@ -80,6 +80,10 @@ div.fairnessMetric {
     height: 290px;
 }
 
+div.Metric{
+    text-align:center;
+}
+
 div.MetricPage {
     width: 700px;
     margin-left: auto;
