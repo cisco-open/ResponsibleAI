@@ -7,7 +7,6 @@ import flask_admin
 from flask_admin import helpers as admin_helpers
 import redis
 import sys
-from apscheduler.schedulers.background import BackgroundScheduler
 import datetime
 import threading
 
