@@ -48,6 +48,7 @@ cache = {'metric_info': json.loads(r.get(model_name + '|metric_info')), 'metric_
 
 def get_dates():
     data_test = r.lrange(model_name + '|metric_values', 0, -1)
+    clear_streams()
     date_start = "2020-10-01"
     if len(data_test) >= 1:
         date_start = json.loads(data_test[0])['metadata > date'][:10]
@@ -58,6 +59,7 @@ def get_dates():
 
 def get_certificate_dates():
     data_test = r.lrange(model_name + '|certificate_values', 0, -1)
+    clear_streams()
     date_start = "2020-10-01"
     print(json.loads(data_test[0]))
     if len(data_test) >= 1:
@@ -84,6 +86,7 @@ def index():
 def viewCertificates(name):
     cert_info = r.lrange(model_name + '|certificate_values', 0, -1)
     metric_info = r.get(model_name + '|metric_info')
+    clear_streams()
     data = json.loads(cert_info[-1])
     date = data['metadata']['date']
     data = data[name.lower()]
@@ -120,6 +123,7 @@ def viewCertificates(name):
 def viewCertificate(category, name):
     cert_info = r.lrange(model_name + '|certificate_values', 0, -1)
     metric_info = r.get(model_name + '|metric_info')
+    clear_streams()
     metrics = json.loads(metric_info)
     category = category.lower()
     result = []
@@ -149,6 +153,7 @@ def viewCertificate(category, name):
 @app.route('/info')
 def info():
     model_info = r.get(model_name + '|model_info')
+    clear_streams()
     data = json.loads(model_info)
     name = data['id']
     description = data['description']
@@ -188,6 +193,7 @@ def getData(date1, date2):
     date1 += " 00:00:00"
     date2 += " 99:99:99"
     data_test = r.lrange(model_name + '|metric_values', 0, -1)
+    clear_streams()
     # data_test = cache['metric_values']
     res = []
     for i in range(len(data_test)):
@@ -200,6 +206,7 @@ def getData(date1, date2):
 @app.route('/getMetricList', methods=['GET'])
 def getMetricList():
     data_test = r.get(model_name + '|metric_info')
+    clear_streams()
     data = json.loads(data_test)
     result = {}
 
@@ -215,12 +222,14 @@ def getMetricList():
 
 @app.route('/getMetricInfo', methods=['GET'])
 def getMetricInfo():
+    clear_streams()
     return json.loads(r.get(model_name + '|metric_info'))
     # return cache['metric_info']
 
 
 @app.route('/getModelInfo', methods=['GET'])
 def getModelInfo():
+    clear_streams()
     return json.loads(r.get(model_name + '|model_info'))
     # return cache['metric_info']
 
@@ -231,6 +240,7 @@ def getCertification(date1, date2):  # NOT REAL DATA YET.
     date2 += " 99:99:99"
     data_test = r.lrange(model_name + '|certificate_values', 0, -1)
     # data_test = cache['metric_values']
+    clear_streams()
     res = []
     for i in range(len(data_test)):
         item = json.loads(data_test[i])
@@ -243,6 +253,7 @@ def getCertification(date1, date2):  # NOT REAL DATA YET.
 def getCertificationMeta():
     model_info = r.get(model_name + '|certificate_metadata')
     data = json.loads(model_info)
+    clear_streams()
     return data
 
 
@@ -277,6 +288,7 @@ def renderAllMetrics():
 @app.route('/learnMore/<metric>')
 def learnMore(metric):
     data_test = r.get(model_name + '|metric_info')
+    clear_streams()
     metric_info = json.loads(data_test)
     start_date, end_date = get_dates()
     # metric_info = cache['metric_info']
@@ -305,6 +317,10 @@ def updateMetrics():
 def updateCertificates():
     return json.dumps(cert_event_stream())
 
+def clear_streams():
+    metric_event_stream()
+    cert_event_stream()
+
 
 def metric_event_stream():
     message = metric_sub.get_message()
@@ -312,6 +328,8 @@ def metric_event_stream():
     if message:
         print("METRIC: ", str(message))
         result = message['data'] != 1
+        while message:
+            message = metric_sub.get_message()
     return result
 
 
@@ -321,6 +339,8 @@ def cert_event_stream():
     if message:
         print("METRIC: ", str(message))
         result = message['data'] != 1
+        while message:
+            message = cert_sub.get_message()
     return result
 
 

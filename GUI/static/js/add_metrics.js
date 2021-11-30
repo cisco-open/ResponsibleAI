@@ -19,7 +19,7 @@ var page_ready = false;
 
 
 $(document).ready(function() {
-        setInterval("check_data()", 2000); // call every 10 seconds
+        setInterval("check_data()", 1000); // call every 10 seconds
 });
 
 function check_data() {

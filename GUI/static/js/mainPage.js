@@ -6,11 +6,10 @@ var page_ready = false;
 
 
 $(document).ready(function() {
-        setInterval("check_data()", 2000); // call every 10 seconds
+        setInterval("check_data()", 1000); // call every 10 seconds
 });
 
 function check_data() {
-    console.log('PAGE READY: ' + page_ready)
     if(page_ready){
        fetch('/updateCertificates').then(function (response) {
             return response.json();
@@ -84,10 +83,11 @@ function createMetrics(data, explanations) {
         img.setAttribute("title", explanations[i]["explanation"]);
 
         var circle = document.getElementById(i + "Circle");
-        circle.setAttribute("stroke-dasharray", new_data[new_data.length - 1]['value'] + ", 100");
+        circle.setAttribute("stroke-dasharray", new_data[new_data.length - 1]['value'].toFixed(0) + ", 100");
         var circleText = document.getElementById(i + "Text");
 
-        circleText.innerHTML = new_data[new_data.length - 1]['value'];
+        circleText.innerHTML = new_data[new_data.length - 1]['value'].toFixed(1) + "%";
+        // console.log("Setting value for " + i + " to " + new_data[new_data.length - 1]['value'].toFixed(1))
 
         // var percentage = new_data[new_data.length - 1]['value']/Object.keys(data[data.length-1][i]['list']).length).toFixed(2)*100
     }
@@ -114,10 +114,9 @@ function redoMetrics2(data) {
         graphs[type].setData(new_data);
 
         var circle = document.getElementById(type + "Circle");
-        circle.setAttribute("stroke-dasharray", new_data[new_data.length - 1]['value'] + ", 100");
+        circle.setAttribute("stroke-dasharray", new_data[new_data.length - 1]['value'].toFixed(0) + ", 100");
         var circleText = document.getElementById(type + "Text");
-        circleText.innerHTML = new_data[new_data.length - 1]['value'];
-
+        circleText.innerHTML = new_data[new_data.length - 1]['value'].toFixed(1) + "%";
     }
 }
 
