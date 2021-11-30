@@ -1,6 +1,4 @@
-import numpy as np
 import pandas as pd
-import sklearn as sk
 import datetime
 from RAI.metrics.registry import registry
 import json
@@ -9,7 +7,6 @@ import subprocess
 import random
 from RAI import utils
 import threading
-
 
 
 class AISystem:
@@ -207,25 +204,6 @@ class AISystem:
         r.set(self.task.model.name + '|certificate_metadata', json.dumps(certificate_metadata))
         r.rpush(self.task.model.name + '|certificate_values', json.dumps(values))  # True
         r.publish(self.task.model.name + "|certificate", values['metadata']['date'])
-
-
-
-    # def summarize(self):
-    #     categories = {}
-    #     # Separate Metric Groups by Category
-    #     for group in self.metric_groups:
-    #         if self.metric_groups[group].category.lower() not in categories:
-    #             categories[self.metric_groups[group].category.lower()] = []
-    #         categories[self.metric_groups[group].category.lower()].append(group)
-
-    #     for category in categories:
-    #         print("Category ", category, " Metrics")
-    #         for group in categories[category]:
-    #             print("\tGroup ", group)
-    #             metric_values = self.metric_groups[group].get_metric_values()
-    #             for metric in metric_values:
-    #                 print("\t\t", metric, " ", metric_values[metric])
-
 
     def viewGUI(self):
         gui_launcher = threading.Thread(target=self._view_gui_thread, args=[])

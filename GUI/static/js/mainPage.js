@@ -3,8 +3,10 @@
 var graphs = {};
 var metrics;
 var page_ready = false;
+var use_date= true;
 
 
+/*
 $(document).ready(function() {
         setInterval("check_data()", 1000); // call every 10 seconds
 });
@@ -21,6 +23,7 @@ function check_data() {
     }
 }
 
+*/
 
 function load_data() {
     page_ready = false
@@ -59,12 +62,25 @@ function createData(data, key) {
 }
 
 
+function createData(data, key) {
+    var ret = [];
+    for (var i = 0; i < data.length; i++) {
+        ret.push({
+            year: data[i]["metadata"]["date"],
+            value: data[i][key]["score"]
+        });
+    }
+    return ret;
+}
+
+
+
 function createMetrics(data, explanations) {
     var divs = ['fairness', 'robust', 'performance', 'explainability'];
     var names = ["Fairness", "Robustness", "Performance", "Explainability"];
     for (var i in explanations) {
         var new_data = createData(data, i);
-
+        console.log("NEW DATA: " + JSON.stringify(new_data))
         var morrisLine = new Morris.Line({
             element: i + "Chart",
             data: new_data,
@@ -111,12 +127,22 @@ function redoMetrics() {
 function redoMetrics2(data) {
     for (var type in graphs) {
         var new_data = createData(data, type);
+        graphs[type]['options'].parseTime = use_date
         graphs[type].setData(new_data);
+        graphs[type].options.descriptions = newExplanations
 
         var circle = document.getElementById(type + "Circle");
         circle.setAttribute("stroke-dasharray", new_data[new_data.length - 1]['value'].toFixed(0) + ", 100");
         var circleText = document.getElementById(type + "Text");
         circleText.innerHTML = new_data[new_data.length - 1]['value'].toFixed(1) + "%";
     }
+}
+
+
+
+function date_slider(){
+    var slider = document.getElementById('slider_input')
+    use_date = !slider.checked;
+    redoMetrics()
 }
 
