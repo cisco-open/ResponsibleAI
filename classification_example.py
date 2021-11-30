@@ -101,7 +101,7 @@ result = ai.search(query)
 print(result)
 
 # reset all previous keys
-ai.reset_redis()
+# ai.reset_redis()
 
 # export to redis
 ai.export_data_flat("Testing New Features")
@@ -114,7 +114,7 @@ ai.export_certificates()
 
 
 print("\nViewing GUI")
-ai.viewGUI()
+# ai.viewGUI()
 print("DONE")
 
 print("\nSearching Metrics for ", query)

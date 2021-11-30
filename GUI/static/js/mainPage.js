@@ -6,7 +6,7 @@ var page_ready = false;
 var use_date= true;
 
 
-/*
+
 $(document).ready(function() {
         setInterval("check_data()", 1000); // call every 10 seconds
 });
@@ -23,7 +23,6 @@ function check_data() {
     }
 }
 
-*/
 
 function load_data() {
     page_ready = false
@@ -48,29 +47,29 @@ function load_explanations(data) {
 }
 
 
+
 // Used to create the data for the morris chart
 function createData(data, key) {
     var ret = [];
-
+    var descriptions = []
     for (var i = 0; i < data.length; i++) {
-        ret.push({
-            year: data[i]["metadata"]["date"],
-            value: (data[i][key]["score"] / Object.keys(data[i][key]['list']).length).toFixed(2)*100
-        });
+        if(data[i][key] != null && !isNaN(data[i][key]["score"]) && isFinite(data[i][key]["score"])){
+            if(use_date){
+                ret.push({
+                    year: data[i]["metadata"]["date"],
+                    value: data[i][key]["score"]
+                });
+            }
+            else{
+                ret.push({
+                    year: String(i),
+                    value: data[i][key]["score"]
+                });
+            }
+            descriptions.push(data[i]["cert_description"])
+        }
     }
-    return ret;
-}
-
-
-function createData(data, key) {
-    var ret = [];
-    for (var i = 0; i < data.length; i++) {
-        ret.push({
-            year: data[i]["metadata"]["date"],
-            value: data[i][key]["score"]
-        });
-    }
-    return ret;
+    return [ret, descriptions];
 }
 
 
@@ -79,15 +78,18 @@ function createMetrics(data, explanations) {
     var divs = ['fairness', 'robust', 'performance', 'explainability'];
     var names = ["Fairness", "Robustness", "Performance", "Explainability"];
     for (var i in explanations) {
-        var new_data = createData(data, i);
-        console.log("NEW DATA: " + JSON.stringify(new_data))
+        var result = createData(data, i);
+        var new_data = result[0]
+        var chart_explanations = result[1]
         var morrisLine = new Morris.Line({
             element: i + "Chart",
             data: new_data,
+            descriptions: chart_explanations,
             xkey: 'year',
             ykey: i,
             ymax: 100,
             ymin: 0,
+            parseTime: true,
             hideHover: true,
             lineColors: ['#000000'],
             pointFillColors: ['#000000'],
@@ -97,6 +99,7 @@ function createMetrics(data, explanations) {
         graphs[i] = morrisLine;
         var img = document.getElementById(i + "KnobQ");
         img.setAttribute("title", explanations[i]["explanation"]);
+
 
         var circle = document.getElementById(i + "Circle");
         circle.setAttribute("stroke-dasharray", new_data[new_data.length - 1]['value'].toFixed(0) + ", 100");
@@ -126,7 +129,9 @@ function redoMetrics() {
 
 function redoMetrics2(data) {
     for (var type in graphs) {
-        var new_data = createData(data, type);
+        var result = createData(data, type);
+        var new_data = result[0]
+        var newExplanations = result[1]
         graphs[type]['options'].parseTime = use_date
         graphs[type].setData(new_data);
         graphs[type].options.descriptions = newExplanations
