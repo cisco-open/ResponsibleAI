@@ -14,9 +14,29 @@ var tagOwner = {'fairness': [], 'performance': [], 'robust': [], 'stats': []}
 var categories = ['fairness', 'performance', 'robust', 'stats']
 var metric_data
 var use_date = true;
+var page_ready = false;
+
+
+$(document).ready(function() {
+        setInterval("check_data()", 2000); // call every 10 seconds
+});
+
+function check_data() {
+    if(page_ready){
+       fetch('/updateMetrics').then(function (response) {
+            return response.json();
+        }).then(function(result){
+            if (result){
+                redoMetrics();
+            }
+        });
+    }
+}
+
 
 // loads metrics. Contains lists of metrics, and metric tags.
 function loadAll() {
+    page_ready = false
     fetch('/getMetricList').then(function (response) {
         return response.json();
     }).then(function(text){
@@ -68,6 +88,7 @@ function callAllFunctions(metrics, data, df_json) {
     }
     createBoxes(metrics);
     createWhiteList(metrics);
+    page_ready = true
 }
 
 // Create graphs
@@ -507,6 +528,7 @@ function displayWhiteList(classtype) {
 
 // Reload the metrics once the times to query for are changed
 function redoMetrics() {
+    page_ready = false
     var date1 = document.getElementById("startDate").value;
     var date2 = document.getElementById("endDate").value;
     return fetch('/getData/' + date1 + '/' + date2)
@@ -514,6 +536,7 @@ function redoMetrics() {
             return response.json();
         }).then(function (text) {
             redoMetrics2(text)
+            page_ready = true
         });
 }
 

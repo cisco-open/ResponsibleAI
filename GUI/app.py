@@ -7,7 +7,9 @@ import flask_admin
 from flask_admin import helpers as admin_helpers
 import redis
 import sys
+from apscheduler.schedulers.background import BackgroundScheduler
 import datetime
+import threading
 
 
 if len(sys.argv) <= 1:
@@ -17,6 +19,11 @@ if len(sys.argv) > 2:
     raise Exception("Please Enter Model Name with no spaces")
 
 model_name = sys.argv[1]
+metric_access_stats = threading.Lock()
+cert_access_stats = threading.Lock()
+metric_update_required = False
+cert_update_required = False
+
 
 # Create Flask application
 app = Flask(__name__)
@@ -31,6 +38,10 @@ admin = flask_admin.Admin(
 # cert_measures = pandas.read_csv(os.path.dirname(os.path.realpath(__file__)) + "\\output\\certificate_measures.csv")
 cert_meta = json.load(open(os.path.dirname(os.path.realpath(__file__)) + "\\output\\certificate_metadata.json", "r"))
 r = redis.Redis(host='localhost', port=6379, db=0)
+metric_sub = r.pubsub()
+metric_sub.psubscribe(model_name + '|certificate')
+cert_sub = r.pubsub()
+cert_sub.psubscribe(model_name + '|certificate')
 
 cache = {'metric_info': json.loads(r.get(model_name + '|metric_info')), 'metric_values': r.lrange(model_name + '|metric_values', 0, -1)}
 
@@ -285,9 +296,37 @@ def learnMore(metric):
                            end_date=end_date
                            )
 
+@app.route('/updateMetrics', methods=['GET'])
+def updateMetrics():
+    return json.dumps(metric_event_stream())
+
+
+@app.route('/updateCertificates', methods=['GET'])
+def updateCertificates():
+    return json.dumps(cert_event_stream())
+
+
+def metric_event_stream():
+    message = metric_sub.get_message()
+    result = False
+    if message:
+        print("METRIC: ", str(message))
+        result = message['data'] != 1
+    return result
+
+
+def cert_event_stream():
+    message = cert_sub.get_message()
+    result = False
+    if message:
+        print("METRIC: ", str(message))
+        result = message['data'] != 1
+    return result
+
 
 if __name__ == '__main__':
     # Build a sample db on the fly, if one does not exist yet.
     app_dir = os.path.realpath(os.path.dirname(__file__))
     # Start app
     app.run(debug=True)
+

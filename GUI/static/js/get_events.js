@@ -2,8 +2,6 @@
 
 var metric_file = "output/metric_list.json";
 var explanation_file = "/Flask-Admin-Dashboard/static/output/metric_info.json";
-
-
 var whitelist = []; // contains all metrics whose category is checked
 var blacklist = []; // contains which metrics were X'd out
 var metrics; // global variable contains all metrics on screen
@@ -11,6 +9,21 @@ var graphs = {}; // list of all graphs
 var matrices = {};
 var metric_info;
 var tags = {}
+
+$(document).ready(function() {
+        setInterval("check_data()", 2000); // call every 10 seconds
+});
+
+function check_data() {
+   fetch('/updateMetrics').then(function (response) {
+        return response.json();
+    }).then(function(result){
+        if (result){
+            location.reload()
+        }
+    });
+}
+
 
 // Queries Data
 function load_data() {

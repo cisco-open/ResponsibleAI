@@ -157,6 +157,7 @@ class AISystem:
         r.rpush(self.task.model.name + '|metric_values', json.dumps(metric_values))  # True
         r.set(self.task.model.name + '|model_info', json.dumps(model_info))
         r.set(self.task.model.name + '|metric_info', json.dumps(metric_info))
+        r.publish(self.task.model.name + "|metric", metric_values['metadata > date'])
         r.save()
 
     # Searches all metrics. Queries based on Metric Name, Metric Group Name, Category, and Tags.
@@ -205,6 +206,7 @@ class AISystem:
 
         r.set(self.task.model.name + '|certificate_metadata', json.dumps(certificate_metadata))
         r.rpush(self.task.model.name + '|certificate_values', json.dumps(values))  # True
+        r.publish(self.task.model.name + "|certificate", values['metadata']['date'])
 
 
 

@@ -2,9 +2,29 @@
 
 var graphs = {};
 var metrics;
+var page_ready = false;
+
+
+$(document).ready(function() {
+        setInterval("check_data()", 2000); // call every 10 seconds
+});
+
+function check_data() {
+    console.log('PAGE READY: ' + page_ready)
+    if(page_ready){
+       fetch('/updateCertificates').then(function (response) {
+            return response.json();
+        }).then(function(result){
+            if (result){
+                redoMetrics();
+            }
+        });
+    }
+}
 
 
 function load_data() {
+    page_ready = false
     var date1 = document.getElementById("startDate").value;
     var date2 = document.getElementById("endDate").value;
     return fetch('/getCertification/' + date1 + '/' + date2)
@@ -71,18 +91,20 @@ function createMetrics(data, explanations) {
 
         // var percentage = new_data[new_data.length - 1]['value']/Object.keys(data[data.length-1][i]['list']).length).toFixed(2)*100
     }
-
+    page_ready = true
 }
 
 
 function redoMetrics() {
     var date1 = document.getElementById("startDate").value;
     var date2 = document.getElementById("endDate").value;
+    page_ready = false
     return fetch('/getCertification/' + date1 + '/' + date2)
         .then(function (response) {
             return response.json();
         }).then(function (text) {
             redoMetrics2(text)
+            page_ready = true
         });
 }
 
