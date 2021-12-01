@@ -296,13 +296,36 @@ function addBoolChart(metric_name, explanations, data, category, name_extension)
     removeBtn.setAttribute("onclick", "blackList('" + metric_name + "')");
     newDiv.appendChild(removeBtn);
 
+
     var chart = document.createElement('div');
+    chart.setAttribute("class", "overflow_table")
     chart.id = metric_name;
     chart.setAttribute("class", "morris-chart chartScalerSmall");
     newDiv.appendChild(chart);
-
     body.appendChild(newDiv);
-    bool_charts[metric_name] = chart;
+
+    var result = createBoolData(data, metric_name + name_extension)
+    var chart_data = result[0]
+    var chart_descriptions = result[1]
+    var myValues  = {
+        element: metric_name,
+        data: chart_data,
+        xkey: 'year',
+        descriptions: chart_descriptions,
+        ykey: metric_name,
+        hideHover: true,
+        smooth: false,
+        lineColors: ['#000000'],
+        pointFillColors: ['#000000'],
+        ykeys: ['value'],
+        labels: ['Value'],
+        hoverCallback: function (index, options, content, row) {
+                var description = options.descriptions[index];
+                return content + "\nDescription: " + description;}
+    }
+    myValues['parseTime'] = true
+    var morrisLine = new Morris.Line(myValues)
+    bool_charts[metric_name] = morrisLine;
 }
 
 function addTable(metric_name, explanations, data_array, category, optionalName="", optionalNumber=""){
@@ -404,6 +427,36 @@ function createData(data, key) {
     }
     return [ret, descriptions];
 }
+
+
+// Used to create the data for the morris chart
+function createBoolData(data, key) {
+    var ret = [];
+    var descriptions = []
+    for (var i = 0; i < data.length; i++) {
+        if(data[i][key] != null && !isNaN(data[i][key]) && isFinite(data[i][key])){
+            var value = 0
+                if(data[i][key])
+                    value = 1
+            if(use_date){
+                ret.push({
+                    year: data[i]["metadata > date"],
+                    value: value
+                });
+            }
+            else{
+                ret.push({
+                    year: String(i),
+                    value: value
+                });
+            }
+            descriptions.push(data[i]["metadata > description"])
+        }
+    }
+    return [ret, descriptions];
+}
+
+
 
 // Create the category searching of metrics
 function createBoxes(metrics) {
@@ -525,13 +578,9 @@ function generateWhiteList() {
         if (boxes[i].checked) {
             var id = boxes[i].id.toString();
             if(id.indexOf("_mainBox") == -1){
-                console.log("ID: " + id)
                 var list = tags[id];
                 for (var j = 0; j < list.length; j++) {
-                    console.log("CHECKING FOR : " + metric_info[list[j]]["type"])
-                    console.log("IN : " + data_types)
                     if(data_types.includes(metric_info[list[j]]["type"])){
-                        console.log("ADDING TO WHITE LIST")
                         whitelist.push(list[j]);
                     }
                 }
@@ -590,6 +639,21 @@ function redoMetrics2(data) {
         else
             writing.innerHTML = "Null"
     }
+    for (var type in bool_charts){
+        var writing2 = document.getElementById(type + "LastValue");
+        if(data.length == 0 || data[data.length-1][type] == null){
+            writing2.innerHTML = "Null"
+        }
+        else{
+            writing2.innerHTML = data[data.length -1][type];
+        }
+        var result = createBoolData(data, type + ext);
+        var new_data = result[0]
+        var newExplanations = result[1]
+        bool_charts[type].options.parseTime = use_date
+        bool_charts[type].setData(new_data);
+        bool_charts[type].options.descriptions = newExplanations
+    }
     for (var type in matrices){
         if(metric_info[type]['type'] == 'matrix' || metric_info[type]['type'] == 'vector'){
             var chart = document.getElementById(type + "_chart")
@@ -625,15 +689,6 @@ function redoMetrics2(data) {
                     addVectorDict(type, metric_info, data, metric_info[type]["category"], "");
                 }
             }
-        }
-    }
-    for (var type in bool_charts){
-        var writing2 = document.getElementById(type + "LastValue");
-        if(data[data.length-1][type] == null){
-            writing2.innerHTML = "Null"
-        }
-        else{
-            writing2.innerHTML = data[data.length -1][type];
         }
     }
 }
@@ -760,10 +815,13 @@ function view_slider(){
     }
 
     for(var chart in graphs){
-        console.log("chart: " + chart)
-        console.log("data: ")
         if(document.getElementById(chart+"LastValue").innerHTML != "Null")
-            graphs[chart].redraw()
+                graphs[chart].redraw()
+    }
+    for(var chart in bool_charts){
+        if(document.getElementById(chart+"LastValue").innerHTML != "Null"){
+            bool_charts[chart].redraw()
+        }
     }
 }
 
