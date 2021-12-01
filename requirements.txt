@@ -2,3 +2,4 @@ redis
 sklearn
 numpy
 pandas
+apscheduler

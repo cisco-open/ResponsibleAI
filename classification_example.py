@@ -41,8 +41,9 @@ features.append(Feature("race", "integer", "race value", categorical=True, value
 features.append(Feature("gender", "integer", "race value", categorical=True, values=[{1:"male"}, {0:"female"}]))
 
 # Hook data in with our Representation
-training_data = Data(xTest, yTest)  # Accepts Data and GT
-dataset = Dataset(training_data)  # Accepts Training, Test and Validation Set
+training_data = Data(xTrain, yTrain)  # Accepts Data and GT
+test_data = Data(xTest, yTest)
+dataset = Dataset(training_data, test_data=test_data)  # Accepts Training, Test and Validation Set
 meta = MetaDatabase(features)
 
 # Create a model to make predictions
@@ -60,23 +61,36 @@ ai.initialize()
 
 # Train model
 reg.fit(xTrain, yTrain)
-model_preds = reg.predict(xTest)
 
+
+'''
+train_preds = reg.predict(xTrain)
 # Make Predictions
-ai.compute_metrics(model_preds)
+ai.compute_metrics(train_preds, data_type="train")
 # Function to compare our result to sklearn's result.
 
 
-
-# Compute Metrics Using our Engine
 resv_f = ai.get_metric_values_flat()
 resv_d = ai.get_metric_values_dict()
 resi_f = ai.get_metric_info_flat()
 resi_d = ai.get_metric_info_dict()
 
-
+print("TRAINING PREDICTION METRICS:")
 for key in resv_f:
     if hasattr(resv_f[key], "__len__"): 
+        # print(resi_f[key]['display_name'], " = ", 'list ...')
+        print(resi_f[key]['display_name'], " = ", resv_f[key])
+    else:
+        print(resi_f[key]['display_name'], " = ", resv_f[key])
+'''
+
+print("\n\nTESTING PREDICTING METRICS:")
+test_preds = reg.predict(xTest)
+ai.compute_metrics(test_preds, data_type="test")
+resv_f = ai.get_metric_values_flat()
+resi_f = ai.get_metric_info_flat()
+for key in resv_f:
+    if hasattr(resv_f[key], "__len__"):
         # print(resi_f[key]['display_name'], " = ", 'list ...')
         print(resi_f[key]['display_name'], " = ", resv_f[key])
     else:
@@ -104,13 +118,13 @@ print(result)
 # ai.reset_redis()
 
 # export to redis
-# ai.export_data_flat("Testing New Features")
+ai.export_data_flat("Testing New Features")
 
 
 # TEMPORARY WAY TO EXPORT CERTIFICATE VALUES
 # Will be done in another file
 print("Exporting Certificate Data")
-# ai.export_certificates()
+ai.export_certificates()
 
 
 print("\nViewing GUI")

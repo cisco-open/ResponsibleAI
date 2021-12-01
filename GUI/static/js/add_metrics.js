@@ -14,11 +14,32 @@ var dict_charts = {}
 var metric_info;
 var model_info;
 var tags = {}
+var data_types = []
 var use_date= true;
+var page_ready = false;
+
+
+$(document).ready(function() {
+        setInterval("check_data()", 1000); // call every 10 seconds
+});
+
+function check_data() {
+    if(page_ready){
+       fetch('/updateMetrics').then(function (response) {
+            return response.json();
+        }).then(function(result){
+            if (result){
+                redoMetrics();
+            }
+        });
+    }
+}
+
 
 
 // loads metrics. Contains lists of metrics, and metric tags.
 function loadMetrics(category) {
+    page_ready = false
     fetch('/getMetricList').then(function (response) {
         return response.json();
     }).then(function(text){
@@ -65,6 +86,7 @@ function callAllFunctions(metrics, data, df_json, category) {
     createMetrics(metrics, data, df_json, category);
     createBoxes(metrics, category);
     createWhiteList(metrics, category);
+    page_ready = true
 }
 
 
@@ -135,6 +157,11 @@ function addTags(metric_name){
             tags[metric_info[metric_name]["tags"][i]] = [];
         tags[metric_info[metric_name]["tags"][i]].push(metric_name);
     }
+    // console.log(metric_info[metric_name])
+    if (data_types[metric_info[metric_name]["type"]] == null){
+        data_types[metric_info[metric_name]["type"]] = []
+    }
+    data_types[metric_info[metric_name]["type"]].push(metric_name)
 }
 
 
@@ -143,7 +170,7 @@ function addChart(metric_name, explanations, data, category, name_extension){
     // console.log(metric_name)
     var body = document.getElementById('metric_row');
     var newDiv = document.createElement('div');
-    newDiv.setAttribute("class", category.toLowerCase() + 'Metric col-sm-6 chart-container main-panel');
+    newDiv.setAttribute("class", category.toLowerCase() + 'Metric Metric col-sm-6 chart-container main-panel');
     newDiv.setAttribute("id", metric_name + "_chart");
     var writing = document.createElement('p');
     writing.innerHTML = metric_info[metric_name]["display_name"];
@@ -222,10 +249,10 @@ function addChart(metric_name, explanations, data, category, name_extension){
 
 function addBoolChart(metric_name, explanations, data, category, name_extension){
     addTags(metric_name)
-    // console.log("DATA: " + JSON.stringify(data))
+    // console.log(metric_name)
     var body = document.getElementById('metric_row');
     var newDiv = document.createElement('div');
-    newDiv.setAttribute("class", category.toLowerCase() + 'Metric col-sm-6 chart-container main-panel');
+    newDiv.setAttribute("class", category.toLowerCase() + 'Metric Metric col-sm-6 chart-container main-panel');
     newDiv.setAttribute("id", metric_name + "_chart");
     var writing = document.createElement('p');
     writing.innerHTML = metric_info[metric_name]["display_name"];
@@ -237,6 +264,7 @@ function addBoolChart(metric_name, explanations, data, category, name_extension)
         writing2.innerHTML = data[data.length -1][ metric_name + name_extension];
     writing2.setAttribute("class", "chartValue");
     writing2.setAttribute("id", metric_name + "LastValue");
+
     var img = document.createElement('img');
     img.setAttribute("title", explanations[metric_name]["explanation"]);
     img.setAttribute("src", "/static/img/questionMark.png");
@@ -262,19 +290,42 @@ function addBoolChart(metric_name, explanations, data, category, name_extension)
     newDiv.appendChild(removeBtn);
 
     var chart = document.createElement('div');
+    chart.setAttribute("class", "overflow_table")
     chart.id = metric_name;
     chart.setAttribute("class", "morris-chart chartScalerSmall");
     newDiv.appendChild(chart);
-
-    bool_charts[metric_name] = chart;
     body.appendChild(newDiv);
+
+    var result = createBoolData(data, metric_name + name_extension)
+    var chart_data = result[0]
+    var chart_descriptions = result[1]
+    var myValues  = {
+        element: metric_name,
+        data: chart_data,
+        xkey: 'year',
+        descriptions: chart_descriptions,
+        ykey: metric_name,
+        hideHover: true,
+        smooth: false,
+        lineColors: ['#000000'],
+        pointFillColors: ['#000000'],
+        ykeys: ['value'],
+        labels: ['Value'],
+        hoverCallback: function (index, options, content, row) {
+                var description = options.descriptions[index];
+                return content + "\nDescription: " + description;}
+    }
+    myValues['parseTime'] = true
+    var morrisLine = new Morris.Line(myValues)
+    bool_charts[metric_name] = morrisLine;
 }
+
 
 function addTable(metric_name, explanations, data_array, category, optionalName="", optionalNumber=""){
     addTags(metric_name)
     var body = document.getElementById('metric_row');
     var newDiv = document.createElement('div');
-    newDiv.setAttribute("class", category.toLowerCase() + 'Metric col-sm-6 chart-container main-panel');
+    newDiv.setAttribute("class", category.toLowerCase() + 'Metric Metric col-sm-6 chart-container main-panel');
         if(optionalNumber!="")
         optionalNumber = "|"+optionalNumber;
     newDiv.setAttribute("id", metric_name + "_chart"+optionalNumber);
@@ -343,6 +394,34 @@ function generateTableFromArray(data_array, is_float=false){
 }
 
 
+// Used to create the data for the morris chart
+function createBoolData(data, key) {
+    var ret = [];
+    var descriptions = []
+    for (var i = 0; i < data.length; i++) {
+        if(data[i][key] != null && !isNaN(data[i][key]) && isFinite(data[i][key])){
+            var value = 0
+                if(data[i][key])
+                    value = 1
+            if(use_date){
+                ret.push({
+                    year: data[i]["metadata > date"],
+                    value: value
+                });
+            }
+            else{
+                ret.push({
+                    year: String(i),
+                    value: value
+                });
+            }
+            descriptions.push(data[i]["metadata > description"])
+        }
+    }
+    return [ret, descriptions];
+}
+
+
 
 // Used to create the data for the morris chart
 function createData(data, key) {
@@ -370,7 +449,7 @@ function createData(data, key) {
 
 // Create the category searching of metrics
 function createBoxes(metrics, category) {
-    var body = document.getElementById('selector');
+    var body = document.getElementById('tag_selection');
     var list = tags
     var topBox = document.createElement("input");
     topBox.setAttribute("type", "checkbox");
@@ -391,14 +470,13 @@ function createBoxes(metrics, category) {
     for (var i in tags) {
         if (i == category.toLowerCase())
             continue;
-
         var newBox = document.createElement("input");
         newBox.setAttribute("type", "checkbox");
         newBox.setAttribute("id", i);
         newBox.setAttribute("value", true);
         newBox.setAttribute("name", i);
         newBox.setAttribute("class", "selectorBox");
-        newBox.setAttribute("class", category.toString().toLowerCase() + "Box");
+        newBox.setAttribute("class", category.toString().toLowerCase() + "Box" + " innerBox");
         newBox.setAttribute("checked", true);
         newBox.setAttribute("onclick", "checkParent(this, '" + category + "')");
         var label = document.createElement("label");
@@ -409,11 +487,31 @@ function createBoxes(metrics, category) {
         body.appendChild(label);
         body.appendChild(br);
     }
+
+    body = document.getElementById("datatype_selection")
+    for (var i in data_types) {
+        var newBox = document.createElement("input");
+        newBox.setAttribute("type", "checkbox");
+        newBox.setAttribute("id", i);
+        newBox.setAttribute("value", true);
+        newBox.setAttribute("name", i);
+        newBox.setAttribute("class", "selectorBox");
+        newBox.setAttribute("class", i + "_Box");
+        newBox.setAttribute("checked", true);
+        newBox.setAttribute("onclick", "updateDatatypes('" + category +"')");
+        var label = document.createElement("label");
+        label.setAttribute("for", i);
+        label.innerHTML = i;
+        var br = document.createElement("br")
+        body.appendChild(newBox);
+        body.appendChild(label);
+        body.appendChild(br);
+    }
     var button = document.createElement("button");
     button.setAttribute("class", "selectorButton");
     button.innerHTML = "Done";
     button.setAttribute("onclick", "doneEdit('" + category + "');")
-    body.appendChild(button);
+    document.getElementById("selector").appendChild(button);
 }
 
 // white list metrics depending on what is checked in the categories
@@ -447,39 +545,42 @@ function doneEdit(classtype) {
 }
 
 // Generates the white list (what metrics should be shown, based on category) by looking at the checked boxes
-function generateWhiteList(classtype) {
-    var boxes = document.getElementsByClassName(classtype.toString().toLowerCase() + "Box");
+function generateWhiteList() {
     whitelist = [];
-
-    if(boxes.length == 0){
-        var box = document.getElementById(classtype.toString().toLowerCase() + "_mainBox");
-        if (box.checked){
-            var id = box.id.toString();
-            id = id.substring(0, id.indexOf("_"))
-            var list = tags[id];
-            for (var j = 0; j < list.length; j++) {
-                whitelist.push(list[j]);
-            }
+    data_types = []
+    var datatypeBox = document.getElementById("datatype_selection")
+    var boxes = datatypeBox.getElementsByTagName("input")
+    for (var i = 0; i<boxes.length; i++){
+        if (boxes[i].checked){
+            data_types.push(boxes[i].id.toString())
         }
     }
-    else{
-        for (var i = 0; i < boxes.length; i++) {
-            if (boxes[i].checked) {
-                var id = boxes[i].id.toString();
+
+    var boxes = document.getElementById("tag_selection").getElementsByTagName("input");
+    for (var i = 0; i < boxes.length; i++) {
+        if (boxes[i].checked) {
+            var id = boxes[i].id.toString();
+            if(id.indexOf("_mainBox") == -1){
                 var list = tags[id];
                 for (var j = 0; j < list.length; j++) {
-                    whitelist.push(list[j]);
+                    if(data_types.includes(metric_info[list[j]]["type"])){
+                        whitelist.push(list[j]);
+                    }
                 }
             }
         }
     }
-    displayWhiteList(classtype)
+    displayWhiteList()
 }
 
+
+
+
+
 // Display the white listed metrics
-function displayWhiteList(classtype) {
+function displayWhiteList() {
     var row = document.getElementById("metric_row");
-    var divs = row.getElementsByClassName(classtype.toString().toLowerCase() + "Metric");
+    var divs = row.getElementsByClassName("Metric");
     for (var i = 0; i < divs.length; i++) {
         var div = divs[i].getElementsByTagName("div")[0];
         if (whitelist.includes(div.id) && !blacklist.includes(div.id)) {
@@ -495,11 +596,13 @@ function displayWhiteList(classtype) {
 function redoMetrics() {
     var date1 = document.getElementById("startDate").value;
     var date2 = document.getElementById("endDate").value;
+    page_ready = false;
     return fetch('/getData/' + date1 + '/' + date2)
         .then(function (response) {
             return response.json();
         }).then(function (text) {
             redoMetrics2(text)
+            page_ready = true
         });
 }
 
@@ -522,6 +625,21 @@ function redoMetrics2(data) {
             writing.innerHTML = new_data[new_data.length - 1]["value"].toFixed(3);
         else
             writing.innerHTML = "Null"
+    }
+    for (var type in bool_charts){
+        var writing2 = document.getElementById(type + "LastValue");
+        if(data.length == 0 || data[data.length-1][type] == null){
+            writing2.innerHTML = "Null"
+        }
+        else{
+            writing2.innerHTML = data[data.length -1][type];
+        }
+        var result = createBoolData(data, type + ext);
+        var new_data = result[0]
+        var newExplanations = result[1]
+        bool_charts[type].options.parseTime = use_date
+        bool_charts[type].setData(new_data);
+        bool_charts[type].options.descriptions = newExplanations
     }
     for (var type in matrices){
         if(metric_info[type]['type'] == 'matrix' || metric_info[type]['type'] == 'vector'){
@@ -558,15 +676,6 @@ function redoMetrics2(data) {
                     addVectorDict(type, metric_info, data, metric_info[type]["category"], "");
                 }
             }
-        }
-    }
-    for (var type in bool_charts){
-        var writing2 = document.getElementById(type + "LastValue");
-        if(data[data.length-1][type] == null){
-            writing2.innerHTML = "Null"
-        }
-        else{
-            writing2.innerHTML = data[data.length -1][type];
         }
     }
 }
@@ -612,8 +721,14 @@ function checkParent(check, type) {
 }
 
 
+// Checks parent status in checkboxes, once all child checks are unchecked, or one is checked.
+function updateDatatypes(type) {
+    generateWhiteList(type);
+}
+
+
 // Searches available metrics, changes display based on search results.
-function search(category) {
+function search() {
     var input, filter, row, divs, i, text;
     input = document.getElementById("myInput");
     filter = input.value.toLowerCase();
@@ -634,7 +749,7 @@ function search(category) {
         if (p && hiddenDiv) {
             var text = p.innerText;
             var hiddenText = hiddenDiv.id;
-            if ((text.toLowerCase().indexOf(filter) > -1 || mustInclude.includes(hiddenText) && whitelist.includes(hiddenText)) && !blacklist.includes(hiddenText)) {
+            if ((text.toLowerCase().indexOf(filter) > -1 || mustInclude.includes(hiddenText)) && whitelist.includes(hiddenText) && !blacklist.includes(hiddenText)) {
                 divs[i].style.display = "";
             } else {
                 divs[i].style.display = "none";
@@ -647,6 +762,53 @@ function date_slider(){
     var slider = document.getElementById('slider_input')
     use_date = !slider.checked;
     redoMetrics()
+}
+
+function view_slider(){
+    var slider = document.getElementById('view_input')
+    use_date = !slider.checked;
+    var style = ""
+    var svg_style = ""
+    var header_style = ""
+    var text_display = ""
+    var chart_scaler = ""
+    if(slider.checked){
+        style = "width:80%; margin-left:10%; margin-right:auto; height:200px;"
+        header_style = "margin-top:-1px;display:inline-block;"
+        svg_style = "width:100%;"
+        text_display = "display:inline-block; margin-left:8px;"
+        chart_scaler = "height:80%;"
+    }
+    var row = document.getElementById("metric_row");
+    var boxes = row.getElementsByClassName("Metric");
+    for(var i = 0; i<boxes.length; i++){
+        boxes[i].setAttribute("style", style);
+        var svgs = boxes[i].getElementsByTagName("svg")
+        if(svgs.length > 0)
+            svgs[0].setAttribute("width", "100%")
+
+        var text = boxes[i].getElementsByClassName("chartValue")
+        if(text.length > 0)
+            text[0].setAttribute("style", text_display)
+
+        var graph = boxes[i].getElementsByClassName("morris-chart")
+        if(graph.length > 0)
+            graph[0].setAttribute("style", chart_scaler)
+    }
+    var texts = row.getElementsByClassName("chartHeader");
+    for(var i = 0; i<texts.length; i++){
+        texts[i].setAttribute("style", header_style);
+    }
+
+    for(var chart in graphs){
+        if(document.getElementById(chart+"LastValue").innerHTML != "Null")
+                graphs[chart].redraw()
+    }
+    for(var chart in bool_charts){
+        if(document.getElementById(chart+"LastValue").innerHTML != "Null"){
+            bool_charts[chart].redraw()
+        }
+    }
 }
 
 

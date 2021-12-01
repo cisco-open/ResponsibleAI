@@ -8,6 +8,7 @@ from flask_admin import helpers as admin_helpers
 import redis
 import sys
 import datetime
+import threading
 
 
 if len(sys.argv) <= 1:
@@ -17,6 +18,11 @@ if len(sys.argv) > 2:
     raise Exception("Please Enter Model Name with no spaces")
 
 model_name = sys.argv[1]
+metric_access_stats = threading.Lock()
+cert_access_stats = threading.Lock()
+metric_update_required = False
+cert_update_required = False
+
 
 # Create Flask application
 app = Flask(__name__)
@@ -31,12 +37,17 @@ admin = flask_admin.Admin(
 # cert_measures = pandas.read_csv(os.path.dirname(os.path.realpath(__file__)) + "\\output\\certificate_measures.csv")
 cert_meta = json.load(open(os.path.dirname(os.path.realpath(__file__)) + "\\output\\certificate_metadata.json", "r"))
 r = redis.Redis(host='localhost', port=6379, db=0)
+metric_sub = r.pubsub()
+metric_sub.psubscribe(model_name + '|certificate')
+cert_sub = r.pubsub()
+cert_sub.psubscribe(model_name + '|certificate')
 
 cache = {'metric_info': json.loads(r.get(model_name + '|metric_info')), 'metric_values': r.lrange(model_name + '|metric_values', 0, -1)}
 
 
 def get_dates():
     data_test = r.lrange(model_name + '|metric_values', 0, -1)
+    clear_streams()
     date_start = "2020-10-01"
     if len(data_test) >= 1:
         date_start = json.loads(data_test[0])['metadata > date'][:10]
@@ -47,6 +58,7 @@ def get_dates():
 
 def get_certificate_dates():
     data_test = r.lrange(model_name + '|certificate_values', 0, -1)
+    clear_streams()
     date_start = "2020-10-01"
     print(json.loads(data_test[0]))
     if len(data_test) >= 1:
@@ -64,6 +76,7 @@ def index():
                            admin_view=admin.index_view,
                            get_url=url_for,
                            h=admin_helpers,
+                           model_name=model_name,
                            end_date=end_date,
                            start_date=start_date)
     # return redirect(url_for('admin.index'))
@@ -73,6 +86,7 @@ def index():
 def viewCertificates(name):
     cert_info = r.lrange(model_name + '|certificate_values', 0, -1)
     metric_info = r.get(model_name + '|metric_info')
+    clear_streams()
     data = json.loads(cert_info[-1])
     date = data['metadata']['date']
     data = data[name.lower()]
@@ -100,6 +114,7 @@ def viewCertificates(name):
                            get_url=url_for,
                            h=admin_helpers,
                            certificate_name=name,
+                           model_name=model_name,
                            features1=result1,
                            features2=result2,
                            date=date)
@@ -109,6 +124,7 @@ def viewCertificates(name):
 def viewCertificate(category, name):
     cert_info = r.lrange(model_name + '|certificate_values', 0, -1)
     metric_info = r.get(model_name + '|metric_info')
+    clear_streams()
     metrics = json.loads(metric_info)
     category = category.lower()
     result = []
@@ -131,6 +147,7 @@ def viewCertificate(category, name):
                            admin_view=admin.index_view,
                            get_url=url_for,
                            h=admin_helpers,
+                           model_name=model_name,
                            certificate_name=metrics[name]["display_name"],
                            features=result)
 
@@ -138,6 +155,7 @@ def viewCertificate(category, name):
 @app.route('/info')
 def info():
     model_info = r.get(model_name + '|model_info')
+    clear_streams()
     data = json.loads(model_info)
     name = data['id']
     description = data['description']
@@ -156,6 +174,7 @@ def info():
                            get_url=url_for,
                            h=admin_helpers,
                            name=name,
+                           model_name=model_name,
                            description=description,
                            task_type=task_type,
                            protected_attributes=prot_attr,
@@ -169,6 +188,7 @@ def event():
                            admin_base_template=admin.base_template,
                            admin_view=admin.index_view,
                            get_url=url_for,
+                           model_name=model_name,
                            h=admin_helpers)
 
 
@@ -177,6 +197,7 @@ def getData(date1, date2):
     date1 += " 00:00:00"
     date2 += " 99:99:99"
     data_test = r.lrange(model_name + '|metric_values', 0, -1)
+    clear_streams()
     # data_test = cache['metric_values']
     res = []
     for i in range(len(data_test)):
@@ -189,6 +210,7 @@ def getData(date1, date2):
 @app.route('/getMetricList', methods=['GET'])
 def getMetricList():
     data_test = r.get(model_name + '|metric_info')
+    clear_streams()
     data = json.loads(data_test)
     result = {}
 
@@ -204,12 +226,14 @@ def getMetricList():
 
 @app.route('/getMetricInfo', methods=['GET'])
 def getMetricInfo():
+    clear_streams()
     return json.loads(r.get(model_name + '|metric_info'))
     # return cache['metric_info']
 
 
 @app.route('/getModelInfo', methods=['GET'])
 def getModelInfo():
+    clear_streams()
     return json.loads(r.get(model_name + '|model_info'))
     # return cache['metric_info']
 
@@ -220,6 +244,7 @@ def getCertification(date1, date2):  # NOT REAL DATA YET.
     date2 += " 99:99:99"
     data_test = r.lrange(model_name + '|certificate_values', 0, -1)
     # data_test = cache['metric_values']
+    clear_streams()
     res = []
     for i in range(len(data_test)):
         item = json.loads(data_test[i])
@@ -232,6 +257,7 @@ def getCertification(date1, date2):  # NOT REAL DATA YET.
 def getCertificationMeta():
     model_info = r.get(model_name + '|certificate_metadata')
     data = json.loads(model_info)
+    clear_streams()
     return data
 
 
@@ -245,6 +271,7 @@ def renderClassTemplate(category):
                            admin_view=admin.index_view,
                            get_url=url_for,
                            h=admin_helpers,
+                           model_name=model_name,
                            Category=category,
                            Functional=functional,
                            start_date=start_date,
@@ -259,6 +286,7 @@ def renderAllMetrics():
                            admin_view=admin.index_view,
                            get_url=url_for,
                            h=admin_helpers,
+                           model_name=model_name,
                            start_date=start_date,
                            end_date=end_date)
 
@@ -266,6 +294,7 @@ def renderAllMetrics():
 @app.route('/learnMore/<metric>')
 def learnMore(metric):
     data_test = r.get(model_name + '|metric_info')
+    clear_streams()
     metric_info = json.loads(data_test)
     start_date, end_date = get_dates()
     # metric_info = cache['metric_info']
@@ -274,6 +303,7 @@ def learnMore(metric):
                            admin_view=admin.index_view,
                            get_url=url_for,
                            h=admin_helpers,
+                           model_name=model_name,
                            metric_display_name=metric_info[metric]['display_name'],
                            metric_range=metric_info[metric]['range'],
                            metric_has_range=metric_info[metric]['has_range'],
@@ -285,9 +315,45 @@ def learnMore(metric):
                            end_date=end_date
                            )
 
+@app.route('/updateMetrics', methods=['GET'])
+def updateMetrics():
+    return json.dumps(metric_event_stream())
+
+
+@app.route('/updateCertificates', methods=['GET'])
+def updateCertificates():
+    return json.dumps(cert_event_stream())
+
+def clear_streams():
+    metric_event_stream()
+    cert_event_stream()
+
+
+def metric_event_stream():
+    message = metric_sub.get_message()
+    result = False
+    if message:
+        print("METRIC: ", str(message))
+        result = message['data'] != 1
+        while message:
+            message = metric_sub.get_message()
+    return result
+
+
+def cert_event_stream():
+    message = cert_sub.get_message()
+    result = False
+    if message:
+        print("METRIC: ", str(message))
+        result = message['data'] != 1
+        while message:
+            message = cert_sub.get_message()
+    return result
+
 
 if __name__ == '__main__':
     # Build a sample db on the fly, if one does not exist yet.
     app_dir = os.path.realpath(os.path.dirname(__file__))
     # Start app
     app.run(debug=True)
+

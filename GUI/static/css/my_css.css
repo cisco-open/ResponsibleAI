@@ -80,6 +80,10 @@ div.fairnessMetric {
     height: 290px;
 }
 
+div.Metric{
+    text-align:center;
+}
+
 div.MetricPage {
     width: 700px;
     margin-left: auto;
@@ -187,7 +191,7 @@ td.displayMatrix, th.displayMatrix {
 
 
 .selector {
-    width: 200px;
+    width: 400px;
     background-color: #24284e;
     color: white;
     margin-left:auto;
@@ -202,7 +206,11 @@ td.displayMatrix, th.displayMatrix {
 .selectorButton {
     background-color: #332c2c;
     color:white;
-    margin:2px;
+    width:50px;
+    margin-left:auto;
+    margin-right:auto;
+    margin-bottom:5px;
+    display:block;
 }
 
 .selectorBox{
@@ -223,29 +231,13 @@ td.displayMatrix, th.displayMatrix {
     color:white;
 }
 
-input.fairnessBox {
-    margin-left:45px;
+input.innerBox {
+    margin-left:15px;
+    overflow:break-word;
 }
-
-input.explainabilityBox {
-    margin-left: 45px;
-}
-
-input.performanceBox {
-    margin-left: 45px;
-}
-
-input.robustBox {
-    margin-left: 45px;
-}
-
-input.statsBox {
-    margin-left: 45px;
-}
-
 
 input.parentBox {
-    margin-left: 25px;
+    margin-left: 5px;
 }
 
 .dateChooser {
