@@ -116,6 +116,16 @@ p.chartHeader {
     color: black;
 }
 
+p.mainPageChartHeader {
+    display:block;
+    margin-left:8px;
+    text-align: center;
+    font-size: 25px;
+    margin-top: 10px;
+    margin-bottom: 0px;
+    color: black;
+}
+
 p.chartValue{
     margin-top:-1px;
     display:inline-block;
