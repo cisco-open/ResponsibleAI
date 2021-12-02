@@ -11,7 +11,7 @@ compatibility = {"type_restriction": "binary_classification", "output_restrictio
 # Log loss, roc and brier score have been removed. s
 
 _config = {
-    "name": "dataset_fairness",
+    "name": "prediction_fairness",
     "compatibility": {"type_restriction": "classification", "output_restriction": "choice"},
     "src": "equal_treatment",
     "dependency_list": [],
@@ -358,6 +358,16 @@ class GeneralPredictionFairnessGroup(MetricGroup, config=_config):
         
     def update(self, data):
         pass
+
+    def is_compatible(ai_system):
+        compatible = _config["compatibility"]["type_restriction"] is None \
+                    or ai_system.task.type == _config["compatibility"]["type_restriction"] \
+                    or ai_system.task.type == "binary_classification" and _config["compatibility"]["type_restriction"] == "classification"
+        compatible = compatible \
+                     and "fairness" in ai_system.user_config \
+                     and "protected_attributes" in ai_system.user_config["fairness"] \
+                     and "priv_group" in ai_system.user_config["fairness"]
+        return compatible
 
     def getConfig(self):
         return self.config

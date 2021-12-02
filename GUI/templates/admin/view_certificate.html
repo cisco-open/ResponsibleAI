@@ -28,12 +28,14 @@
             <th>Date</th>
             <th>Score</th>
             <th>Explanation</th>
+            <th>Certificate Description</th>
         </tr>
         {% for v in features %}
             <tr>
                 <td>{{v.date}}</td>
                 <td><center><i class="fa {{v.score_class}} fa-lg"></i></center></td>
                 <td>{{v.explanation}}</td>
+                <td>{{v.description}}</td>
             </tr>
         {% endfor %}
     </table>

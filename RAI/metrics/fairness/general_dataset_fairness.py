@@ -15,7 +15,7 @@ _config = {
     "compatibility": {"type_restriction": "classification", "output_restriction": "choice"},
     "src": "equal_treatment",
     "dependency_list": [],
-    "tags": ["fairness", "General Fairness"],
+    "tags": ["fairness", "Data Fairness"],
     "complexity_class": "linear",
     "metrics": {
         "base-rate": {
@@ -65,7 +65,16 @@ _config = {
 class GeneralDatasetFairnessGroup(MetricGroup, config=_config):
     def __init__(self, ai_system) -> None:
         super().__init__(ai_system)
-        
+
+    def is_compatible(ai_system):
+        compatible = _config["compatibility"]["type_restriction"] is None \
+                    or ai_system.task.type == _config["compatibility"]["type_restriction"] \
+                    or ai_system.task.type == "binary_classification" and _config["compatibility"]["type_restriction"] == "classification"
+        compatible = compatible \
+                     and "fairness" in ai_system.user_config \
+                     and "protected_attributes" in ai_system.user_config["fairness"]
+        return compatible
+
     def update(self, data):
         pass
 
@@ -78,7 +87,7 @@ class GeneralDatasetFairnessGroup(MetricGroup, config=_config):
             priv_group = []
             prot_attr = []
             if self.ai_system.user_config is not None and "fairness" in self.ai_system.user_config and "priv_group" in self.ai_system.user_config["fairness"]:
-                prot_attr = self.ai_syste.user_config["fairness"]["protected_attributes"]
+                prot_attr = self.ai_system.user_config["fairness"]["protected_attributes"]
 
             bin_dataset = get_bin_dataset(self, data, prot_attr)
             self.metrics['base-rate'].value = bin_dataset.base_rate()

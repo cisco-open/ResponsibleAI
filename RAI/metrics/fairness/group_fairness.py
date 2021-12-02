@@ -68,6 +68,16 @@ class GroupFairnessMetricGroup(MetricGroup, config=_config):
     def update(self, data):
         pass
 
+    def is_compatible(ai_system):
+        compatible = _config["compatibility"]["type_restriction"] is None \
+                    or ai_system.task.type == _config["compatibility"]["type_restriction"] \
+                    or ai_system.task.type == "binary_classification" and _config["compatibility"]["type_restriction"] == "classification"
+        compatible = compatible \
+                     and "fairness" in ai_system.user_config \
+                     and "protected_attributes" in ai_system.user_config["fairness"] \
+                     and "positive_label" in ai_system.user_config["fairness"]
+        return compatible
+
     def getConfig(self):
         return self.config
 
