@@ -85,12 +85,10 @@ def index():
 def viewCertificates(name):
     name = name.lower()
     cert_info = r.lrange(model_name + '|certificate_values', 0, -1)
-    metric_info = r.get(model_name + '|metric_info')
     metadata = json.loads(r.get(model_name + '|certificate_metadata'))
     clear_streams()
     data = json.loads(cert_info[-1])
     date = data['metadata > date']
-    metric_info = json.loads(metric_info)
     result1 = []
     result2 = []
     for item in data:
@@ -124,11 +122,8 @@ def viewCertificates(name):
 @app.route('/viewCertificate/<category>/<name>')
 def viewCertificate(category, name):
     cert_info = r.lrange(model_name + '|certificate_values', 0, -1)
-    metric_info = r.get(model_name + '|metric_info')
     metadata = json.loads(r.get(model_name + '|certificate_metadata'))
     clear_streams()
-    metrics = json.loads(metric_info)
-    category = category.lower()
     result = []
     for i in range(len(cert_info)):
         dict_item = {}
@@ -149,7 +144,7 @@ def viewCertificate(category, name):
                            get_url=url_for,
                            h=admin_helpers,
                            model_name=model_name,
-                           certificate_name=metrics[name]["display_name"],
+                           certificate_name=metadata[name]["display_name"],
                            features=result)
 
 
