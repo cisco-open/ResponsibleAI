@@ -49,7 +49,8 @@ class AISystem:
 
     def get_model_info(self):
         result = {"id": self.task.model.name, "model": self.task.model.model_class, "adaptive": self.task.model.adaptive,
-                  "task_type": self.task.type, "configuration": self.user_config, "features": [], "description": self.task.description}
+                  "task_type": self.task.type, "configuration": self.user_config, "features": [], "description": self.task.description,
+                  "display_name": self.task.model.display_name}
         for i in range(len(self.meta_database.features)):
             result['features'].append(self.meta_database.features[i].name)
         return result

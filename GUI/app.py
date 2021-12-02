@@ -18,6 +18,7 @@ if len(sys.argv) > 2:
     raise Exception("Please Enter Model Name with no spaces")
 
 model_name = sys.argv[1]
+
 metric_access_stats = threading.Lock()
 cert_access_stats = threading.Lock()
 metric_update_required = False
@@ -70,12 +71,14 @@ def get_certificate_dates():
 @app.route('/')
 def index():
     start_date, end_date = get_certificate_dates()
+    model_info = json.loads(r.get(model_name + '|model_info'))
+
     return render_template('/admin/index.html',
                            admin_base_template=admin.base_template,
                            admin_view=admin.index_view,
                            get_url=url_for,
                            h=admin_helpers,
-                           model_name=model_name,
+                           model_name=model_info["display_name"],
                            end_date=end_date,
                            start_date=start_date)
     # return redirect(url_for('admin.index'))
@@ -85,6 +88,7 @@ def index():
 def viewCertificates(name):
     name = name.lower()
     cert_info = r.lrange(model_name + '|certificate_values', 0, -1)
+    model_info = json.loads(r.get(model_name + '|model_info'))
     metadata = json.loads(r.get(model_name + '|certificate_metadata'))
     clear_streams()
     data = json.loads(cert_info[-1])
@@ -113,7 +117,7 @@ def viewCertificates(name):
                            get_url=url_for,
                            h=admin_helpers,
                            certificate_name=name,
-                           model_name=model_name,
+                           model_name=model_info["display_name"],
                            features1=result1,
                            features2=result2,
                            date=date["value"])
@@ -123,6 +127,7 @@ def viewCertificates(name):
 def viewCertificate(category, name):
     cert_info = r.lrange(model_name + '|certificate_values', 0, -1)
     metadata = json.loads(r.get(model_name + '|certificate_metadata'))
+    model_info = json.loads(r.get(model_name + '|model_info'))
     clear_streams()
     result = []
     for i in range(len(cert_info)):
@@ -143,7 +148,7 @@ def viewCertificate(category, name):
                            admin_view=admin.index_view,
                            get_url=url_for,
                            h=admin_helpers,
-                           model_name=model_name,
+                           model_name=model_info["display_name"],
                            certificate_name=metadata[name]["display_name"],
                            features=result)
 
@@ -159,6 +164,7 @@ def info():
     prot_attr = ["None"]
     model_type = data['model']
     features = data['features']
+    model_display_name = data["display_name"]
 
     if 'fairness' in data['configuration'] and 'protected_attributes' in data['configuration']['fairness']:
         prot_attr = data['configuration']['fairness']['protected_attributes']
@@ -170,7 +176,7 @@ def info():
                            get_url=url_for,
                            h=admin_helpers,
                            name=name,
-                           model_name=model_name,
+                           model_name=model_display_name,
                            description=description,
                            task_type=task_type,
                            protected_attributes=prot_attr,
@@ -180,11 +186,13 @@ def info():
 
 @app.route('/event')
 def event():
+    model_info = json.loads(r.get(model_name + '|model_info'))
+
     return render_template('/admin/event_list.html',
                            admin_base_template=admin.base_template,
                            admin_view=admin.index_view,
                            get_url=url_for,
-                           model_name=model_name,
+                           model_name=model_info["display_name"],
                            h=admin_helpers)
 
 
@@ -279,13 +287,14 @@ def getCertificationMeta():
 def renderClassTemplate(category):
     functional = category.replace(' ', '_').lower()
     start_date, end_date = get_dates()
+    model_info = json.loads(r.get(model_name + '|model_info'))
 
     return render_template('/admin/view_class.html',
                            admin_base_template=admin.base_template,
                            admin_view=admin.index_view,
                            get_url=url_for,
                            h=admin_helpers,
-                           model_name=model_name,
+                           model_name=model_info["display_name"],
                            Category=category,
                            Functional=functional,
                            start_date=start_date,
@@ -295,12 +304,13 @@ def renderClassTemplate(category):
 @app.route('/viewAll')
 def renderAllMetrics():
     start_date, end_date = get_dates()
+    model_info = json.loads(r.get(model_name + '|model_info'))
     return render_template('/admin/view_all.html',
                            admin_base_template=admin.base_template,
                            admin_view=admin.index_view,
                            get_url=url_for,
                            h=admin_helpers,
-                           model_name=model_name,
+                           model_name=model_info["display_name"],
                            start_date=start_date,
                            end_date=end_date)
 
@@ -308,16 +318,18 @@ def renderAllMetrics():
 @app.route('/learnMore/<metric>')
 def learnMore(metric):
     data_test = r.get(model_name + '|metric_info')
+    model_info = json.loads(r.get(model_name + '|model_info'))
     clear_streams()
     metric_info = json.loads(data_test)
     start_date, end_date = get_dates()
     # metric_info = cache['metric_info']
+
     return render_template('/admin/metric_info.html',
                            admin_base_template=admin.base_template,
                            admin_view=admin.index_view,
                            get_url=url_for,
                            h=admin_helpers,
-                           model_name=model_name,
+                           model_name=model_info["display_name"],
                            metric_display_name=metric_info[metric]['display_name'],
                            metric_range=metric_info[metric]['range'],
                            metric_has_range=metric_info[metric]['has_range'],
