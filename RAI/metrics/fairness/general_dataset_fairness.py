@@ -27,7 +27,7 @@ _config = {
             "explanation": ""
         },
         "consistency": {
-            "display_name": "Consistency",
+            "display_name": "Data Consistency",
             "type": "numeric",
             "tags": [],
             "has_range": True,
@@ -91,7 +91,7 @@ class GeneralDatasetFairnessGroup(MetricGroup, config=_config):
 
             bin_dataset = get_bin_dataset(self, data, prot_attr)
             self.metrics['base-rate'].value = bin_dataset.base_rate()
-            self.metrics['consistency'].value = bin_dataset.consistency()
+            self.metrics['consistency'].value = bin_dataset.consistency()[0]
             self.metrics['num-instances'].value = bin_dataset.num_instances()
             self.metrics['num-negatives'].value = bin_dataset.num_negatives()
             self.metrics['num-positives'].value = bin_dataset.num_positives()

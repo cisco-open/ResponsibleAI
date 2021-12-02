@@ -418,7 +418,7 @@ function createData(data, key) {
             }
             else{
                 ret.push({
-                    year: String(i),
+                    year: data[i]["metadata > description"],
                     value: data[i][key]
                 });
             }

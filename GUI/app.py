@@ -107,6 +107,7 @@ def viewCertificates(name):
             dict_item['explanation'] = data[item]["explanation"]
             dict_item['name'] = metadata[item]['display_name']
             dict_item['backend_name'] = item
+            dict_item["measurement_description"] = data["metadata > description"]
             if metadata[item]['level'] == 1:
                 result1.append(dict_item)
             elif metadata[item]['level'] == 2:
@@ -270,7 +271,7 @@ def getCertification(date1, date2):  # NOT REAL DATA YET.
                         scores[metadata[value]["tags"][0]][1] += 1
                         if item[value]["value"]:
                             scores[metadata[value]["tags"][0]][0] += 1
-            temp_dict['metadata'] = {"date": item['metadata > date'], "description": "", "scores": scores}
+            temp_dict['metadata'] = {"date": item['metadata > date'], "description": item['metadata > description'], "scores": scores}
             res.append(temp_dict)
     return json.dumps(res)
 

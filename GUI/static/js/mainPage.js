@@ -62,11 +62,11 @@ function createData(data, key) {
             }
             else{
                 ret.push({
-                    year: String(i),
+                    year: data[i]["metadata"]["description"]["value"],
                     value: (100* data[i]["metadata"]["scores"][key][0] / data[i]["metadata"]["scores"][key][1]).toFixed(1)
                 });
             }
-            descriptions.push("")
+            descriptions.push(data[i]["metadata"]["description"]["value"])
         }
     }
     return [ret, descriptions];
@@ -96,7 +96,10 @@ function createMetrics(data, explanations) {
             lineColors: ['#000000'],
             pointFillColors: ['#000000'],
             ykeys: ['value'],
-            labels: ['Value']
+            labels: ['Value'],
+            hoverCallback: function (index, options, content, row) {
+                var description = options.descriptions[index];
+                return content + "\nDescription: " + description;}
         });
         graphs[i] = morrisLine;
         var img = document.getElementById(i + "KnobQ");

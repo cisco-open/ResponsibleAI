@@ -194,7 +194,7 @@ class AISystem:
         # Relevant information on each metric
         metadata = {    "cert1_1": {"display_name": "Cert 1 Low Level", "tags": ["fairness"], "level": 1, "description": "A Level 1 Fairness Certificate"},
                         "cert1_2": {"display_name": "Cert 1 High Level", "tags": ["fairness"], "level": 2, "description": "A Level 2 Fairness Certificate"},
-                        "cert2_1": {"display_name": "Cert 2 Low Level", "tags": ["robust"], "level": 2, "description": "A Level 1 Robustness Certificate"},
+                        "cert2_1": {"display_name": "Cert 2 Low Level", "tags": ["robust"], "level": 1, "description": "A Level 1 Robustness Certificate"},
                         "cert2_2": {"display_name": "Cert 2 High Level", "tags": ["robust"], "level": 2, "description": "A Level 2 Robustness Certificate"},
                         "cert3_1": {"display_name": "Cert 1 Low Level", "tags": ["explainability"], "level": 1, "description": "A Level 1 Explainability Certificate"},
                         "cert3_2": {"display_name": "Cert 1 High Level", "tags": ["explainability"], "level": 2, "description": "A Level 2 Explainability Certificate"},
@@ -212,8 +212,11 @@ class AISystem:
         # metadata > date is added to metadata and values to allow for date based parsing of both and avoiding mismatch.
         values['metadata > date'] = {"value": self.metric_groups['metadata'].metrics['date'].value,
                                      "description": "time certificates were measured", "level": 1, "tags": ["metadata"]}
+        values['metadata > description'] = {"value": "Measuring Stuff", "description": "Purpose of measurement.", "tags": ["metadata"]}
+
         metadata['metadata > date'] = {"value": self.metric_groups['metadata'].metrics['date'].value,
                                      "description": "time certificates were measured", "level": 1, "tags": ["metadata"]}
+        metadata['metadata > description'] = {"value": "Measuring Stuff", "description": "Purpose of measurement.", "tags": ["metadata"]}
 
 
         r.set(self.task.model.name + '|certificate_metadata', json.dumps(metadata))
