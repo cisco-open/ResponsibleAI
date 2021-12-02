@@ -786,12 +786,12 @@ function view_slider(){
     var header_style = ""
     var text_display = ""
     var chart_scaler = ""
-    if(slider.checked){
-        style = "width:80%; margin-left:10%; margin-right:auto; height:200px;"
-        header_style = "margin-top:-1px;display:inline-block;"
+    if(!slider.checked){
+        style = 'width: 32%; margin-left: 1%; margin-top: 2%; background-color: #dce2ff; fill: black; height: 290px;'
+        header_style = "text-align: center; font-size: 25px; margin-top: 10px; margin-bottom: 0px; color: black;"
         svg_style = "width:100%;"
-        text_display = "display:inline-block; margin-left:8px;"
-        chart_scaler = "height:80%;"
+        text_display = "display:block; margin-left:0px; text-align: center; font-size: 25px; margin-top: 5px; margin-bottom: 0px; color: black;"
+        chart_scaler = "height:60%;"
     }
     var row = document.getElementById("metric_row");
     var boxes = row.getElementsByClassName("Metric");
@@ -824,4 +824,3 @@ function view_slider(){
         }
     }
 }
-

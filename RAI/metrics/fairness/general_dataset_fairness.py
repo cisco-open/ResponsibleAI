@@ -84,7 +84,6 @@ class GeneralDatasetFairnessGroup(MetricGroup, config=_config):
     def compute(self, data_dict):
         if "data" and "predictions" in data_dict:
             data = data_dict["data"]
-            priv_group = []
             prot_attr = []
             if self.ai_system.user_config is not None and "fairness" in self.ai_system.user_config and "priv_group" in self.ai_system.user_config["fairness"]:
                 prot_attr = self.ai_system.user_config["fairness"]["protected_attributes"]
