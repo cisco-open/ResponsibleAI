@@ -128,7 +128,7 @@ ai.export_certificates()
 
 
 print("\nViewing GUI")
-ai.viewGUI()
+# ai.viewGUI()
 print("DONE")
 
 print("\nSearching Metrics for ", query)

@@ -437,10 +437,18 @@ function createData(data, key) {
             }
             else{
                 ret.push({
+                    year: data[i]["metadata > description"],
+                    value: data[i][key]
+                });
+            }
+            /*
+            else{
+                ret.push({
                     year: String(i),
                     value: data[i][key]
                 });
             }
+            */
             descriptions.push(data[i]["metadata > description"])
         }
     }

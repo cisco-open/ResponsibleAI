@@ -63,72 +63,24 @@ ai.initialize()
 reg.fit(xTrain, yTrain)
 train_preds = reg.predict(xTrain)
 # Make Predictions
+
 ai.compute_metrics(train_preds, data_type="train")
-# Function to compare our result to sklearn's result.
-
-
-resv_f = ai.get_metric_values_flat()
-resv_d = ai.get_metric_values_dict()
-resi_f = ai.get_metric_info_flat()
-resi_d = ai.get_metric_info_dict()
-
-print("TRAINING PREDICTION METRICS:")
-for key in resv_f:
-    if hasattr(resv_f[key], "__len__"): 
-        # print(resi_f[key]['display_name'], " = ", 'list ...')
-        print(resi_f[key]['display_name'], " = ", resv_f[key])
-    else:
-        print(resi_f[key]['display_name'], " = ", resv_f[key])
-
-
-print("\n\nTESTING PREDICTING METRICS:")
-test_preds = reg.predict(xTest)
-ai.compute_metrics(test_preds, data_type="test")
-resv_f = ai.get_metric_values_flat()
-for key in resv_f:
-    if hasattr(resv_f[key], "__len__"):
-        # print(resi_f[key]['display_name'], " = ", 'list ...')
-        print(resi_f[key]['display_name'], " = ", resv_f[key])
-    else:
-        print(resi_f[key]['display_name'], " = ", resv_f[key])
-
-
-# Getting Metric Information
-print("\nGetting Metric Information")
-metric_info = ai.get_metric_info_flat()
-for metric in metric_info:
-    print(metric_info[metric])
- 
-# Get Model Information
-print("\nGetting Model Info:")
-res = ai.get_model_info()
-print(res)
-
-# Demonstrating Searching
-query = "Bias"
-print("\nSearching Metrics for ", query)
-result = ai.search(query)
-print(result)
-
-# reset all previous keys
-# ai.reset_redis()
-
-# export to redis
-ai.export_data_flat("Testing New Features")
-
-
-# TEMPORARY WAY TO EXPORT CERTIFICATE VALUES
-# Will be done in another file
-print("Exporting Certificate Data")
+ai.export_data_flat("Train set")
 ai.export_certificates()
+
+
+test_preds = reg.predict(xTest)
+# Make Predictions
+
+ai.compute_metrics(test_preds, data_type="test")
+ai.export_data_flat("Test set")
+ai.export_certificates()
+
 
 
 print("\nViewing GUI")
 # ai.viewGUI()
 print("DONE")
 
-print("\nSearching Metrics for ", query)
-result = ai.search(query)
-print(result)
 
 

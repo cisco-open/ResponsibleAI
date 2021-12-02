@@ -155,7 +155,7 @@ class AISystem:
         r.set(self.task.model.name + '|model_info', json.dumps(model_info))
         r.set(self.task.model.name + '|metric_info', json.dumps(metric_info))
         r.publish(self.task.model.name + "|metric", metric_values['metadata > date'])
-        r.save()
+        # r.save()
 
     # Searches all metrics. Queries based on Metric Name, Metric Group Name, Category, and Tags.
     def search(self, query):
@@ -178,32 +178,32 @@ class AISystem:
 # TEMPORARY FUNCTION FOR PRODUCING DATA
     def compute_certificates(self):
         result = {}
+        metadata = {}
         for group in self.metric_groups:
-            if self.metric_groups[group].tags[0] not in result:
-                result[self.metric_groups[group].tags[0]] = {}
-                result[self.metric_groups[group].tags[0]]["list"] = {}
-                result[self.metric_groups[group].tags[0]]["score"] = 0
             for metric in self.metric_groups[group].metrics:
                 passed = bool(random.getrandbits(1))
                 explanation = "filler"
-                if passed:
-                    result[self.metric_groups[group].tags[0]]["score"] += 1
-                result[self.metric_groups[group].tags[0]]["list"][self.metric_groups[group].metrics[metric].unique_name] \
-                    = {"score": passed, "explanation": explanation, "level": random.randint(1, 2)}
-        return result
+                result[self.metric_groups[group].metrics[metric].unique_name] \
+                    = {"value": passed, "explanation": explanation}
+                metadata[self.metric_groups[group].metrics[metric].unique_name] \
+                    = {"level": random.randint(1, 2), "tags": [self.metric_groups[group].tags[0]],
+                       "display_name": self.metric_groups[group].metrics[metric].display_name, "description": ""}
+        return result, metadata
 
 # TEMPORARY FUNCTION FOR PRODUCING DATA
     def export_certificates(self):
-        values = self.compute_certificates()
+        values, metadata = self.compute_certificates()
         r = redis.Redis(host='localhost', port=6379, db=0)
         certificate_metadata = {"fairness": {"name": "fairness", "explanation": "Measures how fair a model's predictions are.", "display_name": "Fairness"}, "robust": {"name": "robustness", "explanation": "Measures a model's resiliance to time and sway.", "display_name": "Robustness"}, "explainability": {"name": "explainability", "explanation": "Measures how explainable the model is.", "display_name": "Explainability"}, "performance": {"name": "performance", "explanation": "Performance describes how well at predicting the model was.", "display_name": "Performance"}}
 
-        values["explainability"] = {"score": 1, "list": {"temp function:": {"score": True, "explanation": "filler function"}}}
-        values['metadata'] = {'date': self.metric_groups['metadata'].metrics['date'].value}
+        values["temp function"] = {"value": True, "explanation": "filler"}
+        metadata["temp function"] = {"description": "filler", "level": 1, "tags": ["explainability"], "display_name": "Temp Function"}
+        values['metadata > date'] = {"value": self.metric_groups['metadata'].metrics['date'].value,
+                                     "description": "time certificates were measured", "level": 1, "tags": ["metadata"]}
 
-        r.set(self.task.model.name + '|certificate_metadata', json.dumps(certificate_metadata))
+        r.set(self.task.model.name + '|certificate_metadata', json.dumps(metadata))
         r.rpush(self.task.model.name + '|certificate_values', json.dumps(values))  # True
-        r.publish(self.task.model.name + "|certificate", values['metadata']['date'])
+        r.publish(self.task.model.name + "|certificate", values["metadata > date"]["value"])
 
     def viewGUI(self):
         gui_launcher = threading.Thread(target=self._view_gui_thread, args=[])
