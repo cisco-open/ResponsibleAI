@@ -194,7 +194,6 @@ class AISystem:
     def export_certificates(self):
         values, metadata = self.compute_certificates()
         r = redis.Redis(host='localhost', port=6379, db=0)
-        certificate_metadata = {"fairness": {"name": "fairness", "explanation": "Measures how fair a model's predictions are.", "display_name": "Fairness"}, "robust": {"name": "robustness", "explanation": "Measures a model's resiliance to time and sway.", "display_name": "Robustness"}, "explainability": {"name": "explainability", "explanation": "Measures how explainable the model is.", "display_name": "Explainability"}, "performance": {"name": "performance", "explanation": "Performance describes how well at predicting the model was.", "display_name": "Performance"}}
 
         values["temp function"] = {"value": True, "explanation": "filler"}
         metadata["temp function"] = {"description": "filler", "level": 1, "tags": ["explainability"], "display_name": "Temp Function"}
