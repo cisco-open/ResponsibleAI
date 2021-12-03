@@ -6,7 +6,7 @@ import scipy.stats
 # Move config to external .json? 
 _config = {
     "name": "frequency_stats",
-    "compatibility" : {"type_restriction": None, "output_restriction": None},
+    "compatibility": {"type_restriction": None, "output_restriction": None},
     "dependency_list": [],
     "tags": ["stats", "Frequency Stats"],
     "complexity_class": "linear",
@@ -14,8 +14,8 @@ _config = {
         "cumfreq": {
             "display_name": "Cumulative Frequency",
             "type": "vector-dict",
-            "has_range": False,
-            "range": None,
+            "has_range": True,
+            "range": [0, None],
             "explanation": "Indicates the cumulative count of each subclass.",
         },
         "relfreq": {

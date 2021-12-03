@@ -72,7 +72,7 @@ ai.export_certificates()
 test_preds = reg.predict(xTest)
 # Make Predictions
 
-ai.reset_redis()
+# ai.reset_redis()
 
 ai.compute_metrics(test_preds, data_type="test")
 ai.export_data_flat("Test set")

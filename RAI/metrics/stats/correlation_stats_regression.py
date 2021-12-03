@@ -14,26 +14,29 @@ _config = {
         "pearson-correlation": {
             "display_name": "Pearson's Correlation'",
             "type": "vector",
-            "has_range": False,
-            "range": None,
-            "explanation": "",
+            "has_range": True,
+            "range": [-1, 1],
+            "explanation": "Indicates if a statistically significance relationship is found between variables.",
         },
         "spearman-correlation": {
             "display_name": "Spearman's Correlation",
             "type": "vector",
-            "has_range": False,
-            "range": None,
-            "explanation": "",
+            "has_range": True,
+            "range": [-1, 1],
+            "explanation": "Measures rank correlation. Indicates how well can two variables be described with a monotonic function.",
         },
-        "lin-regress": {
+    }
+}
+
+'''  TEMPORARILY REMOVED LINEAR REGRESSION. 
+"lin-regress": {
             "display_name": "Linear Regression",
             "type": "vector",
             "has_range": False,
             "range": None,
             "explanation": "",
         },
-    }
-}
+'''
 
 # Type (Regression, Classification, Data | probability, numeric)
 
@@ -58,7 +61,7 @@ class CorrelationStatRegression(MetricGroup, config=_config):
             data = data_dict["data"]
             self.metrics["pearson-correlation"].value = _masked_calculate_per_feature(scipy.stats.pearsonr, data.X, data.y, mask)
             self.metrics["spearman-correlation"].value = _masked_calculate_per_feature(scipy.stats.spearmanr, data.X, data.y, mask)
-            self.metrics["lin-regress"].value = _masked_calculate_per_feature(scipy.stats.linregress, data.X, data.y, mask)
+            # self.metrics["lin-regress"].value = _masked_calculate_per_feature(scipy.stats.linregress, data.X, data.y, mask)
 
 
 def _calculate_per_feature(function, X, y):
