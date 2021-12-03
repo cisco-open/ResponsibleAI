@@ -246,9 +246,10 @@ function addChart(metric_name, explanations, data, category, name_extension){
         if(metric_info[metric_name]["range"][0] != null){
             myValues['ymin'] = Number(metric_info[metric_name]["range"][0])
         }
-        if(metric_info[metric_name]["range"][0] != null){
+        if(metric_info[metric_name]["range"][1] != null){
             myValues['ymax'] = Number(metric_info[metric_name]["range"][1])
         }
+        myValues['yLabelFormat'] = function(y){return y.toFixed(2);}
     }
     var morrisLine = new Morris.Line(myValues)
     graphs[metric_name] = morrisLine;
@@ -324,6 +325,15 @@ function addBoolChart(metric_name, explanations, data, category, name_extension)
                 return content + "\nDescription: " + description;}
     }
     myValues['parseTime'] = true
+    if(metric_info[metric_name]["has_range"]){
+        if(metric_info[metric_name]["range"][0] != null){
+            myValues['ymin'] = Number(metric_info[metric_name]["range"][0])
+        }
+        if(metric_info[metric_name]["range"][0] != null){
+            myValues['ymax'] = Number(metric_info[metric_name]["range"][1])
+        }
+    }
+
     var morrisLine = new Morris.Line(myValues)
     bool_charts[metric_name] = morrisLine;
 }

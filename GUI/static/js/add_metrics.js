@@ -231,14 +231,16 @@ function addChart(metric_name, explanations, data, category, name_extension){
         hoverCallback: function (index, options, content, row) {
                 var description = options.descriptions[index];
                 return content + "\nDescription: " + description;}
+
     }
     if(metric_info[metric_name]["has_range"]){
         if(metric_info[metric_name]["range"][0] != null){
             myValues['ymin'] = Number(metric_info[metric_name]["range"][0])
         }
-        if(metric_info[metric_name]["range"][0] != null){
+        if(metric_info[metric_name]["range"][1] != null){
             myValues['ymax'] = Number(metric_info[metric_name]["range"][1])
         }
+        myValues['yLabelFormat'] = function(y){return y.toFixed(2);}
     }
     myValues['parseTime'] = true
 
