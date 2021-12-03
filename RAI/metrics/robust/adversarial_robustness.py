@@ -6,7 +6,7 @@ import sklearn
 # Move config to external .json? 
 _config = {
     "name": "adversarial_robustness",
-    "compatibility": {"type_restriction": None, "output_restriction": None},
+    "compatibility": {"type_restriction": "classification", "output_restriction": None},
     "dependency_list": [],
     "tags": ["robust", "Adversarial"],
     "complexity_class": "linear",
