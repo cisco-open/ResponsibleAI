@@ -20,6 +20,7 @@ nums[:int(xTrain.shape[0]/2)] = 0
 xTrain = np.hstack((xTrain, nums))
 
 
+
 nums = np.ones((xTest.shape[0], 1))
 nums[:int(xTest.shape[0]/2)] = 0
 xTest = np.hstack((xTest, nums))
@@ -63,7 +64,7 @@ ai.initialize()
 reg.fit(xTrain, yTrain)
 train_preds = reg.predict(xTrain)
 # Make Predictions
-
+ai.reset_redis()
 ai.compute_metrics(train_preds, data_type="train")
 ai.export_data_flat("Train set")
 ai.export_certificates()
@@ -72,7 +73,8 @@ ai.export_certificates()
 test_preds = reg.predict(xTest)
 # Make Predictions
 
-# ai.reset_redis()
+
+
 
 ai.compute_metrics(test_preds, data_type="test")
 ai.export_data_flat("Test set")
@@ -81,7 +83,7 @@ ai.export_certificates()
 
 
 print("\nViewing GUI")
-# ai.viewGUI()
+ai.viewGUI()
 print("DONE")
 
 
