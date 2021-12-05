@@ -1,0 +1,16 @@
+{
+    "meta":{
+        "display_name": "normalized features",  
+        "description":"certifies that weather or not all the scalar features are normalized properly",
+        "tags": ["robustness"],
+        "level":["1"]
+    },
+
+    "condition": {
+            "op":"or" ,
+            "terms": [              
+                [ "&basic_robustness > normalized_feature_01" , "==" , "True" ],
+                [ "&basic_robustness > normalized_feature_std" , "==" , "True" ]
+            ]
+        }
+}     

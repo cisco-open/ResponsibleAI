@@ -7,6 +7,7 @@ import subprocess
 import random
 from RAI import utils
 import threading
+from RAI.certificates import CertificateManager
 
 
 class AISystem:
@@ -19,6 +20,8 @@ class AISystem:
         self.sample_count = 0
         self.user_config = user_config
 
+        self.certificate_manager = CertificateManager()
+        self.certificate_manager.load_stock_certificates()
     def initialize(self, metric_groups=None, metric_group_re=None, max_complexity="linear"):
         for metric_group_name in registry:
             metric_class = registry[metric_group_name]
@@ -180,26 +183,30 @@ class AISystem:
     def compute_certificates(self):
         # CERTIFICATE VALUES, one for each group (Fairness, Explainability etc.). I added one for each level.
 
-        cert_values = {"cert1_1": {"value": True, "explanation": "Test Passed because ..."},
-                        "cert1_2": {"value": True, "explanation": "Test Passed because .."},
-                        "cert2_1": {"value": False, "explanation": "Test failed because .."},
-                        "cert2_2": {"value": True, "explanation": "Test passed because .."},
-                        "cert3_1": {"value": True, "explanation": "Test passed because .."},
-                        "cert3_2": {"value": False, "explanation": "Test failed because .."},
-                        "cert4_1": {"value": True, "explanation": "Test passed because .."},
-                        "cert4_2": {"value": True, "explanation": "Test passed becuase ..."}}
+        metric_values = self.get_metric_values_flat()
+        cert_values = self.certificate_manager.compute( metric_values)
+        # cert_values = { "cert1_1": {"value": True, "explanation": "Test Passed because ..."},
+        #                 "cert1_2": {"value": True, "explanation": "Test Passed because .."},
+        #                 "cert2_1": {"value": False, "explanation": "Test failed because .."},
+        #                 "cert2_2": {"value": True, "explanation": "Test passed because .."},
+        #                 "cert3_1": {"value": True, "explanation": "Test passed because .."},
+        #                 "cert3_2": {"value": False, "explanation": "Test failed because .."},
+        #                 "cert4_1": {"value": True, "explanation": "Test passed because .."},
+        #                 "cert4_2": {"value": True, "explanation": "Test passed becuase ..."}}
 
 
         # it is currently important that there is at least one metric for each metric group for displaying data on the main page.
         # Relevant information on each metric
-        metadata = {    "cert1_1": {"display_name": "Cert 1 Low Level", "tags": ["fairness"], "level": 1, "description": "A Level 1 Fairness Certificate"},
-                        "cert1_2": {"display_name": "Cert 1 High Level", "tags": ["fairness"], "level": 2, "description": "A Level 2 Fairness Certificate"},
-                        "cert2_1": {"display_name": "Cert 2 Low Level", "tags": ["robust"], "level": 1, "description": "A Level 1 Robustness Certificate"},
-                        "cert2_2": {"display_name": "Cert 2 High Level", "tags": ["robust"], "level": 2, "description": "A Level 2 Robustness Certificate"},
-                        "cert3_1": {"display_name": "Cert 1 Low Level", "tags": ["explainability"], "level": 1, "description": "A Level 1 Explainability Certificate"},
-                        "cert3_2": {"display_name": "Cert 1 High Level", "tags": ["explainability"], "level": 2, "description": "A Level 2 Explainability Certificate"},
-                        "cert4_1": {"display_name": "Cert 1 Low Level", "tags": ["performance"], "level": 1, "description": "A Level 1 Performance Certificate"},
-                        "cert4_2": {"display_name": "Cert 1 High Level", "tags": ["performance"], "level": 2, "description": "A Level 2 Performance Certificate"}}
+        metadata = self.certificate_manager.metadata
+
+        # metadata = {    "cert1_1": {"display_name": "Cert 1 Low Level", "tags": ["fairness"], "level": 1, "description": "A Level 1 Fairness Certificate"},
+        #                 "cert1_2": {"display_name": "Cert 1 High Level", "tags": ["fairness"], "level": 2, "description": "A Level 2 Fairness Certificate"},
+        #                 "cert2_1": {"display_name": "Cert 2 Low Level", "tags": ["robust"], "level": 1, "description": "A Level 1 Robustness Certificate"},
+        #                 "cert2_2": {"display_name": "Cert 2 High Level", "tags": ["robust"], "level": 2, "description": "A Level 2 Robustness Certificate"},
+        #                 "cert3_1": {"display_name": "Cert 1 Low Level", "tags": ["explainability"], "level": 1, "description": "A Level 1 Explainability Certificate"},
+        #                 "cert3_2": {"display_name": "Cert 1 High Level", "tags": ["explainability"], "level": 2, "description": "A Level 2 Explainability Certificate"},
+        #                 "cert4_1": {"display_name": "Cert 1 Low Level", "tags": ["performance"], "level": 1, "description": "A Level 1 Performance Certificate"},
+        #                 "cert4_2": {"display_name": "Cert 1 High Level", "tags": ["performance"], "level": 2, "description": "A Level 2 Performance Certificate"}}
 
         return cert_values, metadata
 
