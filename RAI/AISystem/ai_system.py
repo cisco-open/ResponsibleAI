@@ -1,3 +1,4 @@
+from math import exp
 import pandas as pd
 import datetime
 from RAI.metrics.registry import registry
@@ -96,7 +97,7 @@ class AISystem:
                  
         return result
 
-    def compute_metrics(self, preds=None, reset_metrics=False, data_type="train"):
+    def compute_metrics(self, preds=None, reset_metrics=False, data_type="train", export_title = None):
         if reset_metrics:
             self.reset_metrics()
         data_dict = {"data": self.get_data(data_type)}
@@ -106,6 +107,9 @@ class AISystem:
             self.metric_groups[metric_group_name].compute(data_dict)
         self.timestamp = self._get_time()
         self.sample_count += len(data_dict)
+        if export_title is not None:
+            self.export_data_flat(export_title)
+            self.export_certificates()
 
     def update_metrics(self, data):
         for i in range(len(data)):
