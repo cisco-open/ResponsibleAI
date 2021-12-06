@@ -8,7 +8,7 @@ _config = {
     "name" : "basic_robustness",
     "compatibility": {"type_restriction": None, "output_restriction": None},
     "dependency_list": [],
-    "tags": ["robust", "Normalization"],
+    "tags": ["robustness", "Normalization"],
     "complexity_class": "linear",
     "metrics": {
         "normalized_feature_01": {

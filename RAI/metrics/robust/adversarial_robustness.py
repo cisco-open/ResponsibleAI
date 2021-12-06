@@ -8,7 +8,7 @@ _config = {
     "name": "adversarial_robustness",
     "compatibility": {"type_restriction": "classification", "output_restriction": None},
     "dependency_list": [],
-    "tags": ["robust", "Adversarial"],
+    "tags": ["robustness", "Adversarial"],
     "complexity_class": "linear",
     "metrics": {
         "inaccuracy": {
