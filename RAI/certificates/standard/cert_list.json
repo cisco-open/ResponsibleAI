@@ -1,0 +1,8 @@
+{
+    "version": "1.0" ,
+    "certs": [
+        {"name": "normalized features",  "filename":"normalized_features.json"},
+        {"name": "test cert",  "filename":"test.json"}
+    ]
+
+}

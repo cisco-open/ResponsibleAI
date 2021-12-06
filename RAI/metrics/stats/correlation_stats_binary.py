@@ -7,17 +7,17 @@ import scipy.stats
 
 _config = {
     "name": "correlation_stats_binary",
-    "compatibility": {"type_restriction": "classification", "output_restriction": None},
+    "compatibility": {"type_restriction": "binary_classification", "output_restriction": None},
     "dependency_list": [],
     "tags": ["stats", "Binary Correlation"],
     "complexity_class": "linear",
     "metrics": {
         "point-biserial-r": {
             "display_name": "Point Biserial Coefficient",
-            "type": "numeric",
-            "has_range": False,
-            "range": None,
-            "explanation": "Mean is the expected value of data.",
+            "type": "vector",
+            "has_range": True,
+            "range": [-1, 1],
+            "explanation": "Indicates the relationship between a binary variable and a continuous variable.",
         },
     }
 }
@@ -47,5 +47,5 @@ class BinaryCorrelationStats(MetricGroup, config=_config):
 def _calculate_per_feature(function, X, y):
     result = []
     for i in range(np.shape(X)[1]):
-        result.append(function(X[:, i], y))
+        result.append(function(y, X[:, i]))
     return result

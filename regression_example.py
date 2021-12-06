@@ -31,7 +31,7 @@ meta = MetaDatabase(features)
 # Create a model to make predictions
 from sklearn.ensemble import RandomForestRegressor
 reg = RandomForestRegressor(n_estimators=15, max_depth=20)
-model = Model(agent=reg, name="Cisco RealEstate AI", model_class="Random Forest Regressor", adaptive=False)
+model = Model(agent=reg, name="Cisco_RealEstate_AI", model_class="Random Forest Regressor", adaptive=False)
 # Indicate the task of the model
 task = Task(model=model, type='regression')
 

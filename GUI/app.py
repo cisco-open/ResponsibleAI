@@ -11,13 +11,14 @@ import datetime
 import threading
 
 
-if len(sys.argv) <= 1:
-    raise Exception("Please Enter Model Name")
+# if len(sys.argv) <= 1:
+#    raise Exception("Please Enter Model Name")
 
-if len(sys.argv) > 2:
-    raise Exception("Please Enter Model Name with no spaces")
+# if len(sys.argv) > 2:
+#     raise Exception("Please Enter Model Name with no spaces")
 
-model_name = sys.argv[1]
+model_name = "cisco_cancer_ai" # sys.argv[1]
+
 metric_access_stats = threading.Lock()
 cert_access_stats = threading.Lock()
 metric_update_required = False
@@ -60,9 +61,8 @@ def get_certificate_dates():
     data_test = r.lrange(model_name + '|certificate_values', 0, -1)
     clear_streams()
     date_start = "2020-10-01"
-    print(json.loads(data_test[0]))
     if len(data_test) >= 1:
-        date_start = json.loads(data_test[0])['metadata']['date'][:10]
+        date_start = json.loads(data_test[0])['metadata > date']["value"][:10]
     now = datetime.datetime.now()
     date_end = "{:02d}".format(now.year) + "-" + "{:02d}".format(now.month) + "-" + "{:02d}".format(now.day)
     return date_start, date_end
@@ -71,12 +71,14 @@ def get_certificate_dates():
 @app.route('/')
 def index():
     start_date, end_date = get_certificate_dates()
+    model_info = json.loads(r.get(model_name + '|model_info'))
+
     return render_template('/admin/index.html',
                            admin_base_template=admin.base_template,
                            admin_view=admin.index_view,
                            get_url=url_for,
                            h=admin_helpers,
-                           model_name=model_name,
+                           model_name=model_info["display_name"],
                            end_date=end_date,
                            start_date=start_date)
     # return redirect(url_for('admin.index'))
@@ -84,71 +86,76 @@ def index():
 
 @app.route('/viewCertificates/<name>')
 def viewCertificates(name):
+    name = name.lower()
     cert_info = r.lrange(model_name + '|certificate_values', 0, -1)
-    metric_info = r.get(model_name + '|metric_info')
+    model_info = json.loads(r.get(model_name + '|model_info'))
+    metadata = json.loads(r.get(model_name + '|certificate_metadata'))
     clear_streams()
     data = json.loads(cert_info[-1])
-    date = data['metadata']['date']
-    data = data[name.lower()]
-    metric_info = json.loads(metric_info)
+    date = data['metadata > date']
+    print("METADATA: " + str(metadata))
     result1 = []
     result2 = []
-    for item in data['list']:
-        dict_item = {}
-        if data['list'][item]["score"]:
-            dict_item['score'] = "Passed"
-            dict_item['score_class'] = 'fa-check'
-        else:
-            dict_item['score'] = "Failed"
-            dict_item['score_class'] = 'fa-times'
-        dict_item['explanation'] = data['list'][item]["explanation"]
-        dict_item['name'] = metric_info[item]['display_name']
-        dict_item['backend_name'] = item
-        if data['list'][item]['level'] == 1:
-            result1.append(dict_item)
-        elif data['list'][item]['level'] == 2:
-            result2.append(dict_item)
+    print("DATA: ")
+    print(str(data))
+    for item in data:
+        if metadata[item]["tags"][0] == name:
+            print("ADDING: " + str(item))
+            dict_item = {}
+            if data[item]["value"]:
+                dict_item['value'] = "Passed"
+                dict_item['score_class'] = 'fa-check'
+            else:
+                dict_item['value'] = "Failed"
+                dict_item['score_class'] = 'fa-times'
+            dict_item['explanation'] = data[item]["explanation"]
+            dict_item['name'] = metadata[item]['display_name']
+            dict_item['backend_name'] = item
+            dict_item["measurement_description"] = data["metadata > description"]
+            print(metadata[item]["level"])
+            if '1' in metadata[item]['level'] or metadata[item]['level'] == 1:
+                result1.append(dict_item)
+            elif '2' in metadata[item]['level'] or metadata[item]['level'] == 2:
+                result2.append(dict_item)
     return render_template('/admin/view_certificates.html',
                            admin_base_template=admin.base_template,
                            admin_view=admin.index_view,
                            get_url=url_for,
                            h=admin_helpers,
                            certificate_name=name,
-                           model_name=model_name,
+                           model_name=model_info["display_name"],
                            features1=result1,
                            features2=result2,
-                           date=date)
+                           date=date["value"])
 
 
 @app.route('/viewCertificate/<category>/<name>')
 def viewCertificate(category, name):
     cert_info = r.lrange(model_name + '|certificate_values', 0, -1)
-    metric_info = r.get(model_name + '|metric_info')
+    metadata = json.loads(r.get(model_name + '|certificate_metadata'))
+    model_info = json.loads(r.get(model_name + '|model_info'))
     clear_streams()
-    metrics = json.loads(metric_info)
-    category = category.lower()
     result = []
     for i in range(len(cert_info)):
         dict_item = {}
         data = json.loads(cert_info[i])
-        dict_item['date'] = data['metadata']['date']
-        if data[category]['list'][name]["score"]:
-            dict_item['score'] = "Passed"
+        dict_item['date'] = data['metadata > date']["value"]
+        if data[name]["value"]:
+            dict_item['value'] = "Passed"
             dict_item['score_class'] = 'fa-check'
         else:
-            dict_item['score'] = "Failed"
+            dict_item['value'] = "Failed"
             dict_item['score_class'] = 'fa-times'
-
-        dict_item['score'] = data[category]['list'][name]['score']
-        dict_item['explanation'] = data[category]['list'][name]['explanation']
+        dict_item['explanation'] = data[name]['explanation']
+        dict_item['description'] = metadata[name]['description']
         result.append(dict_item)
     return render_template('/admin/view_certificate.html',
                            admin_base_template=admin.base_template,
                            admin_view=admin.index_view,
                            get_url=url_for,
                            h=admin_helpers,
-                           model_name=model_name,
-                           certificate_name=metrics[name]["display_name"],
+                           model_name=model_info["display_name"],
+                           certificate_name=metadata[name]["display_name"],
                            features=result)
 
 
@@ -163,6 +170,7 @@ def info():
     prot_attr = ["None"]
     model_type = data['model']
     features = data['features']
+    model_display_name = data["display_name"]
 
     if 'fairness' in data['configuration'] and 'protected_attributes' in data['configuration']['fairness']:
         prot_attr = data['configuration']['fairness']['protected_attributes']
@@ -174,7 +182,7 @@ def info():
                            get_url=url_for,
                            h=admin_helpers,
                            name=name,
-                           model_name=model_name,
+                           model_name=model_display_name,
                            description=description,
                            task_type=task_type,
                            protected_attributes=prot_attr,
@@ -184,11 +192,13 @@ def info():
 
 @app.route('/event')
 def event():
+    model_info = json.loads(r.get(model_name + '|model_info'))
+
     return render_template('/admin/event_list.html',
                            admin_base_template=admin.base_template,
                            admin_view=admin.index_view,
                            get_url=url_for,
-                           model_name=model_name,
+                           model_name=model_info["display_name"],
                            h=admin_helpers)
 
 
@@ -243,13 +253,31 @@ def getCertification(date1, date2):  # NOT REAL DATA YET.
     date1 += " 00:00:00"
     date2 += " 99:99:99"
     data_test = r.lrange(model_name + '|certificate_values', 0, -1)
+    metadata = json.loads(r.get(model_name + '|certificate_metadata'))
+
     # data_test = cache['metric_values']
     clear_streams()
     res = []
     for i in range(len(data_test)):
         item = json.loads(data_test[i])
-        if date1 <= item['metadata']['date'] <= date2:
-            res.append(item)
+        scores = {"fairness": [0, 0], "explainability": [0, 0], "performance": [0, 0], "robust": [0, 0]}
+        if date1 <= item['metadata > date']["value"] <= date2:
+            temp_dict = {}
+            for value in item:
+                if metadata[value]["tags"][0] != "metadata":
+                    if metadata[value]["tags"][0] not in temp_dict:
+                        temp_dict[metadata[value]["tags"][0]] = []
+                    metric_obj = item[value]
+                    for key in metadata[value]:
+                        metric_obj[key] = metadata[value][key]
+                    temp_dict[metadata[value]["tags"][0]].append(metric_obj)
+
+                    if metadata[value]["tags"][0] in scores:
+                        scores[metadata[value]["tags"][0]][1] += 1
+                        if item[value]["value"]:
+                            scores[metadata[value]["tags"][0]][0] += 1
+            temp_dict['metadata'] = {"date": item['metadata > date'], "description": item['metadata > description'], "scores": scores}
+            res.append(temp_dict)
     return json.dumps(res)
 
 
@@ -265,13 +293,14 @@ def getCertificationMeta():
 def renderClassTemplate(category):
     functional = category.replace(' ', '_').lower()
     start_date, end_date = get_dates()
+    model_info = json.loads(r.get(model_name + '|model_info'))
 
     return render_template('/admin/view_class.html',
                            admin_base_template=admin.base_template,
                            admin_view=admin.index_view,
                            get_url=url_for,
                            h=admin_helpers,
-                           model_name=model_name,
+                           model_name=model_info["display_name"],
                            Category=category,
                            Functional=functional,
                            start_date=start_date,
@@ -281,12 +310,13 @@ def renderClassTemplate(category):
 @app.route('/viewAll')
 def renderAllMetrics():
     start_date, end_date = get_dates()
+    model_info = json.loads(r.get(model_name + '|model_info'))
     return render_template('/admin/view_all.html',
                            admin_base_template=admin.base_template,
                            admin_view=admin.index_view,
                            get_url=url_for,
                            h=admin_helpers,
-                           model_name=model_name,
+                           model_name=model_info["display_name"],
                            start_date=start_date,
                            end_date=end_date)
 
@@ -294,16 +324,18 @@ def renderAllMetrics():
 @app.route('/learnMore/<metric>')
 def learnMore(metric):
     data_test = r.get(model_name + '|metric_info')
+    model_info = json.loads(r.get(model_name + '|model_info'))
     clear_streams()
     metric_info = json.loads(data_test)
     start_date, end_date = get_dates()
     # metric_info = cache['metric_info']
+
     return render_template('/admin/metric_info.html',
                            admin_base_template=admin.base_template,
                            admin_view=admin.index_view,
                            get_url=url_for,
                            h=admin_helpers,
-                           model_name=model_name,
+                           model_name=model_info["display_name"],
                            metric_display_name=metric_info[metric]['display_name'],
                            metric_range=metric_info[metric]['range'],
                            metric_has_range=metric_info[metric]['has_range'],
@@ -333,7 +365,6 @@ def metric_event_stream():
     message = metric_sub.get_message()
     result = False
     if message:
-        print("METRIC: ", str(message))
         result = message['data'] != 1
         while message:
             message = metric_sub.get_message()
@@ -344,7 +375,6 @@ def cert_event_stream():
     message = cert_sub.get_message()
     result = False
     if message:
-        print("METRIC: ", str(message))
         result = message['data'] != 1
         while message:
             message = cert_sub.get_message()

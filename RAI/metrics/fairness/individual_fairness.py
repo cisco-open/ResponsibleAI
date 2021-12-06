@@ -11,8 +11,8 @@ __all__ = ['compatibility']
 # Log loss, roc and brier score have been removed. s
 
 _config = {
-    "name" : "individual_fairness",
-    "compatibility" : {"type_restriction": "classification", "output_restriction": "choice"},
+    "name": "individual_fairness",
+    "compatibility": {"type_restriction": "classification", "output_restriction": "choice"},
     "src": "equal_treatment",
     "dependency_list": [],
     "tags": ["fairness", "Individual Fairness"],
@@ -23,40 +23,32 @@ _config = {
             "type": "numeric",
             "tags": [],
             "has_range": True,
-            "range": [0, 2],
-            "explanation": ""
-        },
-        "between_group_generalized_entropy_error": {
-            "display_name": "BG Generalized Entropy Error",
-            "type": "numeric",
-            "tags": [],
-            "has_range": True,
-            "range": [0, 2],
-            "explanation": ""
+            "range": [0, None],
+            "explanation": "Measures inequality over a population. Lower values are better."
         },
         "theil_index": {
             "display_name": "Theil Index",
             "type": "numeric",
             "tags": [],
             "has_range": True,
-            "range": [0, 2],
-            "explanation": ""
+            "range": [0, None],
+            "explanation": "Measures the entropic distances between real data and an ideal and equal population. Lower values are better."
         },
         "coefficient_of_variation": {
             "display_name": "Coefficient of Variance",
             "type": "numeric",
             "tags": [],
             "has_range": True,
-            "range": [0, 2],
-            "explanation": ""
+            "range": [0, None],
+            "explanation": "Two times the square root of the generalzed entropy index with a=2. "
         },
         "consistency_score": {
             "display_name": "Consistency Score",
             "type": "numeric",
             "tags": [],
             "has_range": True,
-            "range": [0, 2],
-            "explanation": ""
+            "range": [0, 1],
+            "explanation": "Measures how similiar labels are for similiar instances. R. Zemel, Y. Wu, K. Swersky, T. Pitassi, and C. Dwork, “Learning Fair Representations,” International Conference on Machine Learning, 2013."
         }
     }
 }
@@ -68,6 +60,16 @@ class IndividualFairnessMetricGroup(MetricGroup, config=_config):
 
     def update(self, data):
         pass
+
+    def is_compatible(ai_system):
+        compatible = _config["compatibility"]["type_restriction"] is None \
+                    or ai_system.task.type == _config["compatibility"]["type_restriction"] \
+                    or ai_system.task.type == "binary_classification" and _config["compatibility"]["type_restriction"] == "classification"
+        compatible = compatible \
+                     and "fairness" in ai_system.user_config \
+                     and "protected_attributes" in ai_system.user_config["fairness"] \
+                     and "positive_label" in ai_system.user_config["fairness"]
+        return compatible
 
     def getConfig(self):
         return self.config
@@ -86,7 +88,6 @@ class IndividualFairnessMetricGroup(MetricGroup, config=_config):
             y = _convert_to_ai360(self, data, prot_attr)
             # MAY REQUIRE ADJUSTMENT DEPENDING ON AI360'S USE.
             self.metrics['generalized_entropy_error'].value = _generalized_entropy_error(y, preds, pos_label=pos_label)
-            self.metrics['between_group_generalized_entropy_error'].value = _between_group_generalized_entropy_error(y, preds, prot_attr=prot_attr[0], pos_label=pos_label)
             self.metrics['theil_index'].value = _theil_index(_get_b(y, preds, 1))
             self.metrics['coefficient_of_variation'].value = _coefficient_of_variation(_get_b(y, preds, 1))
             self.metrics['consistency_score'].value = _consistency_score(data.X, data.y)
@@ -107,17 +108,6 @@ def _get_b(y_true, y_pred, pos_label):
 
 def _generalized_entropy_error(y_true, y_pred, alpha=2, pos_label=1):
     b = 1 + (y_pred == pos_label) - (y_true == pos_label)
-    return _generalized_entropy_index(b, alpha=alpha)
-
-
-def _between_group_generalized_entropy_error(y_true, y_pred, prot_attr=None, priv_group=None, alpha=2, pos_label=1):
-    groups, _ = check_groups(y_true, prot_attr)
-    b = np.empty_like(y_true, dtype='float')
-    if priv_group is not None:
-        groups = [1 if g == priv_group else 0 for g in groups]
-    for g in np.unique(groups):
-        b[groups == g] = (1 + (y_pred[groups == g] == pos_label)
-                            - (y_true[groups == g] == pos_label)).mean()
     return _generalized_entropy_index(b, alpha=alpha)
 
 

@@ -231,14 +231,16 @@ function addChart(metric_name, explanations, data, category, name_extension){
         hoverCallback: function (index, options, content, row) {
                 var description = options.descriptions[index];
                 return content + "\nDescription: " + description;}
+
     }
     if(metric_info[metric_name]["has_range"]){
         if(metric_info[metric_name]["range"][0] != null){
             myValues['ymin'] = Number(metric_info[metric_name]["range"][0])
         }
-        if(metric_info[metric_name]["range"][0] != null){
+        if(metric_info[metric_name]["range"][1] != null){
             myValues['ymax'] = Number(metric_info[metric_name]["range"][1])
         }
+        myValues['yLabelFormat'] = function(y){return y.toFixed(2);}
     }
     myValues['parseTime'] = true
 
@@ -437,10 +439,18 @@ function createData(data, key) {
             }
             else{
                 ret.push({
+                    year: data[i]["metadata > description"],
+                    value: data[i][key]
+                });
+            }
+            /*
+            else{
+                ret.push({
                     year: String(i),
                     value: data[i][key]
                 });
             }
+            */
             descriptions.push(data[i]["metadata > description"])
         }
     }
@@ -772,12 +782,12 @@ function view_slider(){
     var header_style = ""
     var text_display = ""
     var chart_scaler = ""
-    if(slider.checked){
-        style = "width:80%; margin-left:10%; margin-right:auto; height:200px;"
-        header_style = "margin-top:-1px;display:inline-block;"
+    if(!slider.checked){
+        style = 'width: 32%; margin-left: 1%; margin-top: 2%; background-color: #dce2ff; fill: black; height: 290px;'
+        header_style = "text-align: center; font-size: 25px; margin-top: 10px; margin-bottom: 0px; color: black;"
         svg_style = "width:100%;"
-        text_display = "display:inline-block; margin-left:8px;"
-        chart_scaler = "height:80%;"
+        text_display = "display:block; margin-left:0px; text-align: center; font-size: 25px; margin-top: 5px; margin-bottom: 0px; color: black;"
+        chart_scaler = "height:60%;"
     }
     var row = document.getElementById("metric_row");
     var boxes = row.getElementsByClassName("Metric");

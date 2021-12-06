@@ -182,6 +182,7 @@ function addChart(metric_name, data, name_extension){
         if(range[1] != null){
             myValues['ymax'] = range[1]
         }
+        myValues['yLabelFormat'] = function(y){return y.toFixed(2);}
     }
     var morrisLine = new Morris.Line(myValues)
     graphs[metric_name] = morrisLine;
@@ -306,7 +307,7 @@ function createData(data, key) {
             }
             else{
                 ret.push({
-                    year: String(i),
+                    year: data[i]["metadata > description"],
                     value: data[i][key]
                 });
             }
@@ -333,7 +334,7 @@ function createBoolData(data, key) {
             }
             else{
                 ret.push({
-                    year: String(i),
+                    year: data[i]["metadata > description"],
                     value: value
                 });
             }

@@ -7,6 +7,7 @@ import subprocess
 import random
 from RAI import utils
 import threading
+from RAI.certificates import CertificateManager
 
 
 class AISystem:
@@ -19,6 +20,8 @@ class AISystem:
         self.sample_count = 0
         self.user_config = user_config
 
+        self.certificate_manager = CertificateManager()
+        self.certificate_manager.load_stock_certificates()
     def initialize(self, metric_groups=None, metric_group_re=None, max_complexity="linear"):
         for metric_group_name in registry:
             metric_class = registry[metric_group_name]
@@ -49,7 +52,8 @@ class AISystem:
 
     def get_model_info(self):
         result = {"id": self.task.model.name, "model": self.task.model.model_class, "adaptive": self.task.model.adaptive,
-                  "task_type": self.task.type, "configuration": self.user_config, "features": [], "description": self.task.description}
+                  "task_type": self.task.type, "configuration": self.user_config, "features": [], "description": self.task.description,
+                  "display_name": self.task.model.display_name}
         for i in range(len(self.meta_database.features)):
             result['features'].append(self.meta_database.features[i].name)
         return result
@@ -155,7 +159,7 @@ class AISystem:
         r.set(self.task.model.name + '|model_info', json.dumps(model_info))
         r.set(self.task.model.name + '|metric_info', json.dumps(metric_info))
         r.publish(self.task.model.name + "|metric", metric_values['metadata > date'])
-        r.save()
+        # r.save()
 
     # Searches all metrics. Queries based on Metric Name, Metric Group Name, Category, and Tags.
     def search(self, query):
@@ -177,33 +181,54 @@ class AISystem:
 
 # TEMPORARY FUNCTION FOR PRODUCING DATA
     def compute_certificates(self):
-        result = {}
-        for group in self.metric_groups:
-            if self.metric_groups[group].tags[0] not in result:
-                result[self.metric_groups[group].tags[0]] = {}
-                result[self.metric_groups[group].tags[0]]["list"] = {}
-                result[self.metric_groups[group].tags[0]]["score"] = 0
-            for metric in self.metric_groups[group].metrics:
-                passed = bool(random.getrandbits(1))
-                explanation = "filler"
-                if passed:
-                    result[self.metric_groups[group].tags[0]]["score"] += 1
-                result[self.metric_groups[group].tags[0]]["list"][self.metric_groups[group].metrics[metric].unique_name] \
-                    = {"score": passed, "explanation": explanation, "level": random.randint(1, 2)}
-        return result
+        # CERTIFICATE VALUES, one for each group (Fairness, Explainability etc.). I added one for each level.
+
+        metric_values = self.get_metric_values_flat()
+        cert_values = self.certificate_manager.compute( metric_values)
+        # cert_values = { "cert1_1": {"value": True, "explanation": "Test Passed because ..."},
+        #                 "cert1_2": {"value": True, "explanation": "Test Passed because .."},
+        #                 "cert2_1": {"value": False, "explanation": "Test failed because .."},
+        #                 "cert2_2": {"value": True, "explanation": "Test passed because .."},
+        #                 "cert3_1": {"value": True, "explanation": "Test passed because .."},
+        #                 "cert3_2": {"value": False, "explanation": "Test failed because .."},
+        #                 "cert4_1": {"value": True, "explanation": "Test passed because .."},
+        #                 "cert4_2": {"value": True, "explanation": "Test passed becuase ..."}}
+
+
+        # it is currently important that there is at least one metric for each metric group for displaying data on the main page.
+        # Relevant information on each metric
+        metadata = self.certificate_manager.metadata
+
+        # metadata = {    "cert1_1": {"display_name": "Cert 1 Low Level", "tags": ["fairness"], "level": 1, "description": "A Level 1 Fairness Certificate"},
+        #                 "cert1_2": {"display_name": "Cert 1 High Level", "tags": ["fairness"], "level": 2, "description": "A Level 2 Fairness Certificate"},
+        #                 "cert2_1": {"display_name": "Cert 2 Low Level", "tags": ["robust"], "level": 1, "description": "A Level 1 Robustness Certificate"},
+        #                 "cert2_2": {"display_name": "Cert 2 High Level", "tags": ["robust"], "level": 2, "description": "A Level 2 Robustness Certificate"},
+        #                 "cert3_1": {"display_name": "Cert 1 Low Level", "tags": ["explainability"], "level": 1, "description": "A Level 1 Explainability Certificate"},
+        #                 "cert3_2": {"display_name": "Cert 1 High Level", "tags": ["explainability"], "level": 2, "description": "A Level 2 Explainability Certificate"},
+        #                 "cert4_1": {"display_name": "Cert 1 Low Level", "tags": ["performance"], "level": 1, "description": "A Level 1 Performance Certificate"},
+        #                 "cert4_2": {"display_name": "Cert 1 High Level", "tags": ["performance"], "level": 2, "description": "A Level 2 Performance Certificate"}}
+
+        return cert_values, metadata
 
 # TEMPORARY FUNCTION FOR PRODUCING DATA
     def export_certificates(self):
-        values = self.compute_certificates()
+        values, metadata = self.compute_certificates()
         r = redis.Redis(host='localhost', port=6379, db=0)
-        certificate_metadata = {"fairness": {"name": "fairness", "explanation": "Measures how fair a model's predictions are.", "display_name": "Fairness"}, "robust": {"name": "robustness", "explanation": "Measures a model's resiliance to time and sway.", "display_name": "Robustness"}, "explainability": {"name": "explainability", "explanation": "Measures how explainable the model is.", "display_name": "Explainability"}, "performance": {"name": "performance", "explanation": "Performance describes how well at predicting the model was.", "display_name": "Performance"}}
 
-        values["explainability"] = {"score": 1, "list": {"temp function:": {"score": True, "explanation": "filler function"}}}
-        values['metadata'] = {'date': self.metric_groups['metadata'].metrics['date'].value}
 
-        r.set(self.task.model.name + '|certificate_metadata', json.dumps(certificate_metadata))
+        # metadata > date is added to metadata and values to allow for date based parsing of both and avoiding mismatch.
+        values['metadata > date'] = {"value": self.metric_groups['metadata'].metrics['date'].value,
+                                     "description": "time certificates were measured", "level": 1, "tags": ["metadata"]}
+        values['metadata > description'] = {"value": "Measuring Stuff", "description": "Purpose of measurement.", "tags": ["metadata"]}
+
+        metadata['metadata > date'] = {"value": self.metric_groups['metadata'].metrics['date'].value,
+                                     "description": "time certificates were measured", "level": 1, "tags": ["metadata"]}
+        metadata['metadata > description'] = {"value": "Measuring Stuff", "description": "Purpose of measurement.", "tags": ["metadata"]}
+
+
+        r.set(self.task.model.name + '|certificate_metadata', json.dumps(metadata))
         r.rpush(self.task.model.name + '|certificate_values', json.dumps(values))  # True
-        r.publish(self.task.model.name + "|certificate", values['metadata']['date'])
+        r.publish(self.task.model.name + "|certificate", values["metadata > date"]["value"])
 
     def viewGUI(self):
         gui_launcher = threading.Thread(target=self._view_gui_thread, args=[])

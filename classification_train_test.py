@@ -20,6 +20,7 @@ nums[:int(xTrain.shape[0]/2)] = 0
 xTrain = np.hstack((xTrain, nums))
 
 
+
 nums = np.ones((xTest.shape[0], 1))
 nums[:int(xTest.shape[0]/2)] = 0
 xTest = np.hstack((xTest, nums))
@@ -49,7 +50,7 @@ meta = MetaDatabase(features)
 # Create a model to make predictions
 from sklearn.ensemble import RandomForestClassifier
 reg = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=0)
-model = Model(agent=reg, name="cisco_cancer_ai", model_class="Random Forest Classifier", adaptive=False)
+model = Model(agent=reg, name="cisco_cancer_ai", display_name="Cisco Health AI", model_class="Random Forest Classifier", adaptive=False)
 # Indicate the task of the model
 task = Task(model=model, type='binary_classification', description="Detect Cancer in patients using skin measurements")
 
@@ -63,72 +64,27 @@ ai.initialize()
 reg.fit(xTrain, yTrain)
 train_preds = reg.predict(xTrain)
 # Make Predictions
+ai.reset_redis()
 ai.compute_metrics(train_preds, data_type="train")
-# Function to compare our result to sklearn's result.
-
-
-resv_f = ai.get_metric_values_flat()
-resv_d = ai.get_metric_values_dict()
-resi_f = ai.get_metric_info_flat()
-resi_d = ai.get_metric_info_dict()
-
-print("TRAINING PREDICTION METRICS:")
-for key in resv_f:
-    if hasattr(resv_f[key], "__len__"): 
-        # print(resi_f[key]['display_name'], " = ", 'list ...')
-        print(resi_f[key]['display_name'], " = ", resv_f[key])
-    else:
-        print(resi_f[key]['display_name'], " = ", resv_f[key])
-
-
-print("\n\nTESTING PREDICTING METRICS:")
-test_preds = reg.predict(xTest)
-ai.compute_metrics(test_preds, data_type="test")
-resv_f = ai.get_metric_values_flat()
-for key in resv_f:
-    if hasattr(resv_f[key], "__len__"):
-        # print(resi_f[key]['display_name'], " = ", 'list ...')
-        print(resi_f[key]['display_name'], " = ", resv_f[key])
-    else:
-        print(resi_f[key]['display_name'], " = ", resv_f[key])
-
-
-# Getting Metric Information
-print("\nGetting Metric Information")
-metric_info = ai.get_metric_info_flat()
-for metric in metric_info:
-    print(metric_info[metric])
- 
-# Get Model Information
-print("\nGetting Model Info:")
-res = ai.get_model_info()
-print(res)
-
-# Demonstrating Searching
-query = "Bias"
-print("\nSearching Metrics for ", query)
-result = ai.search(query)
-print(result)
-
-# reset all previous keys
-# ai.reset_redis()
-
-# export to redis
-ai.export_data_flat("Testing New Features")
-
-
-# TEMPORARY WAY TO EXPORT CERTIFICATE VALUES
-# Will be done in another file
-print("Exporting Certificate Data")
+ai.export_data_flat("Train set")
 ai.export_certificates()
+
+
+test_preds = reg.predict(xTest)
+# Make Predictions
+
+
+ai.reset_redis()
+
+ai.compute_metrics(test_preds, data_type="test")
+ai.export_data_flat("Test set")
+ai.export_certificates()
+
 
 
 print("\nViewing GUI")
 # ai.viewGUI()
 print("DONE")
 
-print("\nSearching Metrics for ", query)
-result = ai.search(query)
-print(result)
 
 

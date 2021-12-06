@@ -8,8 +8,8 @@ __all__ = ['compatibility']
 
 compatibility = {"type_restriction": "binary_classification", "output_restriction": "choice"}
 
-# Log loss, roc and brier score have been removed. s
 
+# IMPROVE CONFIG ONCE METRICS ARE SET UP.
 _config = {
     "name": "sample_distortion_fairness",
     "compatibility": {"type_restriction": "classification", "output_restriction": "choice"},
@@ -36,6 +36,16 @@ class SampleDistortionFairnessGroup(MetricGroup, config=_config):
         
     def update(self, data):
         pass
+
+    def is_compatible(ai_system):
+        compatible = _config["compatibility"]["type_restriction"] is None \
+                    or ai_system.task.type == _config["compatibility"]["type_restriction"] \
+                    or ai_system.task.type == "binary_classification" and _config["compatibility"]["type_restriction"] == "classification"
+        compatible = compatible \
+                     and "fairness" in ai_system.user_config \
+                     and "protected_attributes" in ai_system.user_config["fairness"] \
+                     and "positive_label" in ai_system.user_config["fairness"]
+        return compatible
 
     def getConfig(self):
         return self.config

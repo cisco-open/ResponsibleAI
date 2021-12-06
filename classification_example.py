@@ -49,7 +49,7 @@ meta = MetaDatabase(features)
 # Create a model to make predictions
 from sklearn.ensemble import RandomForestClassifier
 reg = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=0)
-model = Model(agent=reg, name="cisco_cancer_ai", model_class="Random Forest Classifier", adaptive=False)
+model = Model(agent=reg, name="cisco_cancer_ai", display_name="Cisco Health AI", model_class="Random Forest Classifier", adaptive=False)
 # Indicate the task of the model
 task = Task(model=model, type='binary_classification', description="Detect Cancer in patients using skin measurements")
 
@@ -128,7 +128,7 @@ ai.export_certificates()
 
 
 print("\nViewing GUI")
-ai.viewGUI()
+# ai.viewGUI()
 print("DONE")
 
 print("\nSearching Metrics for ", query)

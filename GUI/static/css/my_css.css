@@ -35,54 +35,60 @@ p.gauge-container {
 }
 
 div.explainabilityMetric {
-    width: 32%;
-    margin-left: 1%;
+    width:80%;
+    margin-left:10%;
+    margin-right:auto;
+    height:200px;
     margin-top: 2%;
     background-color: #d8cfc1;
     fill: black;
-    height: 290px;
 }
 
 
 div.robustMetric {
-    width: 32%;
-    margin-left: 1%;
-    margin-top: 2%;
+    width:80%;
+    margin-left:10%;
+    margin-right:auto;
+    height:200px;
+    margin-top: 10px;
     background-color: #c5dcd2;
     fill: black;
-    height: 290px;
 }
 
 div.statsMetric {
-    width: 32%;
-    margin-left: 1%;
-    margin-top: 2%;
+    width:80%;
+    margin-left:10%;
+    margin-right:auto;
+    height:200px;
+    margin-top: 10px;
     background-color: #e4ddb8;
     fill: black;
-    height: 290px;
 }
 
 div.performanceMetric {
-    width: 32%;
-    margin-left: 1%;
-    margin-top: 2%;
+    width:80%;
+    margin-left:10%;
+    margin-right:auto;
+    height:200px;
+    margin-top: 10px;
     background-color: #e2c5c5;
     fill: black;
-    height: 290px;
 }
 
 div.fairnessMetric {
-    width: 32%;
-    margin-left: 1%;
-    margin-top: 2%;
+    width:80%;
+    margin-left:10%;
+    margin-right:auto;
+    height:200px;
+    margin-top: 10px;
     background-color: #dce2ff;
     fill: black;
-    height: 290px;
 }
 
 div.Metric{
     text-align:center;
 }
+
 
 div.MetricPage {
     width: 700px;
@@ -101,23 +107,38 @@ div.overflow_table {
 
 
 p.chartHeader {
+    display:inline-block;
+    margin-left:8px;
     text-align: center;
     font-size: 25px;
-    margin-top: 20px;
+    margin-top: 10px;
+    margin-bottom: 0px;
+    color: black;
+}
+
+p.mainPageChartHeader {
+    display:block;
+    margin-left:8px;
+    text-align: center;
+    font-size: 25px;
+    margin-top: 10px;
     margin-bottom: 0px;
     color: black;
 }
 
 p.chartValue{
+    margin-top:-1px;
+    display:inline-block;
     text-align: center;
     font-size: 25px;
     margin-top: 0px;
+    margin-left: 8px;
     margin-bottom: 0px;
     color: black;
 }
 
 .morris-chart {
-    height:75%;
+    height:100%;
 }
 
 
@@ -285,7 +306,7 @@ label.dateChooser {
 
 .chartScalerSmall {
     width: 100%;
-    height: 70%;
+    height: 80%;
 }
 
 
