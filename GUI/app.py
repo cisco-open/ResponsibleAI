@@ -93,10 +93,14 @@ def viewCertificates(name):
     clear_streams()
     data = json.loads(cert_info[-1])
     date = data['metadata > date']
+    print("METADATA: " + str(metadata))
     result1 = []
     result2 = []
+    print("DATA: ")
+    print(str(data))
     for item in data:
         if metadata[item]["tags"][0] == name:
+            print("ADDING: " + str(item))
             dict_item = {}
             if data[item]["value"]:
                 dict_item['value'] = "Passed"
@@ -108,9 +112,10 @@ def viewCertificates(name):
             dict_item['name'] = metadata[item]['display_name']
             dict_item['backend_name'] = item
             dict_item["measurement_description"] = data["metadata > description"]
-            if metadata[item]['level'] == 1:
+            print(metadata[item]["level"])
+            if '1' in metadata[item]['level'] or metadata[item]['level'] == 1:
                 result1.append(dict_item)
-            elif metadata[item]['level'] == 2:
+            elif '2' in metadata[item]['level'] or metadata[item]['level'] == 2:
                 result2.append(dict_item)
     return render_template('/admin/view_certificates.html',
                            admin_base_template=admin.base_template,

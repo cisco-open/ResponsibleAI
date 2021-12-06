@@ -23,40 +23,32 @@ _config = {
             "type": "numeric",
             "tags": [],
             "has_range": True,
-            "range": [0, 2],
-            "explanation": ""
-        },
-        "consistency": {
-            "display_name": "Data Consistency",
-            "type": "numeric",
-            "tags": [],
-            "has_range": True,
             "range": [0, 1],
-            "explanation": "Shows how similar labels are for similar instances"
+            "explanation": "Calculates the rate at which at which a groups with a protected attribute recieve a positive outcome."
         },
         "num-instances": {
             "display_name": "Num Instances",
             "type": "numeric",
             "tags": [],
-            "has_range": False,
-            "range": [None, None],
-            "explanation": ""
+            "has_range": True,
+            "range": [0, None],
+            "explanation": "Calculates the number of instances classified"
         },
         "num-negatives": {
             "display_name": "Num Negatives",
             "type": "numeric",
             "tags": [],
-            "has_range": False,
-            "range": [None, None],
-            "explanation": ""
+            "has_range": True,
+            "range": [0, None],
+            "explanation": "Calculates the number of negative instances predicted"
         },
         "num-positives": {
             "display_name": "Num Positives",
             "type": "numeric",
             "tags": [],
-            "has_range": False,
-            "range": [None, None],
-            "explanation": ""
+            "has_range": True,
+            "range": [0, None],
+            "explanation": "Calculates the number of positive instances predicted."
         },
     }
 }
@@ -90,7 +82,6 @@ class GeneralDatasetFairnessGroup(MetricGroup, config=_config):
 
             bin_dataset = get_bin_dataset(self, data, prot_attr)
             self.metrics['base-rate'].value = bin_dataset.base_rate()
-            self.metrics['consistency'].value = bin_dataset.consistency()[0]
             self.metrics['num-instances'].value = bin_dataset.num_instances()
             self.metrics['num-negatives'].value = bin_dataset.num_negatives()
             self.metrics['num-positives'].value = bin_dataset.num_positives()

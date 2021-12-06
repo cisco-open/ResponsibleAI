@@ -8,8 +8,8 @@ __all__ = ['compatibility']
 
 compatibility = {"type_restriction": "binary_classification", "output_restriction": "choice"}
 
-# Log loss, roc and brier score have been removed. s
 
+# IMPROVE CONFIG ONCE METRICS ARE SET UP.
 _config = {
     "name": "sample_distortion_fairness",
     "compatibility": {"type_restriction": "classification", "output_restriction": "choice"},

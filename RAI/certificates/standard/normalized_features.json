@@ -1,8 +1,8 @@
 {
     "meta":{
-        "display_name": "normalized features",  
+        "display_name": "normalized features (or)",
         "description":"certifies that weather or not all the scalar features are normalized properly",
-        "tags": ["robustness"],
+        "tags": ["robust"],
         "level":["1"]
     },
 
