@@ -32,26 +32,12 @@ _config = {
             "range": [None, None],
             "explanation": "Robustness Score determined by the type of model and depth. Is Robustness the Cost of Accuracy? A comprehensive Study on the Robustness of 18 Deep Image Classification Models",
         },
-        "clever-model-score": {
-            "display_name": "Clever Model Score",
-            "type": "numeric",
-            "has_range": False,
-            "range": [None, None],
-            "explanation": "Robustness Score determined by the type of model and depth. Is Robustness the Cost of Accuracy? A comprehensive Study on the Robustness of 18 Deep Image Classification Models",
-        },
         "data-dimensionality": {
             "display_name": "Adversarial Data Dimensionality",
             "type": "numeric",
             "has_range": False,
             "range": [None, None],
             "explanation": "Dimensionality of Data correlates to its robustness against adversarial attacks.",
-        },
-        "clever-score": {
-            "display_name": "CLEVER Score",
-            "type": "numeric",
-            "has_range": False,
-            "range": [None, None],
-            "explanation": "Evaluating the robustness of neural networks: An extreme value theory approach.",
         },
         "brendel-bethge-attack": {
             "display_name": "Brendel Bethge Score",
@@ -119,9 +105,6 @@ class AdversarialRobustnessMetricGroup(MetricGroup, config=_config):
             self.metrics["data-dimensionality"].value = np.sqrt(len(data.X[0]))
             self.metrics["l-inf-model-score"].value = None
             self.metrics["l-2-model-score"].value = None
-            self.metrics["clever-model-score"].value = None
-            self.metrics["clever-score"].value = None
-            self.metrics["clever-score"].value = None
             self.metrics["brendel-bethge-attack"].value = None
 
             # Is Robustness the Cost of Accuracy? A Comprehensive Study on the Robustness of 18 Deep Image Classification Models. - Dong Su
