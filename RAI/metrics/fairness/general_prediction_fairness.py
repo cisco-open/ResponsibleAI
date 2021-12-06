@@ -254,57 +254,57 @@ _config = {
             "display_name": "Instance Count",
             "type": "numeric",
             "tags": [],
-            "has_range": False,
-            "range": [None, None],
-            "explanation": ""
+            "has_range": True,
+            "range": [0, None],
+            "explanation": "The number of examples seen."
         },
         "num-negatives": {
             "display_name": "Negative Count",
             "type": "numeric",
             "tags": [],
-            "has_range": False,
-            "range": [None, None],
-            "explanation": ""
+            "has_range": True,
+            "range": [0, None],
+            "explanation": "The number of negative examples seen."
         },
         "num-positives": {
             "display_name": "Positive Count",
             "type": "numeric",
             "tags": [],
-            "has_range": False,
-            "range": [None, None],
-            "explanation": ""
+            "has_range": True,
+            "range": [0, None],
+            "explanation": "The number of positive examples seen."
         },
         "num-pred-negatives": {
             "display_name": "Negative Prediction Count",
             "type": "numeric",
             "tags": [],
-            "has_range": False,
-            "range": [None, None],
-            "explanation": ""
+            "has_range": True,
+            "range": [0, None],
+            "explanation": "The number of negative predictions seen."
         },
         "num-pred-positives": {
             "display_name": "Positive Prediction Count",
             "type": "numeric",
             "tags": [],
-            "has_range": False,
-            "range": [None, None],
-            "explanation": ""
+            "has_range": True,
+            "range": [0, None],
+            "explanation": "The number of positive predictions seen."
         },
         "num-true-negatives": {
             "display_name": "True Negative Count",
             "type": "numeric",
             "tags": [],
-            "has_range": False,
-            "range": [None, None],
-            "explanation": ""
+            "has_range": True,
+            "range": [0, None],
+            "explanation": "The number of times the classifier correctly predicted an example to be negative."
         },
         "num-true-positives": {
             "display_name": "True Positive Count",
             "type": "numeric",
             "tags": [],
-            "has_range": False,
-            "range": [None, None],
-            "explanation": ""
+            "has_range": True,
+            "range": [0, None],
+            "explanation": "The number of times the classifier correctly predicted an example to be positive."
         },
         "positive-predictive-value": {
             "display_name": "Positive Predictive Value",
@@ -318,33 +318,33 @@ _config = {
             "display_name": "Smoothed Emp Diff Fairness",
             "type": "numeric",
             "tags": [],
-            "has_range": False,
-            "range": [None, None],
-            "explanation": ""
+            "has_range": True,
+            "range": [0, 1],
+            "explanation": "Fairness metric from: Foulds, James R., et al. 'An intersectional definition of fairness.' 2020 IEEE 36th International Conference on Data Engineering (ICDE). IEEE, 2020."
         },
         "true-negative-rate": {
             "display_name": "True Negative Rate",
             "type": "numeric",
             "tags": [],
-            "has_range": False,
-            "range": [None, None],
-            "explanation": ""
+            "has_range": True,
+            "range": [0, 1],
+            "explanation": "The number of true negatives divided by the total number of negatives."
         },
         "true-positive-rate": {
             "display_name": "True Positive Rate",
             "type": "numeric",
             "tags": [],
-            "has_range": False,
-            "range": [None, None],
-            "explanation": ""
+            "has_range": True,
+            "range": [0, 1],
+            "explanation": "The number of true positives divided by the total number of positives."
         },
         "true-positive-rate-difference": {
             "display_name": "True Positive Rate Difference",
             "type": "numeric",
             "tags": [],
-            "has_range": False,
-            "range": [None, None],
-            "explanation": ""
+            "has_range": True,
+            "range": [-1, 1],
+            "explanation": "The difference in true positive rate between unprivileged and privileged groups."
         },
 
 

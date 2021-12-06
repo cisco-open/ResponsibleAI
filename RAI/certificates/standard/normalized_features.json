@@ -2,7 +2,7 @@
     "meta":{
         "display_name": "normalized features (or)",
         "description":"certifies that weather or not all the scalar features are normalized properly",
-        "tags": ["robust"],
+        "tags": ["robustness"],
         "level":["1"]
     },
 

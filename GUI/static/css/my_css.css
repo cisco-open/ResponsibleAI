@@ -22,7 +22,7 @@ p.gauge-container {
     background-color: #dce2ff;
 }
 
-.bg-robust{
+.bg-robustness{
     background-color: #c5dcd2;
 }
 
@@ -45,7 +45,7 @@ div.explainabilityMetric {
 }
 
 
-div.robustMetric {
+div.robustnessMetric {
     width:80%;
     margin-left:10%;
     margin-right:auto;
@@ -408,6 +408,15 @@ label.dateChooser {
   background-color: #ccc;
   -webkit-transition: .4s;
   transition: .4s;
+}
+
+
+.red {
+  color: red;
+}
+
+.green{
+    color:green;
 }
 
 .slider:before {

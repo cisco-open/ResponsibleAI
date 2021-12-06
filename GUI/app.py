@@ -104,10 +104,10 @@ def viewCertificates(name):
             dict_item = {}
             if data[item]["value"]:
                 dict_item['value'] = "Passed"
-                dict_item['score_class'] = 'fa-check'
+                dict_item['score_class'] = 'fa-check green'
             else:
                 dict_item['value'] = "Failed"
-                dict_item['score_class'] = 'fa-times'
+                dict_item['score_class'] = 'fa-times red'
             dict_item['explanation'] = data[item]["explanation"]
             dict_item['name'] = metadata[item]['display_name']
             dict_item['backend_name'] = item
@@ -142,10 +142,10 @@ def viewCertificate(category, name):
         dict_item['date'] = data['metadata > date']["value"]
         if data[name]["value"]:
             dict_item['value'] = "Passed"
-            dict_item['score_class'] = 'fa-check'
+            dict_item['score_class'] = 'fa-check green'
         else:
             dict_item['value'] = "Failed"
-            dict_item['score_class'] = 'fa-times'
+            dict_item['score_class'] = 'fa-times red'
         dict_item['explanation'] = data[name]['explanation']
         dict_item['description'] = metadata[name]['description']
         result.append(dict_item)
@@ -157,6 +157,49 @@ def viewCertificate(category, name):
                            model_name=model_info["display_name"],
                            certificate_name=metadata[name]["display_name"],
                            features=result)
+
+
+
+@app.route('/viewAllCertificates')
+def viewAllCertificates():
+    cert_info = r.lrange(model_name + '|certificate_values', 0, -1)
+    model_info = json.loads(r.get(model_name + '|model_info'))
+    metadata = json.loads(r.get(model_name + '|certificate_metadata'))
+    clear_streams()
+    data = json.loads(cert_info[-1])
+    date = data['metadata > date']
+    result1 = []
+    result2 = []
+    for item in data:
+        if 'metadata' not in metadata[item]["tags"]:
+            dict_item = {}
+            if data[item]["value"]:
+                dict_item['value'] = "Passed"
+                dict_item['score_class'] = 'fa-check green'
+            else:
+                dict_item['value'] = "Failed"
+                dict_item['score_class'] = 'fa-times red'
+            dict_item['explanation'] = data[item]["explanation"]
+            dict_item['name'] = metadata[item]['display_name']
+            dict_item['category'] = metadata[item]['tags'][0]
+            dict_item['backend_name'] = item
+            dict_item["measurement_description"] = data["metadata > description"]
+            print(metadata[item]["level"])
+            if '1' in metadata[item]['level'] or metadata[item]['level'] == 1:
+                result1.append(dict_item)
+            elif '2' in metadata[item]['level'] or metadata[item]['level'] == 2:
+                result2.append(dict_item)
+    return render_template('/admin/view_all_certificates.html',
+                           admin_base_template=admin.base_template,
+                           admin_view=admin.index_view,
+                           get_url=url_for,
+                           h=admin_helpers,
+                           model_name=model_info["display_name"],
+                           features1=result1,
+                           features2=result2,
+                           date=date["value"])
+
+
 
 
 @app.route('/info')
@@ -188,6 +231,13 @@ def info():
                            protected_attributes=prot_attr,
                            model_type=model_type,
                            features=features)
+
+
+
+
+
+
+
 
 
 @app.route('/event')
@@ -260,7 +310,7 @@ def getCertification(date1, date2):  # NOT REAL DATA YET.
     res = []
     for i in range(len(data_test)):
         item = json.loads(data_test[i])
-        scores = {"fairness": [0, 0], "explainability": [0, 0], "performance": [0, 0], "robust": [0, 0]}
+        scores = {"fairness": [0, 0], "explainability": [0, 0], "performance": [0, 0], "robustness": [0, 0]}
         if date1 <= item['metadata > date']["value"] <= date2:
             temp_dict = {}
             for value in item:

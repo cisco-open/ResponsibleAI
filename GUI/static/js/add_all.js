@@ -11,8 +11,8 @@ var metric_info;
 var model_info;
 var tags = {}
 var data_types = []
-var tagOwner = {'fairness': [], 'performance': [], 'robust': [], 'stats': []}
-var categories = ['fairness', 'performance', 'robust', 'stats']
+var tagOwner = {'fairness': [], 'performance': [], 'robustness': [], 'stats': []}
+var categories = ['fairness', 'performance', 'robustness', 'stats']
 var metric_data
 var use_date = true;
 var page_ready = false;

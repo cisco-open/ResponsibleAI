@@ -9,7 +9,7 @@ _config = {
     "name": "noise_robustness",
     "compatibility": {"type_restriction": None, "output_restriction": None},
     "dependency_list": [],
-    "tags": ["robust", "Noise"],
+    "tags": ["robustness", "Noise"],
     "complexity_class": "linear",
     "metrics": {
         "certified-adversarial-noise": {

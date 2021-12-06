@@ -75,9 +75,9 @@ function createData(data, key) {
 
 
 function createMetrics(data, explanations) {
-    var divs = ['fairness', 'robust', 'performance', 'explainability'];
+    var divs = ['fairness', 'robustness', 'performance', 'explainability'];
     var names = ["Fairness", "Robustness", "Performance", "Explainability"];
-    var explanations = {"fairness": {"name": "fairness", "explanation": "Measures how fair a model's predictions are.", "display_name": "Fairness"}, "robust": {"name": "robustness", "explanation": "Measures a model's resiliance to time and sway.", "display_name": "Robustness"}, "explainability": {"name": "explainability", "explanation": "Measures how explainable the model is.", "display_name": "Explainability"}, "performance": {"name": "performance", "explanation": "Performance describes how well at predicting the model was.", "display_name": "Performance"}}
+    var explanations = {"fairness": {"name": "fairness", "explanation": "Measures how fair a model's predictions are.", "display_name": "Fairness"}, "robustness": {"name": "robustness", "explanation": "Measures a model's resiliance to time and sway.", "display_name": "Robustness"}, "explainability": {"name": "explainability", "explanation": "Measures how explainable the model is.", "display_name": "Explainability"}, "performance": {"name": "performance", "explanation": "Performance describes how well at predicting the model was.", "display_name": "Performance"}}
     for (var j in divs) {
         var i = divs[j]
         var result = createData(data, i);
