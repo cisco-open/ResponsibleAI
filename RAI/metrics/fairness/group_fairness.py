@@ -2,6 +2,7 @@ from RAI.metrics.metric_group import MetricGroup
 from RAI.metrics.ai360_helper.AI360_helper import *
 import numpy as np
 import pandas as pd
+from RAI.utils import compare_runtimes
 
 __all__ = ['compatibility']
 
@@ -82,7 +83,8 @@ class GroupFairnessMetricGroup(MetricGroup, config=_config):
                     or ai_system.task.type == "binary_classification" and _config["compatibility"]["type_restriction"] == "classification"
         compatible = compatible and "fairness" in ai_system.user_config \
                      and "protected_attributes" in ai_system.user_config["fairness"] \
-                     and "positive_label" in ai_system.user_config["fairness"]
+                     and "positive_label" in ai_system.user_config["fairness"] \
+                     and compare_runtimes(ai_system.user_config.get("time_complexity"), _config["complexity_class"])
         return compatible
 
     def getConfig(self):
@@ -102,7 +104,6 @@ class GroupFairnessMetricGroup(MetricGroup, config=_config):
             self.metrics['average_odds_difference'].value = _average_odds_difference(y, preds, prot_attr=prot_attr[0], pos_label=pos_label)
             self.metrics['average_odds_error'].value = _average_odds_error(y, preds, prot_attr=prot_attr[0], pos_label=pos_label)
             self.metrics['between_group_generalized_entropy_error'].value = _between_group_generalized_entropy_error(y, preds, prot_attr=prot_attr[0], pos_label=pos_label)
-
 
 
 def _convert_to_ai360(metric_group, data, prot_attr):

@@ -95,7 +95,7 @@ meta = MetaDatabase(features)
 model = Model(agent=net, name="cisco_cancer_ai", display_name="Cisco Health AI", model_class="Neural Network", adaptive=True,
               optimizer=optimizer, loss_function=criterion)
 task = Task(model=model, type='binary_classification', description="Detect Cancer in patients using skin measurements")
-configuration = ""
+configuration = {"time_complexity": "polynomial"}
 ai = AISystem(meta_database=meta, dataset=dataset, task=task, user_config=configuration)
 ai.initialize()
 

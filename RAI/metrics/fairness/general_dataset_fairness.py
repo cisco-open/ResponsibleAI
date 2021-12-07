@@ -3,6 +3,7 @@ from RAI.metrics.ai360_helper.AI360_helper import *
 import pandas as pd
 from RAI.metrics.AIF360.datasets import BinaryLabelDataset
 from RAI.metrics.AIF360.metrics import BinaryLabelDatasetMetric
+from RAI.utils import compare_runtimes
 
 __all__ = ['compatibility']
 
@@ -64,7 +65,8 @@ class GeneralDatasetFairnessGroup(MetricGroup, config=_config):
                     or ai_system.task.type == "binary_classification" and _config["compatibility"]["type_restriction"] == "classification"
         compatible = compatible \
                      and "fairness" in ai_system.user_config \
-                     and "protected_attributes" in ai_system.user_config["fairness"]
+                     and "protected_attributes" in ai_system.user_config["fairness"] \
+                     and compare_runtimes(ai_system.user_config.get("time_complexity"), _config["complexity_class"])
         return compatible
 
     def update(self, data):

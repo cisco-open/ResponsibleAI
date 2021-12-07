@@ -198,6 +198,7 @@ class PerformanceClassificationMetricGroup(MetricGroup, config=_config):
             self.metrics["auc"].value = sklearn.metrics.auc(fpr, tpr)
 
 
+
 def get_fptn(confusion_matrix):
     result = {'fp': confusion_matrix.sum(axis=0) - np.diag(confusion_matrix),
               'fn': confusion_matrix.sum(axis=1) - np.diag(confusion_matrix),

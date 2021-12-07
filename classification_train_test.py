@@ -60,7 +60,9 @@ task = Task(model=model, type='binary_classification', description="Detect Cance
 
 # Create AISystem from previous objects. AISystems are what users will primarily interact with.
 configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}},
-                              "protected_attributes": ["race"], "positive_label": 1}}
+                              "protected_attributes": ["race"], "positive_label": 1},
+                 "time_complexity": "linear"
+                 }
 ai = AISystem(meta_database=meta, dataset=dataset, task=task, user_config=configuration)
 ai.initialize()
 
@@ -70,7 +72,7 @@ train_preds = reg.predict(xTrain)
 
 # Make Predictions
 ai.reset_redis()
-ai.compute_metrics(train_preds, data_type="train", export_title="Train set")
+# ai.compute_metrics(train_preds, data_type="train", export_title="Train set")
 
 test_preds = reg.predict(xTest)
 # Make Predictions

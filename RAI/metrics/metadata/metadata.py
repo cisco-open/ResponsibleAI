@@ -8,7 +8,7 @@ _config = {
     "compatibility": {"type_restriction": None, "output_restriction": None},
     "dependency_list": [],
     "tags": ["metadata"],
-    "complexity_class": None,
+    "complexity_class": "linear",
     "metrics": {
         "date": {
             "display_name": "Date",
