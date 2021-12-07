@@ -95,7 +95,7 @@ body {
 .content-wrapper,
 .right-side {
   min-height: 100%;
-  background-color: #1b1f21;
+  background-color: #5e78a0;
   z-index: 800;
 }
 .main-footer {
@@ -148,6 +148,7 @@ body.hold-transition .main-header .logo {
   margin-left: auto;
   padding-left: 15px;
   padding-right: 15px;
+  color: #72afd2;
 }
 /* H1 - H6 font */
 h1,

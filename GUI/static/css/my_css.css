@@ -19,19 +19,19 @@ p.gauge-container {
 }
 
 .bg-fairness{
-    background-color: #dce2ff;
+    background-color: #dbedff;
 }
 
 .bg-robustness{
-    background-color: #c5dcd2;
+    background-color: #dbedff;
 }
 
 .bg-explain{
-    background-color: #d8cfc1;
+    background-color: #dbedff;
 }
 
 .bg-dataset{
-    background-color: #e2c5c5;
+    background-color: #dbedff;
 }
 
 div.explainabilityMetric {
@@ -39,8 +39,8 @@ div.explainabilityMetric {
     margin-left:10%;
     margin-right:auto;
     height:200px;
-    margin-top: 2%;
-    background-color: #d8cfc1;
+    margin-top: 40px;
+    background-color: #dbedff;
     fill: black;
 }
 
@@ -50,8 +50,8 @@ div.robustnessMetric {
     margin-left:10%;
     margin-right:auto;
     height:200px;
-    margin-top: 10px;
-    background-color: #c5dcd2;
+    margin-top: 40px;
+    background-color: #dbedff;
     fill: black;
 }
 
@@ -60,8 +60,8 @@ div.statsMetric {
     margin-left:10%;
     margin-right:auto;
     height:200px;
-    margin-top: 10px;
-    background-color: #e4ddb8;
+    margin-top: 40px;
+    background-color: #dbedff;
     fill: black;
 }
 
@@ -70,9 +70,13 @@ div.performanceMetric {
     margin-left:10%;
     margin-right:auto;
     height:200px;
-    margin-top: 10px;
-    background-color: #e2c5c5;
+    margin-top: 40px;
+    background-color:azure;
     fill: black;
+    border-width:3px;
+    border-style: solid;
+    border-radius: 15px;
+    border-color: #09134e;
 }
 
 div.fairnessMetric {
@@ -80,8 +84,8 @@ div.fairnessMetric {
     margin-left:10%;
     margin-right:auto;
     height:200px;
-    margin-top: 10px;
-    background-color: #dce2ff;
+    margin-top: 40px;
+    background-color: #fdfdfd;
     fill: black;
 }
 

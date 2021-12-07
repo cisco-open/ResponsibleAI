@@ -797,7 +797,7 @@ function view_slider(){
     var text_display = ""
     var chart_scaler = ""
     if(!slider.checked){
-        style = 'width: 32%; margin-left: 1%; margin-top: 2%; background-color: #dce2ff; fill: black; height: 290px;'
+        style = 'width: 32%; margin-left: 1%; margin-top: 2%; fill: black; height: 290px;'
         header_style = "text-align: center; font-size: 25px; margin-top: 10px; margin-bottom: 0px; color: black;"
         svg_style = "width:100%;"
         text_display = "display:block; margin-left:0px; text-align: center; font-size: 25px; margin-top: 5px; margin-bottom: 0px; color: black;"
