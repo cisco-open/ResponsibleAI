@@ -93,6 +93,8 @@ function callAllFunctions(metrics, data, df_json, category) {
 // Create graphs
 function createMetrics(metrics, explanations, data, category) {
     var list = metrics[category.toLowerCase()];
+    if (list==null)
+        return
     for (var i = 0; i < list.length; i++) {
         if(metric_info[list[i]]["type"] == "numeric"){
             addChart(list[i], explanations, data, category, "");

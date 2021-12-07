@@ -1,4 +1,3 @@
-from RAI import certificates
 from .certificate import Certificate
 
 __all__ = ['CertificateManager']

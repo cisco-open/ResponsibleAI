@@ -15,6 +15,7 @@
     RAI
     <small class="rai-desc">Tools for a Robust Future</small>
   </h1>
+      <h1 class="model_name">Model Name: {{model_name}} </h1>
   <ol class="breadcrumb">
     <li><a href="#"><i class="fa dashboard"></i>Home</a></li>
     <li class="active">Certificate</li>
@@ -22,13 +23,13 @@
 </section>
 
 <section class="content">
-    <h1 class="metricHeader">{{model_name}} - {{certificate_name}} History</h1>
+    <h1 class="metricHeader">{{certificate_name}} History</h1>
     <table class="grey" style="width:40%; margin-left:auto; margin-right:auto;">
         <tr>
             <th>Date</th>
             <th>Score</th>
             <th>Explanation</th>
-            <th>Certificate Description</th>
+            <th>Badge Description</th>
             <th>Measurement Description</th>
         </tr>
         {% for v in features %}

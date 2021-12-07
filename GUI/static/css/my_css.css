@@ -3,6 +3,13 @@ h1.metricHeader {
     color: white;
 }
 
+h1.model_name {
+    text-align: center;
+    display:inline-block;
+    color: white;
+    margin-left:50px;
+}
+
 p.chart-container {
     color: black;
     margin-top: 10px;
@@ -185,6 +192,7 @@ p.chartValue{
 
 .rai-desc {
     color:white;
+    display:inline-block;
 }
 
 .title {
@@ -477,3 +485,8 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 
+
+.controller_row{
+    margin-top:40px;
+    margin-bottom:40px;
+}

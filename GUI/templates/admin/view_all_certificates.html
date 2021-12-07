@@ -15,14 +15,16 @@
     RAI
     <small class="rai-desc">Tools for a Robust Future</small>
   </h1>
+  <h1 class="model_name">Model Name: {{model_name}} </h1>
+
   <ol class="breadcrumb">
     <li><a href="#"><i class="fa dashboard"></i>Home</a></li>
-    <li class="active">All Certificates</li>
+    <li class="active">All Badges</li>
   </ol>
 </section>
 
 <section class="content">
-    <h1 class="metricHeader">{{model_name}} - {{certificate_name}} All Certificates</h1>
+    <h1 class="metricHeader">{{badge_name}} All Badges</h1>
     <h1 class="metricHeader">Tests From {{date}}</h1>
     <h1 class="metricHeader">Level 1 Badges</h1>
     <table class="grey" style="width:40%; margin-left:auto; margin-right:auto;">
@@ -34,7 +36,7 @@
         </tr>
         {% for v in features1 %}
             <tr>
-                <td>{{v.name}} <a href="/viewCertificate/{{certificate_name}}/{{v.backend_name}}" class="fa fa-external-link fa-lg" style="float:right; color:black"></a> </td>
+                <td>{{v.name}} <a href="/viewCertificate/{{Certificate_name}}/{{v.backend_name}}" class="fa fa-external-link fa-lg" style="float:right; color:black"></a> </td>
                 <td><center><i class="fa {{v.score_class}} fa-2x"></i></center></td>
                 <td>{{v.category}}</td>
                 <td>{{v.explanation}}</td>
