@@ -40,8 +40,12 @@ div.explainabilityMetric {
     margin-right:auto;
     height:200px;
     margin-top: 40px;
-    background-color: #dbedff;
+    background-color:azure;
     fill: black;
+    border-width:3px;
+    border-style: solid;
+    border-radius: 15px;
+    border-color: #09134e;
 }
 
 
@@ -51,8 +55,12 @@ div.robustnessMetric {
     margin-right:auto;
     height:200px;
     margin-top: 40px;
-    background-color: #dbedff;
+    background-color:azure;
     fill: black;
+    border-width:3px;
+    border-style: solid;
+    border-radius: 15px;
+    border-color: #09134e;
 }
 
 div.statsMetric {
@@ -61,8 +69,12 @@ div.statsMetric {
     margin-right:auto;
     height:200px;
     margin-top: 40px;
-    background-color: #dbedff;
+    background-color:azure;
     fill: black;
+    border-width:3px;
+    border-style: solid;
+    border-radius: 15px;
+    border-color: #09134e;
 }
 
 div.performanceMetric {
@@ -85,8 +97,12 @@ div.fairnessMetric {
     margin-right:auto;
     height:200px;
     margin-top: 40px;
-    background-color: #fdfdfd;
+    background-color:azure;
     fill: black;
+    border-width:3px;
+    border-style: solid;
+    border-radius: 15px;
+    border-color: #09134e;
 }
 
 div.Metric{
@@ -98,10 +114,13 @@ div.MetricPage {
     width: 700px;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 2%;
-    background-color: #f4f2ee;
+    margin-top: 40px;
+    background-color:azure;
     fill: black;
-    height: 400px;
+    border-width:3px;
+    border-style: solid;
+    border-radius: 15px;
+    border-color: #09134e;
 }
 
 div.overflow_table {
