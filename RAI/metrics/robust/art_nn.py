@@ -4,6 +4,7 @@ import torch
 
 from art.estimators.classification import PyTorchClassifier
 from art.metrics import empirical_robustness, clever_t, clever_u, clever, loss_sensitivity, wasserstein_distance
+from RAI.utils import compare_runtimes
 
 R_L1 = 40
 R_L2 = 2
@@ -21,7 +22,7 @@ _config = {
     "src": "art",
     "dependency_list": [],
     "tags": ["robustness", "Adversarial"],
-    "complexity_class": "linear",
+    "complexity_class": "polynomial",
     "metrics": {
         "clever-t-l1": {
             "display_name": "Targeted L1 CLEVER",
@@ -116,7 +117,8 @@ class ArtAdversarialRobustnessGroup(MetricGroup, config=_config):
         compatible = _config["compatibility"]["type_restriction"] is None \
                     or ai_system.task.type == _config["compatibility"]["type_restriction"] \
                     or ai_system.task.type == "binary_classification" and _config["compatibility"]["type_restriction"] == "classification"
-        compatible = compatible and 'torch.nn' in str(ai_system.task.model.agent.__class__.__bases__)
+        compatible = compatible and 'torch.nn' in str(ai_system.task.model.agent.__class__.__bases__) \
+                     and compare_runtimes(ai_system.user_config.get("time_complexity"), _config["complexity_class"])
         return compatible
 
     def update(self, data):

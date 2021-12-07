@@ -60,6 +60,7 @@ class ClassificationMetric(BinaryLabelDatasetMetric):
             
             self.classified_dataset.favorable_label = float(fav_label_value)
             self.classified_dataset.unfavorable_label = float(unfav_label_value)
+
         
         # Verify if everything except the predictions and metadata are the same
         # for the two datasets

@@ -44,7 +44,6 @@ class BinaryLabelDatasetMetric(DatasetMetric):
             fav_idx = np.logical_or.reduce(np.equal.outer(self.dataset.favorable_label, self.dataset.labels))
             # Replace labels with corresponding values
             self.dataset.labels = np.where(fav_idx, fav_label_value, unfav_label_value)
-
             self.dataset.favorable_label = float(fav_label_value)
             self.dataset.unfavorable_label = float(unfav_label_value)
 
