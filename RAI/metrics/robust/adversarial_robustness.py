@@ -39,6 +39,12 @@ _config = {
             "range": [None, None],
             "explanation": "Dimensionality of Data correlates to its robustness against adversarial attacks.",
         },
+    }
+}
+
+
+# Other options
+'''
         "brendel-bethge-attack": {
             "display_name": "Brendel Bethge Score",
             "type": "numeric",
@@ -81,8 +87,7 @@ _config = {
             "range": [None, None],
             "explanation": "The Relationship Between High-Dimensional Geometry and Adversarial Examples. Justin Gilmer",
         },
-    }
-}
+'''
 
 
 # Type (Regression, Classification, Data | probability, numeric)
@@ -105,7 +110,6 @@ class AdversarialRobustnessMetricGroup(MetricGroup, config=_config):
             self.metrics["data-dimensionality"].value = np.sqrt(len(data.X[0]))
             self.metrics["l-inf-model-score"].value = None
             self.metrics["l-2-model-score"].value = None
-            self.metrics["brendel-bethge-attack"].value = None
 
             # Is Robustness the Cost of Accuracy? A Comprehensive Study on the Robustness of 18 Deep Image Classification Models. - Dong Su
             l_inf_distortions = {"alexnet": 3.5E-2, "vgg": 2.7E-2, "resnet": 1.5E-2, "inception": 1.5E-2, "mobilenet": 5E-3,

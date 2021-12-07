@@ -36,7 +36,7 @@
         </tr>
         {% for v in features1 %}
             <tr>
-                <td>{{v.name}} <a href="/viewCertificate/{{Certificate_name}}/{{v.backend_name}}" class="fa fa-external-link fa-lg" style="float:right; color:black"></a> </td>
+                <td>{{v.name}} <a href="/viewCertificate/{{v.backend_name}}" class="fa fa-external-link fa-lg" style="float:right; color:black"></a> </td>
                 <td><center><i class="fa {{v.score_class}} fa-2x"></i></center></td>
                 <td>{{v.category}}</td>
                 <td>{{v.explanation}}</td>

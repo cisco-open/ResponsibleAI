@@ -188,7 +188,7 @@ class AISystem:
         # CERTIFICATE VALUES, one for each group (Fairness, Explainability etc.). I added one for each level.
 
         metric_values = self.get_metric_values_flat()
-        cert_values = self.certificate_manager.compute( metric_values)
+        cert_values = self.certificate_manager.compute(metric_values)
         # cert_values = { "cert1_1": {"value": True, "explanation": "Test Passed because ..."},
         #                 "cert1_2": {"value": True, "explanation": "Test Passed because .."},
         #                 "cert2_1": {"value": False, "explanation": "Test failed because .."},

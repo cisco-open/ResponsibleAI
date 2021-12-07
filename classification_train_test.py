@@ -70,19 +70,17 @@ train_preds = reg.predict(xTrain)
 
 # Make Predictions
 ai.reset_redis()
-ai.compute_metrics(train_preds, data_type="train", export_title = "Train set")
+ai.compute_metrics(train_preds, data_type="train", export_title="Train set")
 
 test_preds = reg.predict(xTest)
 # Make Predictions
 
 
-ai.compute_metrics(test_preds, data_type="test", export_title = "Test set")
- 
-
+ai.compute_metrics(test_preds, data_type="test", export_title="Test set")
 
 
 print("\nViewing GUI")
-ai.viewGUI()
+# ai.viewGUI()
 print("DONE")
 
 

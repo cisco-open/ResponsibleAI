@@ -43,6 +43,20 @@
         {% endfor %}
     </table>
 
+    <h1 class="metricHeader">Last Conditions, {{union}}</h1>
+    <table class="grey" style="width:40%; margin-left:auto; margin-right:auto;">
+        <tr>
+            <th>Condition</th>
+            <th>Evaluation</th>
+        </tr>
+        {% for v in conditions %}
+            <tr>
+                <td>{{v.name}}</td>
+                <td>{{v.result}}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
 </section>
 <!-- /.content -->
 

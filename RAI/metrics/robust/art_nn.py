@@ -1,11 +1,8 @@
 from RAI.metrics.metric_group import MetricGroup
-from RAI.metrics.ai360_helper.AI360_helper import *
-import pandas as pd
 import numpy as np
-from RAI.metrics.AIF360.datasets import BinaryLabelDataset
-from RAI.metrics.AIF360.metrics import BinaryLabelDatasetMetric
+import torch
 
-from art.estimators.classification import SklearnClassifier
+from art.estimators.classification import PyTorchClassifier
 from art.metrics import empirical_robustness, clever_t, clever_u, clever, loss_sensitivity, wasserstein_distance
 
 R_L1 = 40
@@ -73,7 +70,13 @@ _config = {
             "has_range": True,
             "range": [0, 1],
             "explanation": "Calculates the rate at which at which a groups with a protected attribute recieve a positive outcome."
-        },
+        }
+    }
+}
+
+
+# Other metrics to consider adding
+'''
         "loss-sensitivity": {
             "display_name": "Loss Sensitivity",
             "type": "numeric",
@@ -88,7 +91,7 @@ _config = {
             "tags": [],
             "has_range": True,
             "range": [0, None],
-            "explanation": "Calculates the number of positive instances predicted."
+            "explanation": "Measures distribution samples between two inputs."
         },
         "empirical-robustness": {
             "display_name": "Empirical Robustness",
@@ -98,8 +101,11 @@ _config = {
             "range": [0, 1],
             "explanation": "Calculates the rate at which at which a groups with a protected attribute recieve a positive outcome."
         },
-    }
-}
+'''
+
+
+
+
 
 
 class ArtAdversarialRobustnessGroup(MetricGroup, config=_config):
@@ -110,6 +116,7 @@ class ArtAdversarialRobustnessGroup(MetricGroup, config=_config):
         compatible = _config["compatibility"]["type_restriction"] is None \
                     or ai_system.task.type == _config["compatibility"]["type_restriction"] \
                     or ai_system.task.type == "binary_classification" and _config["compatibility"]["type_restriction"] == "classification"
+        compatible = compatible and 'torch.nn' in str(ai_system.task.model.agent.__class__.__bases__)
         return compatible
 
     def update(self, data):
@@ -123,27 +130,37 @@ class ArtAdversarialRobustnessGroup(MetricGroup, config=_config):
             data = data_dict["data"]
             preds = data_dict["predictions"]
 
-            classifier = SklearnClassifier(model=self.ai_system.task.model.agent)
+            classifier = PyTorchClassifier(model=self.ai_system.task.model.agent,
+                                                                                 loss=self.ai_system.task.model.loss_function,
+                                                                                 optimizer=self.ai_system.task.model.optimizer,
+                                                                                 input_shape=[1, 30], nb_classes=2)
+
             # CLEVER PARAMS: classifier, input sample, target class, estimate repetitions, random examples to sample per batch, radius of max pertubation, param norm, Weibull distribution init, pool_factor
 
+            '''
+            X_t = torch.from_numpy(data.X).to(torch.float32).to("cpu")
+            n_values = np.max(data.y) + 1
+            y_one_hot = np.eye(n_values)[data.y]
+            y_t = torch.from_numpy(y_one_hot).to(torch.long).to("cpu")
+            '''
+
+            preds = preds.to("cpu")
             example_num = -1
             for i in range(len(preds)):
                 if preds[i] != data.y[i]:
                     example_num = i
                     break
 
-        # self.metrics['wasserstein-distance'].value = wasserstein_distance(data.X, data.y)
-        self.metrics['loss-sensitivity'].value = loss_sensitivity(classifier, data.X, data.y)
-        params = {"eps_step": 1.0, "eps": 1.0}
-        self.metrics['empirical-robustness'].value = empirical_robustness(classifier, data.X)
+            #self.metrics['wasserstein-distance'].value = wasserstein_distance(preds, data.y)
+            #self.metrics['loss-sensitivity'].value = loss_sensitivity(classifier, X_t, y_t)
+            #params = {"eps_step": 1.0, "eps": 1.0}
+            #self.metrics['empirical-robustness'].value = empirical_robustness(classifier, X_t, attack_name="fgsm")
 
-'''
             if example_num != -1:
-                self.metrics['clever-t-l1'].value = clever_t(classifier, data.X[example_num], data.y[example_num], 10, 5, R_L1, norm=1, pool_factor=3)
-                self.metrics['clever-t-l2'].value = clever_t(classifier, data.X[example_num], data.y[example_num], 10, 5, R_L2, norm=2, pool_factor=3)
-                self.metrics['clever-t-li'].value = clever_t(classifier, data.X[example_num], data.y[example_num], 10, 5, R_LI, norm=np.inf, pool_factor=3)
-                self.metrics['clever-u-l1'].value = clever_u(classifier, data.X[example_num], data.y[example_num], 10, 5, R_L1, norm=1, pool_factor=3, verbose=False)
-                self.metrics['clever-u-l2'].value = clever_u(classifier, data.X[example_num], data.y[example_num], 10, 5, R_L2, norm=2, pool_factor=3, verbose=False)
-                self.metrics['clever-u-li'].value = clever_u(classifier, data.X[example_num], data.y[example_num], 10, 5, R_LI, norm=np.inf, pool_factor=3, verbose=False)
-'''
+                self.metrics['clever-t-l1'].value = clever_t(classifier, np.float32(data.X[example_num]), data.y[example_num], 10, 5, R_L1, norm=1, pool_factor=3)
+                self.metrics['clever-t-l2'].value = clever_t(classifier, np.float32(data.X[example_num]), data.y[example_num], 10, 5, R_L2, norm=2, pool_factor=3)
+                self.metrics['clever-t-li'].value = clever_t(classifier, np.float32(data.X[example_num]), data.y[example_num], 10, 5, R_LI, norm=np.inf, pool_factor=3)
+                self.metrics['clever-u-l1'].value = clever_u(classifier, np.float32(data.X[example_num]), 10, 5, R_L1, norm=1, pool_factor=3, verbose=False)
+                self.metrics['clever-u-l2'].value = clever_u(classifier, np.float32(data.X[example_num]), 10, 5, R_L2, norm=2, pool_factor=3, verbose=False)
+                self.metrics['clever-u-li'].value = clever_u(classifier, np.float32(data.X[example_num]), 10, 5, R_LI, norm=np.inf, pool_factor=3, verbose=False)
 

@@ -129,11 +129,35 @@ def viewCertificates(name):
                            date=date["value"])
 
 
-@app.route('/viewCertificate/<category>/<name>')
-def viewCertificate(category, name):
+def getConditions(name, metadata, cert_values):
+    result = []
+    metric_info = json.loads(r.get(model_name + '|metric_info'))
+    print("Function starting")
+    cert_values = json.loads(cert_values[-1])
+    for i, item in enumerate(metadata[name]['condition']['terms']):
+        if item[0][0] == '@':
+            print("Certificate")
+            new_val = str(cert_values[name]["term_values"][i])
+            display_name = str(metadata[(item[0])[1:]]["name"])
+            result.append({"name": display_name + " " + str(item[1]) + " " + str(item[2]), "result": new_val})
+        elif item[0][0] == '&':
+            print("Metric")
+            new_val = str(cert_values[name]["term_values"][i])
+            display_name = str(metric_info[(item[0])[1:]]["display_name"])
+            result.append({"name": display_name + " " + str(item[1]) + " " + str(item[2]), "result": new_val})
+    return result
+
+
+
+@app.route('/viewCertificate/<name>')
+def viewCertificate(name):
     cert_info = r.lrange(model_name + '|certificate_values', 0, -1)
     metadata = json.loads(r.get(model_name + '|certificate_metadata'))
     model_info = json.loads(r.get(model_name + '|model_info'))
+
+    conditions = getConditions(name, metadata, cert_info)
+    print(str(conditions))
+
     clear_streams()
     result = []
     for i in range(len(cert_info)):
@@ -154,6 +178,8 @@ def viewCertificate(category, name):
                            admin_view=admin.index_view,
                            get_url=url_for,
                            h=admin_helpers,
+                           conditions=conditions,
+                           union=metadata[name]['condition']['op'],
                            model_name=model_info["display_name"],
                            certificate_name=metadata[name]["display_name"],
                            features=result)
