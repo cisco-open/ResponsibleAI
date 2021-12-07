@@ -22,9 +22,10 @@
     </ol>
 </section>
 
-<section class="content">
-    <h1 class="metricHeader">{{Category}} Metrics</h1>
-    <div class="row controller_row">
+<section class="content" style="margin-top:20px; margin-bottom: 20px; border-style: groove;border-radius: 5px; margin-left:70px; margin-right:70px; background-color:rgb(60, 63, 68);">
+    <h4 class="metricHeader">{{Category}} Metrics</h4>
+    
+    <div class="row controller_row" style="margin-top: 20px;">
         <button id="edit_view" class="editView" onclick="displayMenu('{{Functional}}')">Filter</button>
         <input type="text" id="myInput" onkeyup="search('{{Functional}}')" placeholder="Search metrics.." style="margin-left:50px">
         <div style="display:inline-block; margin-left:50px; color:white; vertical-align:top;">
@@ -41,10 +42,11 @@
                 <span class="slider round" onclick="view_slider()"></span>
             </label>
         </div>
-        <input class="dateChooser" type="date" id="endDate" value="{{end_date}}" onchange="redoMetrics()">
-        <label for="endDate" class="dateChooser">End Date:</label>
-        <input class="dateChooser" type="date" id="startDate" value="{{start_date}}" onchange="redoMetrics()">
-        <label for="startDate" class="dateChooser">Start Date:</label>
+        <br>
+        <label for="startDate" class="dateChooser" style=" margin-left: 50px; margin-top: 20px;">Start Date:</label>
+        <input class="dateChooser" type="date" id="startDate" value="{{start_date}}" onchange="redoMetrics()"style=" margin-left: 20px; margin-top: 20px;">
+        <label for="startDate" class="dateChooser" style=" margin-left: 50px; margin-top: 20px;">End Date:</label>
+        <input class="dateChooser" type="date" id="endDate" value="{{end_date}}" onchange="redoMetrics()" style=" margin-left: 50px; margin-top: 20px;">
         <div id="selector" class="selector" style="display:none">
             <p class="selectorHeader">Metric Selector</p>
             <div id="tag_selection" style="width:49%; display:inline-block; vertical-align:top;">
@@ -54,8 +56,12 @@
                 <p style="margin-bottom:5px; margin-left:70px;">Data Types</p>
             </div>
         </div>
+     
     </div>
-    <div class="row" id="metric_row">
+    </section>
+    <div class="row" id="metric_row", style="border-style: groove;border-radius: 15px; margin-left:70px; margin-right:70px; background-color:rgb(9, 30, 61);">
+        <div class="row" id="metric_row">
+        </div>
     </div>
     <script>loadMetrics("{{Functional}}")</script>
 </section>
