@@ -273,7 +273,7 @@ td.displayMatrix, th.displayMatrix {
 
 .selector {
     width: 400px;
-    background-color: #081f27;
+    background-color: #134e66;
     color: white;
     border-radius:15px;
     margin-left:auto;
@@ -286,7 +286,7 @@ td.displayMatrix, th.displayMatrix {
 }
 
 .selectorButton {
-    background-color: #332c2c;
+    background-color: #134e66;
     color:white;
     width:50px;
     margin-left:auto;
@@ -300,11 +300,12 @@ td.displayMatrix, th.displayMatrix {
 }
 
 .editView {
-    background-color: #24284e;
+    background-color: #134e66;
     color:white;
     float:left;
     margin-right:15px;
-    margin-left: 50px;
+    margin-left: 30px;
+    margin-top:20px;
 }
 
 .removeChart {
@@ -570,7 +571,7 @@ input:checked + .slider:before {
 }
 
 .styled-table tbody tr:nth-of-type(even) {
-    background-color: #f3f3f3;
+    background-color: #eef1f5;;
 }
 
 .styled-table tbody tr:last-of-type {
