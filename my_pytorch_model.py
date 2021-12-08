@@ -104,18 +104,38 @@ train_preds = torch.argmax(net(X_train_t), axis=1)
 
 ai.reset_redis()
 ai.compute_metrics(train_preds.cpu(), data_type="train")
-ai.export_data_flat("Train set")
+ai.export_data_flat("Pytorch Model")
 ai.export_certificates()
 
 
-resv_f = ai.get_metric_values_flat()
-resi_f = ai.get_metric_info_flat()
-for key in resv_f:
-    if hasattr(resv_f[key], "__len__"):
-        # print(resi_f[key]['display_name'], " = ", 'list ...')
-        print(resi_f[key]['display_name'], " = ", resv_f[key])
-    else:
-        print(resi_f[key]['display_name'], " = ", resv_f[key])
+
+from sklearn.ensemble import RandomForestClassifier
+reg = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=0)
+model = Model(agent=reg, name="cisco_cancer_ai_2", display_name="Cisco Health AI Forest", model_class="Random Forest Classifier", adaptive=False)
+# Indicate the task of the model
+task = Task(model=model, type='binary_classification', description="Detect Cancer in patients using skin measurements")
+configuration = {}
+
+ai = AISystem(meta_database=meta, dataset=dataset, task=task, user_config=configuration)
+ai.initialize()
+
+# Train model
+reg.fit(xTrain, yTrain)
+train_preds = reg.predict(xTrain)
+
+# Make Predictions
+ai.reset_redis()
+# ai.compute_metrics(train_preds, data_type="train", export_title="Train set")
+
+test_preds = reg.predict(xTest)
+# Make Predictions
+
+ai.compute_metrics(test_preds, data_type="test", export_title="Test set")
+ai.export_data_flat("Sklearn Model")
+ai.export_certificates()
+
+
+
 
 
 

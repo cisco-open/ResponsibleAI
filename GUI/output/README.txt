@@ -1,1 +1,0 @@
-these are temporary files while certificate data isn't exported to redis yet.
