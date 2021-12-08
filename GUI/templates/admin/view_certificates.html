@@ -19,12 +19,14 @@
     <h1 class="tableHeader">{{certificate_name}} Badges From {{date}}</h1>
     <br>
     <h1 class="tableHeader">Level 1 Badges</h1>
-    <table class="grey" style="width:40%; margin-left:auto; margin-right:auto;">
+    <table class="styled-table" style="width:40%; margin-left:auto; margin-right:auto;">
+        <thead>
         <tr>
             <th>Test</th>
             <th>Score</th>
             <th>Explanation</th>
         </tr>
+        </thead>
         {% for v in features1 %}
             <tr>
                 <td>{{v.name}} <a href="/viewCertificate/{{v.backend_name}}" class="fa fa-external-link fa-lg" style="float:right; color:black"></a> </td>
@@ -35,12 +37,14 @@
     </table>
 
     <h1 class="tableHeader">Level 2 Badges</h1>
-    <table class="grey" style="width:40%; margin-left:auto; margin-right:auto;">
+    <table class="styled-table" style="width:40%; margin-left:auto; margin-right:auto;">
+        <thead>
         <tr>
             <th>Test</th>
             <th>Score</th>
             <th>Explanation</th>
         </tr>
+        </thead>
         {% for v in features2 %}
             <tr>
                 <td>{{v.name}} <a href="/viewCertificate/{{certificate_name}}/{{v.backend_name}}" class="fa fa-external-link fa-lg" style="float:right; color:black"></a> </td>

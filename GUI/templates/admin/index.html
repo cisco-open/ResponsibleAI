@@ -120,11 +120,13 @@
             <p class="mainPageChartHeader">Failed Fairness Badges</p>
             <div id="fairnessChart" class="morris-chart chartScaler" style="height:80%;width:100%;">
                 <div class="front_overflow_table" id="fairness_chart">
-                    <table class="grey">
-                        <tr>
-                            <th>Name</th>
-                            <th>Status</th>
-                        </tr>
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Status</th>
+                            <tr>
+                        </thead>
                         {% for v in failed.fairness %}
                         <tr>
                             <td>{{v.name}}</td>
@@ -142,11 +144,13 @@
             <p class="mainPageChartHeader">Failed Robustness Badges</p>
             <div id="robustnessChart" class="morris-chart chartScaler" style="height:80%;width:100%;">
                 <div class="front_overflow_table" id="robustness_chart">
-                    <table class="grey">
-                        <tr>
-                            <th>Name</th>
-                            <th>Status</th>
-                        </tr>
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
                         {% for v in failed.robustness %}
                         <tr>
                             <td>{{v.name}}</td>
@@ -167,11 +171,13 @@
             <p class="mainPageChartHeader">Failed Explainability Badges</p>
             <div id="explainabilityChart" class="morris-chart chartScaler" style="height:80%;width:100%;">
                 <div class="front_overflow_table" id="explainability_chart">
-                    <table class="grey">
-                        <tr>
-                            <th>Name</th>
-                            <th>Status</th>
-                        </tr>
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
                         {% for v in failed.explainability %}
                         <tr>
                             <td>{{v.name}}</td>
@@ -189,11 +195,13 @@
             <p class="mainPageChartHeader">Failed Performance Badges</p>
                         <div id="performanceChart" class="morris-chart chartScaler" style="height:80%;width:100%;">
                 <div class="front_overflow_table" id="performance_chart">
-                    <table class="grey">
-                        <tr>
-                            <th>Name</th>
-                            <th>Status</th>
-                        </tr>
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
                         {% for v in failed.performance %}
                         <tr>
                             <td>{{v.name}}</td>

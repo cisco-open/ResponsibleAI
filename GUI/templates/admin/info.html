@@ -16,11 +16,13 @@
 
 <section class="content">
     <h1 class="tableHeader">Model Info</h1>
-    <table class="grey" style="width:40%; margin-left:auto; margin-right:auto;">
+    <table class="styled-table" style="width:40%; margin-left:auto; margin-right:auto;">
+        <thead>
         <tr>
             <th>Name</th>
             <th>{{name}}</th>
         </tr>
+        </thead>
         <tr>
             <td>Description</td>
             <td>{{description}}</td>
@@ -40,10 +42,12 @@
     </table>
 
     <h1 class="tableHeader">Inputs</h1>
-    <table class="grey" style="width:40%; margin-left:auto; margin-right:auto;">
+    <table class="styled-table" style="width:40%; margin-left:auto; margin-right:auto;">
+        <thead>
         <tr>
             <th>Input</th>
         </tr>
+        </thead>
         {% for v in features %}
             <tr>
                 <td>{{v}}</td>
