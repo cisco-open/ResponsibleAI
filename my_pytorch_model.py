@@ -4,6 +4,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
 
+# FIRST DRAFT, CODE SOON TO CLEANED UP, COMPLETED AND PUT IN JUPYTER.
+# MULTIPLE WEBSITE INSTANCES NEEDED TO BE ADDED TO RAI FIRST TO ALLOW FOR THE DEMO.
 
 class Net(nn.Module):
     def __init__(self):
