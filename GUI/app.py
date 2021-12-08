@@ -68,6 +68,7 @@ def get_certificate_dates():
 @app.route('/')
 def index():
     model_info = json.loads(r.get(model_name + '|model_info'))
+    start_date, end_date = get_certificate_dates()
     # GET FAILED PER CATEGORY.
     failed = []
 
@@ -97,6 +98,8 @@ def index():
                            get_url=url_for,
                            failed=failed,
                            h=admin_helpers,
+                           end_date=end_date,
+                           start_date=start_date,
                            model_name=model_info["display_name"])
     # return redirect(url_for('admin.index'))
 
@@ -341,8 +344,10 @@ def getModelInfo():
     # return cache['metric_info']
 
 
-@app.route('/getCertification', methods=['GET'])
-def getCertification():  # NOT REAL DATA YET.
+@app.route('/getCertification/<date1>/<date2>', methods=['GET'])
+def getCertification(date1, date2):  # NOT REAL DATA YET.
+    date1 += " 00:00:00"
+    date2 += " 99:99:99"
     data_test = r.lrange(model_name + '|certificate_values', 0, -1)
     metadata = json.loads(r.get(model_name + '|certificate_metadata'))
 
@@ -352,22 +357,23 @@ def getCertification():  # NOT REAL DATA YET.
     for i in range(len(data_test)):
         item = json.loads(data_test[i])
         scores = {"fairness": [0, 0], "explainability": [0, 0], "performance": [0, 0], "robustness": [0, 0]}
-        temp_dict = {}
-        for value in item:
-            if metadata[value]["tags"][0] != "metadata":
-                if metadata[value]["tags"][0] not in temp_dict:
-                    temp_dict[metadata[value]["tags"][0]] = []
-                metric_obj = item[value]
-                for key in metadata[value]:
-                    metric_obj[key] = metadata[value][key]
-                temp_dict[metadata[value]["tags"][0]].append(metric_obj)
+        if date1 <= item['metadata > date']["value"] <= date2:
+            temp_dict = {}
+            for value in item:
+                if metadata[value]["tags"][0] != "metadata":
+                    if metadata[value]["tags"][0] not in temp_dict:
+                        temp_dict[metadata[value]["tags"][0]] = []
+                    metric_obj = item[value]
+                    for key in metadata[value]:
+                        metric_obj[key] = metadata[value][key]
+                    temp_dict[metadata[value]["tags"][0]].append(metric_obj)
 
-                if metadata[value]["tags"][0] in scores:
-                    scores[metadata[value]["tags"][0]][1] += 1
-                    if item[value]["value"]:
-                        scores[metadata[value]["tags"][0]][0] += 1
-        temp_dict['metadata'] = {"date": item['metadata > date'], "description": item['metadata > description'], "scores": scores}
-        res.append(temp_dict)
+                    if metadata[value]["tags"][0] in scores:
+                        scores[metadata[value]["tags"][0]][1] += 1
+                        if item[value]["value"]:
+                            scores[metadata[value]["tags"][0]][0] += 1
+            temp_dict['metadata'] = {"date": item['metadata > date'], "description": item['metadata > description'], "scores": scores}
+            res.append(temp_dict)
     return json.dumps(res)
 
 

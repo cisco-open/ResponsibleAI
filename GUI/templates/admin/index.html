@@ -113,14 +113,53 @@
     </div>
     <!-- /.row -->
     <!-- Main row -->
+
+    <section class="content control_content" style="margin-top:20px;">
+    <div class="row controller_row">
+        <div style="display:inline-block; margin-left:0px; color:white; float:left; margin-left:10px; vertical-align:top;">
+            <p style="display:inline-block; font-size:17px;">Use Dates:</p>
+            <label class="switch" style="vertical-align:top">
+                <input type="checkbox" id="slider_input" checked>
+                <span class="slider round" onclick="date_slider()"></span>
+            </label>
+        </div>
+        <input class="dateChooser" type="date" id="endDate" value="{{end_date}}" onchange="redoMetrics()" style="float:right; margin-right: 20px;">
+        <label for="startDate" class="dateChooser" style="margin-right: 20px; float:right;">End Date:</label>
+        <input class="dateChooser" type="date" id="startDate" value="{{start_date}}" onchange="redoMetrics()"style="float:right; margin-right: 20px;">
+        <label for="startDate" class="dateChooser" style="float:right; margin-right: 20px;">Start Date:</label>
+        <br>
+    </div>
+
+    </section>
+
+
     <div class="row">
         <!-- Left col -->
         <div class="col-sm-6 bg-fairness chart-container main-panel" style="width:80%; margin-left:10%; fill:black;  height:450px;">
             <!-- Custom tabs (Charts with tabs)-->
             <p class="mainPageChartHeader">Badge Scores</p>
-            <div id="fairnessChart" class="morris-chart chartScaler" style="height:80%;width:100%;"></div>
+            <div id="allChart" class="morris-chart chartScaler" style="height:80%;width:100%;"></div>
             <!-- /.nav-tabs-custom -->
+            <div class="legend">
+                <div style="display:inline-block; margin-left:15px;">
+                    <div class="solid-box" style="background-color:red;"></div>
+                    <p class="legend-text">Fairness</p>
+                </div>
+                <div style="display:inline-block; margin-left:15px;">
+                    <div class="solid-box" style="background-color:green;"></div>
+                    <p class="legend-text">Robustness</p>
+                </div>
+                <div style="display:inline-block; margin-left:15px;">
+                    <div class="solid-box" style="background-color:blue;"></div>
+                    <p class="legend-text">Performance</p>
+                </div>
+                <div style="display:inline-block; margin-left:15px;">
+                    <div class="solid-box" style="background-color:yellow;"></div>
+                    <p class="legend-text">Explainability</p>
+                </div>
+            </div>
         </div>
+
     <!-- /.row (main row) -->
     </div>
     <p class="mainPageChartHeader" style="margin-top:50px;">Failed Badges</p>
