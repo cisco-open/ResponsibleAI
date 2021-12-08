@@ -11,21 +11,14 @@
 
 <!-- Content Header (Page header) -->
 <section class="content-header">
-  <h1 class="rai-desc">
-    RAI
-    <small class="rai-desc">Tools for a Robust Future</small>
-  </h1>
       <h1 class="model_name">Model Name: {{model_name}} </h1>
-  <ol class="breadcrumb">
-    <li><a href="#"><i class="fa dashboard"></i>Home</a></li>
-    <li class="active">Certificate</li>
-  </ol>
+    <h1 class="pageHeader">Badges</h1>
 </section>
 
 <section class="content">
-    <h1 class="metricHeader">{{certificate_name}} Badges</h1>
-    <h1 class="metricHeader">Tests From {{date}}</h1>
-    <h1 class="metricHeader">Level 1 Badges</h1>
+    <h1 class="tableHeader">{{certificate_name}} Badges From {{date}}</h1>
+    <br>
+    <h1 class="tableHeader">Level 1 Badges</h1>
     <table class="grey" style="width:40%; margin-left:auto; margin-right:auto;">
         <tr>
             <th>Test</th>
@@ -41,7 +34,7 @@
         {% endfor %}
     </table>
 
-    <h1 class="metricHeader">Level 2 Badges</h1>
+    <h1 class="tableHeader">Level 2 Badges</h1>
     <table class="grey" style="width:40%; margin-left:auto; margin-right:auto;">
         <tr>
             <th>Test</th>

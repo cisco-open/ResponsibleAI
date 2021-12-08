@@ -6,48 +6,40 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
-<script type="text/javascript" src="/static/js/add_metrics.js"></script>
+<script type="text/javascript" src="{{page_js}}"></script>
 <link rel="stylesheet" href="/static/css/my_css.css">
 
 <!-- Content Header (Page header) -->
 <section class="content-header">
-    <h1 class="rai-desc">
-        RAI
-        <small class="rai-desc">Tools for a Robust Future</small>
-    </h1>
       <h1 class="model_name">Model Name: {{model_name}} </h1>
-    <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i>Home</a></li>
-        <li class="active">{{Category}}</li>
-    </ol>
+    <h1 class="pageHeader">{{Category}} Metrics</h1>
 </section>
 
-<section class="content" style="margin-top:20px; margin-bottom: 20px; border-style: groove;border-radius: 5px; margin-left:70px; margin-right:70px; background-color:rgb(60, 63, 68);">
-    <h4 class="metricHeader">{{Category}} Metrics</h4>
-    
-    <div class="row controller_row" style="margin-top: 20px;">
-        <button id="edit_view" class="editView" onclick="displayMenu('{{Functional}}')">Filter</button>
-        <input type="text" id="myInput" onkeyup="search('{{Functional}}')" placeholder="Search metrics.." style="margin-left:50px">
-        <div style="display:inline-block; margin-left:50px; color:white; vertical-align:top;">
+<section class="content control_content">
+    <div class="row controller_row">
+        <input type="text" id="myInput" onkeyup="search('{{Functional}}')" placeholder="Search metrics.." style="margin-right:20px; float:right;">
+        <div style="display:inline-block; margin-left:15px; color:white; vertical-align:top;">
             <p style="display:inline-block; font-size:17px;">Use Dates:</p>
             <label class="switch" style="vertical-align:top">
                 <input type="checkbox" id="slider_input" checked>
                 <span class="slider round" onclick="date_slider()"></span>
             </label>
         </div>
-        <div style="display:inline-block; margin-left:50px; color:white; vertical-align:top;">
+        <div style="display:inline-block; margin-left:15px; color:white; vertical-align:top; margin-left:35px; margin-right:70px;">
             <p style="display:inline-block; font-size:17px;">Shared View:</p>
             <label class="switch" style="vertical-align:top">
                 <input type="checkbox" id="view_input">
                 <span class="slider round" onclick="view_slider()"></span>
             </label>
         </div>
+         <button id="edit_view" class="editView" onclick="displayMenu('{{Functional}}')">Filter</button>
         <br>
-        <label for="startDate" class="dateChooser" style=" margin-left: 50px; margin-top: 20px;">Start Date:</label>
-        <input class="dateChooser" type="date" id="startDate" value="{{start_date}}" onchange="redoMetrics()"style=" margin-left: 20px; margin-top: 20px;">
-        <label for="startDate" class="dateChooser" style=" margin-left: 50px; margin-top: 20px;">End Date:</label>
-        <input class="dateChooser" type="date" id="endDate" value="{{end_date}}" onchange="redoMetrics()" style=" margin-left: 50px; margin-top: 20px;">
-        <div id="selector" class="selector" style="display:none">
+        <label for="startDate" class="dateChooser" style=" margin-left: 30px; margin-top: 20px; float:left;">Start Date:</label>
+        <input class="dateChooser" type="date" id="startDate" value="{{start_date}}" onchange="redoMetrics()"style=" margin-left: 10px; margin-top: 20px;">
+        <input class="dateChooser" type="date" id="endDate" value="{{end_date}}" onchange="redoMetrics()" style="float:right; margin-right: 30px; margin-top: 20px;">
+        <label for="startDate" class="dateChooser" style=" margin-right: 20px; margin-top: 20px; float:right;">End Date:</label>
+        <br>
+        <div id="selector" class="selector" style="display:none; margin-top:50px;">
             <p class="selectorHeader">Metric Selector</p>
             <div id="tag_selection" style="width:49%; display:inline-block; vertical-align:top;">
                 <p style="margin-bottom:5px; margin-left:35px;">Metric Categories</p>
@@ -56,15 +48,13 @@
                 <p style="margin-bottom:5px; margin-left:70px;">Data Types</p>
             </div>
         </div>
-     
+
     </div>
+
     </section>
-    <div class="row" id="metric_row", style="border-style: groove;border-radius: 15px; margin-left:70px; margin-right:70px; background-color:rgb(9, 30, 61);">
-        <div class="row" id="metric_row">
-        </div>
+    <div class="row main_content_background" id="metric_row">
     </div>
-    <script>loadMetrics("{{Functional}}")</script>
-</section>
+    <script>{{main_function}}("{{Functional}}")</script>
 <!-- /.content -->
 
 {% endblock body %}

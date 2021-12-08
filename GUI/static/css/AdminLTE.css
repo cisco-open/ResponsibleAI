@@ -95,7 +95,7 @@ body {
 .content-wrapper,
 .right-side {
   min-height: 100%;
-  background-color: #5e78a0;
+  background-color: #dee4ee;
   z-index: 800;
 }
 .main-footer {
@@ -142,7 +142,6 @@ body.hold-transition .main-header .logo {
 }
 /* Content */
 .content {
-  min-height: 250px;
   padding: 15px;
   margin-right: auto;
   margin-left: auto;

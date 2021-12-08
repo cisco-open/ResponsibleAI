@@ -133,7 +133,7 @@ function stringToMatrix(data, name){
 function addChart(metric_name, data, name_extension){
     var body = document.getElementById('_row');
     var newDiv = document.createElement('div');
-    newDiv.setAttribute("class", 'MetricPage chart-container main-panel');
+    newDiv.setAttribute("class", 'MetricPage Metric chart-container main-panel');
     newDiv.setAttribute("id", metric_name + "_chart");
     var writing = document.createElement('p');
     writing.innerHTML = metric_display_name;
@@ -192,7 +192,7 @@ function addChart(metric_name, data, name_extension){
 function addBoolChart(metric_name, data){
     var body = document.getElementById('_row');
     var newDiv = document.createElement('div');
-    newDiv.setAttribute("class", 'MetricPage chart-container main-panel');
+    newDiv.setAttribute("class", 'MetricPage Metric chart-container main-panel');
     newDiv.setAttribute("id", metric_name + "_chart");
     var writing = document.createElement('p');
     writing.innerHTML = metric_display_name;
@@ -246,7 +246,7 @@ function addBoolChart(metric_name, data){
 function addTable(metric_name, data_array, optionalName="", optionalNumber=""){
     var body = document.getElementById('_row');
     var newDiv = document.createElement('div');
-    newDiv.setAttribute("class", 'MetricPage chart-container main-panel');
+    newDiv.setAttribute("class", 'MetricPage Metric chart-container main-panel');
     if(optionalNumber!="")
         optionalNumber = "|"+optionalNumber;
     newDiv.setAttribute("id", metric_name + "_chart"+optionalNumber);

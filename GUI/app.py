@@ -70,17 +70,37 @@ def get_certificate_dates():
 
 @app.route('/')
 def index():
-    start_date, end_date = get_certificate_dates()
     model_info = json.loads(r.get(model_name + '|model_info'))
+    # GET FAILED PER CATEGORY.
+    failed = {"fairness": [], "robustness": [], "performance": [], "explainability": []}
+
+    data_test = r.lrange(model_name + '|certificate_values', 0, -1)
+    metadata = json.loads(r.get(model_name + '|certificate_metadata'))
+
+    # data_test = cache['metric_values']
+    clear_streams()
+    res = []
+    item = json.loads(data_test[-1])
+    scores = {"fairness": [0, 0], "explainability": [0, 0], "performance": [0, 0], "robustness": [0, 0]}
+    temp_dict = {}
+    for value in item:
+        if metadata[value]["tags"][0] != "metadata":
+            if metadata[value]["tags"][0] in scores:
+                scores[metadata[value]["tags"][0]][1] += 1
+                if item[value]["value"]:
+                    scores[metadata[value]["tags"][0]][0] += 1
+                else:
+                    failed[metadata[value]["tags"][0]].append({"name":metadata[value]['display_name'], "status": item[value]["value"]})
+        temp_dict['metadata'] = {"date": item['metadata > date'], "description": item['metadata > description'], "scores": scores}
+        res.append(temp_dict)
 
     return render_template('/admin/index.html',
                            admin_base_template=admin.base_template,
                            admin_view=admin.index_view,
                            get_url=url_for,
+                           failed=failed,
                            h=admin_helpers,
-                           model_name=model_info["display_name"],
-                           end_date=end_date,
-                           start_date=start_date)
+                           model_name=model_info["display_name"])
     # return redirect(url_for('admin.index'))
 
 
@@ -215,7 +235,7 @@ def viewAllCertificates():
                 result1.append(dict_item)
             elif '2' in metadata[item]['level'] or metadata[item]['level'] == 2:
                 result2.append(dict_item)
-    return render_template('/admin/view_all_certificates.html',
+    return render_template('/admin/view_certificates.html',
                            admin_base_template=admin.base_template,
                            admin_view=admin.index_view,
                            get_url=url_for,
@@ -324,10 +344,8 @@ def getModelInfo():
     # return cache['metric_info']
 
 
-@app.route('/getCertification/<date1>/<date2>', methods=['GET'])
-def getCertification(date1, date2):  # NOT REAL DATA YET.
-    date1 += " 00:00:00"
-    date2 += " 99:99:99"
+@app.route('/getCertification', methods=['GET'])
+def getCertification():  # NOT REAL DATA YET.
     data_test = r.lrange(model_name + '|certificate_values', 0, -1)
     metadata = json.loads(r.get(model_name + '|certificate_metadata'))
 
@@ -337,23 +355,22 @@ def getCertification(date1, date2):  # NOT REAL DATA YET.
     for i in range(len(data_test)):
         item = json.loads(data_test[i])
         scores = {"fairness": [0, 0], "explainability": [0, 0], "performance": [0, 0], "robustness": [0, 0]}
-        if date1 <= item['metadata > date']["value"] <= date2:
-            temp_dict = {}
-            for value in item:
-                if metadata[value]["tags"][0] != "metadata":
-                    if metadata[value]["tags"][0] not in temp_dict:
-                        temp_dict[metadata[value]["tags"][0]] = []
-                    metric_obj = item[value]
-                    for key in metadata[value]:
-                        metric_obj[key] = metadata[value][key]
-                    temp_dict[metadata[value]["tags"][0]].append(metric_obj)
+        temp_dict = {}
+        for value in item:
+            if metadata[value]["tags"][0] != "metadata":
+                if metadata[value]["tags"][0] not in temp_dict:
+                    temp_dict[metadata[value]["tags"][0]] = []
+                metric_obj = item[value]
+                for key in metadata[value]:
+                    metric_obj[key] = metadata[value][key]
+                temp_dict[metadata[value]["tags"][0]].append(metric_obj)
 
-                    if metadata[value]["tags"][0] in scores:
-                        scores[metadata[value]["tags"][0]][1] += 1
-                        if item[value]["value"]:
-                            scores[metadata[value]["tags"][0]][0] += 1
-            temp_dict['metadata'] = {"date": item['metadata > date'], "description": item['metadata > description'], "scores": scores}
-            res.append(temp_dict)
+                if metadata[value]["tags"][0] in scores:
+                    scores[metadata[value]["tags"][0]][1] += 1
+                    if item[value]["value"]:
+                        scores[metadata[value]["tags"][0]][0] += 1
+        temp_dict['metadata'] = {"date": item['metadata > date'], "description": item['metadata > description'], "scores": scores}
+        res.append(temp_dict)
     return json.dumps(res)
 
 
@@ -370,12 +387,16 @@ def renderClassTemplate(category):
     functional = category.replace(' ', '_').lower()
     start_date, end_date = get_dates()
     model_info = json.loads(r.get(model_name + '|model_info'))
+    page_js = "/static/js/add_metrics.js"
+    main_function = "loadMetrics"
 
     return render_template('/admin/view_class.html',
                            admin_base_template=admin.base_template,
                            admin_view=admin.index_view,
                            get_url=url_for,
                            h=admin_helpers,
+                           page_js=page_js,
+                           main_function=main_function,
                            model_name=model_info["display_name"],
                            Category=category,
                            Functional=functional,
@@ -387,10 +408,18 @@ def renderClassTemplate(category):
 def renderAllMetrics():
     start_date, end_date = get_dates()
     model_info = json.loads(r.get(model_name + '|model_info'))
-    return render_template('/admin/view_all.html',
+    page_js = "/static/js/add_all.js"
+    main_function = "loadAll"
+    functional = ""
+
+    return render_template('/admin/view_class.html',
                            admin_base_template=admin.base_template,
                            admin_view=admin.index_view,
                            get_url=url_for,
+                           Category="All",
+                           main_function=main_function,
+                           functional=functional,
+                           page_js=page_js,
                            h=admin_helpers,
                            model_name=model_info["display_name"],
                            start_date=start_date,

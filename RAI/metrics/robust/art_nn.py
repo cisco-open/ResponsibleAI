@@ -1,7 +1,7 @@
 from RAI.metrics.metric_group import MetricGroup
 import numpy as np
 import torch
-
+import math
 from art.estimators.classification import PyTorchClassifier
 from art.metrics import empirical_robustness, clever_t, clever_u, clever, loss_sensitivity, wasserstein_distance
 from RAI.utils import compare_runtimes
@@ -112,6 +112,7 @@ _config = {
 class ArtAdversarialRobustnessGroup(MetricGroup, config=_config):
     def __init__(self, ai_system) -> None:
         super().__init__(ai_system)
+        self.MAX_COMPUTES = 10
 
     def is_compatible(ai_system):
         compatible = _config["compatibility"]["type_restriction"] is None \
@@ -147,22 +148,51 @@ class ArtAdversarialRobustnessGroup(MetricGroup, config=_config):
             '''
 
             preds = preds.to("cpu")
-            example_num = -1
+            example_nums = []
             for i in range(len(preds)):
                 if preds[i] != data.y[i]:
-                    example_num = i
-                    break
+                    example_nums.append(i)
 
             #self.metrics['wasserstein-distance'].value = wasserstein_distance(preds, data.y)
             #self.metrics['loss-sensitivity'].value = loss_sensitivity(classifier, X_t, y_t)
             #params = {"eps_step": 1.0, "eps": 1.0}
             #self.metrics['empirical-robustness'].value = empirical_robustness(classifier, X_t, attack_name="fgsm")
 
-            if example_num != -1:
-                self.metrics['clever-t-l1'].value = clever_t(classifier, np.float32(data.X[example_num]), data.y[example_num], 10, 5, R_L1, norm=1, pool_factor=3)
-                self.metrics['clever-t-l2'].value = clever_t(classifier, np.float32(data.X[example_num]), data.y[example_num], 10, 5, R_L2, norm=2, pool_factor=3)
-                self.metrics['clever-t-li'].value = clever_t(classifier, np.float32(data.X[example_num]), data.y[example_num], 10, 5, R_LI, norm=np.inf, pool_factor=3)
-                self.metrics['clever-u-l1'].value = clever_u(classifier, np.float32(data.X[example_num]), 10, 5, R_L1, norm=1, pool_factor=3, verbose=False)
-                self.metrics['clever-u-l2'].value = clever_u(classifier, np.float32(data.X[example_num]), 10, 5, R_L2, norm=2, pool_factor=3, verbose=False)
-                self.metrics['clever-u-li'].value = clever_u(classifier, np.float32(data.X[example_num]), 10, 5, R_LI, norm=np.inf, pool_factor=3, verbose=False)
+            if len(example_nums) >= 1:
+                self.metrics['clever-t-l1'].value = 0
+                self.metrics['clever-t-l2'].value = 0
+                self.metrics['clever-t-li'].value = 0
+                self.metrics['clever-u-l1'].value = 0
+                self.metrics['clever-u-l2'].value = 0
+                self.metrics['clever-u-li'].value = 0
+                to_compute = self.get_selection(example_nums)
+                print(str(to_compute))
+                for example_num in to_compute:
+                    self.metrics['clever-t-l1'].value += clever_t(classifier, np.float32(data.X[example_num]), data.y[example_num], 10, 5, R_L1, norm=1, pool_factor=3)
+                    self.metrics['clever-t-l2'].value += clever_t(classifier, np.float32(data.X[example_num]), data.y[example_num], 10, 5, R_L2, norm=2, pool_factor=3)
+                    self.metrics['clever-t-li'].value += clever_t(classifier, np.float32(data.X[example_num]), data.y[example_num], 10, 5, R_LI, norm=np.inf, pool_factor=3)
+                    self.metrics['clever-u-l1'].value += clever_u(classifier, np.float32(data.X[example_num]), 10, 5, R_L1, norm=1, pool_factor=3, verbose=False)
+                    self.metrics['clever-u-l2'].value += clever_u(classifier, np.float32(data.X[example_num]), 10, 5, R_L2, norm=2, pool_factor=3, verbose=False)
+                    self.metrics['clever-u-li'].value += clever_u(classifier, np.float32(data.X[example_num]), 10, 5, R_LI, norm=np.inf, pool_factor=3, verbose=False)
 
+                self.metrics['clever-t-l1'].value /= len(to_compute)
+                self.metrics['clever-t-l2'].value /= len(to_compute)
+                self.metrics['clever-t-li'].value /= len(to_compute)
+                self.metrics['clever-u-l1'].value /= len(to_compute)
+                self.metrics['clever-u-l2'].value /= len(to_compute)
+                self.metrics['clever-u-li'].value /= len(to_compute)
+
+    def get_selection(self, list):
+        result = []
+        print("list len: " + str(len(list)))
+        print("max computes " + str(self.MAX_COMPUTES))
+        max_items = min(len(list), self.MAX_COMPUTES)
+        grab_each = math.floor(len(list)/max_items)
+        print('grab each: ' + str(grab_each))
+        for i in range(0, len(list), grab_each):
+            print("i: " + str(i))
+            print("list value: " + str(list[i]))
+            result.append(list[i])
+            if len(result) >= max_items:
+                break
+        return result
