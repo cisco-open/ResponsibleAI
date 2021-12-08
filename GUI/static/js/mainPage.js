@@ -95,7 +95,7 @@ function createMetrics(data, explanations) {
 
 function redoMetrics() {
     page_ready = false
-    return fetch('/getCertification)
+    return fetch('/getCertification')
         .then(function (response) {
             return response.json();
         }).then(function (text) {
