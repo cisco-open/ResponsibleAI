@@ -35,15 +35,12 @@ admin = flask_admin.Admin(
     template_mode='bootstrap4',
 )
 
-# cert_measures = pandas.read_csv(os.path.dirname(os.path.realpath(__file__)) + "\\output\\certificate_measures.csv")
-cert_meta = json.load(open(os.path.dirname(os.path.realpath(__file__)) + "\\output\\certificate_metadata.json", "r"))
 r = redis.Redis(host='localhost', port=6379, db=0)
 metric_sub = r.pubsub()
 metric_sub.psubscribe(model_name + '|certificate')
 cert_sub = r.pubsub()
 cert_sub.psubscribe(model_name + '|certificate')
 
-cache = {'metric_info': json.loads(r.get(model_name + '|metric_info')), 'metric_values': r.lrange(model_name + '|metric_values', 0, -1)}
 
 
 def get_dates():

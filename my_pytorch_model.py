@@ -43,7 +43,6 @@ xTest = scaler.fit_transform(xTest)
 # Convert data to pytorch:
 X_train_t = torch.from_numpy(xTrain).to(torch.float32).to("cpu")
 y_train_t = torch.from_numpy(yTrain_1h).to(torch.float32).to("cpu")
-
 train_dataset = TensorDataset(X_train_t, y_train_t)
 train_dataloader = DataLoader(train_dataset, batch_size=150)
 
