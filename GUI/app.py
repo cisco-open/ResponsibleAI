@@ -69,7 +69,7 @@ def get_certificate_dates():
 def index():
     model_info = json.loads(r.get(model_name + '|model_info'))
     # GET FAILED PER CATEGORY.
-    failed = {"fairness": [], "robustness": [], "performance": [], "explainability": []}
+    failed = []
 
     data_test = r.lrange(model_name + '|certificate_values', 0, -1)
     metadata = json.loads(r.get(model_name + '|certificate_metadata'))
@@ -87,7 +87,7 @@ def index():
                 if item[value]["value"]:
                     scores[metadata[value]["tags"][0]][0] += 1
                 else:
-                    failed[metadata[value]["tags"][0]].append({"name":metadata[value]['display_name'], "status": item[value]["value"]})
+                    failed.append({"name":metadata[value]['display_name'], "category": metadata[value]["tags"][0]})
         temp_dict['metadata'] = {"date": item['metadata > date'], "description": item['metadata > description'], "scores": scores}
         res.append(temp_dict)
 

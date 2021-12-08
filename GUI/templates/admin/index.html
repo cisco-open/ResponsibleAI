@@ -115,108 +115,33 @@
     <!-- Main row -->
     <div class="row">
         <!-- Left col -->
-        <div class="col-sm-6 bg-fairness chart-container main-panel" style="width:48%; left:1%; fill:black;  height:350px;">
+        <div class="col-sm-6 bg-fairness chart-container main-panel" style="width:80%; margin-left:10%; fill:black;  height:450px;">
             <!-- Custom tabs (Charts with tabs)-->
-            <p class="mainPageChartHeader">Failed Fairness Badges</p>
-            <div id="fairnessChart" class="morris-chart chartScaler" style="height:80%;width:100%;">
-                <div class="front_overflow_table" id="fairness_chart">
-                    <table class="styled-table">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Status</th>
-                            <tr>
-                        </thead>
-                        {% for v in failed.fairness %}
-                        <tr>
-                            <td>{{v.name}}</td>
-                            <td>{{v.status}}</td>
-                        </tr>
-                        {% endfor %}
-                    </table>
-                </div>
-            </div>
-            <!-- /.nav-tabs-custom -->
-        </div>
-        <!-- right col -->
-        <div class="col-sm-6 bg-robustness chart-container main-panel" style="width:48%; right:1%; fill:black; float:right;  height:350px;">
-            <!-- Custom tabs (Charts with tabs)-->
-            <p class="mainPageChartHeader">Failed Robustness Badges</p>
-            <div id="robustnessChart" class="morris-chart chartScaler" style="height:80%;width:100%;">
-                <div class="front_overflow_table" id="robustness_chart">
-                    <table class="styled-table">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        {% for v in failed.robustness %}
-                        <tr>
-                            <td>{{v.name}}</td>
-                            <td>{{v.status}}</td>
-                        </tr>
-                        {% endfor %}
-                    </table>
-                </div>
-            </div>
+            <p class="mainPageChartHeader">Badge Scores</p>
+            <div id="fairnessChart" class="morris-chart chartScaler" style="height:80%;width:100%;"></div>
             <!-- /.nav-tabs-custom -->
         </div>
     <!-- /.row (main row) -->
     </div>
-    <div class="row" style="margin-top:20px;">
-        <!-- Left col -->
-        <div class="col-sm-6 bg-explain chart-container main-panel" style="width:48%; left:1%; fill:black; height:350px;">
-            <!-- Custom tabs (Charts with tabs)-->
-            <p class="mainPageChartHeader">Failed Explainability Badges</p>
-            <div id="explainabilityChart" class="morris-chart chartScaler" style="height:80%;width:100%;">
-                <div class="front_overflow_table" id="explainability_chart">
-                    <table class="styled-table">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        {% for v in failed.explainability %}
-                        <tr>
-                            <td>{{v.name}}</td>
-                            <td>{{v.status}}</td>
-                        </tr>
-                        {% endfor %}
-                    </table>
-                </div>
-            </div>
-            <!-- /.nav-tabs-custom -->
-        </div>
-        <!-- right col -->
-        <div class="col-sm-6 bg-dataset chart-container" style="width:48%; right:1%; fill:black; float:right;  height:350px;">
-            <!-- Custom tabs (Charts with tabs)-->
-            <p class="mainPageChartHeader">Failed Performance Badges</p>
-                        <div id="performanceChart" class="morris-chart chartScaler" style="height:80%;width:100%;">
-                <div class="front_overflow_table" id="performance_chart">
-                    <table class="styled-table">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        {% for v in failed.performance %}
-                        <tr>
-                            <td>{{v.name}}</td>
-                            <td>{{v.status}}</td>
-                        </tr>
-                        {% endfor %}
-                    </table>
-                </div>
-            </div>
-            <!-- /.nav-tabs-custom -->
-        </div>
-            <!-- /.nav-tabs-custom -->
-            <script>load_data()</script>
-        </div>
+    <p class="mainPageChartHeader" style="margin-top:50px;">Failed Badges</p>
+    <div id="explainabilityChart" class="morris-chart chartScaler" style="height:80%;width:60%;margin-left:20%;">
+        <table class="styled-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Category</th>
+                </tr>
+            </thead>
+            {% for v in failed %}
+            <tr>
+                <td>{{v.name}}</td>
+                <td>{{v.category}}</td>
+            </tr>
+            {% endfor %}
+        </table>
     </div>
+            <!-- /.nav-tabs-custom -->
+    <script>load_data()</script>
 
 
 </section>
