@@ -1,0 +1,16 @@
+{
+    "meta":{
+        "display_name": "Accuracy Certification",
+        "description": "Certifies whether or not the agent contains high enough accuracy for the domain.",
+        "tags": ["performance"],
+        "level":["1"]
+    },
+
+    "condition": {
+            "op": "and",
+            "terms": [              
+                [ "&performance_cl > tp_rate_avg" , ">=" , 0.9 ],
+                [ "&performance_cl > recall_score_avg" , ">=" , 0.9 ]
+            ]
+        }
+}     

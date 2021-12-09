@@ -32,7 +32,7 @@ _config = {
             "tags": [],
             "has_range": True,
             "range": [0, 1],
-            "explanation": "Calculates the rate at which at which a groups with a protected attribute recieve a positive outcome."
+            "explanation": 'Lower bound on minimum adversarial distortion averaged over all test samples. Larger is better. Chen, Hongge, et al. "Robustness verification of tree-based models." arXiv preprint arXiv:1906.03849 (2019).'
         },
         "adversarial-tree-verification-error": {
             "display_name": "Adversarial Tree Verified Error",
@@ -40,7 +40,7 @@ _config = {
             "tags": [],
             "has_range": True,
             "range": [0, 1],
-            "explanation": "Calculates the rate at which at which a groups with a protected attribute recieve a positive outcome."
+            "explanation": 'Upper bound of error for adversarial examples with L_infinity pertubation of specified size. From Chen, Hongge, et al. "Robustness verification of tree-based models." arXiv preprint arXiv:1906.03849 (2019).'
         },
     }
 }
@@ -75,6 +75,6 @@ class ArtAdversarialRobustnessTreeGroup(MetricGroup, config=_config):
 
             self.metrics['adversarial-tree-verification-bound'].value, \
             self.metrics['adversarial-tree-verification-error'].value = \
-                rt.verify(data.X, np.reshape(data.y, (data.y.size, 1)), eps_init=0.3, nb_search_steps=10, max_clique=2, max_level=2)
+                rt.verify(data.X, np.reshape(data.y, (data.y.size, 1)), eps_init=0.3, nb_search_steps=2, max_clique=2, max_level=2)
 
 

@@ -48,11 +48,13 @@ dataset = Dataset(training_data, test_data=test_data)  # Accepts Training, Test 
 meta = MetaDatabase(features)
 
 # Create a model to make predictions
-from sklearn.ensemble import RandomForestClassifier
-# from sklearn.ensemble import GradientBoostingClassifier
+# from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import GradientBoostingClassifier
 
 # reg = GradientBoostingClassifier(n_estimators=4, max_depth=6)
 reg = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=0)
+reg = GradientBoostingClassifier()
+
 
 model = Model(agent=reg, name="cisco_cancer_ai", display_name="Cisco Health AI", model_class="Random Forest Classifier", adaptive=False)
 # Indicate the task of the model
@@ -61,7 +63,7 @@ task = Task(model=model, type='binary_classification', description="Detect Cance
 # Create AISystem from previous objects. AISystems are what users will primarily interact with.
 configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}},
                               "protected_attributes": ["race"], "positive_label": 1},
-                 "time_complexity": "linear"
+                 "time_complexity": "polynomial"
                  }
 ai = AISystem(meta_database=meta, dataset=dataset, task=task, user_config=configuration)
 ai.initialize()
@@ -79,11 +81,22 @@ test_preds = reg.predict(xTest)
 
 
 ai.compute_metrics(test_preds, data_type="test", export_title="Test set")
+ai.compute_certificates()
+ai.export_certificates()
 
 
-print("\nViewing GUI")
-# ai.viewGUI()
-print("DONE")
+resv_f = ai.get_metric_values_flat()
+resi_f = ai.get_metric_info_flat()
 
+for key in resv_f:
+    if hasattr(resv_f[key], "__len__"):
+        # print(resi_f[key]['display_name'], " = ", 'list ...')
+        print(resi_f[key]['display_name'], " = ", resv_f[key])
+    else:
+        print(resi_f[key]['display_name'], " = ", resv_f[key])
+
+
+print("Decision Tree Scores")
+print(str(ai.get_certificate_category_scores()))
 
 

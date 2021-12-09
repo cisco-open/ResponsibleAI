@@ -1,5 +1,6 @@
 import json
 import os.path
+from RAI import utils
 
 from RAI import certificates
 
@@ -51,20 +52,23 @@ class Certificate(object):
 
         value = float(value)
         v = self._get_value(var, metrics, certs)
-        if op == "==" or op == "=" :
-            return v == value
+        result = False
+        if op == "==" or op == "=":
+            result = v == value
         if op == ">":
-            return v > value
+            result = v > value
         if op == ">=":
-            return v >= value
+            result = v >= value
         if op == "<":
-            return v > value
+            result = v < value
         if op == "<=":
-            return v <= value
+            result = v <= value
+        return utils.jsonify(result)
+
 
     def _get_value(self, var, metrics, certs):
-        if var[0]=="&":
+        if var[0] == "&":
             return metrics[var[1:]]
-        if var[0]=="@":
+        if var[0] == "@":
             return certs[var[1:]]
 

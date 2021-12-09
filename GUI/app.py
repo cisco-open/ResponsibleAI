@@ -18,6 +18,9 @@ import threading
 #     raise Exception("Please Enter Model Name with no spaces")
 
 model_name = "cisco_cancer_ai" # sys.argv[1]
+if len(sys.argv) == 2:
+    model_name = sys.argv[1]
+
 
 metric_access_stats = threading.Lock()
 cert_access_stats = threading.Lock()

@@ -166,7 +166,6 @@ class ArtAdversarialRobustnessGroup(MetricGroup, config=_config):
                 self.metrics['clever-u-l2'].value = 0
                 self.metrics['clever-u-li'].value = 0
                 to_compute = self.get_selection(example_nums)
-                print(str(to_compute))
                 for example_num in to_compute:
                     self.metrics['clever-t-l1'].value += clever_t(classifier, np.float32(data.X[example_num]), data.y[example_num], 10, 5, R_L1, norm=1, pool_factor=3)
                     self.metrics['clever-t-l2'].value += clever_t(classifier, np.float32(data.X[example_num]), data.y[example_num], 10, 5, R_L2, norm=2, pool_factor=3)
@@ -184,14 +183,9 @@ class ArtAdversarialRobustnessGroup(MetricGroup, config=_config):
 
     def get_selection(self, list):
         result = []
-        print("list len: " + str(len(list)))
-        print("max computes " + str(self.MAX_COMPUTES))
         max_items = min(len(list), self.MAX_COMPUTES)
         grab_each = math.floor(len(list)/max_items)
-        print('grab each: ' + str(grab_each))
         for i in range(0, len(list), grab_each):
-            print("i: " + str(i))
-            print("list value: " + str(list[i]))
             result.append(list[i])
             if len(result) >= max_items:
                 break

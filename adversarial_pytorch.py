@@ -4,8 +4,6 @@ import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
 
-# FIRST DRAFT, CODE SOON TO CLEANED UP, COMPLETED AND PUT IN JUPYTER.
-# MULTIPLE WEBSITE INSTANCES NEEDED TO BE ADDED TO RAI FIRST TO ALLOW FOR THE DEMO.
 
 class Net(nn.Module):
     def __init__(self):
@@ -23,7 +21,9 @@ class Net(nn.Module):
         return x
 
 
+# Create instance of pytorch network
 net = Net().to("cpu")
+
 
 # Get Dataset
 from torch.utils.data import TensorDataset, DataLoader
@@ -31,29 +31,30 @@ from sklearn.datasets import load_breast_cancer
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 x, y = load_breast_cancer(return_X_y=True)
-
 xTrain, xTest, yTrain, yTest = train_test_split(x, y)
 n_values = np.max(yTest) + 1
-yTrain_1h = np.eye(n_values)[yTrain]
+yTrain_1h = np.eye(n_values)[yTrain]  # 1-hot representation of output classes, to match the criteria of the loss function.
 
+
+# Scale data
 scaler = StandardScaler()
 xTrain = scaler.fit_transform(xTrain)
 xTest = scaler.fit_transform(xTest)
 
-# Convert data to pytorch:
+
+# Convert sklearn dataset to pytorch's format.
 X_train_t = torch.from_numpy(xTrain).to(torch.float32).to("cpu")
 y_train_t = torch.from_numpy(yTrain_1h).to(torch.float32).to("cpu")
 train_dataset = TensorDataset(X_train_t, y_train_t)
 train_dataloader = DataLoader(train_dataset, batch_size=150)
 
 
-# Define Optimizer and Loss Function
+# Define Pytorch Optimizer and Loss Function
 criterion = nn.CrossEntropyLoss().to("cpu")
 optimizer = torch.optim.Adam(net.parameters(), lr=1e-5, weight_decay=1e-4)
-optimizer
 
 
-# Train Loop
+# Pytorch basic train Loop
 for epoch in range(300):
     running_loss = 0.0
     for i, data in enumerate(train_dataloader, 0):
@@ -69,14 +70,12 @@ for epoch in range(300):
             outputs = torch.argmax(outputs, axis=1)
             labels = torch.argmax(labels, axis=1)
             correct = (outputs == labels).float().sum() / len(outputs)
-
 print('Finished Training')
 
-# ADD RAI
+
+# Convert current dataset to RAI's representation.
 from RAI.dataset import Feature, Data, MetaDatabase, Dataset
 from RAI.AISystem import AISystem, Model, Task
-
-# Put features in RAI format.
 features_raw = ["id", "radius_mean", "texture_mean", "perimeter_mean", "area_mean", "smoothness_mean", "compactness_mean", "concavity_mean", "concave points_mean", "symmetry_mean",
                 "fractal_dimension_mean", "radius_se", "texture_se", "compactness_se", "concavity_se",
                 "concave points_se", "symmetry_se", "fractal_dimension_se", "radius_worst", "texture_worst", "texture_worst", "perimeter_worst", "area_worst",
@@ -86,57 +85,109 @@ for feature in features_raw:
     features.append(Feature(feature, "float32", feature))
 
 
-# Hook data in with our Representation
+# Create RAI Data objects for the datasets.
 training_data = Data(xTrain, yTrain)  # Accepts Data and GT
 test_data = Data(xTest, yTest)
 dataset = Dataset(training_data, test_data=test_data)  # Accepts Training, Test and Validation Set
 meta = MetaDatabase(features)
 
 
-model = Model(agent=net, name="cisco_cancer_ai", display_name="Cisco Health AI", model_class="Neural Network", adaptive=True,
+# Create RAI model and set the agent as the pytorch network.
+model = Model(agent=net, name="cisco_cancer_ai_pytorch", display_name="Cisco Health AI Pytorch", model_class="Neural Network", adaptive=True,
               optimizer=optimizer, loss_function=criterion)
 task = Task(model=model, type='binary_classification', description="Detect Cancer in patients using skin measurements")
 configuration = {"time_complexity": "polynomial"}
-ai = AISystem(meta_database=meta, dataset=dataset, task=task, user_config=configuration)
-ai.initialize()
+ai_pytorch = AISystem(meta_database=meta, dataset=dataset, task=task, user_config=configuration, custom_certificate_location="RAI\\certificates\\standard\\cert_list_ad_demo_ptc.json")
+ai_pytorch.initialize()
 
 
+# Create predictions from the training data
 train_preds = torch.argmax(net(X_train_t), axis=1)
 
-ai.reset_redis()
-ai.compute_metrics(train_preds.cpu(), data_type="train")
-ai.export_data_flat("Pytorch Model")
-ai.export_certificates()
+
+# Compute and store metrics about pytorch predictions.
+ai_pytorch.reset_redis()
+ai_pytorch.compute_metrics(train_preds.cpu(), data_type="train")
+ai_pytorch.export_data_flat("Pytorch Model")
+ai_pytorch.compute_certificates()
+ai_pytorch.export_certificates("Neural Net")
 
 
+# View GUI
+# ai_pytorch.viewGUI()
+
+
+
+
+'''
 
 from sklearn.ensemble import RandomForestClassifier
 reg = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=0)
-model = Model(agent=reg, name="cisco_cancer_ai_2", display_name="Cisco Health AI Forest", model_class="Random Forest Classifier", adaptive=False)
+model = Model(agent=reg, name="cisco_cancer_ai", display_name="Cisco Health AI Sklearn", model_class="Random Forest Classifier", adaptive=False)
 # Indicate the task of the model
 task = Task(model=model, type='binary_classification', description="Detect Cancer in patients using skin measurements")
 configuration = {}
 
-ai = AISystem(meta_database=meta, dataset=dataset, task=task, user_config=configuration)
-ai.initialize()
-
+ai_sklearn = AISystem(meta_database=meta, dataset=dataset, task=task, user_config=configuration)
+ai_sklearn.initialize()
 # Train model
 reg.fit(xTrain, yTrain)
 train_preds = reg.predict(xTrain)
-
 # Make Predictions
-ai.reset_redis()
-# ai.compute_metrics(train_preds, data_type="train", export_title="Train set")
-
+ai_sklearn.reset_redis()
+# Make Predictions
 test_preds = reg.predict(xTest)
+
+ai_sklearn.compute_metrics(test_preds, data_type="test", export_title="Test set")
+ai_sklearn.export_data_flat("Sklearn Model")
+ai_sklearn.compute_certificates()
+ai_sklearn.export_certificates()
+
+resv_f = ai_sklearn.get_metric_values_flat()
+resi_f = ai_sklearn.get_metric_info_flat()
+
+from sklearn.ensemble import RandomForestClassifier
+reg = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=0)
+model = Model(agent=reg, name="cisco_cancer_ai", display_name="Cisco Health AI Sklearn", model_class="Random Forest Classifier", adaptive=False)
+# Indicate the task of the model
+task = Task(model=model, type='binary_classification', description="Detect Cancer in patients using skin measurements")
+configuration = {}
+
+ai_sklearn = AISystem(meta_database=meta, dataset=dataset, task=task, user_config=configuration)
+ai_sklearn.initialize()
+# Train model
+reg.fit(xTrain, yTrain)
+train_preds = reg.predict(xTrain)
 # Make Predictions
+ai_sklearn.reset_redis()
+# Make Predictions
+test_preds = reg.predict(xTest)
 
-ai.compute_metrics(test_preds, data_type="test", export_title="Test set")
-ai.export_data_flat("Sklearn Model")
-ai.export_certificates()
+ai_sklearn.compute_metrics(test_preds, data_type="test", export_title="Test set")
+ai_sklearn.export_data_flat("Sklearn Model")
+ai_sklearn.compute_certificates()
+ai_sklearn.export_certificates()
 
 
 
+resv_f = ai_sklearn.get_metric_values_flat()
+resi_f = ai_sklearn.get_metric_info_flat()
+
+
+for key in resv_f:
+    if hasattr(resv_f[key], "__len__"):
+        # print(resi_f[key]['display_name'], " = ", 'list ...')
+        print(resi_f[key]['display_name'], " = ", resv_f[key])
+    else:
+        print(resi_f[key]['display_name'], " = ", resv_f[key])
+
+
+print("Comparing Certificate Scores: ")
+print("Decision Tree Scores")
+print(str(ai_sklearn.get_certificate_category_scores()))
+print("Pytorch Tree Scores")
+print(str(ai_pytorch.get_certificate_category_scores()))
 
 
 
+'''

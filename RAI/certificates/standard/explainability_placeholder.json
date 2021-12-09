@@ -1,0 +1,15 @@
+{
+    "meta":{
+        "display_name": "Explainability Placeholder",
+        "description": "Explainability placeholder.",
+        "tags": ["explainability"],
+        "level":["1"]
+    },
+
+    "condition": {
+            "op": "and",
+            "terms": [              
+                [ "&performance_cl > balanced_accuracy" , ">" , 1 ]
+            ]
+        }
+}     

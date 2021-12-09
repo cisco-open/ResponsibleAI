@@ -2,7 +2,9 @@
     "version": "1.0" ,
     "certs": [
         {"name": "normalized features",  "filename":"normalized_features.json"},
-        {"name": "test cert",  "filename":"test.json"}
+        {"name": "test cert",  "filename":"test.json"},
+        {"name":  "adversarial bounds cert", "filename": "adversarial_bound_certs.json"},
+        {"name":  "adversarial error cert", "filename": "adversarial_error_certs.json"}
     ]
 
 }

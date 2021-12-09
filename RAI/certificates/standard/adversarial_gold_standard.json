@@ -1,0 +1,16 @@
+{
+    "meta":{
+        "display_name": "Adversarial Gold Standard",
+        "description": "Certifies whether or not the agent is robust against adversarial attacks.",
+        "tags": ["robustness"],
+        "level":["1"]
+    },
+
+    "condition": {
+            "op":"and" ,
+            "terms": [              
+                [ "&adversarial_validation_tree > adversarial-tree-verification-bound" , ">" , 0.5 ],
+                [ "&adversarial_validation_tree > adversarial-tree-verification-error" , "<" , 0.5 ]
+            ]
+        }
+}     

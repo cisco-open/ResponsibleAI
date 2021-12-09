@@ -5,15 +5,13 @@ from RAI.metrics.registry import registry
 import json
 import redis
 import subprocess
-import random
-import time
 from RAI import utils
 import threading
 from RAI.certificates import CertificateManager
 
 
 class AISystem:
-    def __init__(self, meta_database, dataset, task, user_config) -> None:
+    def __init__(self, meta_database, dataset, task, user_config, custom_certificate_location=None) -> None:
         if type(user_config) is not dict:
             raise TypeError("User config must be of type Dictionary")
         self.meta_database = meta_database
@@ -23,9 +21,12 @@ class AISystem:
         self.timestamp = ""
         self.sample_count = 0
         self.user_config = user_config
-
         self.certificate_manager = CertificateManager()
-        self.certificate_manager.load_stock_certificates()
+        if custom_certificate_location is None:
+            self.certificate_manager.load_stock_certificates()
+        else:
+            self.certificate_manager.load_custom_certificates(custom_certificate_location)
+
     def initialize(self, metric_groups=None, metric_group_re=None, max_complexity="linear"):
         for metric_group_name in registry:
             metric_class = registry[metric_group_name]
@@ -193,14 +194,15 @@ class AISystem:
         return cert_values, metadata
 
 
-    def export_certificates(self):
-        values, metadata = self.compute_certificates()
+    def export_certificates(self, description=""):
+        values = self.certificate_manager.results
+        metadata = self.certificate_manager.metadata
         r = redis.Redis(host='localhost', port=6379, db=0)
 
         # metadata > date is added to metadata and values to allow for date based parsing of both and avoiding mismatch.
         values['metadata > date'] = {"value": self.metric_groups['metadata'].metrics['date'].value,
                                      "description": "time certificates were measured", "level": 1, "tags": ["metadata"]}
-        values['metadata > description'] = {"value": "Measuring Stuff", "description": "Purpose of measurement.", "tags": ["metadata"]}
+        values['metadata > description'] = {"value": description, "description": "Purpose of measurement.", "tags": ["metadata"]}
 
         metadata['metadata > date'] = {"value": self.metric_groups['metadata'].metrics['date'].value,
                                      "description": "time certificates were measured", "level": 1, "tags": ["metadata"]}
@@ -210,6 +212,35 @@ class AISystem:
         r.set(self.task.model.name + '|certificate_metadata', json.dumps(metadata))
         r.rpush(self.task.model.name + '|certificate_values', json.dumps(values))  # True
         r.publish(self.task.model.name + "|certificate", values["metadata > date"]["value"])
+
+    def get_certificate_values(self):
+        result = {}
+        for key in self.certificate_manager.results:
+            if "metadata" not in self.certificate_manager.metadata[key]["tags"]:
+                result[key] = self.certificate_manager.results[key]
+        return result
+
+    def get_certificate_category_summary(self):
+        result = {"fairness": {"passed": [], "failed": [], "score": 0},
+                  "robustness": {"passed": [], "failed": [], "score": 0},
+                  "explainability": {"passed": [], "failed": [], "score": 0},
+                  "performance": {"passed": [], "failed": [], "score": 0}}
+        for key in self.certificate_manager.results:
+            if "metadata" not in self.certificate_manager.metadata[key]["tags"]:
+                if self.certificate_manager.results[key]["value"]:
+                    result[self.certificate_manager.metadata[key]["tags"][0]]["passed"].append(key)
+                else:
+                    result[self.certificate_manager.metadata[key]["tags"][0]]["failed"].append(key)
+        for key in result:
+            result[key]["score"] = str(100*(len(result[key]["passed"]) / max(len(result[key]["failed"]), 1))) + "%"
+        return result
+
+    def get_certificate_category_scores(self):
+        result = {}
+        values = self.get_certificate_category_summary()
+        for value in values:
+            result[value] = values[value]["score"]
+        return result
 
     def viewGUI(self):
         gui_launcher = threading.Thread(target=self._view_gui_thread, args=[])

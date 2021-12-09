@@ -1,0 +1,16 @@
+{
+    "meta":{
+        "display_name": "Accuracy Certification",
+        "description": "Certifies whether or not the agent contains high enough accuracy for the domain.",
+        "tags": ["performance"],
+        "level":["1"]
+    },
+
+    "condition": {
+            "op": "and",
+            "terms": [              
+                [ "&performance_cl > accuracy" , ">=" , 0.9 ],
+                [ "&performance_cl > balanced_accuracy" , ">=" , 0.9 ]
+            ]
+        }
+}     

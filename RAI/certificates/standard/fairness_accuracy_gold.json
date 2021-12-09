@@ -1,0 +1,15 @@
+{
+    "meta":{
+        "display_name": "Fairness Accuracy Gold Certification",
+        "description": "Certifies whether or not the agent contains high enough balanced accuracy for the domain.",
+        "tags": ["fairness"],
+        "level":["1"]
+    },
+
+    "condition": {
+            "op": "and",
+            "terms": [
+                [ "&performance_cl > balanced_accuracy" , ">=" , 0.95 ]
+            ]
+        }
+}     

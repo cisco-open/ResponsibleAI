@@ -1,0 +1,17 @@
+{
+    "version": "1.0",
+    "certs": [
+        {"name":  "Targeted Adversarial Robustness Bronze", "filename": "clever_t_certs_bronze.json"},
+        {"name":  "Targeted Adversarial Robustness Silver", "filename": "clever_t_certs_silver.json"},
+        {"name":  "Targeted Adversarial Robustness Gold", "filename": "clever_t_certs_gold.json"},
+        {"name":  "Untargeted Adversarial Robustness Bronze", "filename": "clever_u_certs_bronze.json"},
+        {"name":  "Untargeted Adversarial Robustness Silver", "filename": "clever_u_certs_silver.json"},
+        {"name":  "Untargeted Adversarial Robustness Gold", "filename": "clever_u_certs_gold.json"},
+        {"name":  "accuracy certificate", "filename": "performance_accuracy.json"},
+        {"name":  "true positive certificate", "filename": "performance_tp.json"},
+        {"name":  "fairness accuracy bronze", "filename": "fairness_accuracy_bronze.json"},
+        {"name":  "fairness accuracy silver", "filename": "fairness_accuracy_silver.json"},
+        {"name":  "fairness accuracy gold", "filename": "fairness_accuracy_gold.json"},
+        {"name":  "Explainability Placeholder", "filename": "explainability_placeholder.json"}
+    ]
+}
