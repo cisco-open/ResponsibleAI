@@ -119,6 +119,8 @@ ai_pytorch.export_certificates("Neural Net")
 
 
 
+
+# Not part of demo, just potentially useful code that I might reuse later.
 '''
 
 from sklearn.ensemble import RandomForestClassifier
