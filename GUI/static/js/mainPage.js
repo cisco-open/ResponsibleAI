@@ -101,13 +101,11 @@ function createMetrics(data, explanations) {
     var result = createData(data)
     var all_data = result[0]
     var descriptions = result[1]
-    console.log(all_data)
     /*
     all_data = [{year: '2021-12-08 09:10:37', fairness: '30', robustness: '20', performance: "60", explainability: "80"},
             {year: '2021-12-09 09:10:37', fairness: '40', robustness: '10', performance: "80", explainability: "85"}
     ]
     */
-
     var chart_explanations = result[1]
     var options = {
         element: "allChart",
@@ -151,13 +149,12 @@ function redoMetrics2(data) {
     for (var type in graphs) {
         var myValue = 0
         if (data.length >= 1)
-            myValue = parseFloat(data[data.length - 1]['value'])
+            myValue = data[data.length - 1]['metadata']['scores'][type][0] / data[data.length - 1]['metadata']['scores'][type][1] * 100
         var circle = document.getElementById(type + "Circle");
         circle.setAttribute("stroke-dasharray", myValue.toFixed(0) + ", 100");
         var circleText = document.getElementById(type + "Text");
         circleText.innerHTML = myValue.toFixed(1) + "%";
     }
-
     var result = createData(data);
     var new_data = result[0]
     var newExplanations = result[1]

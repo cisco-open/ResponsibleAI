@@ -149,8 +149,9 @@ class AISystem:
 
     def reset_redis(self):
         r = redis.Redis(host='localhost', port=6379, db=0)
-        for key in r.keys():
-            r.delete(key)
+        to_delete = ["metric_values", "model_info", "metric_info", "metric", "certificate_metadata", "certificate_values", "certificate"]
+        for key in to_delete:
+            r.delete(self.task.model.name + "|" + key)
             
     def _dict_to_csv(self, file, dict, write_headers=True):
         newDict = {}
@@ -203,7 +204,6 @@ class AISystem:
         values['metadata > date'] = {"value": self.metric_groups['metadata'].metrics['date'].value,
                                      "description": "time certificates were measured", "level": 1, "tags": ["metadata"]}
         values['metadata > description'] = {"value": description, "description": "Purpose of measurement.", "tags": ["metadata"]}
-
         metadata['metadata > date'] = {"value": self.metric_groups['metadata'].metrics['date'].value,
                                      "description": "time certificates were measured", "level": 1, "tags": ["metadata"]}
         metadata['metadata > description'] = {"value": "Measuring Stuff", "description": "Purpose of measurement.", "tags": ["metadata"]}

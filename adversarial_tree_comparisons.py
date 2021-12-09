@@ -106,5 +106,3 @@ ai_tree_comparison.export_certificates("Boosting")
 # Visually compare results.
 # ai_tree_comparison.viewGUI()
 
-
-

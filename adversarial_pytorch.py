@@ -117,9 +117,6 @@ ai_pytorch.export_certificates("Neural Net")
 # ai_pytorch.viewGUI()
 
 
-
-
-
 # Not part of demo, just potentially useful code that I might reuse later.
 '''
 
