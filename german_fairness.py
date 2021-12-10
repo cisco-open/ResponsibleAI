@@ -1,25 +1,21 @@
-from RAI.dataset import Feature, Data, MetaDatabase, Dataset
-from RAI.AISystem import AISystem, Model, Task
-import numpy as np
+
+'''
+We will use RAI to create and evaluate a model on the German Credit Dataset.
+
+German Credit Dataset:
+    Dataset for a bank to predict whether or not someone is a good or bad credit risk for a loan.
+
+    Input Features:
+        Bank Account status, Duration of bank account, total credit history, loan purpose, total credit amount,
+        savings account size, Age, Installment plants, Housing, Current Bank credits, Job skill level type,
+        Number of liable people, has telephone, is foreign worker
+
+    Output:
+        0 (Bad), 1 (Good)
+'''
 
 
 # Get Pandas Dataframe dataset.
-#
-# To test RAI, we will use the German Credit Dataset.
-#
-# German Credit Dataset:
-# Dataset for a bank to predict whether or not someone is a good or bad credit risk for a loan.
-#
-# Input Features:
-# Bank Account status, Duration of bank account, total credit history, loan purpose, total credit amount,
-# savings account size, Age, Installment plants, Housing, Current Bank credits, Job skill level type,
-# Number of liable people, has telephone, is foreign worker
-#
-# Output:
-# 0 (Bad), 1 (Good)
-
-
-
 # Collect data stored in pandas dataframe
 from demo_helper_code.demo_helper_functions import get_german_dataset
 df_info = get_german_dataset() # df_info is a dictionary containing the dataframe and information about its features.

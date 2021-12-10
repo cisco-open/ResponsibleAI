@@ -102,7 +102,5 @@ for epoch in range(100):
         test(epoch, test_dataloader)
 
 
-
-# View metrics to see the best model
-print("View GUI")
+# View metrics and certificates to determine the best model to use.
 ai_pytorch.viewGUI()
