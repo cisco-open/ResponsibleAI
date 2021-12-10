@@ -45,6 +45,7 @@ ai_pytorch.task.model.loss_function = criterion2
 # Recompute metrics.
 ai_pytorch.compute_metrics(test_preds_2.cpu(), data_type="test", export_title="Scale 10")
 
+
 # Replace the AI System parts with elements of Net3.
 ai_pytorch.task.model.agent = net3
 ai_pytorch.task.model.optimizer = optimizer3
