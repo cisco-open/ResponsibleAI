@@ -5,7 +5,6 @@ import random
 os.environ["CUDA_VISIBLE_DEVICES"] = "cpu"
 torch.manual_seed(0)
 random.seed(0)
-os.environ["CUDA_VISIBLE_DEVICES"] = "cpu"
 
 
 # Get Breast cancer data, with pytorch representation
