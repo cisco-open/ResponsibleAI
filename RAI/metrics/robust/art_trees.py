@@ -2,6 +2,7 @@ from RAI.metrics.metric_group import MetricGroup
 from RAI.metrics.ai360_helper.AI360_helper import *
 import pandas as pd
 import numpy as np
+import art
 
 from art.estimators.classification import SklearnClassifier
 from art.metrics.verification_decisions_trees import RobustnessVerificationTreeModelsCliqueMethod

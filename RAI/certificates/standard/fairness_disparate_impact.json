@@ -1,0 +1,16 @@
+{
+    "meta":{
+        "display_name": "Fairness Disparate Impact",
+        "description": "Certifies whether or not the agent meets disparate impact fairness requirements.",
+        "tags": ["fairness"],
+        "level":["1"]
+    },
+
+    "condition": {
+            "op": "and",
+            "terms": [
+                [ "&group_fairness > disparate_impact_ratio" , ">=" , 0.8 ],
+                [ "&group_fairness > disparate_impact_ratio" , "<=" , 1.2 ]
+            ]
+        }
+}     

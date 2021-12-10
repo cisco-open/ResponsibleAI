@@ -1,0 +1,16 @@
+{
+    "meta":{
+        "display_name": "Fairness Average Odds",
+        "description": "Certifies whether or not the agent meets average odds difference fairness requirements.",
+        "tags": ["fairness"],
+        "level":["1"]
+    },
+
+    "condition": {
+            "op": "and",
+            "terms": [
+                [ "&group_fairness > average_odds_difference" , ">=" , -0.11 ],
+                [ "&group_fairness > average_odds_difference" , "<=" , 0.11 ]
+            ]
+        }
+}     

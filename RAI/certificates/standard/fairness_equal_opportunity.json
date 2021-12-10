@@ -1,0 +1,16 @@
+{
+    "meta":{
+        "display_name": "Fairness Equal Opportunity",
+        "description": "Certifies whether or not the agent meets equal opportunity difference fairness requirements.",
+        "tags": ["fairness"],
+        "level":["1"]
+    },
+
+    "condition": {
+            "op": "and",
+            "terms": [
+                [ "&group_fairness > equal_opportunity_difference" , ">=" , -0.06 ],
+                [ "&group_fairness > equal_opportunity_difference" , "<=" , 0.06 ]
+            ]
+        }
+}     

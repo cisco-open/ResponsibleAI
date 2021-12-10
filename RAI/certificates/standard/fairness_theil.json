@@ -1,0 +1,16 @@
+{
+    "meta":{
+        "display_name": "Fairness Theil Index",
+        "description": "Certifies whether or not the agent meets theil index fairness requirements.",
+        "tags": ["fairness"],
+        "level":["1"]
+    },
+
+    "condition": {
+            "op": "and",
+            "terms": [
+                [ "&individual_fairness > theil_index" , ">=" , -0.11 ],
+                [ "&individual_fairness > theil_index" , "<=" , 0.11 ]
+            ]
+        }
+}     

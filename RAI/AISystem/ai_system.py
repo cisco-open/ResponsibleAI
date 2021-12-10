@@ -152,7 +152,8 @@ class AISystem:
         to_delete = ["metric_values", "model_info", "metric_info", "metric", "certificate_metadata", "certificate_values", "certificate"]
         for key in to_delete:
             r.delete(self.task.model.name + "|" + key)
-            
+
+
     def _dict_to_csv(self, file, dict, write_headers=True):
         newDict = {}
         newDict['date'] = self.timestamp

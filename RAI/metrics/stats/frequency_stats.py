@@ -47,6 +47,8 @@ class FrequencyStatMetricGroup(MetricGroup, config=_config):
                 args = self.ai_system.user_config["stats"]["args"]
             data = data_dict["data"]
 
+
+            # MAKES ASSUMPTION DATA IS FACTORIZED. So categorical variables start at 0 and no numbers are skipped.
             self.metrics["cumfreq"].value = _cumulative_freq(data.X, self.ai_system.meta_database.features)
             self.metrics["relfreq"].value = _rel_freq(data.X, self.ai_system.meta_database.features)
 
@@ -76,7 +78,7 @@ def _rel_freq(X, features=None):
 def _convert_to_feature_dict(values, feature):
     result = {}
     for i in range(len(values)):
-        result[list(feature.values[i].values())[0]] = values[i]
+        result[feature.values[i]] = values[i]
     return result
 
 

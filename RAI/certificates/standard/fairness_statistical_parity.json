@@ -1,0 +1,16 @@
+{
+    "meta":{
+        "display_name": "Fairness Statistical Parity",
+        "description": "Certifies whether or not the agent meets statistical parity fairness requirements.",
+        "tags": ["fairness"],
+        "level":["1"]
+    },
+
+    "condition": {
+            "op": "and",
+            "terms": [
+                [ "&group_fairness > statistical_parity_difference" , ">=" , -0.11 ],
+                [ "&group_fairness > statistical_parity_difference" , "<=" , 0.11 ]
+            ]
+        }
+}     

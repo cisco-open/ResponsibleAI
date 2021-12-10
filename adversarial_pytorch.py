@@ -117,6 +117,7 @@ ai_pytorch.export_certificates("Neural Net")
 # ai_pytorch.viewGUI()
 
 
+
 # Not part of demo, just potentially useful code that I might reuse later.
 '''
 
@@ -186,7 +187,6 @@ print("Decision Tree Scores")
 print(str(ai_sklearn.get_certificate_category_scores()))
 print("Pytorch Tree Scores")
 print(str(ai_pytorch.get_certificate_category_scores()))
-
 
 
 '''

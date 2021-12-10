@@ -1,6 +1,7 @@
 import numpy as np
 import math
-__all__ = [ 'jsonify', 'compare_runtimes']
+from RAI.dataset import Feature, Data, MetaDatabase, Dataset
+__all__ = [ 'jsonify', 'compare_runtimes', 'df_to_meta_database']
 
 
 def jsonify(v):
@@ -32,3 +33,20 @@ def complexity_to_integer(complexity):
     elif complexity == "exponential":
         result = 3
     return result
+
+
+def df_to_meta_database(df, categorical_values=None, protected_attribute_names=None, privileged_info=None, positive_label=None):
+    features = []
+    fairness_config = {}
+    for col in df.columns:
+        categorical = categorical_values is not None and col in categorical_values
+        features.append(Feature(col, "float32", col, categorical=categorical, values=categorical_values.get(col, None)))
+    if protected_attribute_names != None:
+        fairness_config["protected_attributes"] = protected_attribute_names
+    if privileged_info != None:
+        fairness_config["priv_group"] = privileged_info
+    if positive_label != None:
+        fairness_config["positive_label"] = positive_label
+    meta = MetaDatabase(features)
+    return meta, fairness_config
+
