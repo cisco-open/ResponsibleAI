@@ -1,10 +1,9 @@
-# Setup environent for pytorch
+# Setup environment for pytorch
 import torch
 import torch.nn as nn
-import numpy as np
 import os
+os.environ["CUDA_VISIBLE_DEVICES"] = "cpu"
 
-os.environ["CUDA_VISIBLE_DEVICES"]="cpu"
 
 # Create instance of pytorch network
 from demo_helper_code.demo_helper_functions import Net

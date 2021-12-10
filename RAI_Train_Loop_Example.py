@@ -2,8 +2,7 @@
 import torch
 import torch.nn as nn
 import os
-
-os.environ["CUDA_VISIBLE_DEVICES"]="cpu"
+os.environ["CUDA_VISIBLE_DEVICES"] = "cpu"
 
 
 # Create instance of pytorch network
