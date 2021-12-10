@@ -33,7 +33,7 @@ test_preds = reg.predict(xTest)
 
 
 # Place model in RAI format.
-model = Model(agent=reg, name="cisco_cancer_ai", display_name="Cisco Health AI Sklearn", model_class="Random Forest Classifier", adaptive=False)
+model = Model(agent=reg, name="cisco_tree_ai", display_name="Cisco Tree AIs", model_class="Random Forest Classifier", adaptive=False)
 task = Task(model=model, type='binary_classification', description="Detect Cancer in patients using skin measurements")
 configuration = {}
 ai_tree_comparison = AISystem(meta_database=meta, dataset=dataset, task=task, user_config=configuration, custom_certificate_location="RAI\\certificates\\standard\\cert_list_ad_demo.json")
@@ -104,5 +104,5 @@ ai_tree_comparison.export_certificates("Boosting")
 
 
 # Visually compare results.
-# ai_tree_comparison.viewGUI()
+ai_tree_comparison.viewGUI()
 

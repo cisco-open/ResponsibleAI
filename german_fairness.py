@@ -64,8 +64,8 @@ test_preds = reg.predict(xTest)
 
 
 # Create an AI System using all collected information to allow for metric computation.
-model = Model(agent=reg, name="cisco_cancer_ai", display_name="Cisco Health AI Sklearn", model_class="Random Forest Classifier", adaptive=False)
-task = Task(model=model, type='binary_classification', description="Detect Cancer in patients using skin measurements")
+model = Model(agent=reg, name="cisco_german_fairness", display_name="Cisco German Fairness", model_class="Random Forest Classifier", adaptive=False)
+task = Task(model=model, type='binary_classification', description="Predict the credit score of various Germans.")
 configuration = {"fairness": fairness_config, "time_complexity": "linear"}
 credit_ai = AISystem(meta_database=meta, dataset=dataset, task=task, user_config=configuration, custom_certificate_location="RAI\\certificates\\standard\\cert_list_credit.json")
 credit_ai.initialize()
@@ -116,5 +116,6 @@ credit_ai.compute_certificates()
 credit_ai.export_certificates("Weight")
 
 
-
+# View GUI
+credit_ai.viewGUI()
 

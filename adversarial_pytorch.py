@@ -1,39 +1,22 @@
-# Define Pytorch Model
+# Setup environent for pytorch
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 import numpy as np
+import os
 
-
-class Net(nn.Module):
-    def __init__(self):
-        super().__init__()
-        self.fc1 = nn.Linear(30, 300)
-        self.fc2 = nn.Linear(300, 200)
-        self.fc3 = nn.Linear(200, 80)
-        self.fc4 = nn.Linear(80, 2)
-
-    def forward(self, x):
-        x = F.relu(self.fc1(x))
-        x = F.relu(self.fc2(x))
-        x = F.relu(self.fc3(x))
-        x = self.fc4(x)
-        return x
-
+os.environ["CUDA_VISIBLE_DEVICES"]="cpu"
 
 # Create instance of pytorch network
-net = Net().to("cpu")
+from demo_helper_code.demo_helper_functions import Net
+net = Net(30).to("cpu")
 
 
 # Get Dataset
-from torch.utils.data import TensorDataset, DataLoader
 from sklearn.datasets import load_breast_cancer
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 x, y = load_breast_cancer(return_X_y=True)
 xTrain, xTest, yTrain, yTest = train_test_split(x, y)
-n_values = np.max(yTest) + 1
-yTrain_1h = np.eye(n_values)[yTrain]  # 1-hot representation of output classes, to match the criteria of the loss function.
 
 
 # Scale data
@@ -42,11 +25,9 @@ xTrain = scaler.fit_transform(xTrain)
 xTest = scaler.fit_transform(xTest)
 
 
-# Convert sklearn dataset to pytorch's format.
-X_train_t = torch.from_numpy(xTrain).to(torch.float32).to("cpu")
-y_train_t = torch.from_numpy(yTrain_1h).to(torch.float32).to("cpu")
-train_dataset = TensorDataset(X_train_t, y_train_t)
-train_dataloader = DataLoader(train_dataset, batch_size=150)
+# Convert Sklearn data to a Pytorch Tensor representation so the Net can run on them.
+from demo_helper_code.demo_helper_functions import convertSklearnToDataloader
+train_dataloader, test_dataloader = convertSklearnToDataloader(xTrain, xTest, yTrain, yTest)
 
 
 # Define Pytorch Optimizer and Loss Function
@@ -54,9 +35,8 @@ criterion = nn.CrossEntropyLoss().to("cpu")
 optimizer = torch.optim.Adam(net.parameters(), lr=1e-5, weight_decay=1e-4)
 
 
-# Pytorch basic train Loop
+# Very basic pytorch training cycle
 for epoch in range(300):
-    running_loss = 0.0
     for i, data in enumerate(train_dataloader, 0):
         inputs, labels = data
         optimizer.zero_grad()
@@ -65,11 +45,6 @@ for epoch in range(300):
         loss = criterion(outputs, labels)
         loss.backward()
         optimizer.step()
-
-        if epoch % 100 == 0 and i == len(train_dataloader)-1:  # print every 2000 mini-batches
-            outputs = torch.argmax(outputs, axis=1)
-            labels = torch.argmax(labels, axis=1)
-            correct = (outputs == labels).float().sum() / len(outputs)
 print('Finished Training')
 
 
@@ -93,7 +68,7 @@ meta = MetaDatabase(features)
 
 
 # Create RAI model and set the agent as the pytorch network.
-model = Model(agent=net, name="cisco_cancer_ai_pytorch", display_name="Cisco Health AI Pytorch", model_class="Neural Network", adaptive=True,
+model = Model(agent=net, name="cisco_cancer_pytorch_robustness", display_name="Cisco Pytorch Robustness", model_class="Neural Network", adaptive=True,
               optimizer=optimizer, loss_function=criterion)
 task = Task(model=model, type='binary_classification', description="Detect Cancer in patients using skin measurements")
 configuration = {"time_complexity": "polynomial"}
@@ -102,6 +77,9 @@ ai_pytorch.initialize()
 
 
 # Create predictions from the training data
+# Put the data in tensor format and make predictions.
+from demo_helper_code.demo_helper_functions import convertSklearnToTensor
+X_train_t, y_train_t, X_test_t, y_test_t = convertSklearnToTensor(xTrain, xTest, yTrain, yTest)
 train_preds = torch.argmax(net(X_train_t), axis=1)
 
 
@@ -114,79 +92,5 @@ ai_pytorch.export_certificates("Neural Net")
 
 
 # View GUI
-# ai_pytorch.viewGUI()
+ai_pytorch.viewGUI()
 
-
-
-# Not part of demo, just potentially useful code that I might reuse later.
-'''
-
-from sklearn.ensemble import RandomForestClassifier
-reg = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=0)
-model = Model(agent=reg, name="cisco_cancer_ai", display_name="Cisco Health AI Sklearn", model_class="Random Forest Classifier", adaptive=False)
-# Indicate the task of the model
-task = Task(model=model, type='binary_classification', description="Detect Cancer in patients using skin measurements")
-configuration = {}
-
-ai_sklearn = AISystem(meta_database=meta, dataset=dataset, task=task, user_config=configuration)
-ai_sklearn.initialize()
-# Train model
-reg.fit(xTrain, yTrain)
-train_preds = reg.predict(xTrain)
-# Make Predictions
-ai_sklearn.reset_redis()
-# Make Predictions
-test_preds = reg.predict(xTest)
-
-ai_sklearn.compute_metrics(test_preds, data_type="test", export_title="Test set")
-ai_sklearn.export_data_flat("Sklearn Model")
-ai_sklearn.compute_certificates()
-ai_sklearn.export_certificates()
-
-resv_f = ai_sklearn.get_metric_values_flat()
-resi_f = ai_sklearn.get_metric_info_flat()
-
-from sklearn.ensemble import RandomForestClassifier
-reg = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=0)
-model = Model(agent=reg, name="cisco_cancer_ai", display_name="Cisco Health AI Sklearn", model_class="Random Forest Classifier", adaptive=False)
-# Indicate the task of the model
-task = Task(model=model, type='binary_classification', description="Detect Cancer in patients using skin measurements")
-configuration = {}
-
-ai_sklearn = AISystem(meta_database=meta, dataset=dataset, task=task, user_config=configuration)
-ai_sklearn.initialize()
-# Train model
-reg.fit(xTrain, yTrain)
-train_preds = reg.predict(xTrain)
-# Make Predictions
-ai_sklearn.reset_redis()
-# Make Predictions
-test_preds = reg.predict(xTest)
-
-ai_sklearn.compute_metrics(test_preds, data_type="test", export_title="Test set")
-ai_sklearn.export_data_flat("Sklearn Model")
-ai_sklearn.compute_certificates()
-ai_sklearn.export_certificates()
-
-
-
-resv_f = ai_sklearn.get_metric_values_flat()
-resi_f = ai_sklearn.get_metric_info_flat()
-
-
-for key in resv_f:
-    if hasattr(resv_f[key], "__len__"):
-        # print(resi_f[key]['display_name'], " = ", 'list ...')
-        print(resi_f[key]['display_name'], " = ", resv_f[key])
-    else:
-        print(resi_f[key]['display_name'], " = ", resv_f[key])
-
-
-print("Comparing Certificate Scores: ")
-print("Decision Tree Scores")
-print(str(ai_sklearn.get_certificate_category_scores()))
-print("Pytorch Tree Scores")
-print(str(ai_pytorch.get_certificate_category_scores()))
-
-
-'''

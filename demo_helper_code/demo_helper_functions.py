@@ -1,7 +1,10 @@
 import os
 import pandas as pd
+import torch.nn as nn
+import torch.nn.functional as F
+import numpy as np
 from sklearn.base import BaseEstimator, TransformerMixin
-__all__ = ["get_german_dataset", "reweigh_dataset_for_age"]
+__all__ = ["get_german_dataset", "reweigh_dataset_for_age", "Net", "convertSklearnToTensor", "convertSklearnToDataloader"]
 
 
 default_mappings = {
@@ -111,3 +114,46 @@ def reweigh_dataset_for_age(df, y):
     return xTrain, xTest, yTrain, yTest
 
 
+
+class Net(nn.Module):
+    def __init__(self, input_size):
+        super().__init__()
+        self.fc1 = nn.Linear(input_size, 300).to("cpu")
+        self.fc2 = nn.Linear(300, 200).to("cpu")
+        self.fc3 = nn.Linear(200, 80).to("cpu")
+        self.fc4 = nn.Linear(80, 2).to("cpu")
+
+    def forward(self, x):
+        x = F.relu(self.fc1(x)).to("cpu")
+        x = F.relu(self.fc2(x)).to("cpu")
+        x = F.relu(self.fc3(x)).to("cpu")
+        x = self.fc4(x).to("cpu")
+        return x.to("cpu")
+
+
+def convertSklearnToTensor(xTrain, xTest, yTrain, yTest):
+    import torch
+    n_values = np.max(yTest) + 1
+    yTrain_1h = np.eye(n_values)[
+        yTrain]  # 1-hot representation of output classes, to match the criteria of the loss function.
+    yTest_1h = np.eye(n_values)[
+        yTest]  # 1-hot representation of output classes, to match the criteria of the loss function.
+
+    # Convert sklearn dataset to pytorch's format.
+    X_train_t = torch.from_numpy(xTrain).to(torch.float32).to("cpu")
+    y_train_t = torch.from_numpy(yTrain_1h).to(torch.float32).to("cpu")
+    X_test_t = torch.from_numpy(xTest).to(torch.float32).to("cpu")
+    y_test_t = torch.from_numpy(yTest_1h).to(torch.float32).to("cpu")
+    return X_train_t, y_train_t, X_test_t, y_test_t
+
+
+
+def convertSklearnToDataloader(xTrain, xTest, yTrain, yTest):
+    from torch.utils.data import TensorDataset
+    from torch.utils.data import DataLoader
+    X_train_t, y_train_t, X_test_t, y_test_t = convertSklearnToTensor(xTrain, xTest, yTrain, yTest)
+    train_dataset = TensorDataset(X_train_t, y_train_t)
+    train_dataloader = DataLoader(train_dataset, batch_size=150)
+    test_dataset = TensorDataset(X_test_t, y_test_t)
+    test_dataloader = DataLoader(test_dataset, batch_size=150)
+    return train_dataloader, test_dataloader
