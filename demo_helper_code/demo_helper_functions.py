@@ -5,7 +5,9 @@ import torch.nn.functional as F
 import numpy as np
 
 __all__ = ["get_german_dataset", "reweigh_dataset_for_age", "Net", "convertSklearnToTensor", "convertSklearnToDataloader",
-           "get_rai_dataset", "get_rai_metadatabase"]
+           "get_rai_dataset", "get_rai_metadatabase", 'get_classifier_and_preds', 'get_german_rai_ai_system', 'get_untrained_net',
+           'load_breast_cancer_dataset', 'get_breast_cancer_metadatabase', 'get_breast_cancer_rai_ai_system', 'train_net',
+           'get_net_test_preds', 'run_train_test_cycle']
 
 
 # GERMAN DATASET VALUES
@@ -170,9 +172,9 @@ def convertSklearnToDataloader(xTrain, xTest, yTrain, yTest):
     from torch.utils.data import DataLoader
     X_train_t, y_train_t, X_test_t, y_test_t = convertSklearnToTensor(xTrain, xTest, yTrain, yTest)
     train_dataset = TensorDataset(X_train_t, y_train_t)
-    train_dataloader = DataLoader(train_dataset, batch_size=150)
+    train_dataloader = DataLoader(train_dataset, batch_size=150, shuffle=False, random_state=0)
     test_dataset = TensorDataset(X_test_t, y_test_t)
-    test_dataloader = DataLoader(test_dataset, batch_size=150)
+    test_dataloader = DataLoader(test_dataset, shuffle=False, batch_size=150)
     return train_dataloader, test_dataloader
 
 
@@ -190,5 +192,118 @@ def get_rai_metadatabase(df_info):
                                                 privileged_info=df_info["privileged_info"],
                                                 positive_label=df_info["positive_label"])
     return meta, fairness_config
+
+
+def get_classifier_and_preds(xTrain, xTest, yTrain, reg=None):
+    from sklearn.ensemble import RandomForestClassifier
+    if reg == None:
+        reg = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=0)
+    reg.fit(xTrain, yTrain)
+    train_preds = reg.predict(xTrain)
+    test_preds = reg.predict(xTest)
+    return reg, train_preds, test_preds
+
+
+def load_breast_cancer_dataset(pytorch=False):
+    from sklearn.datasets import load_breast_cancer
+    from sklearn.model_selection import train_test_split
+    x, y = load_breast_cancer(return_X_y=True)
+    xTrain, xTest, yTrain, yTest = train_test_split(x, y)
+
+    from sklearn.preprocessing import StandardScaler
+    scaler = StandardScaler()
+    xTrain = scaler.fit_transform(xTrain)
+    xTest = scaler.fit_transform(xTest)
+    if(pytorch):
+        train_dataloader, test_dataloader = convertSklearnToDataloader(xTrain, xTest, yTrain, yTest)
+        return train_dataloader, test_dataloader, xTrain, xTest, yTrain, yTest
+    return xTrain, xTest, yTrain, yTest
+
+
+def get_german_rai_ai_system(reg, rai_fairness_config, rai_MetaDatabase, rai_dataset):
+    from RAI.AISystem import AISystem, Model, Task
+    model = Model(agent=reg, name="cisco_german_fairness", display_name="Cisco German Fairness",
+                  model_class="Random Forest Classifier", adaptive=False)
+    task = Task(model=model, type='binary_classification', description="Predict the credit score of various Germans.")
+    configuration = {"fairness": rai_fairness_config, "time_complexity": "linear"}
+    credit_ai = AISystem(meta_database=rai_MetaDatabase, dataset=rai_dataset, task=task, user_config=configuration,
+                         custom_certificate_location="RAI\\certificates\\standard\\cert_list_credit.json")
+    credit_ai.initialize()
+    return credit_ai
+
+
+# Train Test
+def get_breast_cancer_rai_ai_system(net, optimizer, criterion, rai_MetaDatabase, rai_dataset):
+    from RAI.AISystem import AISystem, Model, Task
+    model = Model(agent=net, name="cisco_ai_train_cycle", display_name="Cisco AI Train Test",
+                  model_class="Neural Network", adaptive=True,
+                  optimizer=optimizer, loss_function=criterion)
+    task = Task(model=model, type='binary_classification',
+                description="Detect Cancer in patients using skin measurements")
+    configuration = {"time_complexity": "polynomial"}
+    ai_pytorch = AISystem(meta_database=rai_MetaDatabase, dataset=rai_dataset, task=task, user_config=configuration,
+                          custom_certificate_location="RAI\\certificates\\standard\\cert_list_ad_demo_ptc.json")
+    ai_pytorch.initialize()
+    ai_pytorch.reset_redis()
+    return ai_pytorch
+
+
+def get_untrained_net(input_size=30, scale=10):
+    import torch
+    import torch.nn as nn
+    net = Net(input_size=input_size, scale=scale).to("cpu")
+    criterion = nn.CrossEntropyLoss().to("cpu")
+    optimizer = torch.optim.Adam(net.parameters(), lr=1e-5, weight_decay=1e-4)
+    return net, criterion, optimizer
+
+
+def get_breast_cancer_metadatabase():
+    from RAI.dataset import Feature, MetaDatabase
+    features_raw = ["id", "radius_mean", "texture_mean", "perimeter_mean", "area_mean", "smoothness_mean",
+                    "compactness_mean", "concavity_mean", "concave points_mean", "symmetry_mean",
+                    "fractal_dimension_mean", "radius_se", "texture_se", "compactness_se", "concavity_se",
+                    "concave points_se", "symmetry_se", "fractal_dimension_se", "radius_worst", "texture_worst",
+                    "texture_worst", "perimeter_worst", "area_worst",
+                    "smoothness_worst", "compactness_worst", "concavity_worst", "concave points_worst",
+                    "symmetry_worst", "fractal_dimension_worst", "diagnosis"]
+    features = []
+    for feature in features_raw:
+        features.append(Feature(feature, "float32", feature))
+    return MetaDatabase(features)
+
+
+
+# Train the model
+def train_net(net, optimizer, criterion, train_dataloader):
+    for i, data in enumerate(train_dataloader, 0):
+        inputs, labels = data
+        inputs = inputs.to("cpu")
+        optimizer.zero_grad()
+        outputs = net(inputs)
+        loss = criterion(outputs, labels)
+        loss.backward()
+        optimizer.step()
+
+def get_net_test_preds(net, test_dataloader):
+    import torch
+    with torch.no_grad():
+        for i, data in enumerate(test_dataloader, 0):
+            inputs, labels = data
+            outputs = net(inputs).to("cpu")
+    # Compute metrics on the outputs of the test metrics
+    return torch.argmax(outputs, axis=1)
+
+
+def run_train_test_cycle(ai_pytorch, net, optimizer, criterion, train_dataloader, test_dataloader, epochs=100):
+    for epoch in range(epochs):
+        train_net(net, optimizer, criterion, train_dataloader)
+        if epoch % 10 == 0:
+            test(ai_pytorch, net, epoch, test_dataloader)
+
+
+# Test the model
+def test(ai_pytorch, net, epoch, test_dataloader):
+    outputs = get_net_test_preds(net, test_dataloader)
+    ai_pytorch.compute_metrics(outputs.to("cpu"), data_type="test", export_title=(str(epoch)))
 
 

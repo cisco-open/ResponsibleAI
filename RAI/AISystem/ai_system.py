@@ -101,7 +101,7 @@ class AISystem:
                  
         return result
 
-    def compute_metrics(self, preds=None, reset_metrics=False, data_type="train", export_title = None):
+    def compute_metrics(self, preds=None, reset_metrics=False, data_type="train", export_title=None):
         if reset_metrics:
             self.reset_metrics()
         data_dict = {"data": self.get_data(data_type)}
@@ -113,6 +113,7 @@ class AISystem:
         self.sample_count += len(data_dict)
         if export_title is not None:
             self.export_data_flat(export_title)
+            self.compute_certificates()
             self.export_certificates()
 
     def update_metrics(self, data):
