@@ -1,6 +1,10 @@
 from demo_helper_code.demo_helper_functions import *
 import os
+import random
+import torch
 os.environ["CUDA_VISIBLE_DEVICES"] = "cpu"
+torch.manual_seed(0)
+random.seed(0)
 
 
 # Create instance of pytorch network
@@ -17,11 +21,11 @@ rai_dataset = get_rai_dataset(xTrain, xTest, yTrain, yTest)
 
 
 # Get RAI AI system for the dataset.
-ai_pytorch = get_breast_cancer_rai_ai_system(net, optimizer, criterion, rai_MetaDatabase, rai_dataset)
+ai_pytorch = get_breast_cancer_rai_ai_system(net, optimizer, criterion, rai_MetaDatabase, rai_dataset, cert_loc="cert_list_ad_demo_ptc.json")
 
 
 '''
-Integrate RAI into the test function inthe training testing loop. 
+Integrate RAI into the test function in the training testing loop. 
 Each time the model is tested, RAI will compute and store its metrics and badges.
 
 def test(net, epoch, test_dataloader):

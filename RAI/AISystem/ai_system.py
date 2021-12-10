@@ -114,7 +114,7 @@ class AISystem:
         if export_title is not None:
             self.export_data_flat(export_title)
             self.compute_certificates()
-            self.export_certificates()
+            self.export_certificates(description=export_title)
 
     def update_metrics(self, data):
         for i in range(len(data)):

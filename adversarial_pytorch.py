@@ -1,124 +1,57 @@
-# Training not importnat just call function
-# Hide all training, give function to get pytorch models.
-# Use a closer scale.
-
-
-# Setup environment for pytorch
+from demo_helper_code.demo_helper_functions import *
 import torch
-import torch.nn as nn
 import os
+import random
+os.environ["CUDA_VISIBLE_DEVICES"] = "cpu"
+torch.manual_seed(0)
+random.seed(0)
 os.environ["CUDA_VISIBLE_DEVICES"] = "cpu"
 
 
-# Create instance of pytorch network
-from demo_helper_code.demo_helper_functions import Net
-net = Net(input_size=30, scale=10).to("cpu")
-net2 = Net(input_size=30, scale=2).to("cpu")
-# Repeat with different scales
+# Get Breast cancer data, with pytorch representation
+train_dataloader, test_dataloader, xTrain, xTest, yTrain, yTest = load_breast_cancer_dataset(pytorch=True)
 
 
-# Get Dataset
-from sklearn.datasets import load_breast_cancer
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
-x, y = load_breast_cancer(return_X_y=True)
-xTrain, xTest, yTrain, yTest = train_test_split(x, y)
+# Train pytorch neural networks of different sizes on the data.
+net1, criterion1, optimizer1 = get_trained_net(input_size=30, scale=5, train_dataloader=train_dataloader, epochs=100)
+net2, criterion2, optimizer2 = get_trained_net(input_size=30, scale=10, train_dataloader=train_dataloader, epochs=100)
+net3, criterion3, optimizer3 = get_trained_net(input_size=30, scale=20, train_dataloader=train_dataloader, epochs=100)
 
 
-# Scale data
-scaler = StandardScaler()
-xTrain = scaler.fit_transform(xTrain)
-xTest = scaler.fit_transform(xTest)
+# Get RAI data representations of the breast cancer dataset.
+rai_MetaDatabase = get_breast_cancer_metadatabase()
+rai_dataset = get_rai_dataset(xTrain, xTest, yTrain, yTest)
 
 
-# Convert Sklearn data to a Pytorch Tensor representation so the Net can run on them.
-from demo_helper_code.demo_helper_functions import convertSklearnToDataloader
-train_dataloader, test_dataloader = convertSklearnToDataloader(xTrain, xTest, yTrain, yTest)
+# Initialize the RAI AI system for this network.
+ai_pytorch = get_breast_cancer_rai_ai_system(net1, optimizer1, criterion1, rai_MetaDatabase, rai_dataset, cert_loc="cert_list_ad_demo_ptc.json")
 
 
-# Define Pytorch Optimizer and Loss Function
-criterion = nn.CrossEntropyLoss().to("cpu")
-optimizer = torch.optim.Adam(net.parameters(), lr=1e-5, weight_decay=1e-4)
-
-
-# Very basic pytorch training cycle
-for epoch in range(300):
-    for i, data in enumerate(train_dataloader, 0):
-        inputs, labels = data
-        optimizer.zero_grad()
-        outputs = net(inputs)
-
-        loss = criterion(outputs, labels)
-        loss.backward()
-        optimizer.step()
-print('Finished Training')
-
-
-# Very basic pytorch training cycle
-for epoch in range(300):
-    for i, data in enumerate(train_dataloader, 0):
-        inputs, labels = data
-        optimizer.zero_grad()
-        outputs = net2(inputs)
-
-        loss = criterion(outputs, labels)
-        loss.backward()
-        optimizer.step()
-print('Finished Training')
-
-
-
-# Convert current dataset to RAI's representation.
-from RAI.dataset import Feature, Data, MetaDatabase, Dataset
-from RAI.AISystem import AISystem, Model, Task
-features_raw = ["id", "radius_mean", "texture_mean", "perimeter_mean", "area_mean", "smoothness_mean", "compactness_mean", "concavity_mean", "concave points_mean", "symmetry_mean",
-                "fractal_dimension_mean", "radius_se", "texture_se", "compactness_se", "concavity_se",
-                "concave points_se", "symmetry_se", "fractal_dimension_se", "radius_worst", "texture_worst", "texture_worst", "perimeter_worst", "area_worst",
-                "smoothness_worst", "compactness_worst", "concavity_worst", "concave points_worst", "symmetry_worst", "fractal_dimension_worst", "diagnosis"]
-features = []
-for feature in features_raw:
-    features.append(Feature(feature, "float32", feature))
-
-
-# Create RAI Data objects for the datasets.
-training_data = Data(xTrain, yTrain)  # Accepts Data and GT
-test_data = Data(xTest, yTest)
-dataset = Dataset(training_data, test_data=test_data)  # Accepts Training, Test and Validation Set
-meta = MetaDatabase(features)
-
-
-# Create RAI model and set the agent as the pytorch network.
-model = Model(agent=net, name="cisco_cancer_pytorch_robustness", display_name="Cisco Pytorch Robustness", model_class="Neural Network", adaptive=True,
-              optimizer=optimizer, loss_function=criterion)
-task = Task(model=model, type='binary_classification', description="Detect Cancer in patients using skin measurements")
-configuration = {"time_complexity": "polynomial"}
-ai_pytorch = AISystem(meta_database=meta, dataset=dataset, task=task, user_config=configuration, custom_certificate_location="RAI\\certificates\\standard\\cert_list_ad_demo_ptc.json")
-ai_pytorch.initialize()
-
-
-# Create predictions from the training data
-# Put the data in tensor format and make predictions.
-from demo_helper_code.demo_helper_functions import convertSklearnToTensor
+# Get Neural Network Predictions on Data for each Network.
 X_train_t, y_train_t, X_test_t, y_test_t = convertSklearnToTensor(xTrain, xTest, yTrain, yTest)
-train_preds = torch.argmax(net(X_train_t), axis=1)
+test_preds_1 = torch.argmax(net1(X_test_t), axis=1)
+test_preds_2 = torch.argmax(net2(X_test_t), axis=1)
+test_preds_3 = torch.argmax(net3(X_test_t), axis=1)
 
 
 # Compute and store metrics about pytorch predictions.
-ai_pytorch.reset_redis()
-ai_pytorch.compute_metrics(train_preds.cpu(), data_type="train")
-ai_pytorch.export_data_flat("Pytorch Model")
-ai_pytorch.compute_certificates()
-ai_pytorch.export_certificates("Neural Net")
+ai_pytorch.compute_metrics(test_preds_1.cpu(), data_type="test", export_title="Scale 5")
 
-
-
-train_preds = torch.argmax(net2(X_train_t), axis=1)
+# Replace the AI System parts with elements of Net2.
 ai_pytorch.task.model.agent = net2
-ai_pytorch.compute_metrics(train_preds.cpu(), data_type="train")
-ai_pytorch.export_data_flat("Pytorch Model2")
-ai_pytorch.compute_certificates()
-ai_pytorch.export_certificates("NN 2")
+ai_pytorch.task.model.optimizer = optimizer2
+ai_pytorch.task.model.loss_function = criterion2
 
+# Recompute metrics.
+ai_pytorch.compute_metrics(test_preds_2.cpu(), data_type="test", export_title="Scale 10")
+
+# Replace the AI System parts with elements of Net3.
+ai_pytorch.task.model.agent = net3
+ai_pytorch.task.model.optimizer = optimizer3
+ai_pytorch.task.model.loss_function = criterion3
+
+# Recompute metrics.
+ai_pytorch.compute_metrics(test_preds_3.cpu(), data_type="test", export_title="Scale 20")
 
 
 # View GUI

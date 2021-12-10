@@ -74,8 +74,12 @@ class ArtAdversarialRobustnessTreeGroup(MetricGroup, config=_config):
 
             rt = RobustnessVerificationTreeModelsCliqueMethod(classifier=classifier, verbose=False)
 
+            if data.y.ndim == 1:
+                y = np.stack([data.y == 0, data.y == 1], 1)
+            else:
+                y = data.y
             self.metrics['adversarial-tree-verification-bound'].value, \
             self.metrics['adversarial-tree-verification-error'].value = \
-                rt.verify(data.X, np.reshape(data.y, (data.y.size, 1)), eps_init=0.3, nb_search_steps=2, max_clique=2, max_level=2)
+                rt.verify(data.X, y, eps_init=0.3, nb_search_steps=2, max_clique=2, max_level=2)
 
 

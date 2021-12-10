@@ -7,7 +7,7 @@ import numpy as np
 __all__ = ["get_german_dataset", "reweigh_dataset_for_age", "Net", "convertSklearnToTensor", "convertSklearnToDataloader",
            "get_rai_dataset", "get_rai_metadatabase", 'get_classifier_and_preds', 'get_german_rai_ai_system', 'get_untrained_net',
            'load_breast_cancer_dataset', 'get_breast_cancer_metadatabase', 'get_breast_cancer_rai_ai_system', 'train_net',
-           'get_net_test_preds', 'run_train_test_cycle']
+           'get_net_test_preds', 'run_train_test_cycle', 'get_ai_trees', 'get_trained_net']
 
 
 # GERMAN DATASET VALUES
@@ -172,7 +172,7 @@ def convertSklearnToDataloader(xTrain, xTest, yTrain, yTest):
     from torch.utils.data import DataLoader
     X_train_t, y_train_t, X_test_t, y_test_t = convertSklearnToTensor(xTrain, xTest, yTrain, yTest)
     train_dataset = TensorDataset(X_train_t, y_train_t)
-    train_dataloader = DataLoader(train_dataset, batch_size=150, shuffle=False, random_state=0)
+    train_dataloader = DataLoader(train_dataset, batch_size=150, shuffle=False)
     test_dataset = TensorDataset(X_test_t, y_test_t)
     test_dataloader = DataLoader(test_dataset, shuffle=False, batch_size=150)
     return train_dataloader, test_dataloader
@@ -233,7 +233,7 @@ def get_german_rai_ai_system(reg, rai_fairness_config, rai_MetaDatabase, rai_dat
 
 
 # Train Test
-def get_breast_cancer_rai_ai_system(net, optimizer, criterion, rai_MetaDatabase, rai_dataset):
+def get_breast_cancer_rai_ai_system(net, optimizer, criterion, rai_MetaDatabase, rai_dataset, cert_loc="cert_list_ad_demo_ptc.json"):
     from RAI.AISystem import AISystem, Model, Task
     model = Model(agent=net, name="cisco_ai_train_cycle", display_name="Cisco AI Train Test",
                   model_class="Neural Network", adaptive=True,
@@ -242,7 +242,7 @@ def get_breast_cancer_rai_ai_system(net, optimizer, criterion, rai_MetaDatabase,
                 description="Detect Cancer in patients using skin measurements")
     configuration = {"time_complexity": "polynomial"}
     ai_pytorch = AISystem(meta_database=rai_MetaDatabase, dataset=rai_dataset, task=task, user_config=configuration,
-                          custom_certificate_location="RAI\\certificates\\standard\\cert_list_ad_demo_ptc.json")
+                          custom_certificate_location="RAI\\certificates\\standard\\" + cert_loc)
     ai_pytorch.initialize()
     ai_pytorch.reset_redis()
     return ai_pytorch
@@ -254,6 +254,17 @@ def get_untrained_net(input_size=30, scale=10):
     net = Net(input_size=input_size, scale=scale).to("cpu")
     criterion = nn.CrossEntropyLoss().to("cpu")
     optimizer = torch.optim.Adam(net.parameters(), lr=1e-5, weight_decay=1e-4)
+    return net, criterion, optimizer
+
+
+def get_trained_net(input_size=30, scale=10, train_dataloader=None, epochs=100):
+    import torch
+    import torch.nn as nn
+    net = Net(input_size=input_size, scale=scale).to("cpu")
+    criterion = nn.CrossEntropyLoss().to("cpu")
+    optimizer = torch.optim.Adam(net.parameters(), lr=1e-5, weight_decay=1e-4)
+    for epoch in range(epochs):
+        train_net(net, optimizer, criterion, train_dataloader)
     return net, criterion, optimizer
 
 
@@ -306,4 +317,18 @@ def test(ai_pytorch, net, epoch, test_dataloader):
     outputs = get_net_test_preds(net, test_dataloader)
     ai_pytorch.compute_metrics(outputs.to("cpu"), data_type="test", export_title=(str(epoch)))
 
+
+def get_ai_trees(xTrain, yTrain):
+    from sklearn.ensemble import RandomForestClassifier
+    reg_rf = RandomForestClassifier(n_estimators=10, max_depth=10, criterion='entropy', random_state=0)
+    reg_rf.fit(xTrain, yTrain)
+
+    reg_dt = RandomForestClassifier(n_estimators=1, max_depth=10, random_state=0)
+    reg_dt.fit(xTrain, yTrain)
+
+    from sklearn.ensemble import GradientBoostingClassifier
+    reg_gb = GradientBoostingClassifier(n_estimators=3, max_depth=10, random_state=0)
+    reg_gb.fit(xTrain, yTrain)
+
+    return reg_rf, reg_dt, reg_gb
 

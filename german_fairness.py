@@ -9,6 +9,8 @@ from demo_helper_code.demo_helper_functions import *
 # Area under curve to AUC-ROC receiever operating characteristic.
 # Area under precision recall. - Add that.
 # Check if CLEVER needs to be 1hot.
+# add more certificates, use accuracy for performance.
+
 
 #
 #
