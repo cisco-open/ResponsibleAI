@@ -4,7 +4,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
 
-__all__ = ["get_german_dataset", "reweigh_dataset_for_age", "Net", "convertSklearnToTensor", "convertSklearnToDataloader"]
+__all__ = ["get_german_dataset", "reweigh_dataset_for_age", "Net", "convertSklearnToTensor", "convertSklearnToDataloader",
+           "get_rai_dataset", "get_rai_metadatabase"]
 
 
 # GERMAN DATASET VALUES
@@ -83,8 +84,20 @@ def get_german_dataset():
         import sys
         sys.exit(1)
 
-    return {"df": df, "protected_attribute_names": ["age"], "privileged_info": {"age": {"privileged": 0, "unprivileged": 1}},
+    # Put data in format where predictions can be made.
+    from sklearn.model_selection import train_test_split
+    y = df.pop("credit")
+    X = df
+    xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=2, stratify=y)
+    xTrain = xTrain.to_numpy()
+    xTest = xTest.to_numpy()
+    yTrain = yTrain.to_numpy()
+    yTest = yTest.to_numpy()
+
+    df_info = {"X": X, "protected_attribute_names": ["age"], "privileged_info": {"age": {"privileged": 0, "unprivileged": 1}},
             "categorical_meanings": categorical_meanings, "positive_label": 1}
+
+    return df_info, X, y, xTrain, xTest, yTrain, yTest
 
 
 # Use the reweighting algorithm on the german dataset DF to potentially solve bias issues
@@ -119,12 +132,12 @@ def reweigh_dataset_for_age(df, y):
 
 # Standard fully connected neural network for very basic predictions
 class Net(nn.Module):
-    def __init__(self, input_size):
+    def __init__(self, input_size=30, scale=10):
         super().__init__()
-        self.fc1 = nn.Linear(input_size, 300).to("cpu")
-        self.fc2 = nn.Linear(300, 200).to("cpu")
-        self.fc3 = nn.Linear(200, 80).to("cpu")
-        self.fc4 = nn.Linear(80, 2).to("cpu")
+        self.fc1 = nn.Linear(input_size, 30*scale).to("cpu")
+        self.fc2 = nn.Linear(30*scale, 20*scale).to("cpu")
+        self.fc3 = nn.Linear(20*scale, 8*scale).to("cpu")
+        self.fc4 = nn.Linear(8*scale, 2).to("cpu")
 
     def forward(self, x):
         x = F.relu(self.fc1(x)).to("cpu")
@@ -161,3 +174,21 @@ def convertSklearnToDataloader(xTrain, xTest, yTrain, yTest):
     test_dataset = TensorDataset(X_test_t, y_test_t)
     test_dataloader = DataLoader(test_dataset, batch_size=150)
     return train_dataloader, test_dataloader
+
+
+def get_rai_dataset(xTrain, xTest, yTrain, yTest):
+    from RAI.dataset import Dataset, Data
+    training_data = Data(xTrain, yTrain)  # Accepts Data and GT
+    test_data = Data(xTest, yTest)
+    return Dataset(training_data, test_data=test_data)  # Accepts Training, Test and Validation Set
+
+
+def get_rai_metadatabase(df_info):
+    from RAI.utils import df_to_meta_database
+    meta, fairness_config = df_to_meta_database(df_info['X'], categorical_values=df_info["categorical_meanings"],
+                                                protected_attribute_names=df_info["protected_attribute_names"],
+                                                privileged_info=df_info["privileged_info"],
+                                                positive_label=df_info["positive_label"])
+    return meta, fairness_config
+
+

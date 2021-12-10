@@ -1,8 +1,17 @@
+# replace performance on main page with balanced accuracy.
+
+# First 2 jupyter, next in python editor.
+
+
+
 # Set up OS environment to only use desired devices.
 import torch
 import torch.nn as nn
 import os
 os.environ["CUDA_VISIBLE_DEVICES"] = "cpu"
+
+# Area under curve to AUC-ROC receiever operating characteristic.
+# Area under precision recall. - Add that.
 
 
 # Create instance of pytorch network

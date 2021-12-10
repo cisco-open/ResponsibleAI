@@ -1,3 +1,8 @@
+# Training not importnat just call function
+# Hide all training, give function to get pytorch models.
+# Use a closer scale.
+
+
 # Setup environment for pytorch
 import torch
 import torch.nn as nn
@@ -7,7 +12,9 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "cpu"
 
 # Create instance of pytorch network
 from demo_helper_code.demo_helper_functions import Net
-net = Net(30).to("cpu")
+net = Net(input_size=30, scale=10).to("cpu")
+net2 = Net(input_size=30, scale=2).to("cpu")
+# Repeat with different scales
 
 
 # Get Dataset
@@ -45,6 +52,20 @@ for epoch in range(300):
         loss.backward()
         optimizer.step()
 print('Finished Training')
+
+
+# Very basic pytorch training cycle
+for epoch in range(300):
+    for i, data in enumerate(train_dataloader, 0):
+        inputs, labels = data
+        optimizer.zero_grad()
+        outputs = net2(inputs)
+
+        loss = criterion(outputs, labels)
+        loss.backward()
+        optimizer.step()
+print('Finished Training')
+
 
 
 # Convert current dataset to RAI's representation.
@@ -88,6 +109,16 @@ ai_pytorch.compute_metrics(train_preds.cpu(), data_type="train")
 ai_pytorch.export_data_flat("Pytorch Model")
 ai_pytorch.compute_certificates()
 ai_pytorch.export_certificates("Neural Net")
+
+
+
+train_preds = torch.argmax(net2(X_train_t), axis=1)
+ai_pytorch.task.model.agent = net2
+ai_pytorch.compute_metrics(train_preds.cpu(), data_type="train")
+ai_pytorch.export_data_flat("Pytorch Model2")
+ai_pytorch.compute_certificates()
+ai_pytorch.export_certificates("NN 2")
+
 
 
 # View GUI

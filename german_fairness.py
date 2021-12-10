@@ -1,3 +1,18 @@
+from demo_helper_code.demo_helper_functions import *
+# TODO:
+# Change show date show it defaults to showing index not date.
+# add margin to graph, choose more instructive names for the models.
+# Drop down with dates to select when you want to look at certificates.
+# Move to jupyter.
+# introduce data and task -> high level fairness indicator,
+#
+# Demo structure:
+# Explain task an dataset.
+# Show naive approach and evaluation technique
+# Show RAI captures more complex issues with data, and what causes it.
+# Fix data because we know now of the bias. Recompute metrics.
+# Improved fairness
+# RAI allows us to detect these issues and give us tools to better evaluate models.
 
 '''
 We will use RAI to create and evaluate a model on the German Credit Dataset.
@@ -15,40 +30,13 @@ German Credit Dataset:
 '''
 
 
-# Get Pandas Dataframe dataset.
-# Collect data stored in pandas dataframe
-from demo_helper_code.demo_helper_functions import get_german_dataset
-df_info = get_german_dataset() # df_info is a dictionary containing the dataframe and information about its features.
-pandas_df = df_info["df"]
-print("German Credit Data: \n", str(pandas_df.head()))
+# Get German Credit Database
+meta_info, X, y, xTrain, xTest, yTrain, yTest = get_german_dataset()
 
 
-# Put data in format where predictions can be made.
-from sklearn.model_selection import train_test_split
-y = pandas_df.pop("credit")
-X = pandas_df
-xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=2, stratify=y)
-xTrain = xTrain.to_numpy()
-xTest = xTest.to_numpy()
-yTrain = yTrain.to_numpy()
-yTest = yTest.to_numpy()
-
-
-# Get Feature Metadata used in RAI from Pandas Dataframe.
-from RAI.utils import df_to_meta_database
-# Helper function which collects all relevant meta information from a dataframe.
-meta, fairness_config = df_to_meta_database(X, categorical_values=df_info["categorical_meanings"],
-                                            protected_attribute_names=df_info["protected_attribute_names"],
-                                            privileged_info=df_info["privileged_info"],
-                                            positive_label=df_info["positive_label"])
-
-
-# Put the train and test data into RAI's representation.
-from RAI.dataset import Data, Dataset
-from RAI.AISystem import AISystem, Model, Task
-training_data = Data(xTrain, yTrain)  # Accepts Data and GT
-test_data = Data(xTest, yTest)
-dataset = Dataset(training_data, test_data=test_data)  # Accepts Training, Test and Validation Set
+# Put the data in a RAI Dataset Object so that RAI can compute metrics
+rai_MetaDatabase, rai_fairness_config = get_rai_metadatabase(meta_info)
+rai_dataset = get_rai_dataset(xTrain, xTest, yTrain, yTest)
 
 
 # Create an AI model and train it to make predictions.
@@ -60,10 +48,11 @@ test_preds = reg.predict(xTest)
 
 
 # Create an AI System using all collected information to allow for metric computation.
+from RAI.AISystem import AISystem, Model, Task
 model = Model(agent=reg, name="cisco_german_fairness", display_name="Cisco German Fairness", model_class="Random Forest Classifier", adaptive=False)
 task = Task(model=model, type='binary_classification', description="Predict the credit score of various Germans.")
-configuration = {"fairness": fairness_config, "time_complexity": "linear"}
-credit_ai = AISystem(meta_database=meta, dataset=dataset, task=task, user_config=configuration, custom_certificate_location="RAI\\certificates\\standard\\cert_list_credit.json")
+configuration = {"fairness": rai_fairness_config, "time_complexity": "linear"}
+credit_ai = AISystem(meta_database=rai_MetaDatabase, dataset=rai_dataset, task=task, user_config=configuration, custom_certificate_location="RAI\\certificates\\standard\\cert_list_credit.json")
 credit_ai.initialize()
 
 
@@ -78,25 +67,21 @@ credit_ai.compute_certificates()
 credit_ai.export_certificates("Original")
 
 
-# Viewing results for these, we can clearly see that nearly all fairness certificates fail for age.
-# To accomodate for this we can reweigh the dataset using tools from:
-# F. Kamiran and T. Calders,  "Data Preprocessing Techniques for Classification without Discrimination," Knowledge and Information Systems, 2012
-# And measure the disparate impact of the retrained model.
+# View performance on dataset, biased against age.
+# credit_ai.viewGUI()
 
 
-# Reweigh data to accomodate for bias
+# Reweigh data to accommodate for the bias against age
 from demo_helper_code.demo_helper_functions import reweigh_dataset_for_age
 xTrain, xTest, yTrain, yTest = reweigh_dataset_for_age(X, y)
 
 
 # Replace the current dataset with the reweighed dataset.
-training_data = Data(xTrain, yTrain)
-test_data = Data(xTest, yTest)
-dataset = Dataset(training_data, test_data=test_data)
-credit_ai.dataset = dataset
+reweigh_dataset = get_rai_dataset(xTrain, xTest, yTrain, yTest)
+credit_ai.dataset = reweigh_dataset
 
 
-# Retrain classifier
+# Retrain classifier on reweighed data
 reg.fit(xTrain, yTrain)
 train_preds = reg.predict(xTrain)
 test_preds = reg.predict(xTest)
@@ -114,4 +99,5 @@ credit_ai.export_certificates("Weight")
 
 # View GUI
 credit_ai.viewGUI()
+
 
