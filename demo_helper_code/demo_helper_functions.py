@@ -3,17 +3,18 @@ import pandas as pd
 import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
-from sklearn.base import BaseEstimator, TransformerMixin
+
 __all__ = ["get_german_dataset", "reweigh_dataset_for_age", "Net", "convertSklearnToTensor", "convertSklearnToDataloader"]
 
 
+# GERMAN DATASET VALUES
 default_mappings = {
     'label_maps': [{1.0: 'Good Credit', 2.0: 'Bad Credit'}],
     'protected_attribute_maps': [{1.0: 'Male', 0.0: 'Female'},
                                  {1.0: 'Old', 0.0: 'Young'}],
 }
 
-
+# Default processing for the german dataset
 def default_preprocessing(df):
     """Adds a derived sex attribute based on personal_status."""
     # TODO: ignores the value of privileged_classes for 'sex'
@@ -23,6 +24,7 @@ def default_preprocessing(df):
     return df
 
 
+# Get the german credit dataset
 def get_german_dataset():
     favorable_classes = [1]
     protected_attribute_names = ['sex']
@@ -85,6 +87,7 @@ def get_german_dataset():
             "categorical_meanings": categorical_meanings, "positive_label": 1}
 
 
+# Use the reweighting algorithm on the german dataset DF to potentially solve bias issues
 def reweigh_dataset_for_age(df, y):
     from aif360.algorithms.preprocessing import Reweighing
     from aif360.datasets import StandardDataset
@@ -114,7 +117,7 @@ def reweigh_dataset_for_age(df, y):
     return xTrain, xTest, yTrain, yTest
 
 
-
+# Standard fully connected neural network for very basic predictions
 class Net(nn.Module):
     def __init__(self, input_size):
         super().__init__()
@@ -131,6 +134,7 @@ class Net(nn.Module):
         return x.to("cpu")
 
 
+# Converts a dataset list from Sklearn to a Pytorch tensors.
 def convertSklearnToTensor(xTrain, xTest, yTrain, yTest):
     import torch
     n_values = np.max(yTest) + 1
@@ -147,7 +151,7 @@ def convertSklearnToTensor(xTrain, xTest, yTrain, yTest):
     return X_train_t, y_train_t, X_test_t, y_test_t
 
 
-
+# Converts Sklearn datasets to Pytorch dataloaders.
 def convertSklearnToDataloader(xTrain, xTest, yTrain, yTest):
     from torch.utils.data import TensorDataset
     from torch.utils.data import DataLoader
