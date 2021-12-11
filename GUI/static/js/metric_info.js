@@ -13,7 +13,7 @@ var model_info;
 var bool_charts = {}
 var dict_charts = {}
 var tags = {}
-var use_date = true;
+var use_date = false;
 var page_ready = false
 
 
@@ -80,7 +80,7 @@ function createMetrics(metric_name, data) {
             addChart(metric_name, data, "-single")
         else {
                 res = stringToMatrix(data, metric_name)
-                if (!Array.isArray(res[0]))
+                if (res != null && !Array.isArray(res[0]))
                     res = [res]
                 addTable(metric_name, res)
         }
@@ -101,6 +101,8 @@ function createMetrics(metric_name, data) {
 
 function addVectorDict(metric_name, data){
     var curData = data[data.length -1][metric_name]
+    if(curData == null)
+        return
     var features = model_info['features']
     var result = {}
     for(var i = 0; i<curData.length; i++){
@@ -165,6 +167,7 @@ function addChart(metric_name, data, name_extension){
         ykey: metric_name,
         hideHover: true,
         smooth: false,
+        parseTime: use_date,
         lineColors: ['#000000'],
         pointFillColors: ['#000000'],
         ykeys: ['value'],
@@ -230,12 +233,12 @@ function addBoolChart(metric_name, data){
         lineColors: ['#000000'],
         pointFillColors: ['#000000'],
         ykeys: ['value'],
+        parseTime: use_date,
         labels: ['Value'],
         hoverCallback: function (index, options, content, row) {
                 var description = options.descriptions[index];
                 return content + "\nDescription: " + description;}
     }
-    myValues['parseTime'] = true
     var morrisLine = new Morris.Line(myValues)
 
     bool_charts[metric_name] = morrisLine;

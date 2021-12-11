@@ -3,7 +3,7 @@
 var graphs = {};
 var metrics;
 var page_ready = false;
-var use_date= true;
+var use_date= false;
 var main_chart = null;
 
 
@@ -107,6 +107,7 @@ function createMetrics(data, explanations) {
     ]
     */
     var chart_explanations = result[1]
+
     var options = {
         element: "allChart",
         data: all_data,
@@ -115,13 +116,12 @@ function createMetrics(data, explanations) {
         ykey: i,
         ymax: 100,
         ymin: 0,
-        parseTime: true,
+        parseTime: use_date,
         hideHover: true,
         lineColors: ['red', 'green', 'blue', 'yellow'],
         pointFillColors: ['red', 'green', 'blue', 'yellow'],
         ykeys: ['fairness', 'robustness', 'performance', 'explainability'],
         labels: ['fairness', 'robustness', 'performance', 'explainability'],
-        parseTime: true,
         hoverCallback: function (index, options, content, row) {
             var description = options.descriptions[index];
             return content + "\nDescription: " + description;},

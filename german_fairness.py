@@ -1,11 +1,10 @@
 from demo_helper_code.demo_helper_functions import *
 # TODO:
-# Change show date show it defaults to showing index not date.
+# DONE.     Change show date show it defaults to showing index not date.
 # add margin to graph, choose more instructive names for the models.
 # Drop down with dates to select when you want to look at certificates.
 # Move to jupyter.
 # replace performance on main page with balanced accuracy.
-# First 2 jupyter, next in python editor.
 # Area under curve to AUC-ROC receiever operating characteristic.
 # Area under precision recall. - Add that.
 # Check if CLEVER needs to be 1hot.

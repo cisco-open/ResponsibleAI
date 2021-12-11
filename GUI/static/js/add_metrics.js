@@ -15,7 +15,7 @@ var metric_info;
 var model_info;
 var tags = {}
 var data_types = []
-var use_date= true;
+var use_date= false;
 var page_ready = false;
 
 
@@ -104,7 +104,7 @@ function createMetrics(metrics, explanations, data, category) {
                 addChart(list[i], explanations, data, category, "-single")
             else if (! (list[i]+"_avg" in metric_info)){
                 res = stringToMatrix(data, list[i])
-                if (!Array.isArray(res[0]))
+                if (res != null && !Array.isArray(res[0]))
                     res = [res]
                 addTable(list[i], explanations, res, category)
             }
@@ -125,6 +125,8 @@ function createMetrics(metrics, explanations, data, category) {
 
 function addVectorDict(metric_name, explanations, data, category, name_extension){
     var curData = data[data.length -1][metric_name]
+    if(curData == null)
+        return
     var features = model_info['features']
     var result = {}
     for(var i = 0; i<curData.length; i++){
@@ -226,6 +228,7 @@ function addChart(metric_name, explanations, data, category, name_extension){
         ykey: metric_name,
         hideHover: true,
         smooth: false,
+        parseTime: use_date,
         lineColors: ['#000000'],
         pointFillColors: ['#000000'],
         ykeys: ['value'],
@@ -244,7 +247,6 @@ function addChart(metric_name, explanations, data, category, name_extension){
         }
         myValues['yLabelFormat'] = function(y){return y.toFixed(2);}
     }
-    myValues['parseTime'] = true
 
     var morrisLine = new Morris.Line(myValues)
     graphs[metric_name] = morrisLine;
@@ -313,13 +315,13 @@ function addBoolChart(metric_name, explanations, data, category, name_extension)
         smooth: false,
         lineColors: ['#000000'],
         pointFillColors: ['#000000'],
+        parseTime: use_date,
         ykeys: ['value'],
         labels: ['Value'],
         hoverCallback: function (index, options, content, row) {
                 var description = options.descriptions[index];
                 return content + "\nDescription: " + description;}
     }
-    myValues['parseTime'] = true
     var morrisLine = new Morris.Line(myValues)
     bool_charts[metric_name] = morrisLine;
 }

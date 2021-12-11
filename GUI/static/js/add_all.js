@@ -14,7 +14,7 @@ var data_types = []
 var tagOwner = {'fairness': [], 'performance': [], 'robustness': [], 'stats': []}
 var categories = ['fairness', 'performance', 'robustness', 'stats']
 var metric_data
-var use_date = true;
+var use_date = false;
 var page_ready = false;
 
 
@@ -106,7 +106,7 @@ function createMetrics(metrics, explanations, data, category) {
                 addChart(list[i], explanations, data, category, "-single")
             else if (! (list[i]+"_avg" in metric_info)){
                 res = stringToMatrix(data, list[i])
-                if (!Array.isArray(res[0]))
+                if (res != null && !Array.isArray(res[0]))
                     res = [res]
                 addTable(list[i], explanations, res, category)
             }
@@ -127,6 +127,8 @@ function createMetrics(metrics, explanations, data, category) {
 
 function addVectorDict(metric_name, explanations, data, category, name_extension){
     var curData = data[data.length -1][metric_name]
+    if(curData == null)
+        return
     var features = model_info['features']
     var result = {}
     for(var i = 0; i<curData.length; i++){
@@ -237,6 +239,7 @@ function addChart(metric_name, explanations, data, category, name_extension){
         hideHover: true,
         smooth: false,
         lineColors: ['#000000'],
+        parseTime: use_date,
         pointFillColors: ['#000000'],
         ykeys: ['value'],
         labels: ['Value'],
@@ -319,6 +322,7 @@ function addBoolChart(metric_name, explanations, data, category, name_extension)
         hideHover: true,
         smooth: false,
         lineColors: ['#000000'],
+        parseTime: use_date,
         pointFillColors: ['#000000'],
         ykeys: ['value'],
         labels: ['Value'],
@@ -326,7 +330,6 @@ function addBoolChart(metric_name, explanations, data, category, name_extension)
                 var description = options.descriptions[index];
                 return content + "\nDescription: " + description;}
     }
-    myValues['parseTime'] = true
     if(metric_info[metric_name]["has_range"]){
         if(metric_info[metric_name]["range"][0] != null){
             myValues['ymin'] = Number(metric_info[metric_name]["range"][0])
