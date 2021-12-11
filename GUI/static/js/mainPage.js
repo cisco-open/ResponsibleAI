@@ -47,17 +47,19 @@ function load_explanations(data) {
 }
 
 
-
+// ADD RANGE PORTION. 
 // Used to create the data for the morris chart
 function createData(data) {
     var ret = [];
     var keys = ["fairness", "robustness", "performance", "explainability"]
     var descriptions = []
+    var names = []
     for (var i = 0; i < data.length; i++) {
         if(data[i]["metadata"]["scores"]["performance"] != null){
             if(use_date){
                 ret.push({
                     year: data[i]["metadata"]["date"]["value"],
+                    name: data[i]["metadata"]["date"]["value"],
                     fairness: (100* data[i]["metadata"]["scores"]["fairness"][0] / data[i]["metadata"]["scores"]["fairness"][1]).toFixed(1),
                     performance: (100* data[i]["metadata"]["scores"]["performance"][0] / data[i]["metadata"]["scores"]["performance"][1]).toFixed(1),
                     explainability: (100* data[i]["metadata"]["scores"]["explainability"][0] / data[i]["metadata"]["scores"]["explainability"][1]).toFixed(1),
@@ -66,7 +68,8 @@ function createData(data) {
             }
             else{
                 ret.push({
-                    year: data[i]["metadata"]["description"]["value"],
+                    year: i,
+                    name: data[i]["metadata"]["description"]["value"],
                     fairness: (100* data[i]["metadata"]["scores"]["fairness"][0] / data[i]["metadata"]["scores"]["fairness"][1]).toFixed(1),
                     performance: (100* data[i]["metadata"]["scores"]["performance"][0] / data[i]["metadata"]["scores"]["performance"][1]).toFixed(1),
                     explainability: (100* data[i]["metadata"]["scores"]["explainability"][0] / data[i]["metadata"]["scores"]["explainability"][1]).toFixed(1),
@@ -74,9 +77,10 @@ function createData(data) {
                 });
             }
             descriptions.push(data[i]["metadata"]["description"]["value"])
+            names.push(data[i]["metadata"]["description"]["value"])
         }
     }
-    return [ret, descriptions];
+    return [ret, descriptions, names];
 }
 
 
@@ -107,6 +111,16 @@ function createMetrics(data, explanations) {
     ]
     */
     var chart_explanations = result[1]
+    var names = result[2]
+
+    var events = [0, 0]
+    if(!use_date){
+        var range = (all_data[all_data.length-1]['year'] - all_data[0]['year'])*0.01
+        events[0] = all_data[0]['year'] - range
+        events[1] = all_data[all_data.length-1]['year'] + range
+        console.log(events)
+    }
+
 
     var options = {
         element: "allChart",
@@ -114,6 +128,9 @@ function createMetrics(data, explanations) {
         descriptions: descriptions,
         xkey: 'year',
         ykey: i,
+        names: names,
+        events: events,
+        eventStrokeWidth:0,
         ymax: 100,
         ymin: 0,
         parseTime: use_date,
@@ -125,6 +142,11 @@ function createMetrics(data, explanations) {
         hoverCallback: function (index, options, content, row) {
             var description = options.descriptions[index];
             return content + "\nDescription: " + description;},
+        xLabelFormat: function(index){
+            if (index.src != null)
+                return index.src.name
+            return index
+        },
     }
     var morrisLine = new Morris.Line(options);
     main_chart = morrisLine
@@ -159,6 +181,7 @@ function redoMetrics2(data) {
     var new_data = result[0]
     var newExplanations = result[1]
     main_chart['options'].parseTime = use_date
+    main_chart.options.events = [new_data[0].year, new_data[new_data.length-1].year]
     main_chart.setData(new_data);
     main_chart.options.descriptions = newExplanations
 }
