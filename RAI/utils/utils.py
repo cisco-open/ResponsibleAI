@@ -21,7 +21,7 @@ def jsonify(v):
 def clean_list(v):
     for i in range(len(v)):
         v[i] = jsonify(v[i])
-
+    return v
 
 def compare_runtimes(required, seen):
     required = complexity_to_integer(required)

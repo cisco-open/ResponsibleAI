@@ -53,7 +53,6 @@ ai_pytorch.task.model.loss_function = criterion3
 # Recompute metrics.
 ai_pytorch.compute_metrics(test_preds_3.cpu(), data_type="test", export_title="Scale 20")
 
-
 # View GUI
 ai_pytorch.viewGUI()
 

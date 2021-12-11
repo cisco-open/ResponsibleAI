@@ -38,8 +38,8 @@ features = []
 
 for feature in features_raw:
     features.append(Feature(feature, "float32", feature))
-features.append(Feature("race", "integer", "race value", categorical=True, values=[{0:"black"}, {1:"white"}]))
-features.append(Feature("gender", "integer", "race value", categorical=True, values=[{1:"male"}, {0:"female"}]))
+features.append(Feature("race", "integer", "race value", categorical=True, values= {0:"black", 1:"white"}))
+features.append(Feature("gender", "integer", "race value", categorical=True, values={1:"male", 0:"female"}))
 
 # Hook data in with our Representation
 training_data = Data(xTrain, yTrain)  # Accepts Data and GT
@@ -49,12 +49,10 @@ meta = MetaDatabase(features)
 
 # Create a model to make predictions
 # from sklearn.ensemble import RandomForestClassifier
-from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.ensemble import RandomForestClassifier
 
 # reg = GradientBoostingClassifier(n_estimators=4, max_depth=6)
 reg = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=0)
-reg = GradientBoostingClassifier()
-
 
 model = Model(agent=reg, name="cisco_cancer_ai", display_name="Cisco Health AI", model_class="Random Forest Classifier", adaptive=False)
 # Indicate the task of the model
