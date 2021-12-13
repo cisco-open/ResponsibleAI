@@ -17,7 +17,7 @@ import threading
 # if len(sys.argv) > 2:
 #     raise Exception("Please Enter Model Name with no spaces")
 
-model_name = "cisco_cancer_ai"  # sys.argv[1]
+model_name = "cisco_german_fairness"  # sys.argv[1]
 if len(sys.argv) == 2:
     model_name = sys.argv[1]
 

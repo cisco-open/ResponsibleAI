@@ -2,9 +2,11 @@ from demo_helper_code.demo_helper_functions import *
 import torch
 import os
 import random
+import numpy as np
 os.environ["CUDA_VISIBLE_DEVICES"] = "cpu"
 torch.manual_seed(0)
 random.seed(0)
+np.random.seed(10)
 
 
 # Get Breast cancer data, with pytorch representation

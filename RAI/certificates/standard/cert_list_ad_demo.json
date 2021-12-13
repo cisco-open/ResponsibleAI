@@ -1,9 +1,12 @@
 {
     "version": "1.0" ,
     "certs": [
-        {"name":  "adversarial bounds cert", "filename": "adversarial_bound_certs.json"},
-        {"name":  "adversarial error cert", "filename": "adversarial_error_certs.json"},
-        {"name":  "adversarial gold standard", "filename": "adversarial_gold_standard.json"},
+        {"name":  "adversarial bounds bronze cert", "filename": "adversarial_bound_bronze_certs.json"},
+        {"name":  "adversarial bounds silver cert", "filename": "adversarial_bound_silver_certs.json"},
+        {"name":  "adversarial bounds gold cert", "filename": "adversarial_bound_gold_certs.json"},
+        {"name":  "adversarial error bronze cert", "filename": "adversarial_error_bronze_certs.json"},
+        {"name":  "adversarial error silver cert", "filename": "adversarial_error_silver_certs.json"},
+        {"name":  "adversarial error gold cert", "filename": "adversarial_error_gold_certs.json"},
         {"name":  "accuracy certificate", "filename": "performance_accuracy.json"},
         {"name":  "true positive certificate", "filename": "performance_tp.json"},
         {"name":  "fairness accuracy bronze", "filename": "fairness_accuracy_bronze.json"},

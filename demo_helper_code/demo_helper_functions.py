@@ -3,11 +3,14 @@ import pandas as pd
 import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
+import torch
+import random
+
 
 __all__ = ["get_german_dataset", "reweigh_dataset_for_age", "Net", "convertSklearnToTensor", "convertSklearnToDataloader",
            "get_rai_dataset", "get_rai_metadatabase", 'get_classifier_and_preds', 'get_german_rai_ai_system', 'get_untrained_net',
            'load_breast_cancer_dataset', 'get_breast_cancer_metadatabase', 'get_breast_cancer_rai_ai_system', 'train_net',
-           'get_net_test_preds', 'run_train_test_cycle', 'get_ai_trees', 'get_trained_net']
+           'get_net_test_preds', 'get_ai_trees', 'get_trained_net']
 
 
 # GERMAN DATASET VALUES
@@ -304,12 +307,6 @@ def get_net_test_preds(net, test_dataloader):
     # Compute metrics on the outputs of the test metrics
     return torch.argmax(outputs, axis=1)
 
-
-def run_train_test_cycle(ai_pytorch, net, optimizer, criterion, train_dataloader, test_dataloader, epochs=100):
-    for epoch in range(epochs):
-        train_net(net, optimizer, criterion, train_dataloader)
-        if epoch % 10 == 0:
-            test(ai_pytorch, net, epoch, test_dataloader)
 
 
 # Test the model

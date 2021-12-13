@@ -28,7 +28,7 @@ ai_tree_comparison.compute_metrics(decision_tree.predict(xTest), data_type="test
 
 # Exchange model for Extra Trees and Recompute Metrics
 ai_tree_comparison.task.model.agent = gradient_boost
-ai_tree_comparison.compute_metrics(gradient_boost.predict(xTest), data_type="test", export_title="Extra Trees")
+ai_tree_comparison.compute_metrics(gradient_boost.predict(xTest), data_type="test", export_title="Grad Boost")
 
 
 ai_tree_comparison.viewGUI()
