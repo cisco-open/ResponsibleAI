@@ -2,7 +2,8 @@ from RAI.metrics.metric_group import MetricGroup
 import math
 import numpy as np
 import scipy.stats
-
+import warnings
+            
 # Move config to external .json? 
 _config = {
     "name": "summary_stats",
@@ -258,7 +259,10 @@ class StatMetricGroup(MetricGroup, config=_config):
             self.metrics["covariance"].value = np.cov(masked_data.T, **args.get("covariance", {}))
             self.metrics["num-Nan-rows"].value = np.count_nonzero(np.isnan(data.X).any(axis=1))
             self.metrics["percent-Nan-rows"].value = self.metrics["num-Nan-rows"].value/np.shape(np.asarray(data.X))[0]
-            self.metrics["geometric-mean"].value = scipy.stats.mstats.gmean(masked_data)
+            with warnings.catch_warnings():
+                warnings.filterwarnings('ignore')
+                self.metrics["geometric-mean"].value = scipy.stats.mstats.gmean(masked_data)
+            
             self.metrics["mode"].value = scipy.stats.mstats.mode(data.X)[0]
             self.metrics["skew"].value = scipy.stats.mstats.skew(masked_data)
             self.metrics["variation"].value = scipy.stats.mstats.variation(masked_data)
