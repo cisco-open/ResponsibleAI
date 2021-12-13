@@ -1,14 +1,26 @@
 from demo_helper_code.demo_helper_functions import *
 # TODO:
 # DONE.     Change show date show it defaults to showing index not date.
-# add margin to graph, choose more instructive names for the models.
-# Drop down with dates to select when you want to look at certificates.
+# add more certificates, use accuracy for performance.
 # Move to jupyter.
+
+
+# add margin to graph, choose more instructive names for the models. - Main page.
+# Change name to Area under curve to AUC-ROC reciever.
+# Drop down with dates to select when you want to look at certificates.
 # replace performance on main page with balanced accuracy.
-# Area under curve to AUC-ROC receiever operating characteristic.
 # Area under precision recall. - Add that.
 # Check if CLEVER needs to be 1hot.
-# add more certificates, use accuracy for performance.
+
+# 3-4 minutes. 2 mis tops for the other two.
+
+# 4.5 MINUTES AVERAGE.
+
+
+# First round, trained model performance good fairness bad. Step by step.
+# Load dataset, using sklearn to train a model, typical datascience task.
+# Time to evaluate model to get insight.
+# Show certificates/badges in flow. Show relevant information to show something failed.
 
 
 #
@@ -58,9 +70,8 @@ credit_ai = get_german_rai_ai_system(reg, rai_fairness_config, rai_MetaDatabase,
 credit_ai.reset_redis()
 credit_ai.compute_metrics(test_preds, data_type="test", export_title="Original")
 
-
-# View performance on dataset, biased against age.
-# credit_ai.viewGUI()
+# View metrics of the predictions and dataset.
+credit_ai.viewGUI()
 
 
 # Reweigh data to accommodate for the bias against age

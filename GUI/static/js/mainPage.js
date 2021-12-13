@@ -6,6 +6,7 @@ var page_ready = false;
 var use_date= false;
 var main_chart = null;
 
+var metric_values = null
 
 $(document).ready(function() {
         setInterval("check_data()", 1000); // call every 10 seconds
@@ -42,18 +43,36 @@ function load_explanations(data) {
         .then(function (response) {
             return response.json();
         }).then(function (text) {
+            load_metric_data(data, text);
+        });
+}
+
+
+// Queries Data
+function load_metric_data(data, text) {
+    var date1 = document.getElementById("startDate").value;
+    var date2 = document.getElementById("endDate").value;
+    return fetch('/getData/' + date1 + '/' + date2)
+        .then(function (response) {
+            return response.json();
+        }).then(function (new_text) {
+            metric_values = new_text
             createMetrics(data, text);
         });
 }
 
 
-// ADD RANGE PORTION. 
+// ADD RANGE PORTION.
 // Used to create the data for the morris chart
 function createData(data) {
     var ret = [];
     var keys = ["fairness", "robustness", "performance", "explainability"]
     var descriptions = []
     var names = []
+
+    console.log()
+    console.log(metric_values)
+
     for (var i = 0; i < data.length; i++) {
         if(data[i]["metadata"]["scores"]["performance"] != null){
             if(use_date){
@@ -61,7 +80,7 @@ function createData(data) {
                     year: data[i]["metadata"]["date"]["value"],
                     name: data[i]["metadata"]["date"]["value"],
                     fairness: (100* data[i]["metadata"]["scores"]["fairness"][0] / data[i]["metadata"]["scores"]["fairness"][1]).toFixed(1),
-                    performance: (100* data[i]["metadata"]["scores"]["performance"][0] / data[i]["metadata"]["scores"]["performance"][1]).toFixed(1),
+                    performance: (100* metric_values[i]['performance_cl > balanced_accuracy']).toFixed(1),
                     explainability: (100* data[i]["metadata"]["scores"]["explainability"][0] / data[i]["metadata"]["scores"]["explainability"][1]).toFixed(1),
                     robustness: (100* data[i]["metadata"]["scores"]["robustness"][0] / data[i]["metadata"]["scores"]["robustness"][1]).toFixed(1)
                 });
@@ -71,7 +90,7 @@ function createData(data) {
                     year: i,
                     name: data[i]["metadata"]["description"]["value"],
                     fairness: (100* data[i]["metadata"]["scores"]["fairness"][0] / data[i]["metadata"]["scores"]["fairness"][1]).toFixed(1),
-                    performance: (100* data[i]["metadata"]["scores"]["performance"][0] / data[i]["metadata"]["scores"]["performance"][1]).toFixed(1),
+                    performance: (100* metric_values[i]['performance_cl > balanced_accuracy']).toFixed(1),
                     explainability: (100* data[i]["metadata"]["scores"]["explainability"][0] / data[i]["metadata"]["scores"]["explainability"][1]).toFixed(1),
                     robustness: (100* data[i]["metadata"]["scores"]["robustness"][0] / data[i]["metadata"]["scores"]["robustness"][1]).toFixed(1)
                 });
@@ -90,6 +109,7 @@ function createMetrics(data, explanations) {
     var names = ["Fairness", "Robustness", "Performance", "Explainability"];
     var explanations = {"fairness": {"name": "fairness", "explanation": "Measures how fair a model's predictions are.", "display_name": "Fairness"}, "robustness": {"name": "robustness", "explanation": "Measures a model's resiliance to time and sway.", "display_name": "Robustness"}, "explainability": {"name": "explainability", "explanation": "Measures how explainable the model is.", "display_name": "Explainability"}, "performance": {"name": "performance", "explanation": "Performance describes how well at predicting the model was.", "display_name": "Performance"}}
 
+
     for (var j in divs) {
         var i = divs[j]
         graphs[i] = i;
@@ -101,6 +121,20 @@ function createMetrics(data, explanations) {
         var circleText = document.getElementById(i + "Text");
         circleText.innerHTML = (data[data.length - 1]['metadata']['scores'][i][0] / data[data.length - 1]['metadata']['scores'][i][1] * 100).toFixed(1) + "%";
     }
+    var i = "performance"
+    graphs[i] = i;
+    var img = document.getElementById(i + "KnobQ");
+    img.setAttribute("title", explanations[i]["explanation"]);
+    var circle = document.getElementById(i + "Circle");
+    circle.setAttribute("stroke-dasharray",
+        (100* metric_values[metric_values.length-1]['performance_cl > balanced_accuracy']).toFixed(0) + ", 100");
+    var circleText = document.getElementById(i + "Text");
+    circleText.innerHTML =(100* metric_values[metric_values.length-1]['performance_cl > balanced_accuracy']).toFixed(1) + "%";
+
+
+
+    // (100* metric_values[i]['performance_cl > balanced_accuracy']).toFixed(1)
+
 
     var result = createData(data)
     var all_data = result[0]
@@ -162,13 +196,31 @@ function redoMetrics() {
         .then(function (response) {
             return response.json();
         }).then(function (text) {
-            redoMetrics2(text)
+            load_metric_data_redo(text)
             page_ready = true
         });
 }
 
+
+// Queries Data
+function load_metric_data_redo(text) {
+    var date1 = document.getElementById("startDate").value;
+    var date2 = document.getElementById("endDate").value;
+    return fetch('/getData/' + date1 + '/' + date2)
+        .then(function (response) {
+            return response.json();
+        }).then(function (new_text) {
+            metric_values = new_text
+            redoMetrics2(text);
+        });
+}
+
+
+
 function redoMetrics2(data) {
     for (var type in graphs) {
+        if(type == "robustness")
+            continue;
         var myValue = 0
         if (data.length >= 1)
             myValue = data[data.length - 1]['metadata']['scores'][type][0] / data[data.length - 1]['metadata']['scores'][type][1] * 100
@@ -177,6 +229,14 @@ function redoMetrics2(data) {
         var circleText = document.getElementById(type + "Text");
         circleText.innerHTML = myValue.toFixed(1) + "%";
     }
+    var i = "performance"
+    var circle = document.getElementById(i + "Circle");
+    circle.setAttribute("stroke-dasharray",
+        (100* metric_values[metric_values.length-1]['performance_cl > balanced_accuracy']).toFixed(0) + ", 100");
+    var circleText = document.getElementById(i + "Text");
+    circleText.innerHTML =(100* metric_values[metric_values.length-1]['performance_cl > balanced_accuracy']).toFixed(1) + "%";
+
+
     var result = createData(data);
     var new_data = result[0]
     var newExplanations = result[1]

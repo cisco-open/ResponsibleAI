@@ -1,0 +1,15 @@
+{
+    "meta":{
+        "display_name": "Adversarial Bound Bronze Certification",
+        "description": "Certifies whether or not the agent is robust against adversarial attacks.",
+        "tags": ["robustness"],
+        "level":["1"]
+    },
+
+    "condition": {
+            "op":"or" ,
+            "terms": [              
+                [ "&adversarial_validation_tree > adversarial-tree-verification-bound" , ">" , 0.1 ]
+            ]
+        }
+}     

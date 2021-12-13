@@ -1,6 +1,6 @@
 {
     "meta":{
-        "display_name": "Adversarial Error Certification",
+        "display_name": "Adversarial Error Bronze Certification",
         "description": "Certifies whether or not the agent is robust against adversarial attacks.",
         "tags": ["robustness"],
         "level":["1"]

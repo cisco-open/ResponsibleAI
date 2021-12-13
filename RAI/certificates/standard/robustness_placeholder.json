@@ -1,0 +1,15 @@
+{
+    "meta":{
+        "display_name": "Robustness Placeholder",
+        "description": "Robustness placeholder.",
+        "tags": ["robustness"],
+        "level":["1"]
+    },
+
+    "condition": {
+            "op": "and",
+            "terms": [              
+                [ "&performance_cl > balanced_accuracy" , ">" , 1 ]
+            ]
+        }
+}     

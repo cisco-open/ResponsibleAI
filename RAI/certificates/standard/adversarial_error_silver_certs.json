@@ -1,15 +1,14 @@
 {
     "meta":{
-        "display_name": "Adversarial Bound Bronze",
+        "display_name": "Adversarial Error Silver Certification",
         "description": "Certifies whether or not the agent is robust against adversarial attacks.",
         "tags": ["robustness"],
         "level":["1"]
     },
 
     "condition": {
-            "op":"and" ,
-            "terms": [              
-                [ "&adversarial_validation_tree > adversarial-tree-verification-bound" , ">" , 0.5 ],
+            "op":"or" ,
+            "terms": [
                 [ "&adversarial_validation_tree > adversarial-tree-verification-error" , "<" , 0.5 ]
             ]
         }

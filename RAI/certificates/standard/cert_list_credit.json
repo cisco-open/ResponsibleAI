@@ -8,7 +8,8 @@
         {"name":  "Theil Index certificate", "filename": "fairness_theil.json"},
         {"name":  "accuracy certificate", "filename": "performance_accuracy.json"},
         {"name":  "true positive certificate", "filename": "performance_tp.json"},
-        {"name":  "Explainability Placeholder", "filename": "explainability_placeholder.json"}
+        {"name":  "Explainability Placeholder", "filename": "explainability_placeholder.json"},
+        {"name":  "Robustness Placeholder", "filename": "robustness_placeholder.json"}
 
     ]
 
