@@ -1,4 +1,9 @@
 from demo_helper_code.demo_helper_functions import *
+import numpy as np
+import random
+random.seed(3)
+np.random.seed(14)
+
 
 # Get Dataset
 xTrain, xTest, yTrain, yTest = load_breast_cancer_dataset()

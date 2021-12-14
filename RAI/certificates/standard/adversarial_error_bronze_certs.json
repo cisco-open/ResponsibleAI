@@ -9,7 +9,7 @@
     "condition": {
             "op":"or" ,
             "terms": [
-                [ "&adversarial_validation_tree > adversarial-tree-verification-error" , "<" , 0.9 ]
+                [ "&adversarial_validation_tree > adversarial-tree-verification-error" , ">" , 0.9 ]
             ]
         }
 }     

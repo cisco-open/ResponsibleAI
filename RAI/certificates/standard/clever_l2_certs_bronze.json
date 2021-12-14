@@ -1,6 +1,6 @@
 {
     "meta":{
-        "display_name": "Clever Targeted Certification Bronze",
+        "display_name": "Clever Targeted L2 Certification Bronze",
         "description": "Certifies whether or not the agent is robust against adversarial attacks.",
         "tags": ["robustness"],
         "level":["1"]
@@ -8,10 +8,9 @@
 
     "condition": {
             "op":"and" ,
-            "terms": [              
-                [ "&adversarial_classification_art > clever-t-l1" , ">" , 0.3 ],
+            "terms": [
                 [ "&adversarial_classification_art > clever-t-l2" , ">" , 0.3 ],
-                [ "&adversarial_classification_art > clever-t-li" , ">" , 0.03 ]
+                [ "&adversarial_classification_art > clever-t-l2" , ">" , 0.3 ]
             ]
         }
 }     

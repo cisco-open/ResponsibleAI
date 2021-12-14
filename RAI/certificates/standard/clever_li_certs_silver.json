@@ -1,0 +1,16 @@
+{
+    "meta":{
+        "display_name": "Clever Targeted Li Certification Silver",
+        "description": "Certifies whether or not the agent is robust against adversarial attacks.",
+        "tags": ["robustness"],
+        "level":["1"]
+    },
+
+    "condition": {
+            "op":"and" ,
+            "terms": [              
+                [ "&adversarial_classification_art > clever-t-li" , ">" , 0.07 ],
+                [ "&adversarial_classification_art > clever-t-li" , ">" , 0.07 ]
+            ]
+        }
+}     

@@ -3,6 +3,8 @@ import numpy as np
 from ..datasets import StructuredDataset
 from ..metrics import Metric, utils
 
+np.seterr(all="ignore")
+
 
 class DatasetMetric(Metric):
     """Class for computing metrics based on one StructuredDataset."""

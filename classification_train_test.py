@@ -61,9 +61,8 @@ task = Task(model=model, type='binary_classification', description="Detect Cance
 # Create AISystem from previous objects. AISystems are what users will primarily interact with.
 configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}},
                               "protected_attributes": ["race"], "positive_label": 1},
-                 "time_complexity": "polynomial"
-                 }
-ai = AISystem(meta_database=meta, dataset=dataset, task=task, user_config=configuration)
+                 "time_complexity": "polynomial"}
+ai = AISystem(meta_database=meta, dataset=dataset, task=task, user_config=configuration) # , custom_certificate_location="RAI\\certificates\\standard\\cert_list_credit.json")
 ai.initialize()
 
 # Train model
@@ -76,6 +75,12 @@ ai.reset_redis()
 
 test_preds = reg.predict(xTest)
 # Make Predictions
+
+
+ai.compute_metrics(train_preds, data_type="train", export_title="Train set")
+ai.compute_certificates()
+ai.export_certificates()
+
 
 
 ai.compute_metrics(test_preds, data_type="test", export_title="Test set")

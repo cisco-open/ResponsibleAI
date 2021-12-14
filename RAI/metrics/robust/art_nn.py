@@ -29,7 +29,7 @@ _config = {
             "type": "numeric",
             "tags": [],
             "has_range": True,
-            "range": [0, 1],
+            "range": [0, None],
             "explanation": "Calculates the rate at which at which a groups with a protected attribute recieve a positive outcome."
         },
         "clever-t-l2": {
@@ -37,7 +37,7 @@ _config = {
             "type": "numeric",
             "tags": [],
             "has_range": True,
-            "range": [0, 1],
+            "range": [0, None],
             "explanation": "Calculates the rate at which at which a groups with a protected attribute recieve a positive outcome."
         },
         "clever-t-li": {
@@ -45,31 +45,31 @@ _config = {
             "type": "numeric",
             "tags": [],
             "has_range": True,
-            "range": [0, 1],
+            "range": [0, None],
             "explanation": "Calculates the rate at which at which a groups with a protected attribute recieve a positive outcome."
         },
         "clever-u-l1": {
-            "display_name": "Targeted L1 CLEVER",
+            "display_name": "Untargeted L1 CLEVER",
             "type": "numeric",
             "tags": [],
             "has_range": True,
-            "range": [0, 1],
+            "range": [0, None],
             "explanation": "Calculates the rate at which at which a groups with a protected attribute recieve a positive outcome."
         },
         "clever-u-l2": {
-            "display_name": "Targeted L2 CLEVER",
+            "display_name": "Untargeted L2 CLEVER",
             "type": "numeric",
             "tags": [],
             "has_range": True,
-            "range": [0, 1],
+            "range": [0, None],
             "explanation": "Calculates the rate at which at which a groups with a protected attribute recieve a positive outcome."
         },
         "clever-u-li": {
-            "display_name": "Targeted Li CLEVER",
+            "display_name": "Untargeted Li CLEVER",
             "type": "numeric",
             "tags": [],
             "has_range": True,
-            "range": [0, 1],
+            "range": [0, None],
             "explanation": "Calculates the rate at which at which a groups with a protected attribute recieve a positive outcome."
         }
     }

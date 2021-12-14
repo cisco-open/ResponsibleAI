@@ -1,3 +1,5 @@
+import warnings
+warnings.simplefilter(action='ignore', category=FutureWarning)
 from RAI.metrics.metric_group import MetricGroup
 from RAI.metrics.ai360_helper.AI360_helper import *
 import pandas as pd

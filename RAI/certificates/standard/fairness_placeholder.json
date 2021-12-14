@@ -1,0 +1,15 @@
+{
+    "meta":{
+        "display_name": "Fairness Placeholder",
+        "description": "Fairness placeholder.",
+        "tags": ["fairness"],
+        "level":["1"]
+    },
+
+    "condition": {
+            "op": "and",
+            "terms": [              
+                [ "&performance_cl > balanced_accuracy" , ">" , 1 ]
+            ]
+        }
+}     
