@@ -87,6 +87,14 @@ for key in resv_f:
 print("\n\nTESTING PREDICTING METRICS:")
 test_preds = reg.predict(xTest)
 ai.compute_metrics(test_preds, data_type="test")
+
+
+
+
+
+
+
+
 resv_f = ai.get_metric_values_flat()
 resi_f = ai.get_metric_info_flat()
 for key in resv_f:

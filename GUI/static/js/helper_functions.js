@@ -46,8 +46,6 @@ function loadAll() {
     });
 }
 
-
-
 // Loads explanations.
 function loadExplanations(metrics) {
     fetch('/getMetricInfo').then(function (response) {
