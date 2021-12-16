@@ -252,3 +252,6 @@ class AISystem:
         subprocess.call("start /wait python GUI\\app.py " + self.task.model.name, shell=True)
         print("GUI can be viewed in new terminal")
 
+
+    def set_agent(self, agent):
+        self.task.model.agent = agent
