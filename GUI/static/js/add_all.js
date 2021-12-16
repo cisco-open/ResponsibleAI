@@ -99,11 +99,11 @@ function load_data(metrics, data, modelInfo) {
 
 
 // Calls functions from helper_functions.js. This will use the data we got to display our metrics.
-function callAllFunctions(metrics, data, df_json) {
+function callAllFunctions(metrics, explanations, data) {
     for(var i = 0; i<categories.length; i++){ // Draw the graphs
-        createMetrics(metrics, metric_info, data, df_json, categories[i], true, tagOwner, tags, data_types);
+        createMetrics(metrics, metric_info, explanations, data, categories[i], true);
     }
-    createMultiCategoryBoxes(metrics, tagOwner, data_types); // Create the filtering boxes
+    createMultiCategoryBoxes(metrics); // Create the filtering boxes
     createWhiteList(metrics); // Setup filtering functionality
     page_ready = true
 }

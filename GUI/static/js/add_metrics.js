@@ -88,10 +88,10 @@ function load_data(metrics, data, category) {
 
 
 // Calls functions from helper_functions.js. This will use the data we got to display our metrics.
-function callAllFunctions(metrics, data, df_json, category) {
-    createMetrics(metrics, metric_info, data, df_json, category, true, tagOwner, tags, data_types);
-    createBoxes(metrics, tags, category);
-    createWhiteList(metrics, category);
+function callAllFunctions(metrics, explanations, data, category) {
+    createMetrics(metrics, metric_info, explanations, data, category, true);
+    createBoxes(metrics, category);
+    createWhiteList(metrics);
     page_ready = true
 }
 
