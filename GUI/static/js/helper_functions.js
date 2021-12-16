@@ -1,9 +1,10 @@
 'use strict';
 
 
-// Create graphs
+// Create all graphs for a category of metrics
+// Accepts metrics, which contains all metrics, metadata, metric explanations, the data, the desired category,
+// Consider removing remaining on all remaining ones.
 function createMetrics(metrics, metric_info, explanations, data, category, add_tag, tagOwner, tag_list, data_types) {
-
     var list = metrics[category.toLowerCase()];
     if (list==null)
         return
@@ -13,95 +14,102 @@ function createMetrics(metrics, metric_info, explanations, data, category, add_t
 }
 
 
+// Creates an individual metric. This part looks at a metrics metadata and determines which function should be used to display it.
 function createMetric(metric_name, metric_type, metric_info, explanations, data, category, add_tag=true, tags=[], tagOwner, tag_list, data_types){
-    if(metric_type == "numeric"){
+    if(metric_type == "numeric"){ // Numeric metrics are displayed as charts.
         addChart(metric_name, metric_info[metric_name]["display_name"], explanations[metric_name]["explanation"],
                 data, category, "", metric_info[metric_name]["has_range"], metric_info[metric_name]["range"], add_tag, tags, tagOwner, tag_list, data_types);
-
     }
-    else if(metric_type == "vector"){
+    else if(metric_type == "vector"){ // Vector metrics that also contain a _avg metric are displayed as charts.
         if(metric_name.indexOf("_avg") >= 0)
             addChart(metric_name, metric_info[metric_name]["display_name"], explanations[metric_name]["explanation"],
                 data, category, "-single", metric_info[metric_name]["has_range"], metric_info[metric_name]["range"], add_tag, tags, tagOwner, tag_list, data_types);
-        else if (! (metric_name+"_avg" in metric_info)){
+        else if (! (metric_name+"_avg" in metric_info)){ // Vector metrics that don't have an _avg metric are displayed as tables
             res = stringToMatrix(data, metric_name)
             if (res != null && !Array.isArray(res[0]))
                 res = [res]
             addTable(metric_name, metric_info[metric_name]["display_name"], explanations[metric_name]["explanation"], res, category, "", "", add_tag, tags, tagOwner, tag_list, data_types)
         }
     }
-    else if(metric_type == "matrix"){
+    else if(metric_type == "matrix"){ // Matrices are displayed as tables.
         var res = stringToMatrix(data, metric_name)
         addTable(metric_name, metric_info[metric_name]["display_name"], explanations[metric_name]["explanation"], res, category, "", "", add_tag, tags, tagOwner, tag_list, data_types)
     }
-    else if(metric_type == "boolean"){
+    else if(metric_type == "boolean"){ // Booleans are displayed as charts, using BoolChart because we need to handle data differently.
         addBoolChart(metric_name, metric_info[metric_name]["display_name"], explanations[metric_name]["explanation"],
                 data, category, "", metric_info[metric_name]["has_range"], metric_info[metric_name]["range"], add_tag, tags, tagOwner, tag_list, data_types);
-
     }
-
-    else if(metric_type == "vector-dict"){
+    else if(metric_type == "vector-dict"){ // Vector dicts are vectors of dictionaries. It is currently assumed that each index associates with a feature of the dataset.
         addVectorDict(metric_name, metric_info[metric_name]["display_name"], explanations[metric_name]["explanation"],
             model_info['features'], data, category, add_tag, tags, tagOwner, tag_list, data_types);
     }
 }
 
 
+// Adds a singular chart. Accepts information about the metric to be creating as a chart.
 function addChart(metric_name, display_name, explanation, data, category, name_extension, has_range, range, add_tag=true, tags=[], tagOwner, tag_list, data_types){
-    if(add_tag)
+    if(add_tag) // tags are used for filtering. We don't need tags on the metric_info page.
         addTags(tags, "numeric", metric_name, tagOwner, tag_list, data_types)
     var body = document.getElementById('metric_row');
-    var newDiv = document.createElement('div');
-    if(explanation != null)
+
+    var newDiv = document.createElement('div'); // Div containing chart.
+    if(add_tag) // Different formatting for the metric_info age vs the other two display pages.
         newDiv.setAttribute("class", category.toLowerCase() + 'Metric Metric col-sm-6 chart-container main-panel');
     else
         newDiv.setAttribute("class", 'MetricPage Metric chart-container main-panel');
     newDiv.setAttribute("id", metric_name + "_chart");
-    var writing = document.createElement('p');
+
+    var writing = document.createElement('p'); // Chart header.
     writing.innerHTML = display_name;
     writing.setAttribute("class", "chartHeader");
-    var writing2 = document.createElement('p');
+
+    var writing2 = document.createElement('p'); // Last seen value of the chart.
     if (typeof(data[data.length-1][metric_name + name_extension]) == 'number')
         writing2.innerHTML = data[data.length -1][ metric_name + name_extension].toFixed(3);
     else
         writing2.innerHTML = "Null"
     writing2.setAttribute("class", "chartValue");
     writing2.setAttribute("id", metric_name + "LastValue");
-    var img = document.createElement('img');
-    if(explanation != null){
+
+    var img = document.createElement('img'); // The explanation question mark that provides info on hover.
+    if(add_tag){
         img.setAttribute("title", explanation);
         img.setAttribute("src", "/static/img/questionMark.png");
         img.setAttribute("alt", "Learn more about " + metric_name);
         img.setAttribute("class", "learnMore");
     }
-    var link = document.createElement('a')
+
+    var link = document.createElement('a') // the link to go to metric_info
     link.setAttribute('href', '/learnMore/'+metric_name)
     link.setAttribute('class', 'learnMoreLink')
-    var logo = document.createElement('i')
+
+    var logo = document.createElement('i') // The image for the link
     logo.setAttribute('class', 'fa fa-external-link fa-lg')
     link.appendChild(logo)
-    newDiv.appendChild(link)
 
+    newDiv.appendChild(link) // Add the new objects
     newDiv.appendChild(img);
     newDiv.appendChild(writing);
     newDiv.appendChild(writing2);
 
-    var removeBtn = document.createElement("button");
+    var removeBtn = document.createElement("button"); // The button that appears when filtering to allow us to delete metrics.
     removeBtn.innerHTML  = "X";
     removeBtn.setAttribute("class", "removeChart");
     removeBtn.setAttribute("style", "display:none");
     removeBtn.setAttribute("onclick", "blackList('" + metric_name + "')");
     newDiv.appendChild(removeBtn);
 
-    var chart = document.createElement('div');
+    var chart = document.createElement('div'); // The morris chart for displaying data.
     chart.id = metric_name;
     chart.setAttribute("class", "morris-chart chartScalerSmall");
     newDiv.appendChild(chart);
     body.appendChild(newDiv);
 
-    var result = createData(data, metric_name + name_extension)
+    var result = createData(data, metric_name + name_extension) // Put data in morris charts format. Can most likely be sped up.
     var chart_data = result[0]
     var chart_descriptions = result[1]
+
+    // Metadata for the morris chart. This is a morris line, all these values are explained in their documentation.
     var myValues  = {
         element: metric_name,
         data: chart_data,
@@ -119,6 +127,8 @@ function addChart(metric_name, display_name, explanation, data, category, name_e
                 var description = options.descriptions[index];
                 return content + "\nDescription: " + description;}
     }
+
+    // We only want to give the morris chart a range if the data says there is a range.
     if(has_range){
         if(range[0] != null){
             myValues['ymin'] = Number(range[0])
@@ -128,50 +138,60 @@ function addChart(metric_name, display_name, explanation, data, category, name_e
         }
         myValues['yLabelFormat'] = function(y){return y.toFixed(2);}
     }
-    var morrisLine = new Morris.Line(myValues)
-    graphs[metric_name] = morrisLine;
+    var morrisLine = new Morris.Line(myValues) // Create morris line with metadata
+    graphs[metric_name] = morrisLine; // save it for when we are redoing metrics
 }
 
 
+// Adds a singular boolean chart. Accepts information about the metric to be creating as a chart.
 function addBoolChart(metric_name, display_name, explanation, data, category, name_extension, has_range, range, add_tag=true, tags=[], tagOwner, tag_list, data_types){
-    if(add_tag)
+    if(add_tag) // tags are used for filtering. We don't need tags on the metric_info page.
         addTags(tags, "bool", metric_name, tagOwner, tag_list, data_types)
     var body = document.getElementById('metric_row');
-    var newDiv = document.createElement('div');
-    if(explanation != null)
+
+
+    var newDiv = document.createElement('div'); // Div containing chart.
+    if(add_tag) // Different formatting for the metric_info age vs the other two display pages.
         newDiv.setAttribute("class", category.toLowerCase() + 'Metric Metric col-sm-6 chart-container main-panel');
     else
         newDiv.setAttribute("class", 'MetricPage Metric chart-container main-panel');
     newDiv.setAttribute("id", metric_name + "_chart");
-    var writing = document.createElement('p');
+
+    var writing = document.createElement('p');  // Chart header.
     writing.innerHTML = display_name;
     writing.setAttribute("class", "chartHeader");
-    var writing2 = document.createElement('p');
+
+    var writing2 = document.createElement('p'); // Last seen value of the chart.
     if(data[data.length-1][metric_name + name_extension] == null)
         writing2.innerHTML = "Null"
     else
         writing2.innerHTML = data[data.length -1][ metric_name + name_extension];
     writing2.setAttribute("class", "chartValue");
     writing2.setAttribute("id", metric_name + "LastValue");
+
+    // The explanation question mark that provides info on hover.
     var img = document.createElement('img');
-    if(explanation != null){
+    if(add_tag){
         img.setAttribute("title", explanation);
         img.setAttribute("src", "/static/img/questionMark.png");
         img.setAttribute("alt", "Learn more about " + metric_name);
         img.setAttribute("class", "learnMore");
     }
-    var link = document.createElement('a')
+
+    var link = document.createElement('a') // the link to go to metric_info
     link.setAttribute('href', '/learnMore/'+metric_name)
     link.setAttribute('class', 'learnMoreLink')
-    var logo = document.createElement('i')
-    logo.setAttribute('class', 'fa fa-external-link fa-lg')
-    link.appendChild(logo)
-    newDiv.appendChild(link)
 
+    var logo = document.createElement('i') // The image for the link
+    logo.setAttribute('class', 'fa fa-external-link fa-lg')
+
+    link.appendChild(logo)  // Add the new objects
+    newDiv.appendChild(link)
     newDiv.appendChild(img);
     newDiv.appendChild(writing);
     newDiv.appendChild(writing2);
 
+    // The button that appears when filtering to allow us to delete metrics.
     var removeBtn = document.createElement("button");
     removeBtn.innerHTML  = "X";
     removeBtn.setAttribute("class", "removeChart");
@@ -179,6 +199,7 @@ function addBoolChart(metric_name, display_name, explanation, data, category, na
     removeBtn.setAttribute("onclick", "blackList('" + metric_name + "')");
     newDiv.appendChild(removeBtn);
 
+    // The morris chart for displaying data.
     var chart = document.createElement('div');
     chart.setAttribute("class", "overflow_table")
     chart.id = metric_name;
@@ -186,9 +207,11 @@ function addBoolChart(metric_name, display_name, explanation, data, category, na
     newDiv.appendChild(chart);
     body.appendChild(newDiv);
 
-    var result = createBoolData(data, metric_name + name_extension)
+    var result = createBoolData(data, metric_name + name_extension) // Put data in morris charts format.
     var chart_data = result[0]
     var chart_descriptions = result[1]
+
+    // Metadata for the morris chart. This is a morris line, all these values are explained in their documentation.
     var myValues  = {
         element: metric_name,
         data: chart_data,
@@ -206,6 +229,7 @@ function addBoolChart(metric_name, display_name, explanation, data, category, na
                 var description = options.descriptions[index];
                 return content + "\nDescription: " + description;}
     }
+    // We only want to give the morris chart a range if the data says there is a range.
     if(has_range){
         if(range[0] != null){
             myValues['ymin'] = Number(range[0])
@@ -215,33 +239,38 @@ function addBoolChart(metric_name, display_name, explanation, data, category, na
         }
     }
 
-    var morrisLine = new Morris.Line(myValues)
-    bool_charts[metric_name] = morrisLine;
+    var morrisLine = new Morris.Line(myValues) // Create the morris chart with the metadata.
+    bool_charts[metric_name] = morrisLine; // Save it for quick access when redoing metrics.
 }
 
 
+// Adds a singular table. Accepts information about the metric to be creating as a chart.
 function addTable(metric_name, display_name, explanation, data, category, optionalName="", optionalNumber="", add_tag=false, tags=[], tagOwner, tag_list, data_types){
-    if(add_tag)
+    if(add_tag) // tags are used for filtering. We don't need tags on the metric_info page.
         addTags(tags, "matrix", metric_name, tagOwner, tag_list, data_types)
     var body = document.getElementById('metric_row');
-    var newDiv = document.createElement('div');
-    if(explanation!=null)
+
+    var newDiv = document.createElement('div'); // Div containing table
+    if(add_tag)
         newDiv.setAttribute("class", category.toLowerCase() + 'Metric Metric col-sm-6 chart-container main-panel ');
     else
         newDiv.setAttribute("class", 'MetricPage Metric chart-container main-panel');
+
+    // Special values for displaying vector dicts. We need unique ID's and use their index number to do so.
     if(optionalNumber!="")
         optionalNumber = "|"+optionalNumber;
     newDiv.setAttribute("id", metric_name + "_chart"+optionalNumber);
-    var writing = document.createElement('p');
+
+    var writing = document.createElement('p');  // Chart header.
     writing.innerHTML = display_name;
-    if(optionalName != "")
+    if(optionalName != "") // Option to also add a string to display, for example to show a feature name with vector dicts
         writing.innerHTML += " - " + optionalName
     writing.setAttribute("class", "chartHeader");
 
-    var img = document.createElement('img');
-    var link = document.createElement('a')
-    var logo = document.createElement('i')
-    if(explanation!=null){
+    var img = document.createElement('img'); // The explanation question mark that provides info on hover.
+    var link = document.createElement('a') // Link to metric_info page
+    var logo = document.createElement('i') // Logo for the link
+    if(add_tag){
         img.setAttribute("title", explanation);
         img.setAttribute("src", "/static/img/questionMark.png");
         img.setAttribute("alt", "Learn more about " + metric_name);
@@ -252,9 +281,11 @@ function addTable(metric_name, display_name, explanation, data, category, option
 
         logo.setAttribute('class', 'fa fa-external-link fa-lg')
     }
+    // Add the new objects
     newDiv.appendChild(img);
     newDiv.appendChild(writing);
 
+    // The button that appears when filtering to allow us to delete metrics.
     var removeBtn = document.createElement("button");
     removeBtn.innerHTML  = "X";
     removeBtn.setAttribute("class", "removeChart");
@@ -262,23 +293,22 @@ function addTable(metric_name, display_name, explanation, data, category, option
     removeBtn.setAttribute("onclick", "blackList('" + metric_name + "')");
     newDiv.appendChild(removeBtn);
 
-
     link.appendChild(logo)
     newDiv.appendChild(link)
 
-    var chart = document.createElement('div');
+    var chart = document.createElement('div'); // The table container for displaying data.
     chart.setAttribute("class", "overflow_table")
     chart.id = metric_name;
     newDiv.appendChild(chart);
     body.appendChild(newDiv);
 
-    var table = generateTableFromArray(data)
+    var table = generateTableFromArray(data) // Generate a table using our function from an array/2d array.
     chart.appendChild(table);
-    matrices[metric_name] = chart;
+    matrices[metric_name] = chart; // Store so we can quickly redo metrics.
 }
 
 
-
+// Adds a singular vector dict. Current assumption is that they are paired to the features of the dataset, so value 0 applies to feature 0.
 function addVectorDict(metric_name, display_name, explanation, features, data, category, add_tag, tags, tagOwner, tag_list, data_types){
     var curData = data[data.length -1][metric_name]
     if(curData == null)
@@ -286,12 +316,11 @@ function addVectorDict(metric_name, display_name, explanation, features, data, c
     var result = {}
     for(var i = 0; i<curData.length; i++){
         if(curData[i] != null){
-            var table = dict_to_table(curData[i]);
+            var table = dict_to_table(curData[i]); // Create a table for each dictionary.
             addTable(metric_name, display_name, explanation, table, category, features[i], String(i), add_tag, tags, tagOwner, tag_list, data_types);
         }
     }
 }
-
 
 
 function dict_to_table(dict){
