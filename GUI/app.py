@@ -284,14 +284,21 @@ def info():
 
 @app.route('/event')
 def event():
+    result = []
+    data_test = r.lrange(model_name + '|metric_values', 0, -1)
+    clear_streams()
+    for i in range(len(data_test)):
+        item = json.loads(data_test[i])
+        new_dict = {"date": item['metadata > date'], "event": "Measurement Added", "description": item['metadata > description']}
+        result.append(new_dict)
     model_info = json.loads(r.get(model_name + '|model_info'))
-
     return render_template('/admin/event_list.html',
                            admin_base_template=admin.base_template,
                            admin_view=admin.index_view,
                            get_url=url_for,
                            model_name=model_info["display_name"],
-                           h=admin_helpers)
+                           h=admin_helpers,
+                           events=result)
 
 
 @app.route('/getData/<date1>/<date2>', methods=['GET'])

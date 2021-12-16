@@ -1,17 +1,28 @@
 'use strict';
 
+
+// GLOBAL VARIABLES
+
+// Chart and graph storage
 var graphs = {};
-var metrics;
-var page_ready = false;
-var use_date= false;
 var main_chart = null;
 
+// Data caching
+var metrics;
 var metric_values = null
 
+// Display options
+var page_ready = false;
+var use_date= false;
+
+
+
+// Run once a second
 $(document).ready(function() {
         setInterval("check_data()", 1000); // call every 10 seconds
 });
 
+// Ping back end to see if there are any updates
 function check_data() {
     if(page_ready){
        fetch('/updateCertificates').then(function (response) {
@@ -25,6 +36,7 @@ function check_data() {
 }
 
 
+// Load in the certificate data
 function load_data() {
     page_ready = false
     var date1 = document.getElementById("startDate").value;
@@ -38,6 +50,7 @@ function load_data() {
 }
 
 
+// Get the explanations for certificates
 function load_explanations(data) {
     return fetch('/getCertificationMeta')
         .then(function (response) {
@@ -48,8 +61,8 @@ function load_explanations(data) {
 }
 
 
-// Queries Data
-function load_metric_data(data, text) {
+// Get the metric values
+function load_metric_data(data, text) {  // Needed because we are displaying balanced accuracy for performance.
     var date1 = document.getElementById("startDate").value;
     var date2 = document.getElementById("endDate").value;
     return fetch('/getData/' + date1 + '/' + date2)
@@ -62,8 +75,8 @@ function load_metric_data(data, text) {
 }
 
 
-// ADD RANGE PORTION.
-// Used to create the data for the morris chart
+// Used to create the main page data for morris charts.
+// Specialized function, each point consists of a time stamp or description and the score for each of the 4 categories.
 function createData(data) {
     var ret = [];
     var keys = ["fairness", "robustness", "performance", "explainability"]
@@ -103,14 +116,13 @@ function createData(data) {
 }
 
 
-
+// Create all displays on the front page
 function createMetrics(data, explanations) {
     var divs = ['fairness', 'robustness', 'performance', 'explainability'];
     var names = ["Fairness", "Robustness", "Performance", "Explainability"];
     var explanations = {"fairness": {"name": "fairness", "explanation": "Measures how fair a model's predictions are.", "display_name": "Fairness"}, "robustness": {"name": "robustness", "explanation": "Measures a model's resiliance to time and sway.", "display_name": "Robustness"}, "explainability": {"name": "explainability", "explanation": "Measures how explainable the model is.", "display_name": "Explainability"}, "performance": {"name": "performance", "explanation": "Performance describes how well at predicting the model was.", "display_name": "Performance"}}
 
-
-    for (var j in divs) {
+    for (var j in divs) { // for each category, create the knob for it
         var i = divs[j]
         graphs[i] = i;
         var img = document.getElementById(i + "KnobQ");
@@ -121,6 +133,8 @@ function createMetrics(data, explanations) {
         var circleText = document.getElementById(i + "Text");
         circleText.innerHTML = (data[data.length - 1]['metadata']['scores'][i][0] / data[data.length - 1]['metadata']['scores'][i][1] * 100).toFixed(1) + "%";
     }
+
+    // Repeat this for performance, which has to be done separately as we are using a metric value for it instead of a certificate.
     var i = "performance"
     graphs[i] = i;
     var img = document.getElementById(i + "KnobQ");
@@ -132,18 +146,11 @@ function createMetrics(data, explanations) {
     circleText.innerHTML =(100* metric_values[metric_values.length-1]['performance_cl > balanced_accuracy']).toFixed(1) + "%";
 
 
-
-    // (100* metric_values[i]['performance_cl > balanced_accuracy']).toFixed(1)
-
-
+    // Create the really big chart
     var result = createData(data)
     var all_data = result[0]
     var descriptions = result[1]
-    /*
-    all_data = [{year: '2021-12-08 09:10:37', fairness: '30', robustness: '20', performance: "60", explainability: "80"},
-            {year: '2021-12-09 09:10:37', fairness: '40', robustness: '10', performance: "80", explainability: "85"}
-    ]
-    */
+
     var chart_explanations = result[1]
     var names = result[2]
 
@@ -155,7 +162,7 @@ function createMetrics(data, explanations) {
         console.log(events)
     }
 
-
+    // Chart metadata
     var options = {
         element: "allChart",
         data: all_data,
@@ -188,6 +195,7 @@ function createMetrics(data, explanations) {
 }
 
 
+// Start function for redoing the page, recollects data.
 function redoMetrics() {
     var date1 = document.getElementById("startDate").value;
     var date2 = document.getElementById("endDate").value;
@@ -202,7 +210,7 @@ function redoMetrics() {
 }
 
 
-// Queries Data
+// Get the metric data again, for balanced accuracy
 function load_metric_data_redo(text) {
     var date1 = document.getElementById("startDate").value;
     var date2 = document.getElementById("endDate").value;
@@ -216,10 +224,10 @@ function load_metric_data_redo(text) {
 }
 
 
-
+// Reset the knobs and redo the big chart
 function redoMetrics2(data) {
-    for (var type in graphs) {
-        if(type == "robustness")
+    for (var type in graphs) { // reset the charts.
+        if(type == "performance")
             continue;
         var myValue = 0
         if (data.length >= 1)
@@ -229,7 +237,7 @@ function redoMetrics2(data) {
         var circleText = document.getElementById(type + "Text");
         circleText.innerHTML = myValue.toFixed(1) + "%";
     }
-    var i = "performance"
+    var i = "performance" // performance is done seperately
     var circle = document.getElementById(i + "Circle");
     circle.setAttribute("stroke-dasharray",
         (100* metric_values[metric_values.length-1]['performance_cl > balanced_accuracy']).toFixed(0) + ", 100");
@@ -237,6 +245,7 @@ function redoMetrics2(data) {
     circleText.innerHTML =(100* metric_values[metric_values.length-1]['performance_cl > balanced_accuracy']).toFixed(1) + "%";
 
 
+    // Redo the main chart by recreating the data and setting the data of the chart
     var result = createData(data);
     var new_data = result[0]
     var newExplanations = result[1]
@@ -247,7 +256,7 @@ function redoMetrics2(data) {
 }
 
 
-
+// Alternate X axis from either date or index/description.
 function date_slider(){
     var slider = document.getElementById('slider_input')
     use_date = !slider.checked;

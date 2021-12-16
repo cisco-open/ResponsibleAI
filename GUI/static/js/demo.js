@@ -1,3 +1,5 @@
+// Original code from the base template.
+
 /**
  * AdminLTE Demo Menu
  * ------------------
