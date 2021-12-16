@@ -1,8 +1,13 @@
 'use strict';
-var whitelist = []; // contains all metrics whose category is checked
-var metrics; // global variable contains all metrics on screen
+
+// The graphs we create
 var graphs = {}; // list of all graphs
 var matrices = {};
+var bool_charts = {}
+var dict_charts = {}
+
+// Model information from the backend
+var metrics; // global variable contains all metrics on screen
 var metric_data;
 var metric_name;
 var metric_has_range;
@@ -10,17 +15,23 @@ var metric_range;
 var metric_display_name;
 var metric_type;
 var model_info;
-var bool_charts = {}
-var dict_charts = {}
+
+// Tags, possibly delete
 var tags = {}
+
+// Information about displaying things.
+var whitelist = []; // contains all metrics whose category is checked
 var use_date = false;
 var page_ready = false
 
 
+// Run once a second
 $(document).ready(function() {
         setInterval("check_data()", 1000); // call every 10 seconds
 });
 
+
+// Pings the back end if data was arrived once a second, if so reload graphs.
 function check_data() {
     if(page_ready){
        fetch('/updateMetrics').then(function (response) {
@@ -33,7 +44,8 @@ function check_data() {
     }
 }
 
-// Queries Data
+
+// Function called by the UI, passes all relevant info over.
 function loadData(metric_name, metric_range_, metric_display_name_, metric_type_, metric_has_range_) {
     metric_name = metric_name.replace('&gt;', '>')
     metric_range = metric_range_.replace("None", "null");
@@ -51,7 +63,8 @@ function loadData(metric_name, metric_range_, metric_display_name_, metric_type_
         });
 }
 
-// Loads explanations.
+
+// Loads Model Information.
 function load_model_info(metric_name, data) {
     fetch('/getModelInfo').then(function (response) {
         return response.json();
