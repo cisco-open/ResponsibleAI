@@ -230,7 +230,7 @@ def get_german_rai_ai_system(reg, rai_fairness_config, rai_MetaDatabase, rai_dat
     task = Task(model=model, type='binary_classification', description="Predict the credit score of various Germans.")
     configuration = {"fairness": rai_fairness_config, "time_complexity": "linear"}
     credit_ai = AISystem(meta_database=rai_MetaDatabase, dataset=rai_dataset, task=task, user_config=configuration,
-                         custom_certificate_location="RAI\\certificates\\standard\\cert_list_credit.json")
+                         custom_certificate_location="cert_list_credit.json")
     credit_ai.initialize()
     return credit_ai
 
