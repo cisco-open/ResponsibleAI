@@ -1,0 +1,29 @@
+---
+taskType: multiclass_classification
+
+features:
+  - name: x1
+    type: float32
+    description: first column
+    categorical: False
+    values:
+
+  - name: x2
+    type: float32
+    description: second column
+    categorical: False
+    values:
+
+  - name: x3
+    type: float32
+    description: third column
+    categorical: False
+    values:
+
+userConfig:
+  bias:
+    args:
+      accuracy:
+        normalize: True
+      sensitive_features:
+        - second column
