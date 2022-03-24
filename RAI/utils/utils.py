@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 import math
 from RAI.dataset import Feature, Data, MetaDatabase, Dataset
 __all__ = [ 'jsonify', 'compare_runtimes', 'df_to_meta_database']
@@ -57,3 +58,50 @@ def df_to_meta_database(df, categorical_values=None, protected_attribute_names=N
     meta = MetaDatabase(features)
     return meta, fairness_config
 
+
+
+
+def df_remove_nans( df, extra_symbols):
+     
+    for i in df:
+        df[i].replace('nan', np.nan, inplace=True)
+        
+        for s in extra_symbols:
+            df[i].replace(s, np.nan, inplace=True)
+    df.dropna(inplace=True)
+     
+def df_to_RAI (  df, test_tf=None, target_column = None, clear_nans = True, extra_symbols="?"):
+
+    if clear_nans:
+        df_remove_nans(df,extra_symbols) 
+    
+    features = []
+
+    cat_columns = []
+    if target_column:
+        y = df.pop(target_column)
+        if y.dtype == "object":
+           y = y.factorize(sort=True)[0] 
+    else:
+        y = None
+        
+    features = []
+
+    for c in df:
+        if df.dtypes[c] == "object":
+            fact = df[c].factorize(sort=True)
+            df[c] = fact[0]
+
+            f = Feature( c, "integer", c, categorical=True, 
+                values= { i:v for i,v in enumerate(fact[1]) } )
+        else:
+            f = Feature(c, "float32", c)
+        features.append(f)
+    
+    return MetaDatabase(features), df,y
+
+
+
+
+
+    
