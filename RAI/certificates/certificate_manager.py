@@ -2,15 +2,24 @@ from .certificate import Certificate
 
 __all__ = ['CertificateManager']
 
-
-
 import json
 import os.path
+import site
 
-cert_list_file_name = "RAI\\certificates\\standard\\cert_list.json"
+# choose the first site packages folder
+site_pkgs_path = site.getsitepackages()[0]
+rai_pkg_path = os.path.join(site_pkgs_path, "RAI")
+if not os.path.isdir(rai_pkg_path):
+    rai_pkg_path = "RAI"
+
+cert_file_folder = os.path.join(rai_pkg_path, "certificates", "standard")
+cert_list_file_name = os.path.join(cert_file_folder, "cert_list.json")
+
 # class Certificate(object):
- 
+
+
 class CertificateManager(object):
+
     def __init__(self) -> None:
         super().__init__()
         self.certificates = {}
@@ -24,7 +33,7 @@ class CertificateManager(object):
         data = json.load(f)
         for item in data["certs"]:
             c = Certificate()
-            c.load_from_json("RAI\\certificates\\standard\\" + item["filename"])
+            c.load_from_json(os.path.join(cert_file_folder, item["filename"]))
             self.metadata[item["name"]] = c.cert_spec["meta"]
             self.metadata[item["name"]]["condition"] = c.cert_spec["condition"]
             self.certificates[item["name"]] = c
@@ -34,7 +43,7 @@ class CertificateManager(object):
         data = json.load(f)
         for item in data["certs"]:
             c = Certificate()
-            c.load_from_json("RAI\\certificates\\standard\\" + item["filename"])
+            c.load_from_json(os.path.join(cert_file_folder, item["filename"]))
             self.metadata[item["name"]] = c.cert_spec["meta"]
             self.metadata[item["name"]]["condition"] = c.cert_spec["condition"]
             self.certificates[item["name"]] = c
@@ -49,8 +58,12 @@ class CertificateManager(object):
         for cert_name in self.certificates:
             c = self.certificates[cert_name]
             self.results[cert_name] = {"explanation": ""}
+<<<<<<< HEAD
             self.results[cert_name]["value"] = c.evaluate(metric_values, self.results)
             # self.results[cert_name]["term_values"] = c.term_values
+=======
+            self.results[cert_name]["value"] = c.evaluate(
+                metric_values, self.results)
+            self.results[cert_name]["term_values"] = c.term_values
+>>>>>>> 68bd6e975fc4193d54560661114243606e0f48f1
         return self.results
-
-
