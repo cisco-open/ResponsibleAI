@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import math
 from RAI.dataset import Feature, Data, MetaDatabase, Dataset
+from sklearn.preprocessing import StandardScaler
 __all__ = [ 'jsonify', 'compare_runtimes', 'df_to_meta_database']
 
 
@@ -69,12 +70,19 @@ def df_remove_nans( df, extra_symbols):
         for s in extra_symbols:
             df[i].replace(s, np.nan, inplace=True)
     df.dropna(inplace=True)
-     
-def df_to_RAI (  df, test_tf=None, target_column = None, clear_nans = True, extra_symbols="?"):
+
+
+    
+def df_to_RAI (  df, test_tf=None, target_column = None, clear_nans = True, extra_symbols="?", normalize="Scalar"):
 
     if clear_nans:
         df_remove_nans(df,extra_symbols) 
-    
+
+    if normalize is not None:
+        if normalize == "Scalar":
+            num_d = df.select_dtypes(exclude=['object'])
+            df[num_d.columns] = StandardScaler().fit_transform(num_d)    
+
     features = []
 
     cat_columns = []
@@ -98,7 +106,7 @@ def df_to_RAI (  df, test_tf=None, target_column = None, clear_nans = True, extr
             f = Feature(c, "float32", c)
         features.append(f)
     
-    return MetaDatabase(features), df,y
+    return MetaDatabase(features), df.to_numpy().astype('float32'),y 
 
 
 
