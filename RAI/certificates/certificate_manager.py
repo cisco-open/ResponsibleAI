@@ -50,7 +50,7 @@ class CertificateManager(object):
             c = self.certificates[cert_name]
             self.results[cert_name] = {"explanation": ""}
             self.results[cert_name]["value"] = c.evaluate(metric_values, self.results)
-            self.results[cert_name]["term_values"] = c.term_values
+            # self.results[cert_name]["term_values"] = c.term_values
         return self.results
 
 
