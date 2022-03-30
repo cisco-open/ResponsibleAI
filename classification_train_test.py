@@ -1,6 +1,7 @@
 import RAI
 from RAI.dataset import Feature, Data, MetaDatabase, Dataset
 from RAI.AISystem import AISystem, Model, Task
+from RAI.redis import RaiRedis
 import sklearn.metrics
 import numpy as np
 
@@ -54,7 +55,7 @@ from sklearn.ensemble import RandomForestClassifier
 # reg = GradientBoostingClassifier(n_estimators=4, max_depth=6)
 reg = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=0)
 
-model = Model(agent=reg, name="cisco_cancer_ai", display_name="Cisco Health AI", model_class="Random Forest Classifier", adaptive=False)
+model = Model(agent=reg, name="TEST", display_name="TEST", model_class="Random Forest Classifier", adaptive=False)
 # Indicate the task of the model
 task = Task(model=model, type='binary_classification', description="Detect Cancer in patients using skin measurements")
 
@@ -65,41 +66,37 @@ configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivil
 ai = AISystem(meta_database=meta, dataset=dataset, task=task, user_config=configuration) # , custom_certificate_location="RAI\\certificates\\standard\\cert_list_credit.json")
 ai.initialize()
 
+r = RaiRedis( ai )
+if not r.connect():
+    raise Exception("redis failed")
+
+r.reset_redis()
+
+
 # Train model
 reg.fit(xTrain, yTrain)
 train_preds = reg.predict(xTrain)
 
 # Make Predictions
-ai.reset_redis()
+# ai.reset_redis()
 # ai.compute_metrics(train_preds, data_type="train", export_title="Train set")
 
 test_preds = reg.predict(xTest)
 # Make Predictions
 
 
-ai.compute_metrics(train_preds, data_type="train", export_title="Train set")
-ai.compute_certificates()
-ai.export_certificates()
+# ai.compute_metrics(train_preds, data_type="train", export_title="Train set")
+# ai.compute_certificates()
+# ai.export_certificates()
 
 
 
-ai.compute_metrics(test_preds, data_type="test", export_title="Test set")
-ai.compute_certificates()
-ai.export_certificates()
+ai.compute(test_preds, data_type="test")
+metrics  = ai.get_metric_values()
+certificates = ai.get_certificate_values()
+r.add_measurement("test set")
+r.viewGUI()
+print(metrics)
+print(certificates)
 
-
-resv_f = ai.get_metric_values_flat()
-resi_f = ai.get_metric_info_flat()
-
-for key in resv_f:
-    if hasattr(resv_f[key], "__len__"):
-        # print(resi_f[key]['display_name'], " = ", 'list ...')
-        print(resi_f[key]['display_name'], " = ", resv_f[key])
-    else:
-        print(resi_f[key]['display_name'], " = ", resv_f[key])
-
-
-print("Decision Tree Scores")
-print(str(ai.get_certificate_category_scores()))
-
-
+ 
