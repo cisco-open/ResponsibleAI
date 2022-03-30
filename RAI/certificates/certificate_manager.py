@@ -18,6 +18,7 @@ class CertificateManager(object):
         self.results = {}
         # self.pre
 
+
     def load_stock_certificates(self):
         f = open(cert_list_file_name, "r")
         data = json.load(f)
@@ -38,6 +39,10 @@ class CertificateManager(object):
             self.metadata[item["name"]]["condition"] = c.cert_spec["condition"]
             self.certificates[item["name"]] = c
 
+
+    def get_metadata(self) -> dict:
+        return self.metadata
+        
     def compute(self, metric_values):
         self.results = {}
         self.results = {}
