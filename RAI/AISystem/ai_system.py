@@ -3,6 +3,7 @@ import pandas as pd
 import datetime
 import json
 import redis
+from redis import StrictRedis
 import subprocess
 import threading
 from RAI import utils
@@ -32,11 +33,11 @@ class AISystem:
             if metric_class.is_compatible(self):
                 # if self._is_compatible(temp.compatibility):
                 self.metric_groups[metric_group_name] = metric_class(self)
-                print("metric group : {} was created".format(metric_group_name))
+                print( f"metric group : {metric_group_name} was created" )
 
 # May be more convenient to just accept metric name (or add functionality to detect group names and return a dictionary)
     def get_metric(self, metric_group_name, metric_name): 
-        print("request for metric group : {}, metric_name : {}".format(metric_group_name, metric_name))
+        print(f"request for metric group : {metric_group_name}, metric_name : {metric_name}")
         return self.metric_groups[metric_group_name].metrics[metric_name].value
 
     def reset_metrics(self):
@@ -52,7 +53,7 @@ class AISystem:
             return self.dataset.val_data
         if data_type == "test":
             return self.dataset.test_data
-        raise Exception("unknown data type : {}".format(data_type))
+        raise Exception(f"unknown data type : {data_type}" )
 
     def get_model_info(self):
         result = {"id": self.task.model.name, "model": self.task.model.model_class, "adaptive": self.task.model.adaptive,
@@ -131,7 +132,7 @@ class AISystem:
     def _get_time(self):
         now = datetime.datetime.now()
         return "{:02d}".format(now.year) + "-" + "{:02d}".format(now.month) + "-" + "{:02d}".format(now.day) + " " + "{:02d}".format(now.hour) + ":" + "{:02d}".format(now.minute) + ":" + "{:02d}".format(now.second)
-
+        
     def export_data_flat(self, description=""):
         metric_values = self.get_metric_values_flat()
         metric_info = self.get_metric_info_flat()
@@ -148,6 +149,11 @@ class AISystem:
 
 
     def reset_redis(self):
+        cache = StrictRedis(host='localhost', port=6379, db=0)
+        to_delete = ["metric_values", "model_info", "metric_info", "metric", "certificate_metadata", "certificate_values", "certificate"]
+        cache.delete(*to_delete)
+        return 
+
         r = redis.Redis(host='localhost', port=6379, db=0)
         to_delete = ["metric_values", "model_info", "metric_info", "metric", "certificate_metadata", "certificate_values", "certificate"]
         for key in to_delete:
