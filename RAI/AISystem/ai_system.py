@@ -1,14 +1,13 @@
 from math import exp
 import pandas as pd
 import datetime
-from RAI.metrics.registry import registry
 import json
 import redis
 import subprocess
-from RAI import utils
 import threading
+from RAI import utils
+from RAI.metrics.registry import registry
 from RAI.certificates import CertificateManager
-
 
 class AISystem:
     def __init__(self, meta_database, dataset, task, user_config, custom_certificate_location=None) -> None:
