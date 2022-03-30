@@ -3,7 +3,7 @@ import pandas as pd
 import math
 from RAI.dataset import Feature, Data, MetaDatabase, Dataset
 from sklearn.preprocessing import StandardScaler
-__all__ = [ 'jsonify', 'compare_runtimes', 'df_to_meta_database']
+__all__ = [ 'jsonify', 'compare_runtimes', 'df_to_meta_database', 'df_to_RAI']
 
 
 def jsonify(v):
