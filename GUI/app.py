@@ -87,17 +87,17 @@ def index():
     # !! Requires the main metric category to be listed in metadata. !!
     # Some way of figuring out which category it is quickly is needed.+
     scores = {"fairness": [0, 0], "explainability": [0, 0], "performance": [0, 0], "robustness": [0, 0]}
-    temp_dict = {}
-    for value in item:
-        if metadata[value]["tags"][0] != "metadata":
-            if metadata[value]["tags"][0] in scores:  # Assumption about data
-                scores[metadata[value]["tags"][0]][1] += 1
-                if item[value]["value"]:
-                    scores[metadata[value]["tags"][0]][0] += 1
-                else:
-                    failed.append({"name":metadata[value]['display_name'], "category": metadata[value]["tags"][0]})
-        temp_dict['metadata'] = {"date": item['metadata > date'], "description": item['metadata > description'], "scores": scores}
-        res.append(temp_dict)
+    # temp_dict = {}
+    # for value in item:
+    #     if metadata[value]["tags"][0] != "metadata":
+    #         if metadata[value]["tags"][0] in scores:  # Assumption about data
+    #             scores[metadata[value]["tags"][0]][1] += 1
+    #             if item[value]["value"]:
+    #                 scores[metadata[value]["tags"][0]][0] += 1
+    #             else:
+    #                 failed.append({"name":metadata[value]['display_name'], "category": metadata[value]["tags"][0]})
+    #     temp_dict['metadata'] = {"date": item['metadata > date'], "description": item['metadata > description'], "scores": scores}
+    #     res.append(temp_dict)
     return render_template('/admin/index.html',
                            admin_base_template=admin.base_template,
                            admin_view=admin.index_view,
@@ -368,26 +368,26 @@ def getCertification(date1, date2):
     # data_test = cache['metric_values']
     clear_streams()
     res = []
-    for i in range(len(data_test)): # Get the total badges and passed badges fo reach category.
-        item = json.loads(data_test[i])
-        scores = {"fairness": [0, 0], "explainability": [0, 0], "performance": [0, 0], "robustness": [0, 0]}
-        if date1 <= item['metadata > date']["value"] <= date2:
-            temp_dict = {}
-            for value in item:
-                if metadata[value]["tags"][0] != "metadata":
-                    if metadata[value]["tags"][0] not in temp_dict: # assumption
-                        temp_dict[metadata[value]["tags"][0]] = []
-                    metric_obj = item[value]
-                    for key in metadata[value]:
-                        metric_obj[key] = metadata[value][key]
-                    temp_dict[metadata[value]["tags"][0]].append(metric_obj)
+    # for i in range(len(data_test)): # Get the total badges and passed badges fo reach category.
+    #     item = json.loads(data_test[i])
+    #     scores = {"fairness": [0, 0], "explainability": [0, 0], "performance": [0, 0], "robustness": [0, 0]}
+    #     if date1 <= item['metadata > date']["value"] <= date2:
+    #         temp_dict = {}
+    #         for value in item:
+    #             if metadata[value]["tags"][0] != "metadata":
+    #                 if metadata[value]["tags"][0] not in temp_dict: # assumption
+    #                     temp_dict[metadata[value]["tags"][0]] = []
+    #                 metric_obj = item[value]
+    #                 for key in metadata[value]:
+    #                     metric_obj[key] = metadata[value][key]
+    #                 temp_dict[metadata[value]["tags"][0]].append(metric_obj)
 
-                    if metadata[value]["tags"][0] in scores:
-                        scores[metadata[value]["tags"][0]][1] += 1
-                        if item[value]["value"]:
-                            scores[metadata[value]["tags"][0]][0] += 1
-            temp_dict['metadata'] = {"date": item['metadata > date'], "description": item['metadata > description'], "scores": scores}
-            res.append(temp_dict)
+    #                 if metadata[value]["tags"][0] in scores:
+    #                     scores[metadata[value]["tags"][0]][1] += 1
+    #                     if item[value]["value"]:
+    #                         scores[metadata[value]["tags"][0]][0] += 1
+    #         temp_dict['metadata'] = {"date": item['metadata > date'], "description": item['metadata > description'], "scores": scores}
+    #         res.append(temp_dict)
     return json.dumps(res)
 
 
