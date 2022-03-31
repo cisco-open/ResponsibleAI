@@ -222,6 +222,8 @@ def viewAllCertificates():
     result1 = [] # Level 1 and 2 certificate tables
     result2 = []
     for item in data:
+        if 'metadata' in item:
+            continue
         if 'metadata' not in metadata[item]["tags"]:
             dict_item = {} # Row of table
             if data[item]["value"]:  # Set the formatting and value Pass/Fail depending on how the certificate went
