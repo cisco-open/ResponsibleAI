@@ -124,7 +124,7 @@ def main():
       
 
     for ep in range(10):
-        print( "loss for epoch %d"%ep, train_loop(20))
+        print( f"loss for epoch {ep}",  train_loop(20))
         preds=predict()
 
       
