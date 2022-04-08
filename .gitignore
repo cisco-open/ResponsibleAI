@@ -1,5 +1,6 @@
 # data files
-data/
+Dashboard/
+cProfileExport
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
