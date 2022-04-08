@@ -73,14 +73,19 @@ def df_remove_nans( df, extra_symbols):
 
 
     
-def df_to_RAI (  df, test_tf=None, target_column = None, clear_nans = True, extra_symbols="?", normalize="Scalar"):
+def df_to_RAI (  df, test_tf=None, target_column = None, clear_nans = True, extra_symbols="?", normalize="Scalar", max_categorical_threshold = None):
 
     if clear_nans:
         df_remove_nans(df,extra_symbols) 
 
+    if max_categorical_threshold:
+        for col in df:
+            if len( df[col].unique())<max_categorical_threshold:
+                df[col] = pd.Categorical( df[col] )
+
     if normalize is not None:
         if normalize == "Scalar":
-            num_d = df.select_dtypes(exclude=['object'])
+            num_d = df.select_dtypes(exclude=['object','category'])
             df[num_d.columns] = StandardScaler().fit_transform(num_d)    
 
     features = []
@@ -88,7 +93,7 @@ def df_to_RAI (  df, test_tf=None, target_column = None, clear_nans = True, extr
     cat_columns = []
     if target_column:
         y = df.pop(target_column)
-        if y.dtype == "object":
+        if y.dtype in ("object","category"):
            y = y.factorize(sort=True)[0] 
     else:
         y = None

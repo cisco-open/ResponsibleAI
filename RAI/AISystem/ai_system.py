@@ -98,6 +98,15 @@ class AISystem:
             result['features'].append(self.meta_database.features[i].name)
         return result
  
+    
+    def get_metric_info(self) -> dict :
+        result = {}
+        for group in self.metric_groups:
+            result[group] = {}
+            for metric in self.metric_groups[group].metrics:
+                result[group][metric] = self.metric_groups[group].metrics[metric].config
+        return result
+
     def get_metric_info_flat(self) -> dict :
         result = {}
         for group in self.metric_groups:
@@ -121,9 +130,10 @@ class AISystem:
         
         result = {}
         for group in self.metric_groups:
+            result[group] = {}
             for metric in self.metric_groups[group].metrics:
                 metric_obj = self.metric_groups[group].metrics[metric]
-                result[metric_obj.unique_name] = utils.jsonify(metric_obj.value)
+                result[group][metric] =  utils.jsonify(metric_obj.value)
                
         self._last_metric_values =  result
         
@@ -133,7 +143,7 @@ class AISystem:
         self._sample_count += len(data_dict)
         
  
-
+    
     def update_metrics(self, data):
         raise NotImplemented()
         # for i in range(len(data)):

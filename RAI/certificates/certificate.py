@@ -68,7 +68,8 @@ class Certificate(object):
 
     def _get_value(self, var, metrics, certs):
         if var[0] == "&":
-            return metrics[var[1:]]
+            group, metric = var[1:].split(" > ")
+            return metrics[group][metric]
         if var[0] == "@":
             return certs[var[1:]]
 

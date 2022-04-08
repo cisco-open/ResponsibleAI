@@ -16,6 +16,8 @@ class Feature:
             self.possibleValues = []
             for value in values:
                 self.possibleValues.append(value)
+    def __repr__(self) -> str:
+        return f"{self.name}:{self.dtype}"
 
 
 class MetaDatabase:
@@ -26,6 +28,8 @@ class MetaDatabase:
             if features[i].categorical:
                 self.scalar_mask[i] = 1
 
+    def __repr__(self) -> str:
+        return f" features: {self.features}"
         
 class Data:
     def __init__(self, X, y) -> None:
