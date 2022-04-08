@@ -251,25 +251,23 @@ class StatMetricGroup(MetricGroup, config=_config):
                 args = self.ai_system.user_config["stats"]["args"]
             data = data_dict["data"]
 
-            mask = np.zeros_like(data.X)
-            mask = mask + self.ai_system.meta_database.scalar_mask
-            masked_data = np.ma.masked_array(data.X, mask)
+            scalar_data = data.X[:,self.ai_system.meta_database.scalar_mask]
 
-            self.metrics["mean"].value = np.mean(masked_data, **args.get("mean", {}), axis=0)
-            self.metrics["covariance"].value = np.cov(masked_data.T, **args.get("covariance", {}))
+            self.metrics["mean"].value = np.mean(scalar_data, **args.get("mean", {}), axis=0)
+            self.metrics["covariance"].value = np.cov(scalar_data.T, **args.get("covariance", {}))
             self.metrics["num-Nan-rows"].value = np.count_nonzero(np.isnan(data.X).any(axis=1))
             self.metrics["percent-Nan-rows"].value = self.metrics["num-Nan-rows"].value/np.shape(np.asarray(data.X))[0]
             with warnings.catch_warnings():
                 warnings.filterwarnings('ignore')
-                self.metrics["geometric-mean"].value = scipy.stats.mstats.gmean(masked_data)
+                self.metrics["geometric-mean"].value = scipy.stats.mstats.gmean(scalar_data)
             
-            self.metrics["mode"].value = scipy.stats.mstats.mode(data.X)[0]
-            self.metrics["skew"].value = scipy.stats.mstats.skew(masked_data)
-            self.metrics["variation"].value = scipy.stats.mstats.variation(masked_data)
-            self.metrics["sem"].value = scipy.stats.mstats.sem(masked_data)
-            self.metrics['kurtosis'].value = scipy.stats.mstats.kurtosis(masked_data)
+            self.metrics["mode"].value = scipy.stats.mstats.mode(scalar_data)
+            self.metrics["skew"].value = scipy.stats.mstats.skew(scalar_data)
+            self.metrics["variation"].value = scipy.stats.mstats.variation(scalar_data)
+            self.metrics["sem"].value = scipy.stats.mstats.sem(scalar_data)
+            self.metrics['kurtosis'].value = scipy.stats.mstats.kurtosis(scalar_data)
 
-            scalar_data = _get_scalar_data(data.X, self.ai_system.meta_database.scalar_mask)
+            scalar_data = data.X[:,self.ai_system.meta_database.scalar_mask]
 
             # Singular Valued
             fMean, fVar, fStd = scipy.stats.mvsdist(scalar_data)
@@ -300,11 +298,4 @@ class StatMetricGroup(MetricGroup, config=_config):
             self.metrics["bayes-std"].value = bStd[1]
             self.metrics["bayes-std-avg"].value = bStd[0]
 
-def _get_scalar_data(X, mask):
-    result = np.copy(X)
-    i = len(mask)-1
-    while i >= 0:
-        if mask[i] == 1:
-            result = np.delete(result, i, axis=1)
-        i = i-1
-    return result
+ 

@@ -47,15 +47,12 @@ class BasicRobustMetricGroup(MetricGroup, config = _config):
 
             data = data_dict["data"]
 
-            # masked_data = np.ma.masked_array(data, self.ai_system.meta_database.scalar_mask)
-            mask = np.zeros_like(data.X)
-            mask = mask + self.ai_system.meta_database.scalar_mask
-            masked_data = np.ma.masked_array(data.X, mask)
+            scalar_data = data.X[:,self.ai_system.meta_database.scalar_mask]
 
-            mean_v = np.mean(masked_data, **args.get("mean", {}), axis=0, keepdims=True)
-            std_v = np.std(masked_data, **args.get("covariance", {}), axis=0, keepdims= True )
-            max_v = np.max(masked_data, axis=0, keepdims=True)
-            min_v = np.min(masked_data, axis=0, keepdims=True)
+            mean_v = np.mean(scalar_data, **args.get("mean", {}), axis=0, keepdims=True)
+            std_v = np.std(scalar_data, **args.get("covariance", {}), axis=0, keepdims= True )
+            max_v = np.max(scalar_data, axis=0, keepdims=True)
+            min_v = np.min(scalar_data, axis=0, keepdims=True)
 
 
             self.metrics["normalized_feature_std"].value = bool(np.all(np.isclose(std_v, np.ones_like(std_v))) and \

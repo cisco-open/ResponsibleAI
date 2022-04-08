@@ -23,10 +23,10 @@ class Feature:
 class MetaDatabase:
     def __init__(self, features) -> None:
         self.features = features
-        self.scalar_mask = [0] * len(features)
-        for i in range(len(features)):
-            if features[i].categorical:
-                self.scalar_mask[i] = 1
+        self.scalar_mask = np.ones(len(features), dtype=int)
+        for i,f in enumerate(features):
+            if f.categorical:
+                self.scalar_mask[i] = 0
 
     def __repr__(self) -> str:
         return f" features: {self.features}"
