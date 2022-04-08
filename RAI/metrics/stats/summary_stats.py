@@ -261,7 +261,7 @@ class StatMetricGroup(MetricGroup, config=_config):
                 warnings.filterwarnings('ignore')
                 self.metrics["geometric-mean"].value = scipy.stats.mstats.gmean(scalar_data)
             
-            self.metrics["mode"].value = scipy.stats.mstats.mode(scalar_data)
+            self.metrics["mode"].value,_ = scipy.stats.mstats.mode(scalar_data)
             self.metrics["skew"].value = scipy.stats.mstats.skew(scalar_data)
             self.metrics["variation"].value = scipy.stats.mstats.variation(scalar_data)
             self.metrics["sem"].value = scipy.stats.mstats.sem(scalar_data)

@@ -101,7 +101,7 @@ def df_to_RAI (  df, test_tf=None, target_column = None, clear_nans = True, extr
     features = []
 
     for c in df:
-        if df.dtypes[c] == "object":
+        if df.dtypes[c] in ("object","category"):
             fact = df[c].factorize(sort=True)
             df[c] = fact[0]
 

@@ -56,9 +56,7 @@ class FrequencyStatMetricGroup(MetricGroup, config=_config):
 def _cumulative_freq(X, features=None):
     result = []
     for i in range(len(features)):
-        if not features[i].categorical:
-            result.append(None)
-        else:
+        if features[i].categorical:
             numbins = len(features[i].values)
             result.append(_convert_to_feature_dict(scipy.stats.cumfreq(X[:, i], numbins=numbins)[0].tolist(), features[i]))
     return result
@@ -67,11 +65,9 @@ def _cumulative_freq(X, features=None):
 def _rel_freq(X, features=None):
     result = []
     for i in range(len(features)):
-        if not features[i].categorical:
-            result.append(None)
-        else:
-            numbins = len(features[i].values)
-            result.append(_convert_to_feature_dict(scipy.stats.relfreq(X[:, i], numbins=numbins)[0].tolist(), features[i]))
+        if features[i].categorical:
+           numbins = len(features[i].values)
+           result.append(_convert_to_feature_dict(scipy.stats.relfreq(X[:, i], numbins=numbins)[0].tolist(), features[i]))
     return result
 
 
