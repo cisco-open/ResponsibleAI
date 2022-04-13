@@ -54,13 +54,10 @@ v = ai.get_metric_values()
 info = ai.get_metric_info()
 
 for g in v:
-    print("\n\ngroup : ", g)
+    
     for m in v[g]:
         if "type" in info[g][m]:
             if info[g][m]["type"]in ("numeric","vector-dict","text"):
-                print ('--------- ' ,g, m, v[g][m])
+                print (g, m, v[g][m])
             
-            else:
-                print ('vvvvvvvvv ' ,g, m, type(v[g][m]), info[g][m]["type"])
-        else:
-            print(     '????????? ', g,m, v[g][m])
+       
