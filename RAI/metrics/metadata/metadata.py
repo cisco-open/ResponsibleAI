@@ -24,6 +24,28 @@ _config = {
             "range": [None, None],
             "explanation": "The user description of collected metric data.",
         }, 
+         "sample_count": {
+            "display_name": "Number of samples",
+            "type": "numeric",
+            "tags": [],
+            "has_range": True,
+            "range": [0, None],
+            "explanation": "Number of samples",
+        }, 
+        "task_type": {
+            "display_name": "Task Type",
+            "type": "text",
+            "has_range": False,
+            "range": [None, None],
+            "explanation": "Task Type",
+        },
+        "model": {
+            "display_name": "model",
+            "type": "text",
+            "has_range": False,
+            "range": [None, None],
+            "explanation": "model description",
+        },
     }
 }
 
@@ -37,8 +59,15 @@ class MetadataGroup(MetricGroup, config=_config):
 
     def compute(self, data_dict):
         self.metrics["date"].value = self._get_time()
-        self.metrics["description"].value = ""
+        self.metrics["description"].value = self.ai_system.task.description
+        self.metrics["sample_count"].value = data_dict["data"].X.shape[0]
+        self.metrics["task_type"].value = self.ai_system.task.type
+        if self.ai_system.task.model: 
+            self.metrics["model"].value = str(self.ai_system.task.model.agent)
+        else:
+            self.metrics["model"].value = "None"
 
+        
     def _get_time(self):
         now = datetime.datetime.now()
         return "{:02d}".format(now.year) + "-" + "{:02d}".format(now.month) + "-" + "{:02d}".format(now.day) + " " + "{:02d}".format(now.hour) + ":" + "{:02d}".format(now.minute) + ":" + "{:02d}".format(now.second)
