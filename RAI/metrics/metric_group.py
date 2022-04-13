@@ -14,9 +14,9 @@ class MetricGroup(object):
     @classmethod
     def is_compatible(cls, ai_system):
         compatible = cls.config["compatibility"]["type_restriction"] is None \
-                    or ai_system.task.type == cls.config["compatibility"]["type_restriction"] \
+                    or ai_system.task.type in cls.config["compatibility"]["type_restriction"] \
                     or ai_system.task.type == "binary_classification" and cls.config["compatibility"]["type_restriction"] == "classification"
-        compatible = compatible and compare_runtimes(ai_system.user_config.get("time_complexity"), cls.config["complexity_class"])
+        compatible = compatible and compare_runtimes(ai_system.metric_manager.user_config.get("time_complexity"), cls.config["complexity_class"])
         return compatible
 
     def __init_subclass__(cls, config=None, **kwargs):

@@ -67,10 +67,11 @@ class IndividualFairnessMetricGroup(MetricGroup, config=_config):
                     or ai_system.task.type == _config["compatibility"]["type_restriction"] \
                     or ai_system.task.type == "binary_classification" and _config["compatibility"]["type_restriction"] == "classification"
         compatible = compatible \
-                     and "fairness" in ai_system.user_config \
-                     and "protected_attributes" in ai_system.user_config["fairness"] \
-                     and "positive_label" in ai_system.user_config["fairness"] \
-                     and compare_runtimes(ai_system.user_config.get("time_complexity"), _config["complexity_class"])
+                     and "fairness" in ai_system.metric_manager.user_config \
+                     and "protected_attributes" in ai_system.metric_manager.user_config["fairness"] \
+                     and  len(ai_system.metric_manager.user_config["fairness"]["protected_attributes"])>0 \
+                     and "positive_label" in ai_system.metric_manager.user_config["fairness"] \
+                     and compare_runtimes(ai_system.metric_manager.user_config.get("time_complexity"), _config["complexity_class"])
         return compatible
 
     def getConfig(self):
@@ -82,10 +83,10 @@ class IndividualFairnessMetricGroup(MetricGroup, config=_config):
             preds = data_dict["predictions"]
             prot_attr = []
             pos_label = 1
-            if self.ai_system.user_config is not None and "fairness" in self.ai_system.user_config and "priv_group" in \
-                    self.ai_system.user_config["fairness"]:
-                prot_attr = self.ai_system.user_config["fairness"]["protected_attributes"]
-                pos_label = self.ai_system.user_config["fairness"]["positive_label"]
+            if self.ai_system.metric_manager.user_config is not None and "fairness" in self.ai_system.metric_manager.user_config and "priv_group" in \
+                    self.ai_system.metric_manager.user_config["fairness"]:
+                prot_attr = self.ai_system.metric_manager.user_config["fairness"]["protected_attributes"]
+                pos_label = self.ai_system.metric_manager.user_config["fairness"]["positive_label"]
 
             y = _convert_to_ai360(self, data, prot_attr)
             # MAY REQUIRE ADJUSTMENT DEPENDING ON AI360'S USE.

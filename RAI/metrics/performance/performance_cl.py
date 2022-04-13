@@ -167,8 +167,8 @@ class PerformanceClassificationMetricGroup(MetricGroup, config=_config):
             data = data_dict["data"]
             preds = data_dict["predictions"]
             args = {}
-            if self.ai_system.user_config is not None and "bias" in self.ai_system.user_config and "args" in self.ai_system.user_config["bias"]:
-                args = self.ai_system.user_config["bias"]["args"]
+            if self.ai_system.metric_manager.user_config is not None and "bias" in self.ai_system.metric_manager.user_config and "args" in self.ai_system.metric_manager.user_config["bias"]:
+                args = self.ai_system.metric_manager.user_config["bias"]["args"]
 
             self.metrics["accuracy"].value = sklearn.metrics.accuracy_score(data.y, preds, **args.get("accuracy", {}))
             self.metrics["balanced_accuracy"].value = sklearn.metrics.balanced_accuracy_score(data.y, preds, **args.get("balanced_accuracy", {}))

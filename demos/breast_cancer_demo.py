@@ -33,8 +33,8 @@ configuration = { }
 
 dataset = Dataset(  train_data = Data(xTrain , yTrain), 
                         test_data = Data(xTest , yTest)) 
-ai = AISystem(meta_database=meta, dataset=dataset, task=task, user_config=configuration)
-ai.initialize()
+ai = AISystem(meta_database=meta, dataset=dataset, task=task)
+ai.initialize( user_config=configuration)
 
 
 reg.fit(xTrain, yTrain)
@@ -54,13 +54,13 @@ v = ai.get_metric_values()
 info = ai.get_metric_info()
 
 for g in v:
-    print("group : ", g)
+    print("\n\ngroup : ", g)
     for m in v[g]:
         if "type" in info[g][m]:
-            if info[g][m]["type"]in ("numeric","vector-dict"):
-                print ('--------- ' , m, v[g][m])
+            if info[g][m]["type"]in ("numeric","vector-dict","text"):
+                print ('--------- ' ,g, m, v[g][m])
             
             else:
-                print ('vvvvvvvvv ' , m, type(v[g][m]), info[g][m]["type"])
+                print ('vvvvvvvvv ' ,g, m, type(v[g][m]), info[g][m]["type"])
         else:
             print(     '????????? ', g,m, v[g][m])

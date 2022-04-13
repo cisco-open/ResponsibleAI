@@ -42,8 +42,8 @@ configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivil
 
 dataset = Dataset(  train_data = Data(xTrain , yTrain), 
                         test_data = Data(xTest , yTest)) 
-ai = AISystem(meta_database=meta, dataset=dataset, task=task, user_config=configuration)
-ai.initialize()
+ai = AISystem(meta_database=meta, dataset=dataset, task=task )
+ai.initialize(user_config=configuration)
 
 
 reg.fit(xTrain, yTrain)
@@ -61,6 +61,8 @@ if use_dashboard:
 
 v = ai.get_metric_values()
 info = ai.get_metric_info()
+
+
 
 for g in v:
     print("group : ", g)

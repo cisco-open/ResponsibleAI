@@ -1,3 +1,4 @@
+from .metric_manager import MetricManager
 from .metric import Metric 
 from .metric_group import MetricGroup
 import RAI.metrics.metadata

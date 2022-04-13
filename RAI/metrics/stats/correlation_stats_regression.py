@@ -53,8 +53,8 @@ class CorrelationStatRegression(MetricGroup, config=_config):
     def compute(self, data_dict):
         if "data" in data_dict:
             args = {}
-            if self.ai_system.user_config is not None and "stats" in self.ai_system.user_config and "args" in self.ai_system.user_config["stats"]:
-                args = self.ai_system.user_config["stats"]["args"]
+            if self.ai_system.metric_manager.user_config is not None and "stats" in self.ai_system.metric_manager.user_config and "args" in self.ai_system.metric_manager.user_config["stats"]:
+                args = self.ai_system.metric_manager.user_config["stats"]["args"]
 
             mask = self.ai_system.meta_database.scalar_mask
 

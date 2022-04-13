@@ -98,8 +98,8 @@ class PerformanceRegMetricGroup(MetricGroup, config=_config):
             data = data_dict["data"]
             preds = data_dict["predictions"]
             args = {}
-            if self.ai_system.user_config is not None and "bias" in self.ai_system.user_config and "args" in self.ai_system.user_config["bias"]:
-                args = self.ai_system.user_config["bias"]["args"]
+            if self.ai_system.metric_manager.user_config is not None and "bias" in self.ai_system.metric_manager.user_config and "args" in self.ai_system.metric_manager.user_config["bias"]:
+                args = self.ai_system.metric_manager.user_config["bias"]["args"]
 
             self.metrics["explained_variance"].value = sklearn.metrics.explained_variance_score(data.y, preds, **args.get("explained_variance", {}))
             self.metrics["mean_absolute_error"].value = sklearn.metrics.mean_absolute_error(data.y, preds, **args.get("mean_absolute_error", {}))
