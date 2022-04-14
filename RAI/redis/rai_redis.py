@@ -57,7 +57,7 @@ class RaiRedis:
         self.redis_connection.rpush(self.ai_system.task.model.name + '|certificate_values', json.dumps(certificates))  # True
 
         
-        # metrics['metadata > description'] = tag
+        # metrics['metadata']['tag'] = tag
         self.redis_connection.rpush(self.ai_system.task.model.name + '|metric_values', json.dumps(metrics))  # True
 
     def viewGUI(self):

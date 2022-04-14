@@ -72,13 +72,13 @@ class AISystem:
             result['features'].append(self.meta_database.features[i].name)
         return result
     
-    def compute(self, predictions: np.ndarray, data_type:str = "train") -> None:
+    def compute(self, predictions: np.ndarray, data_type:str = "train", tag = None) -> None:
         
         
         data_dict = {"data": self.get_data(data_type)}
         if predictions is not None:
             data_dict["predictions"] = predictions
-       
+        data_dict["tag"] = tag
        
         self._last_metric_values = self.metric_manager.compute( data_dict )
         

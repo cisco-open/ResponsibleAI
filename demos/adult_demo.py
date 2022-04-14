@@ -50,7 +50,7 @@ reg.fit(xTrain, yTrain)
  
 print("\n\nTESTING PREDICTING METRICS:")
 test_preds = reg.predict(xTest)
-ai.compute( reg.predict(xTest) , data_type="test")
+ai.compute( reg.predict(xTest) , data_type="test", tag='test')
 
 if use_dashboard:
     r = RaiRedis( ai )
