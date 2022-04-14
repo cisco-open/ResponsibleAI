@@ -31,12 +31,12 @@ class RaiRedis:
             self.export_metadata()
             
     def export_metadata(self) -> None :
-        metric_info = self.ai_system.get_metric_info_flat()
-        certificate_info = self.ai_system.certificate_manager.get_metadata()
+        metric_info = self.ai_system.get_metric_info()
+        certificate_info = self.ai_system.get_certificate_info()
         model_info = self.ai_system.get_model_info()
         
         self.redis_connection.set(self.ai_system.task.model.name + '|metric_info', json.dumps(metric_info))
-        self.redis_connection.set(self.ai_system.task.model.name + '|certificate_metadata', json.dumps(certificate_info))
+        self.redis_connection.set(self.ai_system.task.model.name + '|certificate_info', json.dumps(certificate_info))
         self.redis_connection.set(self.ai_system.task.model.name + '|model_info', json.dumps(model_info))
 
 
@@ -51,13 +51,13 @@ class RaiRedis:
         metrics = self.ai_system.get_metric_values()
 
 
-        certificates['metadata > date'] = {"value": self.ai_system._timestamp,
-                                     "description": "time certificates were measured", "level": 1, "tags": ["metadata"]}
-        certificates['metadata > description'] = {"value": tag, "description": "Purpose of measurement.", "tags": ["metadata"]}
+        # certificates['metadata > date'] = {"value": self.ai_system._timestamp,
+        #                              "description": "time certificates were measured", "level": 1, "tags": ["metadata"]}
+        # certificates['metadata > description'] = {"value": tag, "description": "Purpose of measurement.", "tags": ["metadata"]}
         self.redis_connection.rpush(self.ai_system.task.model.name + '|certificate_values', json.dumps(certificates))  # True
 
         
-        metrics['metadata > description'] = tag
+        # metrics['metadata > description'] = tag
         self.redis_connection.rpush(self.ai_system.task.model.name + '|metric_values', json.dumps(metrics))  # True
 
     def viewGUI(self):

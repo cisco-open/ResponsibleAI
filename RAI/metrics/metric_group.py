@@ -31,7 +31,8 @@ class MetricGroup(object):
         self.dependency_list = []
         self.metrics = {}
         self.tags = []
-        self.complexity_class = None
+        self.complexity_class = ""
+        self.compatiblity = {}
         self.status = "OK"
         self.reset()
         
@@ -53,9 +54,13 @@ class MetricGroup(object):
         if "dependency_list" in config:
             self.dependency_list = config["dependency_list"]
         if "complexity_class" in config:
-            self.complity_class = config["complexity_class"]
+            self.complexity_class = config["complexity_class"]
+        if "compatibility" in config:
+            self.compatiblity = config["compatibility"]
+        
         if "metrics" in config:
             self.create_metrics(config["metrics"])
+        return True
 
     def create_metrics(self, metrics_config):
         for metric_name in metrics_config:

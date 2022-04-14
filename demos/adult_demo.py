@@ -13,7 +13,7 @@ from torch import nn
 from sklearn.datasets import load_breast_cancer
 from sklearn.model_selection import train_test_split
  
-use_dashboard  = False
+use_dashboard  = True
 
 # Get Dataset
 data_path = "./data/adult/"
@@ -34,7 +34,7 @@ xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=1, stratify=y
 from sklearn.ensemble import RandomForestClassifier
 reg = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=0)
 
-model = Model(agent=reg, name="BreastCancer", display_name="sklearn breast cancer data", model_class="Random Forest Classifier", adaptive=False)
+model = Model(agent=reg, name="AdultDB", display_name="predict income", model_class="Random Forest Classifier", adaptive=False)
 task = Task(model=model, type='binary_classification', description="Detect Cancer in patients using skin measurements")
 configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}},
                                 "protected_attributes": ["race"], "positive_label": 1},
@@ -56,8 +56,8 @@ if use_dashboard:
     r = RaiRedis( ai )
     r.connect()
     r.reset_redis()
-    r.add_measurement( f"random_forest")
-    r.viewGUI()
+    r.add_measurement( f"test_set")
+    # r.viewGUI()
 
 v = ai.get_metric_values()
 info = ai.get_metric_info()

@@ -60,6 +60,12 @@ class MetricManager(object):
         result = {}
         for group in self.metric_groups:
             result[group] = {}
+            result[group]["meta"] = {
+                "tags": self.metric_groups[group].tags,
+                "complexity_class":self.metric_groups[group].complexity_class,
+                "dependency_list": self.metric_groups[group].dependency_list,
+                "compatiblity": self.metric_groups[group].compatiblity,
+            }
             for metric in self.metric_groups[group].metrics:
                 result[group][metric] = self.metric_groups[group].metrics[metric].config
         return result
@@ -67,6 +73,7 @@ class MetricManager(object):
     def get_metric_info_flat(self) -> dict :
         result = {}
         for group in self.metric_groups:
+             
             for metric in self.metric_groups[group].metrics:
                 metric_obj = self.metric_groups[group].metrics[metric]
                 result[metric_obj.unique_name] = metric_obj.config

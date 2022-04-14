@@ -56,7 +56,7 @@ _config = {
             "explanation": "The F1 score is a weighted average between a models precision and recall scores",
         },
         "f1_avg": {
-            "display_name": "F1 Score",
+            "display_name": "Average F1 Score",
             "type": "numeric",
             "tags": [],
             "has_range": True,
@@ -90,7 +90,7 @@ _config = {
             "explanation": "Jaccard Score measures the similarity of two two sets of data, and returns a result from 0 to 100%.",
         },
         "jaccard_score_avg": {
-            "display_name": "Jaccard Score",
+            "display_name": "Average Jaccard Score",
             "type": "numeric",
             "tags": [],
             "has_range": True,
@@ -107,7 +107,7 @@ _config = {
             "explanation": "Precision Scores indicates a models ability to not label a positive sample as negative.",
         },
         "precision_score_avg": {
-            "display_name": "Precision Score",
+            "display_name": "Average Precision Score",
             "type": "numeric",
             "tags": [],
             "has_range": True,
@@ -124,7 +124,7 @@ _config = {
             "explanation": "Recall Scores indicates a models ability to classify all positive image samples",
         },
         "recall_score_avg": {
-            "display_name": "Recall Score",
+            "display_name": "Average Recall Score",
             "type": "numeric",
             "tags": [],
             "has_range": True,
@@ -141,7 +141,7 @@ _config = {
             "explanation": "True Positive Rate is the probability that a positive example will be predicted to be positive.",
         },
         "tp_rate_avg": {
-            "display_name": "True Positive Rate",
+            "display_name": "Average True Positive Rate",
             "type": "numeric",
             "tags": [],
             "has_range": True,
