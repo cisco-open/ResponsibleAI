@@ -16,7 +16,7 @@ class AISystem:
                 dataset:Dataset, 
                 task:Task,
                 enable_certificates:bool = True,
-                custom_certificate_location:str = None ) -> None:
+                ) -> None:
         
         # if type(user_config) is not dict:
         #     raise TypeError("User config must be of type Dictionary")
@@ -30,19 +30,20 @@ class AISystem:
         
         
         self.auto_id = 0
-        
         self._last_metric_values = None
         self._last_certificate_values=None
     
+        
+
+    def initialize(self, user_config:dict, custom_certificate_location:str = None , **kw_args):
         self.metric_manager = MetricManager(self)
         self.certificate_manager = CertificateManager()
-        if custom_certificate_location is None:
-            self.certificate_manager.load_stock_certificates()
-        else:
+        
+        self.certificate_manager.load_stock_certificates()
+        if custom_certificate_location is not None:
             self.certificate_manager.load_custom_certificates(custom_certificate_location)
 
 
-    def initialize(self, user_config:dict, **kw_args):
         self.metric_manager.initialize( user_config, *kw_args)    
      
     
@@ -71,7 +72,7 @@ class AISystem:
             result['features'].append(self.meta_database.features[i].name)
         return result
     
-    def compute(self, predictions: np.ndarray, data_type:str = "train", tag = None) -> None:
+    def compute(self, predictions: np.ndarray, data_type:str = "test", tag = None) -> None:
         
         self.auto_id+=1
         if tag is None:

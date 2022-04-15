@@ -2,7 +2,13 @@
     "version": "1.0" ,
     "certs": [
         {"name": "normalized features",  "filename":"normalized_features.json"},
-        {"name": "test cert",  "filename":"test.json"}
+        {"name": "perf",  "filename":"performance_accuracy.json"},
+        {"name":"a", "filename":"fairness_statistical_parity.json"},
+        {"name":"d", "filename":"fairness_disparate_impact.json"},
+        {"name":"e", "filename":"fairness_accuracy_bronze.json"},
+        {"name":"f", "filename":"fairness_theil.json"},
+        {"name":"g", "filename":"performance_tp.json"}
+
     ]
 
 }

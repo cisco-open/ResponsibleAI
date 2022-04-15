@@ -19,23 +19,49 @@ def get_metric_page_graph():
 
 
     d = {"x":[], "value":[],"tag":[], "metric":[]}
-    fig = px.line( pd.DataFrame(d), x="x", y="value", color="metric" )
+    fig = px.line( pd.DataFrame(d), x="x", y="value", color="metric", markers ="True" )
     c = dcc.Graph(figure=fig)
 
     return  html.Div([
-    html.P( "select metric group"),
+    html.P(""),
+    html.P(""),
+    html.P(""),
+    html.P(""),
+    html.P(""),
     
-    
+     html.Div( 
+        
+        html.Div( 
+            [
+                html.P( "select metric group"),
+                dcc.Dropdown( groups,  id='select_group'),
+                html.P( ""),
+                html.P( "select metric"),
+                html.Div(id='select_metric_cnt'),
+            ], 
+        style={ "margin":"20px",
+                }),
 
-    dcc.Dropdown( groups,  id='select_group'),
-    html.P( ""),
-    html.P( "select metric"),
+        style = {"background-color":"Azure",
+                "border-width": "thin",
+                "border-color":"Blue",
+                "border-style":"solid",
+                "border-radius": "10px",
+                }
+    ),
     
-    html.Div(id='select_metric_cnt'),
+    
     html.Hr(),
-
-    html.Div(id='graph_cnt', children = [c], style={"border":"2px black solid", "border-style": "dashed", "bgcolor":"Blue"})
-
+    html.Div( 
+        html.Div(id='graph_cnt', children = [c],
+         style={ "margin":"2",
+                }), 
+        style = {"background-color":"Azure",
+                "border-width": "thin",
+                "border-color":"Blue",
+                "border-style":"solid",
+                "border-radius": "10px",
+                })
 ])
 
 
@@ -50,7 +76,7 @@ def get_metric_page_graph():
 )
 def update_metrics(value):
     if not value:
-        return []
+        return dcc.Dropdown( [],  id='select_metrics'),
     # print('value :',value )
     
     metrics = []

@@ -33,20 +33,22 @@ class CertificateManager(object):
         data = json.load(f)
         for item in data["certs"]:
             c = Certificate()
+            name = os.path.basename(item["filename"])
             c.load_from_json(os.path.join(cert_file_folder, item["filename"]))
-            self.metadata[item["name"]] = c.cert_spec["meta"]
-            self.metadata[item["name"]]["condition"] = c.cert_spec["condition"]
-            self.certificates[item["name"]] = c
+            self.metadata[name] = c.cert_spec["meta"]
+            self.metadata[name]["condition"] = c.cert_spec["condition"]
+            self.certificates[name] = c
 
     def load_custom_certificates(self, filename):
         f = open(filename, "r")
         data = json.load(f)
         for item in data["certs"]:
             c = Certificate()
+            name = os.path.basename(item["filename"])
             c.load_from_json(os.path.join(cert_file_folder, item["filename"]))
-            self.metadata[item["name"]] = c.cert_spec["meta"]
-            self.metadata[item["name"]]["condition"] = c.cert_spec["condition"]
-            self.certificates[item["name"]] = c
+            self.metadata[name] = c.cert_spec["meta"]
+            self.metadata[name]["condition"] = c.cert_spec["condition"]
+            self.certificates[name] = c
 
 
     def get_metadata(self) -> dict:

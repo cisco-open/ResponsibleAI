@@ -22,6 +22,9 @@ from metric_page import  get_metric_page
 from metric_info_page import get_metric_info_page
 from certificate_info_page import get_certificate_info_page
 
+from metric_page_details import get_metric_page_details
+from metric_page_graph import get_metric_page_graph
+
 
 
 import sys
@@ -47,7 +50,6 @@ CONTENT_STYLE = {
     "margin-right": "2rem",
     "padding": "2rem 1rem",
 }
-
 sidebar = html.Div(
     [
         html.H2("RAI", className="display-4"),
@@ -60,7 +62,10 @@ sidebar = html.Div(
             [
                 dbc.NavLink("Home", href="/", active="exact"),
                 html.Hr(),
-                dbc.NavLink("Metrics", href="/metrics", active="exact"),
+                
+                dbc.NavLink("Metrics Details", href="/metrics_details", active="exact"),
+                dbc.NavLink("Metrics Graphs", href="/metrics_graphs", active="exact"),
+                # dbc.NavLink("Metrics", href="/metrics", active="exact"),
                 dbc.NavLink("Certificates", href="/certificates", active="exact"),
                 html.Hr(),
                 dbc.NavLink("Model Info", href="/modelInfo", active="exact"),
@@ -86,10 +91,15 @@ def render_page_content(pathname):
         return get_home_page() 
     elif pathname == "/metrics":
         return get_metric_page()
+    elif pathname == "/metrics_details":
+        return get_metric_page_details()
+    elif pathname == "/metrics_graphs":
+        return get_metric_page_graph()
     elif pathname == "/certificates":
         return get_certificate_page()
     elif pathname == "/modelInfo":
         return get_model_info_page()
+
     elif pathname == "/metricsInfo":
         return get_metric_info_page()
     elif pathname == "/certificateInfo":
