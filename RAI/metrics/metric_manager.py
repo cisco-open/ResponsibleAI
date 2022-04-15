@@ -27,7 +27,7 @@ class MetricManager(object):
         self.user_config = {"fairness": {   "priv_group": {},
                                             "protected_attributes": [], "positive_label": 1},
                                             "time_complexity": "exponential"}
-    
+        
     def initialize(self, user_config:dict = None, metric_groups:list[str] = None, max_complexity:str = "linear"):
         
         

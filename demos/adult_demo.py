@@ -31,7 +31,7 @@ xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=1, stratify=y
  
   
 # Create a model to make predictions
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
 reg = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=0)
 
 model = Model(agent=reg, name="AdultDB", display_name="predict income", model_class="Random Forest Classifier", adaptive=False)
@@ -50,18 +50,25 @@ reg.fit(xTrain, yTrain)
  
 print("\n\nTESTING PREDICTING METRICS:")
 test_preds = reg.predict(xTest)
-ai.compute( reg.predict(xTest) , data_type="test", tag='test')
+ai.compute( reg.predict(xTest) , data_type="test", tag='model1')
 
 if use_dashboard:
     r = RaiRedis( ai )
     r.connect()
     r.reset_redis()
-    r.add_measurement( f"test_set")
+    r.add_measurement()
     # r.viewGUI()
 
+
+reg2 = AdaBoostClassifier()
+reg2.fit(xTrain,yTrain)
+ai.set_agent( reg2 )
+
+ai.compute( reg.predict(xTest), data_type="test", tag="model2")
 v = ai.get_metric_values()
 info = ai.get_metric_info()
-
+if use_dashboard:
+    r.add_measurement()
 
 
 for g in v:

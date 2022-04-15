@@ -10,7 +10,7 @@ from RAI import utils
 class RaiRedis:
     def __init__(self, ai_system:RAI.AISystem = None) -> None:
         self.ai_system = ai_system
-        self.auto_id = 0 
+         
 
 
 
@@ -40,12 +40,9 @@ class RaiRedis:
         self.redis_connection.set(self.ai_system.task.model.name + '|model_info', json.dumps(model_info))
 
 
-    def add_measurement(self, tag:str = None) -> None :
+    def add_measurement(self) -> None :
 
-        if tag is None:
-            tag = str(self.auto_id)
-            self.auto_id+=1
-
+         
 
         certificates = self.ai_system.get_certificate_values()
         metrics = self.ai_system.get_metric_values()

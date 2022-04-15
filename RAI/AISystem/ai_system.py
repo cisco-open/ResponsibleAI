@@ -29,8 +29,7 @@ class AISystem:
         
         
         
-        self._timestamp = ""
-        self._sample_count = 0
+        self.auto_id = 0
         
         self._last_metric_values = None
         self._last_certificate_values=None
@@ -74,7 +73,9 @@ class AISystem:
     
     def compute(self, predictions: np.ndarray, data_type:str = "train", tag = None) -> None:
         
-        
+        self.auto_id+=1
+        if tag is None:
+            tag = f"{self.auto_id}"
         data_dict = {"data": self.get_data(data_type)}
         if predictions is not None:
             data_dict["predictions"] = predictions
