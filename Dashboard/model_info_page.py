@@ -21,17 +21,25 @@ def generate_table():
     rows = []
     for k,v  in  redisUtil.info["model_info" ].items():
         rows.append ( html.Tr( 
-            [ html.Td(k), html.Td( process(v)) ]
+            [ html.Th(k), html.Td( process(v)) ]
         ))
-    return html.Table(
-        className="model-info-table",
+    return dbc.Table(
+        # className="model-info-table",
         children = [
         html.Thead(
             html.Tr([  html.Th("Property Name") , html.Th("Property Value") ])
         ),
         
         html.Tbody(  rows)
-        ])
+        ],
+         
+        bordered=False,
+        striped=True,
+        # color = "info",
+        style={
+        # "border-radius":"40px"
+        }
+)
      
 
 

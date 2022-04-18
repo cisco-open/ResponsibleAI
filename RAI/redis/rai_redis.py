@@ -29,6 +29,8 @@ class RaiRedis:
 
         if export_metadata:
             self.export_metadata()
+        self.redis_connection.publish( self.ai_system.task.model.name + '|update',  "cleared")
+
             
     def export_metadata(self) -> None :
         metric_info = self.ai_system.get_metric_info()
@@ -56,6 +58,7 @@ class RaiRedis:
         
         # metrics['metadata']['tag'] = tag
         self.redis_connection.rpush(self.ai_system.task.model.name + '|metric_values', json.dumps(metrics))  # True
+        self.redis_connection.publish( self.ai_system.task.model.name + '|update',  "New measurement: %s"% metrics["metadata"]["date"])
 
     def viewGUI(self):
         gui_launcher = threading.Thread(target=self._view_gui_thread, args=[])

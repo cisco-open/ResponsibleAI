@@ -98,6 +98,9 @@ def get_metric_info_page():
     return html.Div( [
         html.P("metric groups"),
         get_tbl(),
+        
+        html.Hr(),
+        
         html.P("metrics info"),
         html.Div( id = "metrics_div")
     ])

@@ -58,9 +58,10 @@ def get_metric_page_graph():
                 }), 
         style = {"background-color":"Azure",
                 "border-width": "thin",
-                "border-color":"Blue",
+                "border-color":"LightGray",
                 "border-style":"solid",
-                "border-radius": "10px",
+                "border-radius": "3px",
+                "margin":"4"
                 })
 ])
 
@@ -86,23 +87,67 @@ def update_metrics(value):
         if redisUtil.info["metric_info"][value][m]["type"] in ["numeric"]:
             metrics.append(m)
     # print(metrics)
-    return dcc.Dropdown( metrics,  id='select_metrics'),
+    return html.Div( [
+        dcc.Dropdown( metrics,  id='select_metrics'),
+         dcc.Interval(
+            id='interval-component',
+            interval=1*1000, # in milliseconds
+            n_intervals=0
+        )])
 
 
 # callback for group combo
 #
 #
 
+# @app.callback(
+#     Output('graph_cnt', 'children'),
+#     Input('interval-component', 'n_intervals'),
+#     State('select_metrics', 'value'),
+#     State('select_group', 'value'),
+#     State('graph_cnt', 'children')
+# )
+# def update_graph_timer(n,metric,group, old):
+#     if not metric or not group:
+#         return old
+#     if redisUtil.subscribers["metric_graph"]:
+#         redisUtil.subscribers["metric_graph"] = False
+#         print("update happend")
+#         return update_graph(metric,group)
+#     else:
+#         print("update ignored")
+#         return old
+
+
+    
+
 @app.callback(
     Output('graph_cnt', 'children'),
+    Input('interval-component', 'n_intervals'),
     Input('select_metrics', 'value'),
-    State('select_group', 'value')
+    Input('select_group', 'value'),
+    State('graph_cnt', 'children')
 )
-def update_graph(metric,group):
+
+
+
+def update_graph(n,metric,group, old):
     
+    ctx = dash.callback_context
+    print( ctx.triggered)
+    
+    if 'prop_id' in ctx.triggered and ctx.triggered['prop_id'] == 'interval-component.n_intervals':
+        if redisUtil.subscribers["metric_graph"]:
+            print("new data")
+            redisUtil.subscribers["metric_graph"] = False
+        else:
+            print("ignore timer")
+            return old
+
+
     d = {"x":[], "value":[],"tag":[], "metric":[]}
     if not metric or not group:
-        fig = px.line( pd.DataFrame(df), x="x", y="value", color="metric" )
+        fig = px.line( pd.DataFrame(d), x="x", y="value", color="metric" )
         return dcc.Graph(figure=fig)
     
     for i,data in enumerate(redisUtil.values["metric_values"]):
@@ -112,8 +157,12 @@ def update_graph(metric,group):
         d["metric"].append( f"{group} : {metric}")
 
     df = pd.DataFrame(d)
-    fig = px.line(df, x="x", y="value", color="metric" )
-    fig.update_traces(textposition="bottom right")
+    # fig = px.line(df, x="x", y="value", color="metric" )
+    # fig.update_traces(textposition="bottom right")
+    
+    
+    fig = go.Figure(data=[go.Scatter(x=d["x"], y=d["value"]) ])
+
     fig.update_layout(
     xaxis = dict(
         tickmode = 'array',
@@ -135,6 +184,7 @@ def update_graph(metric,group):
         borderwidth=0)
 
 )
-    return dcc.Graph(figure=fig)    
+    return dcc.Graph(figure=fig) 
+
         
     

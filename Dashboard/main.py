@@ -25,11 +25,12 @@ from certificate_info_page import get_certificate_info_page
 from metric_page_details import get_metric_page_details
 from metric_page_graph import get_metric_page_graph
 
+from utils import Iconify
 
 
 import sys
 
-
+ 
 
 
 # the style arguments for the sidebar. We use position:fixed and a fixed width
@@ -43,6 +44,7 @@ SIDEBAR_STYLE = {
     "background-color": "#f8f9fa",
 }
 
+
 # the styles for the main content position it to the right of the sidebar and
 # add some padding.
 CONTENT_STYLE = {
@@ -52,25 +54,40 @@ CONTENT_STYLE = {
 }
 sidebar = html.Div(
     [
-        html.H2("RAI", className="display-4"),
+        html.H2( ["RAI",html.Img(src = "./assets/img/rai_logo.png", style={"float":"right","width":"62px","height":"80px"} )], className="display-4"),
         
         html.P(
             "A framework for responsible AI development", className="small"
         ),
         html.Hr(),
         dbc.Nav(
-            [
-                dbc.NavLink("Home", href="/", active="exact"),
+            [ 
+                dbc.NavLink(  
+                    Iconify( "Home", "fa-solid fa-home" , "25px"), 
+                    href="/", active="exact"  ),
                 html.Hr(),
+                dbc.NavLink( 
+                    Iconify( "Metrics Details", "fas fa-table fas-10x" , "18px"),
+                    href="/metrics_details", active="exact"),
+                dbc.NavLink(
+                    Iconify( "Metrics Graphs", "fa-solid fa-chart-gantt" , "18px"),
+                    href="/metrics_graphs", active="exact"),
                 
-                dbc.NavLink("Metrics Details", href="/metrics_details", active="exact"),
-                dbc.NavLink("Metrics Graphs", href="/metrics_graphs", active="exact"),
-                # dbc.NavLink("Metrics", href="/metrics", active="exact"),
-                dbc.NavLink("Certificates", href="/certificates", active="exact"),
+                dbc.NavLink(
+                    Iconify( "Certificates", "fa-solid fa-list-check" , "45px"),
+                    href="/certificates", active="exact"),
+                
                 html.Hr(),
-                dbc.NavLink("Model Info", href="/modelInfo", active="exact"),
-                dbc.NavLink("Metrics Info", href="/metricsInfo", active="exact"),
-                dbc.NavLink("Certificates Info", href="/certificateInfo", active="exact"),
+                dbc.NavLink(
+                    Iconify( "Model Info", "fa-solid fa-circle-info" , "55px"),
+                    href="/modelInfo", active="exact"),
+                
+                dbc.NavLink(
+                    Iconify( "Metrics Info", "fa-solid fa-file-lines" , "50px"),
+                    href="/metricsInfo", active="exact"),
+                dbc.NavLink( 
+                    Iconify( "Certificates Info", "fa-solid fa-check-double" , "20px"),
+                    href="/certificateInfo", active="exact"),
                 
             ],
             vertical=True,
@@ -121,5 +138,7 @@ if __name__ == "__main__":
     if len(sys.argv) == 2:
         model_name = sys.argv[1]
 
-    redisUtil.initialize(model_name)
+    if not redisUtil.initialized:
+        redisUtil.initialize(model_name, subscribers={"metric_detail","metric_graph","certificate"})
     app.run_server(debug=True)
+    redisUtil.close()

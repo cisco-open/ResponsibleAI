@@ -45,7 +45,7 @@ def get_accordion(id):
                                         html.Tbody( rows )
         ],
          bordered=True,
-
+        striped=True
 
         )
         items.append(
