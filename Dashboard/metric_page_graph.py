@@ -23,6 +23,13 @@ def get_metric_page_graph():
     c = dcc.Graph(figure=fig)
 
     return  html.Div([
+    
+         dcc.Interval(
+            id='interval-component',
+            interval=1*1000, # in milliseconds
+            n_intervals=0
+         ),
+
     html.P(""),
     html.P(""),
     html.P(""),
@@ -77,7 +84,8 @@ def get_metric_page_graph():
 )
 def update_metrics(value):
     if not value:
-        return dcc.Dropdown( [],  id='select_metrics'),
+        return dcc.Dropdown( [],  id='select_metrics')
+        
     # print('value :',value )
     
     metrics = []
@@ -87,14 +95,7 @@ def update_metrics(value):
         if redisUtil.info["metric_info"][value][m]["type"] in ["numeric"]:
             metrics.append(m)
     # print(metrics)
-    return html.Div( [
-        dcc.Dropdown( metrics,  id='select_metrics'),
-         dcc.Interval(
-            id='interval-component',
-            interval=1*1000, # in milliseconds
-            n_intervals=0
-        )])
-
+    return  dcc.Dropdown( metrics,  id='select_metrics') 
 
 # callback for group combo
 #
@@ -137,7 +138,7 @@ def update_graph(n,metric,group, old):
     print( ctx.triggered)
     
     if 'prop_id' in ctx.triggered and ctx.triggered['prop_id'] == 'interval-component.n_intervals':
-        if redisUtil.subscribers["metric_graph"]:
+        if redisUtil.has_update("metric_graph", reset = True):
             print("new data")
             redisUtil.subscribers["metric_graph"] = False
         else:
@@ -145,7 +146,7 @@ def update_graph(n,metric,group, old):
             return old
 
 
-    d = {"x":[], "value":[],"tag":[], "metric":[]}
+    d = {"x":[], "value":[],"tag":[], "metric":[],"text":[]}
     if not metric or not group:
         fig = px.line( pd.DataFrame(d), x="x", y="value", color="metric" )
         return dcc.Graph(figure=fig)
@@ -155,19 +156,21 @@ def update_graph(n,metric,group, old):
         d["value"].append(data[group][metric])
         d["tag"].append(data["metadata"]["tag"])
         d["metric"].append( f"{group} : {metric}")
+        d["text"].append( "%.2f"%data[group][metric])
 
     df = pd.DataFrame(d)
     # fig = px.line(df, x="x", y="value", color="metric" )
     # fig.update_traces(textposition="bottom right")
     
     
-    fig = go.Figure(data=[go.Scatter(x=d["x"], y=d["value"]) ])
-
+    fig = px.line(df, x="x", y="value", color="metric", markers=True, text="text" ) 
+    fig.update_traces(textposition="top center")
     fig.update_layout(
     xaxis = dict(
         tickmode = 'array',
         tickvals =  d["x"],
         ticktext = d["tag"]
+        
     )
     ,
     legend=dict(
@@ -183,7 +186,7 @@ def update_graph(n,metric,group, old):
         bordercolor="Black",
         borderwidth=0)
 
-)
+)   
     return dcc.Graph(figure=fig) 
 
         

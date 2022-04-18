@@ -138,7 +138,6 @@ if __name__ == "__main__":
     if len(sys.argv) == 2:
         model_name = sys.argv[1]
 
-    if not redisUtil.initialized:
-        redisUtil.initialize(model_name, subscribers={"metric_detail","metric_graph","certificate"})
+    redisUtil.initialize(model_name, subscribers={"metric_detail","metric_graph","certificate"})
     app.run_server(debug=True)
-    redisUtil.close()
+    
