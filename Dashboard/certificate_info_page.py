@@ -17,7 +17,7 @@ def get_accordion():
         
         # print( c.keys())    
          
-
+        print(c)
         detail = dbc.Table(
             children = [
                 html.Thead(
@@ -67,7 +67,7 @@ def dic2tbl(d):
         ),
         
         html.Tbody(
-            html.Tr([  html.Td( str(x) ) for x in d.values()  ])
+            html.Tr([  html.Td( process(x) ) for x in d.values()  ])
           )
         ],
          bordered=True,
@@ -86,8 +86,10 @@ def process(v):
     if isinstance(v,dict):
         return dic2tbl(v)
     if type(v) in (tuple, list):
+        print("list found", v)
         # return pp.pformat(v)
-        return ("\n".join(v))
+        return [ dbc.Row(dbc.Col(html.Div(str(x)))) for x in v] 
+        return ( "\n".join( [ str (x) for x in v] ))
     if isinstance(v,dict):
         return pp.pformat(v)
         return json.dumps(v, indent=4)

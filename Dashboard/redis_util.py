@@ -48,7 +48,7 @@ class RedisUtils(object):
         try:
             print("channel subsribed", self._model_name+"|update")
             self._redis_pub.subscribe( **{ self._model_name+"|update": sub_handler} )
-            self._redis_pub.run_in_thread(sleep_time=.1)
+            # self._redis_pub.run_in_thread(sleep_time=.1)
         except:
             print("unable to subscribe to redis pub/sub")
 

@@ -26,10 +26,12 @@ tbl_styling = {
         'fontWeight': 'bold',
         'textAlign': 'center'
     }}
-
-
+ 
+    
 g_config = []
-def get_tbl():
+
+
+def get_metric_groups():
 
     d = {"Metric Group Name":[],"tags":[],"dependency list":[], "complexity":[]}
     for g,v in redisUtil.info["metric_info"].items():
@@ -37,37 +39,20 @@ def get_tbl():
         d["tags"].append(", ".join(v["meta"]["tags"]))
         d["complexity"].append(v["meta"]["complexity_class"])
         d["dependency list"].append("")
-    df = pd.DataFrame(data = d)
     
+    # rows  = []
+    # for i in range(len(d["tags"])):
+    #     rows.append ( html.Tr([  html.Td( process( d[x][i])) for x in d]))
+         
     return dash_table.DataTable(
-        id = "groups",
-        data = df.to_dict('records'), 
-        columns = [{"name": i, "id": i} for i in df.columns],
+        pd.DataFrame(d).to_dict('records'),
+        id = 'groups',
+        style_cell={'fontSize':16, 'font-family':'Georgia, serif'},
         **tbl_styling
-     )
+        )
 
-def get_tbl2(config):
-    table_header = [
-    html.Thead(html.Tr([html.Th("Metric Group Name"), html.Th("Tags"), html.Th("dependency list"), html.Th("complexity")]))
-    ]
-
-    rows=[]
-    for g,v in config["redis"].info["metric_info"].items():
-        rows.append( html.Tr( [
-                                html.Td(g),
-                                html.Td(  ", ".join(v["meta"]["tags"])),
-                                html.Td(v["meta"]["dependency_list"]),
-                                html.Td(v["meta"]["complexity_class"])
-                            ]) )
-
-    table_body = [html.Tbody(rows)]
-    table = dbc.Table(table_header + table_body, bordered=True,
-    dark=False,
-    hover=True,
-    responsive=True,
-    striped=True,)
-    return table
-
+     
+ 
  
  
 def get_metrics(group):
@@ -91,13 +76,14 @@ def get_metrics(group):
     return dash_table.DataTable(df.to_dict('records'), 
     [{"name": i, "id": i} for i in df.columns],
     id = "metrics" ,
+    style_cell={'fontSize':16, 'font-family':'Georgia, serif'},
     **tbl_styling)
 
 def get_metric_info_page():
     
     return html.Div( [
         html.P("metric groups"),
-        get_tbl(),
+        get_metric_groups(),
         
         html.Hr(),
         

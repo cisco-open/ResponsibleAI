@@ -140,4 +140,4 @@ if __name__ == "__main__":
 
     redisUtil.initialize(model_name, subscribers={"metric_detail","metric_graph","certificate"})
     app.run_server(debug=True)
-    
+    redisUtil.close()

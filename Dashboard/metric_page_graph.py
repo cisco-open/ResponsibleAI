@@ -14,7 +14,6 @@ def get_metric_page_graph():
     groups = []
     for g in redisUtil.info["metric_info"]:
         
-        # print(g)
         groups.append(g)
 
 
@@ -24,53 +23,53 @@ def get_metric_page_graph():
 
     return  html.Div([
     
-         dcc.Interval(
+        dcc.Interval(
             id='interval-component',
             interval=1*1000, # in milliseconds
             n_intervals=0
          ),
 
-    html.P(""),
-    html.P(""),
-    html.P(""),
-    html.P(""),
-    html.P(""),
+        html.P(""),
+        html.P(""),
+        html.P(""),
+        html.P(""),
+        html.P(""),
     
-     html.Div( 
-        
         html.Div( 
-            [
-                html.P( "select metric group"),
-                dcc.Dropdown( groups,  id='select_group'),
-                html.P( ""),
-                html.P( "select metric"),
-                html.Div(id='select_metric_cnt'),
-            ], 
-        style={ "margin":"20px",
-                }),
+        
+            html.Div( [
+                    html.P( "select metric group"),
+                    dcc.Dropdown( groups,  id='select_group'),
+                    html.P( ""),
+                    html.P( "select metric"),
+                    html.Div(id='select_metric_cnt', 
+                    children=html.Div(id="select_metrics")),
+                ], 
+                style={ "margin":"20px",
+                    }),
 
-        style = {"background-color":"Azure",
-                "border-width": "thin",
-                "border-color":"Blue",
-                "border-style":"solid",
-                "border-radius": "10px",
-                }
-    ),
+            style = {"background-color":"Azure",
+                    "border-width": "thin",
+                    "border-color":"Blue",
+                    "border-style":"solid",
+                    "border-radius": "10px",
+                    }
+            ),
     
     
-    html.Hr(),
-    html.Div( 
-        html.Div(id='graph_cnt', children = [c],
-         style={ "margin":"2",
-                }), 
-        style = {"background-color":"Azure",
-                "border-width": "thin",
-                "border-color":"LightGray",
-                "border-style":"solid",
-                "border-radius": "3px",
-                "margin":"4"
-                })
-])
+            html.Hr(),
+            html.Div( 
+                html.Div(id='graph_cnt', children = [c],
+                style={ "margin":"2",
+                        }), 
+            style = {"background-color":"Azure",
+                    "border-width": "thin",
+                    "border-color":"LightGray",
+                    "border-style":"solid",
+                    "border-radius": "3px",
+                    "margin":"4"
+                    })
+        ])
 
 
 # callback for group combo
@@ -96,31 +95,8 @@ def update_metrics(value):
             metrics.append(m)
     # print(metrics)
     return  dcc.Dropdown( metrics,  id='select_metrics') 
+ 
 
-# callback for group combo
-#
-#
-
-# @app.callback(
-#     Output('graph_cnt', 'children'),
-#     Input('interval-component', 'n_intervals'),
-#     State('select_metrics', 'value'),
-#     State('select_group', 'value'),
-#     State('graph_cnt', 'children')
-# )
-# def update_graph_timer(n,metric,group, old):
-#     if not metric or not group:
-#         return old
-#     if redisUtil.subscribers["metric_graph"]:
-#         redisUtil.subscribers["metric_graph"] = False
-#         print("update happend")
-#         return update_graph(metric,group)
-#     else:
-#         print("update ignored")
-#         return old
-
-
-    
 
 @app.callback(
     Output('graph_cnt', 'children'),
@@ -135,7 +111,7 @@ def update_metrics(value):
 def update_graph(n,metric,group, old):
     
     ctx = dash.callback_context
-    print( ctx.triggered)
+    # print( ctx.triggered)
     
     if 'prop_id' in ctx.triggered and ctx.triggered['prop_id'] == 'interval-component.n_intervals':
         if redisUtil.has_update("metric_graph", reset = True):
@@ -155,7 +131,8 @@ def update_graph(n,metric,group, old):
         d["x"].append(i+1)
         d["value"].append(data[group][metric])
         d["tag"].append(data["metadata"]["tag"])
-        d["metric"].append( f"{group} : {metric}")
+        # d["metric"].append( f"{group} : {metric}")
+        d["metric"].append( f"{metric}")
         d["text"].append( "%.2f"%data[group][metric])
 
     df = pd.DataFrame(d)
@@ -166,28 +143,34 @@ def update_graph(n,metric,group, old):
     fig = px.line(df, x="x", y="value", color="metric", markers=True, text="text" ) 
     fig.update_traces(textposition="top center")
     fig.update_layout(
-    xaxis = dict(
-        tickmode = 'array',
-        tickvals =  d["x"],
-        ticktext = d["tag"]
         
-    )
-    ,
-    legend=dict(
-        
-        
-        title_font_family="Times New Roman",
-        font=dict(
-            family="Courier",
-            size=14,
-            color="black"
-        ),
-        bgcolor="Azure",
-        bordercolor="Black",
-        borderwidth=0)
+        xaxis = dict(
+            tickmode = 'array',
+            tickvals =  d["x"],
+            ticktext = d["tag"]
+            
+        )
+        ,
+        legend=dict(
+            
+            
+            title_font_family="Times New Roman",
+            font=dict(
+                family="Times New Roman",
+                size=14,
+                color="black"
+            ),
+            bgcolor="Azure",
+            bordercolor="Black",
+            borderwidth=1 
+             
+            )
+       
 
-)   
-    return dcc.Graph(figure=fig) 
+        
+        
+    )   
+    return dcc.Graph(figure=fig ) 
 
         
     

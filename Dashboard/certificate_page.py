@@ -52,8 +52,17 @@ def generate_table(id):
     
     rows = []
     for k,v  in  redisUtil.values["certificate_values" ][id].items():
+        
+        if v['value']:
+            status = html.Div( [
+                "Passed ", html.I( className = "fa-solid fa-check", style={"width":"30px","height":"30px", "margin-left":"10px", "color":"green"})
+            ])
+        else:
+            status = html.Div( [
+                 "Failed" , html.I( className = "fa-solid fa-xmark", style={"width":"30px","height":"30px","margin-left":"25px", "color":"red"})
+            ])
         rows.append ( html.Tr( 
-            [ html.Td(k[:-4]), html.Td( v['explanation'].ljust(20) ), html.Td( "Passed" if v['value']==True else "Failed") ]
+            [ html.Td(k[:-4]), html.Td( v['explanation'].ljust(20) ), html.Td(status) ]
         ))
     return dbc.Table(
         # className="cert_table",
