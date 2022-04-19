@@ -8,20 +8,30 @@ from dash import dcc
 import plotly.express as px
 import plotly.graph_objs as go
 
+# layout = None
 
 def get_metric_page_graph():
+    # global layout
     
+
+    # if layout is not None:
+    #     print("layout found")
+    #     return layout
+     
+    # print("new layout")
     groups = []
+    print (redisUtil.info.keys())
     for g in redisUtil.info["metric_info"]:
-        
         groups.append(g)
 
 
     d = {"x":[], "value":[],"tag":[], "metric":[]}
     fig = px.line( pd.DataFrame(d), x="x", y="value", color="metric", markers ="True" )
     c = dcc.Graph(figure=fig)
-
-    return  html.Div([
+    v = None
+    if groups:
+        v = groups[0]
+    layout =   html.Div([
     
         dcc.Interval(
             id='interval-component',
@@ -39,7 +49,7 @@ def get_metric_page_graph():
         
             html.Div( [
                     html.P( "select metric group"),
-                    dcc.Dropdown( groups,  id='select_group'),
+                    dcc.Dropdown( groups,  id='select_group',value=v, persistence=True, persistence_type='session'),
                     html.P( ""),
                     html.P( "select metric"),
                     html.Div(id='select_metric_cnt', 
@@ -71,7 +81,7 @@ def get_metric_page_graph():
                     })
         ])
 
-
+    return layout
 # callback for group combo
 #
 #
@@ -79,11 +89,15 @@ def get_metric_page_graph():
 @app.callback(
     Output('select_metric_cnt', 'children'),
     Input('select_group', 'value'),
+    State('select_metric_cnt', 'children')
     
 )
-def update_metrics(value):
+
+def update_metrics(value, children):
+    print("update metric callback : ", value)
     if not value:
-        return dcc.Dropdown( [],  id='select_metrics')
+        # return children
+        return dcc.Dropdown( [],  id='select_metrics',persistence=True, persistence_type='session')
         
     # print('value :',value )
     
@@ -94,10 +108,8 @@ def update_metrics(value):
         if redisUtil.info["metric_info"][value][m]["type"] in ["numeric"]:
             metrics.append(m)
     # print(metrics)
-    return  dcc.Dropdown( metrics,  id='select_metrics') 
- 
-
-
+    return  dcc.Dropdown( metrics,  id='select_metrics',persistence=True, persistence_type='session') 
+  
 @app.callback(
     Output('graph_cnt', 'children'),
     Input('interval-component', 'n_intervals'),
@@ -171,6 +183,3 @@ def update_graph(n,metric,group, old):
         
     )   
     return dcc.Graph(figure=fig ) 
-
-        
-    

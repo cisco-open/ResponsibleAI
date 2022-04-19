@@ -79,7 +79,7 @@ sidebar = html.Div(
                 
                 html.Hr(),
                 dbc.NavLink(
-                    Iconify( "Model Info", "fa-solid fa-circle-info" , "55px"),
+                    Iconify( "Project Info", "fa-solid fa-circle-info" , "55px"),
                     href="/modelInfo", active="exact"),
                 
                 dbc.NavLink(
@@ -99,7 +99,7 @@ sidebar = html.Div(
 
 content = html.Div(id="page-content", style=CONTENT_STYLE)
 
-app.layout = html.Div([dcc.Location(id="url"), sidebar, content])
+app.layout = html.Div([dcc.Location(id="url", refresh=False), sidebar, content])
 
 
 @app.callback(Output("page-content", "children"), [Input("url", "pathname")])
@@ -115,7 +115,7 @@ def render_page_content(pathname):
     elif pathname == "/certificates":
         return get_certificate_page()
     elif pathname == "/modelInfo":
-        return get_model_info_page()
+        return get_model_info_page()    
 
     elif pathname == "/metricsInfo":
         return get_metric_info_page()

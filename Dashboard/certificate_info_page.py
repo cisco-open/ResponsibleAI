@@ -16,14 +16,14 @@ def get_accordion():
         detail = dbc.Table(
             children = [
                 html.Thead(
-                     html.Tr([  html.Th("Description") ,
+                     html.Tr([  html.Th("Description", style = {"width": "25%"}) ,
                                 html.Th('Tags'),
                                 html.Th("Level"),
                                 html.Th("Condition")])
                                                     ),
 
                 html.Tbody(  
-                    html.Tr([  html.Td( process_cell(c["description"])) ,
+                    html.Tr([  html.Td( process_cell(c["description"]), style = {"width": "25%"}) ,
                                 html.Td(process_cell(c['tags'])),
                                 html.Td(process_cell(c["level"])),
                                 html.Td(process_cell(c["condition"]))])

@@ -3,8 +3,11 @@ import dash_bootstrap_components as dbc
 from dash import Input, Output, dcc, html
 
 import dash_daq as daq
-
+# import dash_trich_components as dtc
+ 
 def get_card( t1, t2, t3, ic, n , id, c):
+    # c = "lightcyan"
+    # c= "lightgoldenrodyellow"
     return dbc.Card(
     [
         # html.I(className=ic, style={}),
@@ -14,7 +17,7 @@ def get_card( t1, t2, t3, ic, n , id, c):
                 html.H4(t1, className="card-title"),
                 
                 daq.Gauge(
-    color={"gradient":True,"ranges":{"green":[0,6],"yellow":[6,8],"red":[8,10]}},
+    color={"gradient":True,"ranges":{"red":[0,4],"yellow":[4,8],"green":[8,10]}},
     value=n,
     label='',
     max=10,
