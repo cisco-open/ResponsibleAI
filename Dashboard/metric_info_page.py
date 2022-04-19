@@ -39,11 +39,7 @@ def get_metric_groups():
         d["tags"].append(", ".join(v["meta"]["tags"]))
         d["complexity"].append(v["meta"]["complexity_class"])
         d["dependency list"].append("")
-    
-    # rows  = []
-    # for i in range(len(d["tags"])):
-    #     rows.append ( html.Tr([  html.Td( process( d[x][i])) for x in d]))
-         
+  
     return dash_table.DataTable(
         pd.DataFrame(d).to_dict('records'),
         id = 'groups',

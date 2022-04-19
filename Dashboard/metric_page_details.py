@@ -11,15 +11,7 @@ import pprint
 pp = pprint.PrettyPrinter(indent=4)
 import json
 
-def process(v):
-     
-    if type(v) in (tuple, list):
-        # return pp.pformat(v)
-        return ("\n".join( [ str(a) for a in v] ))
-    if isinstance(v,dict):
-        return pp.pformat(v)
-        return json.dumps(v, indent=4)
-    return str(v)
+from utils import process_cell
 
 
 def get_accordion(id):
@@ -33,7 +25,7 @@ def get_accordion(id):
         rows = []
         for k,v  in  values[group].items():
             rows.append ( html.Tr( 
-                [ html.Td(k), html.Td( process(v)) ]
+                [ html.Td(k), html.Td( process_cell(v, list_vertical = False)) ]
             ))
 
         detail = dbc.Table(
@@ -92,6 +84,8 @@ def get_form():
         dropdown
 
     ])
+
+
 def get_metric_page_details():
     
      
