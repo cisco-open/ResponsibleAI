@@ -2,10 +2,8 @@ import dash
 import dash_bootstrap_components as dbc
 from dash import Input, Output, dcc, html
 from server import app, redisUtil
-import pprint
-pp = pprint.PrettyPrinter(indent=4)
-import json
-
+import pandas as pd
+from utils import process_cell
 
 def get_accordion():
 
@@ -15,9 +13,6 @@ def get_accordion():
     
     for c in certs:
         
-        # print( c.keys())    
-         
-        print(c)
         detail = dbc.Table(
             children = [
                 html.Thead(
@@ -28,10 +23,10 @@ def get_accordion():
                                                     ),
 
                 html.Tbody(  
-                    html.Tr([  html.Td( process(c["description"])) ,
-                                html.Td(process(c['tags'])),
-                                html.Td(process(c["level"])),
-                                html.Td(process(c["condition"]))])
+                    html.Tr([  html.Td( process_cell(c["description"])) ,
+                                html.Td(process_cell(c['tags'])),
+                                html.Td(process_cell(c["level"])),
+                                html.Td(process_cell(c["condition"]))])
                                                     ) 
             ] 
         ,
@@ -55,23 +50,30 @@ def get_accordion():
         
     )
     return acc
+ 
 
-def dic2tbl(d):
+def generate_table():
     
+    
+    rows = []
+    for k,v  in  redisUtil.info["certificate_info" ].items():
+        
+        rows.append ( html.Tr( 
+            [ html.Td([process_cell(x)])   for x in v.values()  ]
+        ))
+        
      
+    
     return dbc.Table(
-        # className="model-info-table",
         children = [
         html.Thead(
-            html.Tr([  html.Th(x) for x in d.keys()  ])
+            # html.Tr([  html.Th("Certificate")   ])
+            html.Tr([ html.Th(x)   for x in next( iter(redisUtil.info["certificate_info" ].values()) )  ])
         ),
         
-        html.Tbody(
-            html.Tr([  html.Td( process(x) ) for x in d.values()  ])
-          )
+        html.Tbody(  rows)
         ],
-         bordered=True,
-    # dark=False,
+        bordered=True,
         hover=True,
         responsive=True,
         striped=True,
@@ -81,58 +83,6 @@ def dic2tbl(d):
         )
         
 
-def process(v):
-     
-    if isinstance(v,dict):
-        return dic2tbl(v)
-    if type(v) in (tuple, list):
-        print("list found", v)
-        # return pp.pformat(v)
-        return [ dbc.Row(dbc.Col(html.Div(str(x)))) for x in v] 
-        return ( "\n".join( [ str (x) for x in v] ))
-    if isinstance(v,dict):
-        return pp.pformat(v)
-        return json.dumps(v, indent=4)
-    return str(v)
-import pandas as pd
-def generate_table():
-    
-    # df = pd.DataFrame(redisUtil.info["certificate_info" ])
-    # return dbc.Table.from_dataframe(df, striped=True, bordered=True, hover=True)
-    rows = []
-    for k,v  in  redisUtil.info["certificate_info" ].items():
-        
-        rows.append ( html.Tr( 
-            [ html.Td([process(x)])   for x in v.values()  ]
-        ))
-        
-        # rows.append( html.Thead(
-        # rows.append ( html.Tr( 
-        #     [ html.Td(k), html.Td( process(v)) ]
-        # ))
-        
-    
-    return dbc.Table(
-        # className="model-info-table",
-        children = [
-        html.Thead(
-            # html.Tr([  html.Th("Certificate")   ])
-            html.Tr([ html.Th(x)   for x in next( iter(redisUtil.info["certificate_info" ].values()) )  ])
-        ),
-        
-        html.Tbody(  rows)
-        ],
-         bordered=True,
-    # dark=False,
-    hover=True,
-    responsive=True,
-    striped=True,
-    style={ "while-space":"pre",
-            "padding-top": "12px",
-            "padding-bottom": "12px"}
-    )
-     
-
 
 
 def get_certificate_info_page():
@@ -140,7 +90,6 @@ def get_certificate_info_page():
     
     return html.Div([
     html.H4(children='List of certificates'),
-    # generate_table( )
     get_accordion()
     ])
 

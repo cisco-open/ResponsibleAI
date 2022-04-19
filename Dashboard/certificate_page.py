@@ -3,21 +3,7 @@ import dash_bootstrap_components as dbc
 from dash import Input, Output, dcc, html
 
 from server import app, redisUtil
-import pprint
-pp = pprint.PrettyPrinter(indent=4)
-import json
-
-def process(v):
-     
-    if type(v) in (tuple, list):
-        # return pp.pformat(v)
-        return ("\n".join(v))
-    if isinstance(v,dict):
-        return pp.pformat(v)
-        return json.dumps(v, indent=4)
-    return str(v)
-
-
+from utils import process_cell 
 
 def get_form():
 
