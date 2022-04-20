@@ -4,6 +4,8 @@ from dash import Input, Output, dcc, html
 from server import app, redisUtil
 import pandas as pd
 from utils import process_cell
+import logging
+logger = logging.getLogger(__name__)
 
 def get_accordion():
 

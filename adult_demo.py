@@ -32,7 +32,7 @@ xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=1, stratify=y
 from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
 reg = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=0)
 
-model = Model(agent=reg, name="AdultDB", display_name="predict income", model_class="Random Forest Classifier", adaptive=False)
+model = Model(agent=reg,   model_class="Random Forest Classifier", adaptive=False)
 task = Task(model=model, type='binary_classification', description="Detect Cancer in patients using skin measurements")
 configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}},
                                 "protected_attributes": ["race"], "positive_label": 1},
@@ -40,7 +40,7 @@ configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivil
 
 dataset = Dataset(  train_data = Data(xTrain , yTrain), 
                         test_data = Data(xTest , yTest)) 
-ai = AISystem(meta_database=meta, dataset=dataset, task=task )
+ai = AISystem(name = "AdultDB", meta_database=meta, dataset=dataset, task=task )
 ai.initialize(user_config=configuration)
 
 

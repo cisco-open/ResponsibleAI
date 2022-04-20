@@ -10,6 +10,12 @@ this feature you must install dash-bootstrap-components >= 0.11.0.
 For more details on building multi-page Dash applications, check out the Dash
 documentation: https://dash.plot.ly/urls
 """
+import logging
+import sys
+
+logging.basicConfig(stream=sys.stdout, level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 import dash
 import dash_bootstrap_components as dbc
 from dash import Input, Output, dcc, html
@@ -24,7 +30,7 @@ from certificate_info_page import get_certificate_info_page
 
 from metric_page_details import get_metric_page_details
 from metric_page_graph import get_metric_page_graph
-
+from setting_page import get_setting_page
 from utils import Iconify
 
 
@@ -55,7 +61,7 @@ CONTENT_STYLE = {
 
 def get_project_list():
     projs = redisUtil.get_projects_list()
-    print(projs)
+    logger.info( "projects list acquired : %s"%projs)
 
 def get_sidebar():
 
@@ -85,6 +91,9 @@ def get_sidebar():
                         Iconify( "Home", "fa-solid fa-home" , "25px"), 
                         href="/", active="exact"  ),
                     
+                    dbc.NavLink(  
+                        Iconify( "Settings", "fa-solid fa-gear" , "25px"), 
+                        href="/settings", active="exact"  ),
                     html.Hr(),
                     dbc.NavLink( 
                         Iconify( "Metrics Details", "fas fa-table fas-10x" , "18px"),
@@ -130,13 +139,14 @@ content = html.Div(id="page-content", style=CONTENT_STYLE)
 
 def render_page_content(pathname,value):
     ctx = dash.callback_context
-    # print( ctx.triggered)
-    
-    # print("Valie = ",value,ctx.triggered)
+
     redisUtil.set_current_project(value)
 
     if pathname == "/":
         return get_home_page() 
+    elif pathname == "/settings":
+        return get_setting_page()
+    
     elif pathname == "/metrics":
         return get_metric_page()
     elif pathname == "/metrics_details":

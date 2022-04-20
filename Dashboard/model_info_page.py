@@ -2,10 +2,9 @@ import dash
 import dash_bootstrap_components as dbc
 from dash import Input, Output, dcc, html
 from server import app, redisUtil
-import pprint
-pp = pprint.PrettyPrinter(indent=4)
-import json
 from utils import process_cell
+import logging
+logger = logging.getLogger(__name__)
 
 def generate_table():
     

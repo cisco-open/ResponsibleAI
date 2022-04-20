@@ -3,6 +3,8 @@ import dash_bootstrap_components as dbc
 from dash import Input, Output, dcc, html, State
 from server import app, redisUtil
 import pandas as pd
+import logging
+logger = logging.getLogger(__name__)
 
 from dash import dcc
 import plotly.express as px
@@ -41,7 +43,7 @@ def get_metric_page():
 @app.callback(Output('tabs-content-classes', 'children'),
               Input('tabs-with-classes', 'value'))
 def render_content(tab):
-    print("tab",tab)
+     
     if tab == 'details':
         return get_metric_page_details()
     elif tab == 'plots':

@@ -1,6 +1,8 @@
 import dash
 import dash_bootstrap_components as dbc
 from dash import Input, Output, dcc, html
+import logging
+logger = logging.getLogger(__name__)
 
 from server import app, redisUtil
 from utils import process_cell 

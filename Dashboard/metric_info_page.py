@@ -2,6 +2,8 @@ import dash
 import dash_bootstrap_components as dbc
 from dash import Input, Output, dcc, html, State
 from server import app, redisUtil
+import logging
+logger = logging.getLogger(__name__)
 
  
 from dash import dash_table
@@ -98,8 +100,6 @@ def update(active_cell,data):
         col = active_cell['column_id']
         row = active_cell['row']
         group_name = data[row]["Metric Group Name"]
-
-        # print("group name = ", group_name)
         return [get_metrics(group_name)]
 
 

@@ -5,18 +5,24 @@ import sys
 import datetime
 import functools
 from collections import defaultdict
+import numpy as np
+import logging
+logger = logging.getLogger(__name__)
+
+
 class RedisUtils(object):
     
     
 
-    def __init__(self, host="localhost", port=6379, db=0):
+    def __init__(self, host="localhost", port=6379, db=0, precision=3, text_maxlen=100):
         self._host = host
         self._port = port 
         self._db = db
         
         
         
-
+        self._precision = precision
+        self._maxlen = text_maxlen
         self.values = {}
         self.info = {}
         self._initialized = False
@@ -40,7 +46,7 @@ class RedisUtils(object):
     def _init_pubsub(self):
         
         def sub_handler( msg):
-            print("a new message received: ", msg)
+            logger.info( f"a new message received: {msg}")
             if self._current_project_name:
                 self._update_info()
                 self._update_values()
@@ -50,11 +56,11 @@ class RedisUtils(object):
         self._redis_pub = self._redis.pubsub()
         
         try:
-            print("channel subsribed", self._model_name+"|update")
+            logger.info( "channel subsribed : %s"%(self._model_name+"|update") )
             self._redis_pub.subscribe( **{ self._model_name+"|update": sub_handler} )
             # self._redis_pub.run_in_thread(sleep_time=.1)
         except:
-            print("unable to subscribe to redis pub/sub")
+            logger.warning("unable to subscribe to redis pub/sub")
 
 
 
@@ -79,6 +85,12 @@ class RedisUtils(object):
         self._update_projects()
         self._initialized = True
 
+
+    def reformat(self, precision):
+        self._precision = precision
+        self._current_project = self._reformat_data(self._current_project)
+
+
     def _reload(self):
         
         self._update_projects()
@@ -92,7 +104,7 @@ class RedisUtils(object):
                 self._redis_pub.unsubscribe(self._model_name+"|update")
                 self._redis_pub.close()
             except:
-                print("Problem in closing pub/sub")
+                logger.warning("Problem in closing pub/sub")
         self._redis.close()
     
 
@@ -108,13 +120,14 @@ class RedisUtils(object):
             return self._current_project["metric_values"]
 
     def set_current_project(self, project_name):
-        print("changing from", self._current_project_name, "to", project_name)
+        logger.info( f"changing current project from {self._current_project_name} to {project_name}")
         if self._current_project_name==project_name:
             return
         self._current_project_name = project_name
         self._current_project = {}
         self._update_info()
         self._update_values()
+        self._current_project = self._reformat_data(self._current_project)
 
     def _update_projects(self):
         self._projects = self._redis.smembers("projects")
@@ -124,7 +137,6 @@ class RedisUtils(object):
 
     def _update_info(self):
         self.info = {}
-        print(self._current_project_name)
         self._current_project["project_info"] = \
             json.loads( self._redis.get( self._current_project_name + '|project_info'))
         self._current_project["certificate_info"] = \
@@ -142,6 +154,16 @@ class RedisUtils(object):
         self._current_project["certificate_values"] = []
         for data in self._redis.lrange( self._current_project_name + '|certificate_values', 0, -1):
             self._current_project["certificate_values"].append( json.loads(data))
+
+    def _reformat_data (self,x ):
+        if type(x) is float:
+            return np.round(x,self._precision)
+        elif type(x) is list:
+            return [self._reformat_data(i) for i in x]
+        elif isinstance(x,dict):
+            return { k:self._reformat_data(v) for k, v in x.items() }
+        else: 
+            return x
 
     def __del__(self):
         pass

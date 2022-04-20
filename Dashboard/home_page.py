@@ -1,6 +1,8 @@
 import dash
 import dash_bootstrap_components as dbc
 from dash import Input, Output, dcc, html
+import logging
+logger = logging.getLogger(__name__)
 
 import dash_daq as daq
 # import dash_trich_components as dtc

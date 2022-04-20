@@ -1,6 +1,8 @@
 import dash
 import dash_bootstrap_components as dbc
 from redis_util import RedisUtils
+import logging
+logger = logging.getLogger(__name__)
 
 external_stylesheets=[
         dbc.themes.BOOTSTRAP,

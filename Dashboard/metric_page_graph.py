@@ -3,6 +3,8 @@ import dash_bootstrap_components as dbc
 from dash import Input, Output, dcc, html, State
 from server import app, redisUtil
 import pandas as pd
+import logging
+logger = logging.getLogger(__name__)
 
 from dash import dcc
 import plotly.express as px
@@ -11,14 +13,7 @@ import plotly.graph_objs as go
 # layout = None
 
 def get_metric_page_graph():
-    # global layout
-    
-
-    # if layout is not None:
-    #     print("layout found")
-    #     return layout
      
-    # print("new layout")
     groups = []
     
     for g in redisUtil.get_metric_info():
@@ -94,20 +89,19 @@ def get_metric_page_graph():
 )
 
 def update_metrics(value, children):
-    print("update metric callback : ", value)
+     
     if not value:
         # return children
         return dcc.Dropdown( [],  id='select_metrics',persistence=True, persistence_type='session')
         
-    # print('value :',value )
-    
+     
     metrics = []
     for m in redisUtil.get_metric_info()[value]:
         if m == "meta": 
             continue
         if redisUtil.get_metric_info()[value][m]["type"] in ["numeric"]:
             metrics.append(m)
-    # print(metrics)
+     
     return  dcc.Dropdown( metrics,  id='select_metrics',persistence=True, persistence_type='session') 
   
 @app.callback(
@@ -123,14 +117,14 @@ def update_metrics(value, children):
 def update_graph(n,metric,group, old):
     
     ctx = dash.callback_context
-    # print( ctx.triggered)
+     
     
     if 'prop_id' in ctx.triggered and ctx.triggered['prop_id'] == 'interval-component.n_intervals':
         if redisUtil.has_update("metric_graph", reset = True):
-            print("new data")
+            logger.info("new data")
             redisUtil.subscribers["metric_graph"] = False
         else:
-            print("ignore timer")
+            logger.info("ignore timer")
             return old
 
 
