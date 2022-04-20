@@ -1,3 +1,6 @@
+import logging
+logger = logging.getLogger(__name__)
+
 import dash
 import dash_bootstrap_components as dbc
 from dash import Input, Output, dcc, html, State
@@ -7,9 +10,7 @@ import pandas as pd
 from dash import dcc
 import plotly.express as px
 import plotly.graph_objs as go
-import pprint
-pp = pprint.PrettyPrinter(indent=4)
-import json
+ 
 
 from utils import process_cell
 
@@ -24,8 +25,21 @@ def get_accordion(id):
         
         rows = []
         for k,v  in  values[group].items():
+            
+            if isinstance(v,dict):
+                vs = []
+                for ki,vi in v.items():
+                    vs.append( html.Div( process_cell( {ki:vi}) , style={"max-width": "1200px"} ) )
+
+            #     vi = dbc.Table([])
+            #     v = [ ]
+            else:
+                vs = process_cell(v, list_vertical =   isinstance(v,dict))
+            
+             
+            
             rows.append ( html.Tr( 
-                [ html.Td(k), html.Td( process_cell(v, list_vertical = False)) ]
+                [ html.Td(k), html.Td( vs) ]
             ))
 
         detail = dbc.Table(
@@ -37,7 +51,8 @@ def get_accordion(id):
                                         html.Tbody( rows )
         ],
          bordered=True,
-        striped=True
+        striped=True ,
+        
 
         )
         items.append(
@@ -66,7 +81,7 @@ def get_form():
         ops.append( {"label":  m["metadata"]["date"]+  " - " +  m["metadata"]["tag"] , 
                      "value":i})
 
-    print(ops)
+     
     dropdown = html.Div(
         [
             dbc.Label("Select Measurement", html_for="dropdown"),
