@@ -12,6 +12,7 @@ from RAI.metrics import MetricManager
 
 class AISystem:
     def __init__(self,
+                name:str,
                 meta_database:MetaDatabase, 
                 dataset:Dataset, 
                 task:Task,
@@ -21,6 +22,7 @@ class AISystem:
         # if type(user_config) is not dict:
         #     raise TypeError("User config must be of type Dictionary")
         
+        self.name = name
         self.meta_database = meta_database
         self.task = task
         self.dataset = dataset
@@ -64,10 +66,10 @@ class AISystem:
             return self.dataset.test_data
         raise Exception(f"unknown data type : {data_type}" )
 
-    def get_model_info(self) -> dict :
-        result = {"id": self.task.model.name, "model": self.task.model.model_class, "adaptive": self.task.model.adaptive,
+    def get_project_info(self) -> dict :
+        result = {"id": self.name,  
                   "task_type": self.task.type, "configuration": self.metric_manager.user_config, "features": [], "description": self.task.description,
-                  "display_name": self.task.model.display_name}
+                  }
         for i in range(len(self.meta_database.features)):
             result['features'].append(self.meta_database.features[i].name)
         return result

@@ -18,7 +18,7 @@ def get_accordion(id):
 
     items = []
 
-    values = redisUtil.values["metric_values"][id]
+    values = redisUtil.get_metric_values()[id]
     for group in values:
         
         
@@ -50,8 +50,8 @@ def get_accordion(id):
     acc = dbc.Accordion(
         items,
         active_item= items[0].item_id,
-        start_collapsed=False,
-        always_open=True
+        # start_collapsed=False,
+        # always_open=True
         
     )
     return acc
@@ -61,7 +61,7 @@ def get_accordion(id):
 def get_form():
 
     ops = []
-    values = redisUtil.values["metric_values"]
+    values = redisUtil.get_metric_values() 
     for i,m in enumerate(values):
         ops.append( {"label":  m["metadata"]["date"]+  " - " +  m["metadata"]["tag"] , 
                      "value":i})

@@ -20,8 +20,8 @@ def get_metric_page_graph():
      
     # print("new layout")
     groups = []
-    print (redisUtil.info.keys())
-    for g in redisUtil.info["metric_info"]:
+    
+    for g in redisUtil.get_metric_info():
         groups.append(g)
 
 
@@ -102,10 +102,10 @@ def update_metrics(value, children):
     # print('value :',value )
     
     metrics = []
-    for m in redisUtil.info["metric_info"][value]:
+    for m in redisUtil.get_metric_info()[value]:
         if m == "meta": 
             continue
-        if redisUtil.info["metric_info"][value][m]["type"] in ["numeric"]:
+        if redisUtil.get_metric_info()[value][m]["type"] in ["numeric"]:
             metrics.append(m)
     # print(metrics)
     return  dcc.Dropdown( metrics,  id='select_metrics',persistence=True, persistence_type='session') 
@@ -139,7 +139,7 @@ def update_graph(n,metric,group, old):
         fig = px.line( pd.DataFrame(d), x="x", y="value", color="metric" )
         return dcc.Graph(figure=fig)
     
-    for i,data in enumerate(redisUtil.values["metric_values"]):
+    for i,data in enumerate(redisUtil.get_metric_values() ):
         d["x"].append(i+1)
         d["value"].append(data[group][metric])
         d["tag"].append(data["metadata"]["tag"])

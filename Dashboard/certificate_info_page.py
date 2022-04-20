@@ -9,7 +9,7 @@ def get_accordion():
 
     items = []
 
-    certs = redisUtil.info["certificate_info" ].values()
+    certs = redisUtil.get_certificate_info().values()
     
     for c in certs:
         
@@ -45,8 +45,8 @@ def get_accordion():
     acc = dbc.Accordion(
         items,
         active_item= items[0].item_id,
-        start_collapsed=False,
-        always_open=True
+        # start_collapsed=False,
+        # always_open=True
         
     )
     return acc
@@ -56,7 +56,7 @@ def generate_table():
     
     
     rows = []
-    for k,v  in  redisUtil.info["certificate_info" ].items():
+    for k,v  in  redisUtil.get_certificate_info().items():
         
         rows.append ( html.Tr( 
             [ html.Td([process_cell(x)])   for x in v.values()  ]
@@ -68,7 +68,7 @@ def generate_table():
         children = [
         html.Thead(
             # html.Tr([  html.Th("Certificate")   ])
-            html.Tr([ html.Th(x)   for x in next( iter(redisUtil.info["certificate_info" ].values()) )  ])
+            html.Tr([ html.Th(x)   for x in next( iter(redisUtil.get_certificate_info().values()) )  ])
         ),
         
         html.Tbody(  rows)

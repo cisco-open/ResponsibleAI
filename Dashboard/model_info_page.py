@@ -10,7 +10,7 @@ from utils import process_cell
 def generate_table():
     
     rows = []
-    for k,v  in  redisUtil.info["model_info" ].items():
+    for k,v  in  redisUtil.get_project_info().items():
         rows.append ( html.Tr( 
             [ html.Th(k), html.Td( process_cell(v)) ]
         ))

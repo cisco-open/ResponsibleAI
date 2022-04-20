@@ -52,58 +52,89 @@ CONTENT_STYLE = {
     "margin-right": "2rem",
     "padding": "2rem 1rem",
 }
-sidebar = html.Div(
-    [
-        html.H2( ["RAI",html.Img(src = "./assets/img/rai_logo.png", style={"float":"right","width":"62px","height":"80px"} )], className="display-4"),
-        
-        html.P(
-            "A framework for responsible AI development", className="small"
-        ),
-        html.Hr(),
-        dbc.Nav(
-            [ 
-                dbc.NavLink(  
-                    Iconify( "Home", "fa-solid fa-home" , "25px"), 
-                    href="/", active="exact"  ),
-                html.Hr(),
-                dbc.NavLink( 
-                    Iconify( "Metrics Details", "fas fa-table fas-10x" , "18px"),
-                    href="/metrics_details", active="exact"),
-                dbc.NavLink(
-                    Iconify( "Metrics Graphs", "fa-solid fa-chart-gantt" , "18px"),
-                    href="/metrics_graphs", active="exact"),
-                
-                dbc.NavLink(
-                    Iconify( "Certificates", "fa-solid fa-list-check" , "45px"),
-                    href="/certificates", active="exact"),
-                
-                html.Hr(),
-                dbc.NavLink(
-                    Iconify( "Project Info", "fa-solid fa-circle-info" , "55px"),
-                    href="/modelInfo", active="exact"),
-                
-                dbc.NavLink(
-                    Iconify( "Metrics Info", "fa-solid fa-file-lines" , "50px"),
-                    href="/metricsInfo", active="exact"),
-                dbc.NavLink( 
-                    Iconify( "Certificates Info", "fa-solid fa-check-double" , "20px"),
-                    href="/certificateInfo", active="exact"),
-                
-            ],
-            vertical=True,
-            pills=True,
-        ),
-    ],
-    style=SIDEBAR_STYLE,
-)
 
+def get_project_list():
+    projs = redisUtil.get_projects_list()
+    print(projs)
+
+def get_sidebar():
+
+    sidebar = html.Div(
+        [
+            html.H2( ["RAI",html.Img(src = "./assets/img/rai_logo.png", style={"float":"right","width":"62px","height":"80px"} )], className="display-4"),
+            
+            html.P(
+                "A framework for responsible AI development", className="small"
+            ),
+            html.Hr(),
+            dbc.Nav(
+                [ 
+                    html.P("Select the active project"),
+                    html.Div( id = "dummy_div", style={"display":"no"}),
+                    dcc.Dropdown(
+                        id="project_selector",
+                        options= redisUtil.get_projects_list() ,
+                        value=  redisUtil.get_projects_list()[0],
+                        persistence=True,
+
+                    ),
+                    
+                    html.Hr(),
+
+                    dbc.NavLink(  
+                        Iconify( "Home", "fa-solid fa-home" , "25px"), 
+                        href="/", active="exact"  ),
+                    
+                    html.Hr(),
+                    dbc.NavLink( 
+                        Iconify( "Metrics Details", "fas fa-table fas-10x" , "18px"),
+                        href="/metrics_details", active="exact"),
+                    dbc.NavLink(
+                        Iconify( "Metrics Graphs", "fa-solid fa-chart-gantt" , "18px"),
+                        href="/metrics_graphs", active="exact"),
+                    
+                    dbc.NavLink(
+                        Iconify( "Certificates", "fa-solid fa-list-check" , "45px"),
+                        href="/certificates", active="exact"),
+                    
+                    html.Hr(),
+                    dbc.NavLink(
+                        Iconify( "Project Info", "fa-solid fa-circle-info" , "55px"),
+                        href="/modelInfo", active="exact"),
+                    
+                    dbc.NavLink(
+                        Iconify( "Metrics Info", "fa-solid fa-file-lines" , "50px"),
+                        href="/metricsInfo", active="exact"),
+                    dbc.NavLink( 
+                        Iconify( "Certificates Info", "fa-solid fa-check-double" , "20px"),
+                        href="/certificateInfo", active="exact"),
+                    
+                ],
+                vertical=True,
+                pills=True,
+            ),
+        ],
+        style=SIDEBAR_STYLE,
+    )
+    return sidebar
+ 
+ 
+    
 content = html.Div(id="page-content", style=CONTENT_STYLE)
 
-app.layout = html.Div([dcc.Location(id="url", refresh=False), sidebar, content])
 
+@app.callback(
+    Output("page-content", "children"), 
+    Input("url", "pathname"),
+    Input('project_selector', 'value') )
 
-@app.callback(Output("page-content", "children"), [Input("url", "pathname")])
-def render_page_content(pathname):
+def render_page_content(pathname,value):
+    ctx = dash.callback_context
+    # print( ctx.triggered)
+    
+    # print("Valie = ",value,ctx.triggered)
+    redisUtil.set_current_project(value)
+
     if pathname == "/":
         return get_home_page() 
     elif pathname == "/metrics":
@@ -138,6 +169,11 @@ if __name__ == "__main__":
     if len(sys.argv) == 2:
         model_name = sys.argv[1]
 
-    redisUtil.initialize(model_name, subscribers={"metric_detail","metric_graph","certificate"})
+    redisUtil.initialize(subscribers={"metric_detail","metric_graph","certificate"})
+    get_project_list()
+    redisUtil.set_current_project( next(iter(redisUtil.get_projects_list())) )
+    
+    app.layout = html.Div([dcc.Location(id="url"), get_sidebar(), content])
+
     app.run_server(debug=True)
     redisUtil.close()

@@ -8,7 +8,7 @@ from utils import process_cell
 def get_form():
 
     ops = []
-    values = redisUtil.values["metric_values"]
+    values = redisUtil.get_metric_values() 
     for i,m in enumerate(values):
         ops.append( {"label":  m["metadata"]["date"]+  " - " +  m["metadata"]["tag"] , 
                      "value":i})
@@ -37,7 +37,7 @@ def get_form():
 def generate_table(id):
     
     rows = []
-    for k,v  in  redisUtil.values["certificate_values" ][id].items():
+    for k,v  in  redisUtil.get_certificate_values()[id].items():
         
         if v['value']:
             status = html.Div( [

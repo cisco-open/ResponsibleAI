@@ -34,7 +34,7 @@ g_config = []
 def get_metric_groups():
 
     d = {"Metric Group Name":[],"tags":[],"dependency list":[], "complexity":[]}
-    for g,v in redisUtil.info["metric_info"].items():
+    for g,v in redisUtil.get_metric_info().items():
         d["Metric Group Name"].append(g)
         d["tags"].append(", ".join(v["meta"]["tags"]))
         d["complexity"].append(v["meta"]["complexity_class"])
@@ -55,7 +55,7 @@ def get_metrics(group):
      
     d = {"Metric Name":[],"tags":[],"type":[], "range":[],"explanation":[]}
     
-    for m,v in redisUtil.info["metric_info"][group].items():
+    for m,v in redisUtil.get_metric_info()[group].items():
         if m=="meta":
             continue
         d["Metric Name"].append(v['display_name'])

@@ -13,7 +13,7 @@ class RedisUtils(object):
         self._host = host
         self._port = port 
         self._db = db
-        self._model_name = None
+        
         
         
 
@@ -22,6 +22,9 @@ class RedisUtils(object):
         self._initialized = False
         self._subscribers = defaultdict(bool)
 
+        
+        self._current_project = None
+        self._current_project_name = None
 
     def has_update(self, channel, reset = True):
         
@@ -38,8 +41,9 @@ class RedisUtils(object):
         
         def sub_handler( msg):
             print("a new message received: ", msg)
-            self._update_info()
-            self._update_values()
+            if self._current_project_name:
+                self._update_info()
+                self._update_values()
             for item in self._subscribers:
                 self._subscribers[item] = True
         
@@ -54,12 +58,11 @@ class RedisUtils(object):
 
 
 
-    def initialize(self, model_name, subscribers = None):
+    def initialize(self, subscribers = None):
         
         if self._initialized:
             return
 
-        self._model_name = model_name
         self._redis = redis.Redis(self._host, self._port, self._db)
 
         self._subscribers = {}
@@ -73,10 +76,15 @@ class RedisUtils(object):
         
         
         
+        self._update_projects()
+        self._initialized = True
+
+    def _reload(self):
         
+        self._update_projects()
         self._update_info()
         self._update_values()
-        self._initialized = True
+
 
     def close(self):
         if self._redis_pub is not None:
@@ -87,22 +95,53 @@ class RedisUtils(object):
                 print("Problem in closing pub/sub")
         self._redis.close()
     
+
+    def get_project_info(self):
+        return self._current_project["project_info"]
+    def get_metric_info(self):
+            return self._current_project["metric_info"]
+    def get_certificate_info(self):
+            return self._current_project["certificate_info"]
+    def get_certificate_values(self):
+            return self._current_project["certificate_values"]
+    def get_metric_values(self):
+            return self._current_project["metric_values"]
+
+    def set_current_project(self, project_name):
+        print("changing from", self._current_project_name, "to", project_name)
+        if self._current_project_name==project_name:
+            return
+        self._current_project_name = project_name
+        self._current_project = {}
+        self._update_info()
+        self._update_values()
+
+    def _update_projects(self):
+        self._projects = self._redis.smembers("projects")
+        self._projects = [ s.decode('utf-8') for s in self._projects]   
+    def get_projects_list(self):
+        return self._projects
+
     def _update_info(self):
         self.info = {}
-        self.info["model_info"] = json.loads( self._redis.get( self._model_name + '|model_info'))
-        self.info["certificate_info"] = json.loads( self._redis.get( self._model_name + '|certificate_info'))
-        self.info["metric_info"] = json.loads( self._redis.get( self._model_name + '|metric_info'))
+        print(self._current_project_name)
+        self._current_project["project_info"] = \
+            json.loads( self._redis.get( self._current_project_name + '|project_info'))
+        self._current_project["certificate_info"] = \
+            json.loads( self._redis.get( self._current_project_name + '|certificate_info'))
+        self._current_project["metric_info"] = \
+            json.loads( self._redis.get( self._current_project_name + '|metric_info'))
         
 
     def _update_values(self):
         self.values = {}
-        self.values["metric_values"]=[]
-        for data in  self._redis.lrange( self._model_name + '|metric_values', 0, -1):
-            self.values["metric_values"].append( json.loads(data))
+        self._current_project["metric_values"]=[]
+        for data in  self._redis.lrange( self._current_project_name + '|metric_values', 0, -1):
+            self._current_project["metric_values"].append( json.loads(data))
         
-        self.values["certificate_values"] = []
-        for data in self._redis.lrange( self._model_name + '|certificate_values', 0, -1):
-            self.values["certificate_values"].append( json.loads(data))
+        self._current_project["certificate_values"] = []
+        for data in self._redis.lrange( self._current_project_name + '|certificate_values', 0, -1):
+            self._current_project["certificate_values"].append( json.loads(data))
 
     def __del__(self):
         pass
