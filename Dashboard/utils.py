@@ -63,7 +63,7 @@ def show_full(x):
     while i<len(x) and x[i] is None:
         i+=1
     if i>=len(x): return []
-    print( i, x[i],  dash.callback_context.inputs_list[0][i])
+    # print( i, x[i],  dash.callback_context.inputs_list[0][i])
     return dbc.Offcanvas(
             html.P(
                  dash.callback_context.inputs_list[0][i]["id"]["type"]
