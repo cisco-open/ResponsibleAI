@@ -26,13 +26,13 @@ from model_info_page import get_model_info_page
 from certificate_page import get_certificate_page
 from metric_page import  get_metric_page
 from metric_info_page import get_metric_info_page
+from single_metric_info_page import  get_single_model_info_page
 from certificate_info_page import get_certificate_info_page
-
 from metric_page_details import get_metric_page_details
 from metric_page_graph import get_metric_page_graph
 from setting_page import get_setting_page
 from utils import Iconify
-
+import urllib
 
 import sys
 
@@ -135,9 +135,18 @@ content = html.Div(id="page-content", style=CONTENT_STYLE)
 @app.callback(
     Output("page-content", "children"), 
     Input("url", "pathname"),
-    Input('project_selector', 'value') )
+    Input('project_selector', 'value') ,
+    Input("url", "search")
+)
 
-def render_page_content(pathname,value):
+def render_page_content(pathname,value,search):
+    if search:
+        print(search)
+
+        parsed = urllib.parse.urlparse(search)
+        parsed_dict = urllib.parse.parse_qs(parsed.query)
+
+        print("search",  parsed_dict, pathname)
     ctx = dash.callback_context
 
     redisUtil.set_current_project(value)
@@ -157,7 +166,8 @@ def render_page_content(pathname,value):
         return get_certificate_page()
     elif pathname == "/modelInfo":
         return get_model_info_page()    
-
+    elif pathname == "/single_metric_info/":
+        return get_single_model_info_page(parsed_dict["g"][0], parsed_dict["m"][0])
     elif pathname == "/metricsInfo":
         return get_metric_info_page()
     elif pathname == "/certificateInfo":

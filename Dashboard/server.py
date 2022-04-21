@@ -18,4 +18,4 @@ except:
     redisUtil = RedisUtils()
     
 
-app = dash.Dash(external_stylesheets=external_stylesheets,suppress_callback_exceptions=False)
+app = dash.Dash(external_stylesheets=external_stylesheets,suppress_callback_exceptions=True)

@@ -6,7 +6,7 @@ import dash_bootstrap_components as dbc
 from dash import Input, Output, dcc, html, State
 from server import app, redisUtil
 import pandas as pd
-
+import urllib
 from dash import dcc
 import plotly.express as px
 import plotly.graph_objs as go
@@ -37,9 +37,19 @@ def get_accordion(id):
                 vs = process_cell(v, list_vertical =   isinstance(v,dict))
             
              
-            
+            qs = urllib.parse.urlencode( {"g":group, "m":k})
+            # btn =  dbc.Button( "_i_", href="/single_metric_info/?" + qs,)
+            ico = html.I( n_clicks=0, className='fa-solid fa-info')
+            btn = dbc.Button(
+                    html.Span([ico]) , href="/single_metric_info/?" + qs, style = { "width":"3px",  "margin-right":"5px"}, outline=True, color="light"
+                           ,className="me-1" )
+            # btn = dbc.NavLink(   "_i_" , href="/single_metric_info/?" + qs),
+            # size="sm", style = {"margin-left":"5px", "width":"28px", "height":"20px", "text-align":"center buttom",  "line-height": "5px"})
+            # rows.append ( html.Tr( 
+            #     [ html.Td(  dbc.Row ( [k, btn] , justify="between" , style={"margin-left":"10px"}) ), html.Td( vs) ]
+            # ))
             rows.append ( html.Tr( 
-                [ html.Td(k), html.Td( vs) ]
+                [ html.Td(  html.Div ( [  btn, k]  ) ), html.Td( vs) ]
             ))
 
         detail = dbc.Table(
