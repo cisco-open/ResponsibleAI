@@ -3,7 +3,6 @@ import dash_bootstrap_components as dbc
 from dash import Input, Output, dcc, html
 import logging
 logger = logging.getLogger(__name__)
-
 from server import app, redisUtil
 from utils import process_cell 
 
@@ -36,7 +35,7 @@ def get_form():
 
 
 
-def generate_table(id):
+def generate_cert_table(id, show_explanation=True):
     
     rows = []
     for k,v  in  redisUtil.get_certificate_values()[id].items():
@@ -50,13 +49,15 @@ def generate_table(id):
                  "Failed" , html.I( className = "fa-solid fa-xmark", style={"width":"30px","height":"30px","margin-left":"25px", "color":"red"})
             ])
         rows.append ( html.Tr( 
-            [ html.Td(k[:-4]), html.Td( v['explanation'].ljust(20) ), html.Td(status) ]
+            [ html.Td(k[:-4]), html.Td( v['explanation'] ), html.Td(status) ] if show_explanation else
+            [ html.Td(k[:-4]),   html.Td(status) ]
         ))
     return dbc.Table(
         # className="cert_table",
         children = [
         html.Thead(
-            html.Tr([  html.Th("Cetrificate") , html.Th("Explanation"), html.Th("Status") ])
+            html.Tr( [  html.Th("Cetrificate") , html.Th("Explanation"), html.Th("Status") ] if show_explanation else 
+            [  html.Th("Cetrificate") ,  html.Th("Status") ] )
         ),
         
         html.Tbody(  rows)
@@ -124,4 +125,4 @@ def get_certificate_page():
 )
 def update_metrics(value):
 
-    return generate_table(value)
+    return generate_cert_table(value)

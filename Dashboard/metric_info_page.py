@@ -8,100 +8,114 @@ logger = logging.getLogger(__name__)
  
 from dash import dash_table
 import pandas as pd
-
-tbl_styling = { 
-    'style_data':{
-        'color': 'black',
-        'backgroundColor': 'white',
-        'textAlign': 'left',
-        "whiteSpace": "pre-line"
-    },
-    'style_data_conditional':[
-        {
-            'if': {'row_index': 'odd'},
-            'backgroundColor': 'rgb(220, 220, 220)',
-        }
-    ],
-    'style_header':{
-        'backgroundColor': 'rgb(210, 210, 210)',
-        'color': 'black',
-        'fontWeight': 'bold',
-        'textAlign': 'center'
-    }}
  
-    
-g_config = []
+from utils import process_cell
 
 
-def get_metric_groups():
+def get_header_table(group_name,group):
+    rows = []
+     
+    rows.append ( html.Tr( 
+            [ html.Td( process_cell(group["meta"]["tags"])),  
+                html.Td( process_cell(group["meta"]["complexity_class"])), 
+                html.Td( process_cell(group["meta"]["compatiblity"])), 
+                html.Td( process_cell(group["meta"]["dependency_list"])) , ]
+        ))
 
-    d = {"Metric Group Name":[],"tags":[],"dependency list":[], "complexity":[]}
-    for g,v in redisUtil.get_metric_info().items():
-        d["Metric Group Name"].append(g)
-        d["tags"].append(", ".join(v["meta"]["tags"]))
-        d["complexity"].append(v["meta"]["complexity_class"])
-        d["dependency list"].append("")
-  
-    return dash_table.DataTable(
-        pd.DataFrame(d).to_dict('records'),
-        id = 'groups',
-        style_cell={'fontSize':16, 'font-family':'Georgia, serif'},
-        **tbl_styling
+    return dbc.Table(
+                        children = [ 
+                            html.Thead(
+                                        html.Tr([  html.Th("Tags"), html.Th("Complexity"), html.Th("Compatiblity"), html.Th("Dependency List") ])  ),
+                           html.Tbody( rows )
+                                    ],
+                    bordered=True,
+                    striped=True ,
+                    responsive=True,
+                    size = 'sm')
+
+
+def get_metric_table(group_name,group):
+    rows = []
+    keys = [k for k in group if k !="meta"]
+    metric_keys = group[keys[0]]
+
+    for k in keys:
+
+        rows.append( 
+            html.Tr([
+                  html.Td(process_cell(group[k][mk]))  for mk in metric_keys  ]
+            )
+        )
+    # rows.append ( html.Tr( 
+    #         [ html.Td( process_cell(group["meta"]["tags"])),  
+    #             html.Td( process_cell(group["meta"]["complexity_class"])), 
+    #             html.Td( process_cell(group["meta"]["compatiblity"])), 
+    #             html.Td( process_cell(group["meta"]["dependency_list"])) , ]
+    #     ))
+
+    return dbc.Table(
+                        children = [ 
+                            html.Thead( 
+                                html.Tr(
+                                    [ html.Th(x) for x in metric_keys ]
+                                      ) ) ,
+                           html.Tbody(  rows )
+                                    ],
+                    bordered=True,
+                    striped=True ,
+                    responsive=True,
+                    size = 'sm')
+
+
+
+
+
+
+def get_accordion( ):
+
+    items = []
+
+     
+    for group_name, group in redisUtil.get_metric_info().items():
+        
+        
+        detail = html.Div( [
+            get_header_table(group_name,group),
+            html.Br(),
+
+            html.P("list of metrics"),
+            get_metric_table(group_name,group)
+        ])
+        
+        items.append(
+            dbc.AccordionItem(
+                children=detail,
+                title=group_name,
+                item_id=group_name
+            ),
         )
 
-     
- 
- 
- 
-def get_metrics(group):
-     
-    d = {"Metric Name":[],"tags":[],"type":[], "range":[],"explanation":[]}
+
     
-    for m,v in redisUtil.get_metric_info()[group].items():
-        if m=="meta":
-            continue
-        d["Metric Name"].append(v['display_name'])
-        if "tags" in v:
-            d["tags"].append(", ".join(v["tags"]))
-        else:
-            d["tags"].append("")
-        d["type"].append(v["type"])
-        vr = v["range"]
-        d["range"].append( f"{vr}" )
-        d["explanation"].append(v["explanation"])
-    df = pd.DataFrame(data = d)
-    
-    return dash_table.DataTable(df.to_dict('records'), 
-    [{"name": i, "id": i} for i in df.columns],
-    id = "metrics" ,
-    style_cell={'fontSize':16, 'font-family':'Georgia, serif'},
-    **tbl_styling)
+    acc = dbc.Accordion(
+        items,
+        active_item= items[0].item_id,
+        # start_collapsed=False,
+        # always_open=True
+        # flush=True,
+    )
+    return acc
+
+ 
 
 def get_metric_info_page():
     
     return html.Div( [
-        html.P("metric groups"),
-        get_metric_groups(),
+        html.H4("Metric Groups"),
+          html.Hr(),
+          get_accordion(),
         
-        html.Hr(),
+      
         
-        html.P("metrics info"),
-        html.Div( id = "metrics_div")
+        
     ])
-
-@app.callback(
-    Output('metrics_div', 'children'),
-    Input('groups', 'active_cell'),
-    State('groups', 'data') 
-)
-def update(active_cell,data):
-    
-    if active_cell:
-        col = active_cell['column_id']
-        row = active_cell['row']
-        group_name = data[row]["Metric Group Name"]
-        return [get_metrics(group_name)]
-
-
-
-

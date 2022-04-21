@@ -38,30 +38,35 @@ def get_setting_page():
     
     return html.Div( [
 
-        html.H3("Display Settings") ,
+        
+        dbc.Form ([
+
+            html.H4("Display Settings") ,
         html.Div(id = "dummy_setting") ,
         html.Hr(),
-        dbc.Form ([
                     html.Div(
                             [
                                 dbc.FormText("Precision for floating points data"),
                                 dbc.Input(id="input_precision", type="number", min=0, max=6, step=1, value = redisUtil._precision,
-                                style={'width': '200px'}),
+                                # style={'width': '200px'}
+                                ),
                             ],
-                            id="styled-numeric-input",) ,
+                            id="styled-numeric-input", className="d-grid gap-2") ,
                     
                     html.Div(
                             [
-                                dbc.FormText("Maximum text length"),
+                                dbc.FormText("Maximum text length", style={"margin-top":"20px"}),
                                 dbc.Input(id="input_maxlen", type="number", min=1, max=500, step=1, value = redisUtil._maxlen,
-                                style={'width': '200px'}),
-                            ],
+                                # style={'width': '200px'}
+                                ),
+                            ], className="d-grid gap-2",
                             id="styled-numeric-input",),
                     html.Div(
-                        dbc.Button( "Apply", id="apply_setting", href="/single_metric_info/?" + qs)
+                        dbc.Button( "Apply", id="apply_setting", href="/single_metric_info/?" + qs, style = {"margin-top":"30px"}, color="secondary"),
+                        className="d-grid gap-2"
                     )
-                    
-        ]),
+        ], style = { "width":"400px", "border":"solid", "border-color":"silver",  "border-radius":"5px", "padding": "50px"}            
+        ),
         
         html.Div( id = "setting_div")
     ])

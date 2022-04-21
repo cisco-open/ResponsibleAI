@@ -30,24 +30,15 @@ def get_accordion(id):
                 vs = []
                 for ki,vi in v.items():
                     vs.append( html.Div( process_cell( {ki:vi}) , style={"max-width": "1200px"} ) )
-
-            #     vi = dbc.Table([])
-            #     v = [ ]
             else:
                 vs = process_cell(v, list_vertical =   isinstance(v,dict))
             
              
             qs = urllib.parse.urlencode( {"g":group, "m":k})
-            # btn =  dbc.Button( "_i_", href="/single_metric_info/?" + qs,)
             ico = html.I( n_clicks=0, className='fa-solid fa-info')
             btn = dbc.Button(
                     html.Span([ico]) , href="/single_metric_info/?" + qs, style = { "width":"3px",  "margin-right":"5px"}, outline=True, color="light"
                            ,className="me-1" )
-            # btn = dbc.NavLink(   "_i_" , href="/single_metric_info/?" + qs),
-            # size="sm", style = {"margin-left":"5px", "width":"28px", "height":"20px", "text-align":"center buttom",  "line-height": "5px"})
-            # rows.append ( html.Tr( 
-            #     [ html.Td(  dbc.Row ( [k, btn] , justify="between" , style={"margin-left":"10px"}) ), html.Td( vs) ]
-            # ))
             rows.append ( html.Tr( 
                 [ html.Td(  html.Div ( [  btn, k]  ) ), html.Td( vs) ]
             ))
@@ -59,11 +50,12 @@ def get_accordion(id):
                                                     ),
 
                                         html.Tbody( rows )
-        ],
-         bordered=True,
+                             ],
+        bordered=True,
         striped=True ,
+        responsive=True,
+        size = 'sm'
         
-
         )
         items.append(
             dbc.AccordionItem(
@@ -77,7 +69,7 @@ def get_accordion(id):
         active_item= items[0].item_id,
         # start_collapsed=False,
         # always_open=True
-        
+        flush=True,
     )
     return acc
 
@@ -131,9 +123,10 @@ def get_metric_page_details():
                 }),
         style = {"background-color":"Azure",
                 "border-width": "thin",
-                "border-color":"Blue",
+                "border-color":"silver",
                 "border-style":"solid",
                 "border-radius": "10px",
+                "padding":"10px"
                 }
     ),
     
@@ -141,12 +134,13 @@ def get_metric_page_details():
     
     html.Div( 
         html.Div( id = "measure_accordion", 
-                style= { "margin":"1px",
-                "border-width": "thin",
-                "border-color":"Blue",
-                "border-style":"solid",
-                "border-radius": "10px",
-                    }) ,
+                # style= { "margin":"1px",
+                # "border-width": "thin",
+                # "border-color":"Blue",
+                # "border-style":"solid",
+                # "border-radius": "10px",
+                #     }
+                    ) ,
 
         # style = {"background-color":"AliceBlue",
         #         "border-width": "thin",

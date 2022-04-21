@@ -18,23 +18,23 @@ def dic2tbl_hor(d):
     
      
     return dbc.Table(
-        # className="model-info-table",
+         
         children = [
-        html.Thead(
-            html.Tr([  html.Th(x) for x in d.keys()  ])
-        ),
+            html.Thead(
+                html.Tr([  html.Th(x) for x in d.keys()  ])
+            ),
         
-        html.Tbody(
-            html.Tr([  html.Td( process_cell(x   ) ) for x in d.values()  ])
-          )
-        ],
+            html.Tbody(
+                html.Tr([  html.Td( process_cell(x   ) ) for x in d.values()  ])
+            )
+            ],
         bordered=True,
         hover=True,
         responsive=True,
         striped=True,
         style={ "while-space":"normal",
-                "padding-top": "12px",
-                "padding-bottom": "12px"}
+                "padding": "20px",
+                }
         )
 
 
