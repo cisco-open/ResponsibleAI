@@ -4,8 +4,7 @@ from dash import Input, Output, dcc, html, State
 from server import app, redisUtil
 import logging
 logger = logging.getLogger(__name__)
-
- 
+import urllib 
 from dash import dash_table
 import pandas as pd
 
@@ -30,10 +29,12 @@ tbl_styling = {
     }}
  
     
-g_config = []
-  
+ 
+
   
 def get_setting_page():
+    
+    qs = urllib.parse.urlencode( {"g":"metadata", "m":"date"})
     
     return html.Div( [
 
@@ -55,7 +56,11 @@ def get_setting_page():
                                 dbc.Input(id="input_maxlen", type="number", min=1, max=500, step=1, value = redisUtil._maxlen,
                                 style={'width': '200px'}),
                             ],
-                            id="styled-numeric-input",)
+                            id="styled-numeric-input",),
+                    html.Div(
+                        dbc.Button( "Apply", id="apply_setting", href="/single_metric_info/?" + qs)
+                    )
+                    
         ]),
         
         html.Div( id = "setting_div")
