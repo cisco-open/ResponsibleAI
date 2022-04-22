@@ -8,37 +8,53 @@ import dash_daq as daq
 # import dash_trich_components as dtc
 import numpy as np
 
+from utils import Iconify
 
 
+def card_title( t, ico, color ):
+    
+
+    style = {    }
+    style={"text-align":"center"}
+    return dbc.Row([
+                      dbc.Col(html.H4(t)), dbc.Col(html.I(   className=ico, style={"font-size": "3em", "color":color}) ) ])
+
+                    
 def get_card( t1, t2, t3, ic, n , id, c):
     # c = "lightcyan"
-    c= "lightgoldenrodyellow"
+    # c= "lightgoldenrodyellow"
     return dbc.Card(
     [
+         
         # html.I(className=ic, style={}),
         # dbc.CardImg(src="fa-solid fa-list-check", top=True),
         dbc.CardBody(
             [
-                html.H4(t1, className="card-title"),
-                daq.Gauge(
-                            color={"gradient":True,"ranges":{"red":[0,4],"yellow":[4,8],"green":[8,10]}},
-                            value=100*np.mean(n),
-                            label='',
-                            max=100,
-                            min=0,
-                            size=150
-                        )
+                # html.H4(t1, className="card-title", style={"text-align":"center"}),
+                card_title ( t1,  ic, c),
+                dbc.Row( [
+                    dbc.Col( daq.Gauge(
+                                color={"gradient":True,"ranges":{"red":[0,4],"yellow":[4,8],"green":[8,10]}},
+                                value=100*np.mean(n),
+                                label='',
+                                max=100,
+                                min=0,
+                                size=100
+                            ) ),
+                    # html.Hr(),
+                    dbc.Col( html.P ( "%d of total %d certificates passed"%(
+                    np.sum(n), len(n) ), style={"text-align":"left","padding":"50px 0"} ) )
+                ])
             ]
         ),
         
-        html.Hr(),
-        html.P ( "%d of total %d certificates passed"%(
-                    np.sum(n), len(n) ) )
+       
     ],
-    style={"width": "20rem",
+    style={"width": "30rem",
     "background-color":"snow",
     "margin":"20px",
-    "border-radius":"10px"
+    "border-radius":"10px",
+    "height":"180px"
     },
     )
 
@@ -80,15 +96,15 @@ def get_home_page():
 
     gauges  =[dbc.Row(
              [
-                get_card("Explainability", "success rate", "details", "fa-solid fa-list-check",  score_explain,"c1", "baige"),
-                get_card("Robustness", "success rate", "details", "fa-solid fa-list-check", score_robust,"c2", "lightgoldenrodyellow"),
+                get_card("Explainability", "success rate", "details", "fa-solid fa-person-circle-question",  score_explain,"c1", "blue"),
+                get_card("Robustness", "success rate", "details", "fa-solid fa-file-shield", score_robust,"c2", "orange"),
 
              ] )
              ,
         dbc.Row(
              [
-                get_card("Performance", "success rate", "details", "fa-solid fa-list-check", score_perform,"c3","lightcyan"),
-                get_card("Fairness", "success rate", "details", "fa-solid fa-list-check",  score_fair,"c4","peachpuff"),
+                get_card("Performance", "success rate", "details", "fa-solid fa-trophy", score_perform,"c3","red"),
+                get_card("Fairness", "success rate", "details", "fa-solid fa-scale-balanced",  score_fair,"c4","darkgreen"),
 
              ] )]
     # return html.P("This is the content of the home page!")
@@ -97,10 +113,11 @@ def get_home_page():
     return html.Div([
         
         dbc.Row([
-            dbc.Col(gauges), 
-            dbc.Col(
-                html.Div( generate_cert_table(-1,False) , style = {"border-color":"silver", "border-radius":"1px", "border-style":"solid","margin-top":"20px","width":"300px"} ) )
-        ])
+            dbc.Row(gauges), 
+            dbc.Row(
+                html.Div( generate_cert_table(-1,False) , style = {"margin":"20px","border-color":"silver", "border-radius":"1px", 
+                "border-style":"solid","margin-top":"20px","width":"63rem"} ) )
+        ] )
         
 
     ])

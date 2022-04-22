@@ -29,7 +29,7 @@ def dic2tbl_hor(d):
             )
             ],
         bordered=True,
-        hover=True,
+        hover=False,
         responsive=True,
         striped=True,
         style={ "while-space":"normal",
@@ -53,7 +53,7 @@ def dic2tbl(d,list_vertical = True):
           )
         ],
         bordered=True,
-        hover=True,
+        hover=False,
         responsive=True,
         striped=True,
         style={ "while-space":"normal",

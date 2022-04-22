@@ -34,6 +34,8 @@ def get_form():
     ])
 
 
+def get_cert_name( cert_id ):
+    return redisUtil.get_certificate_info()[cert_id]['display_name']
 
 def generate_cert_table(id, show_explanation=True):
     
@@ -49,8 +51,8 @@ def generate_cert_table(id, show_explanation=True):
                  "Failed" , html.I( className = "fa-solid fa-xmark", style={"width":"30px","height":"30px","margin-left":"25px", "color":"red"})
             ])
         rows.append ( html.Tr( 
-            [ html.Td(k[:-4]), html.Td( v['explanation'] ), html.Td(status) ] if show_explanation else
-            [ html.Td(k[:-4]),   html.Td(status) ]
+            [ html.Td( get_cert_name(k)), html.Td( v['explanation'] ), html.Td(status) ] if show_explanation else
+            [ html.Td(get_cert_name(k)),   html.Td(status) ]
         ))
     return dbc.Table(
         # className="cert_table",
