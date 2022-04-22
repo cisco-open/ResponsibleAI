@@ -6,6 +6,7 @@ import scipy.stats
 # Move config to external .json? 
 _config = {
     "name": "stat_moment_group",
+    "display_name" : "Statistical Moments Metrics",
     "compatibility": {"type_restriction": None, "output_restriction": None},
     "dependency_list": [],
     "tags": ["stats", "Moments"],

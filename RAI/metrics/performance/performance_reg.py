@@ -6,6 +6,7 @@ import sklearn
 
 _config = {
     "name" : "performance_reg",
+    "display_name" : "Regression Performance Metrics",
     "compatibility" : {"type_restriction": "regression", "output_restriction": None},
     "src": "stats",
     "dependency_list": [],

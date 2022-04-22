@@ -13,6 +13,7 @@ __all__ = ['compatibility']
 
 _config = {
     "name": "individual_fairness",
+    "display_name" : "Individual Fairness Metrics",
     "compatibility": {"type_restriction": "classification", "output_restriction": "choice"},
     "src": "equal_treatment",
     "dependency_list": [],

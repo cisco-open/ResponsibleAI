@@ -7,6 +7,7 @@ import warnings
 # Move config to external .json? 
 _config = {
     "name": "summary_stats",
+    "display_name" : "Summary Statistics Metrics",
     "compatibility" : {"type_restriction": None, "output_restriction": None},
     "dependency_list": [],
     "tags": ["stats", "Summary Stats"],

@@ -5,6 +5,7 @@ import datetime
 
 _config = {
     "name": "metadata",
+    "display_name" : "Metadata for the measurement",
     "compatibility": {"type_restriction": None, "output_restriction": None},
     "dependency_list": [],
     "tags": ["metadata"],

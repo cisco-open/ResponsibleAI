@@ -38,7 +38,7 @@ def get_model_info_page():
     
     
     return html.Div([
-    html.H4(children='Properties of the AI system'),
+    # html.H4(children='Properties of the AI system'),
     generate_table( )
     ])
 

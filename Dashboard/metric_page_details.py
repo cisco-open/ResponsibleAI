@@ -60,7 +60,7 @@ def get_accordion(id):
         items.append(
             dbc.AccordionItem(
                 children=detail,
-                title=group,
+                title= redisUtil.get_metric_info()[group]["meta"]["display_name"],
                 item_id=group
             ),
         )

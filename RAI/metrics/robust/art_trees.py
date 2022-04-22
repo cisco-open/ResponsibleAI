@@ -23,6 +23,7 @@ compatibility = {"type_restriction": "binary_classification", "output_restrictio
 
 _config = {
     "name": "adversarial_validation_tree",
+    "display_name" : "Adverserial Validation Tree Metrics",
     "compatibility": {"type_restriction": "classification", "output_restriction": "choice"},
     "src": "art",
     "dependency_list": [],

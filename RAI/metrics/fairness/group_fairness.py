@@ -12,6 +12,7 @@ compatibility = {"type_restriction": "classification", "output_restriction": "ch
 
 _config = {
     "name" : "group_fairness",
+    "display_name" : "Group Fairness Metrics",
     "compatibility": {"type_restriction": "classification", "output_restriction": "choice"},
     "src": "equal_treatment",
     "dependency_list": [],

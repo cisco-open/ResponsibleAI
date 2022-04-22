@@ -9,6 +9,7 @@ __all__ = ['compatibility']
 
 _config = {
     "name" : "performance_cl",
+    "display_name" : "Classification Performance Metrics",
     "compatibility" : {"type_restriction": "classification", "output_restriction": "choice"},
     "src": "stats",
     "dependency_list": [],

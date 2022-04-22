@@ -7,6 +7,7 @@ import sklearn
 # Move config to external .json? 
 _config = {
     "name": "noise_robustness",
+    "display_name" : "Robustness to Noise Metrics",
     "compatibility": {"type_restriction": None, "output_restriction": None},
     "dependency_list": [],
     "tags": ["robustness", "Noise"],

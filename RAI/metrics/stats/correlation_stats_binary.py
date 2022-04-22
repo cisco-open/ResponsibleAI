@@ -7,6 +7,7 @@ import scipy.stats
 
 _config = {
     "name": "correlation_stats_binary",
+    "display_name" : "Binary Classification Metrics",
     "compatibility": {"type_restriction": "binary_classification", "output_restriction": None},
     "dependency_list": [],
     "tags": ["stats", "Binary Correlation"],

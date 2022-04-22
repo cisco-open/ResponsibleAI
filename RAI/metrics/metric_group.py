@@ -32,6 +32,7 @@ class MetricGroup(object):
         self.metrics = {}
         self.tags = []
         self.complexity_class = ""
+        self.display_name = self.name
         self.compatiblity = {}
         self.status = "OK"
         self.reset()
@@ -57,7 +58,10 @@ class MetricGroup(object):
             self.complexity_class = config["complexity_class"]
         if "compatibility" in config:
             self.compatiblity = config["compatibility"]
-        
+        if "display_name" in config:
+            self.display_name = config["display_name"]
+        else:
+            self.display_name = self.name
         if "metrics" in config:
             self.create_metrics(config["metrics"])
         return True

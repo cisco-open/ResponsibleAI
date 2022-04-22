@@ -13,6 +13,7 @@ compatibility = {"type_restriction": "binary_classification", "output_restrictio
 
 _config = {
     "name": "prediction_fairness",
+    "display_name" : "Classification Fairness Metrics",
     "compatibility": {"type_restriction": "classification", "output_restriction": "choice"},
     "src": "equal_treatment",
     "dependency_list": [],

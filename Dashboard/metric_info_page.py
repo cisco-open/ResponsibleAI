@@ -87,11 +87,13 @@ def get_accordion( ):
             get_metric_table(group_name,group)
         ])
         
+        display_name = group["meta"]["display_name"]
         items.append(
             dbc.AccordionItem(
                 children=detail,
-                title=group_name,
-                item_id=group_name
+                title=  display_name,
+                item_id=group_name,
+                style = {"text-align":"center"}
             ),
         )
 

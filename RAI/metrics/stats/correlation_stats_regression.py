@@ -6,6 +6,7 @@ import scipy.stats
 # Move config to external .json? 
 _config = {
     "name": "correlation_stats_regression",
+    "display_name" : "Correlation Stats for Regression Metrics",
     "compatibility": {"type_restriction": "regression", "output_restriction": None},
     "dependency_list": [],
     "tags": ["stats", "Regression Correlation"],

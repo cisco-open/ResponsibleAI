@@ -13,6 +13,7 @@ compatibility = {"type_restriction": "binary_classification", "output_restrictio
 # IMPROVE CONFIG ONCE METRICS ARE SET UP.
 _config = {
     "name": "sample_distortion_fairness",
+    "display_name" : "Sample Distortion Fairness Metrics",
     "compatibility": {"type_restriction": "classification", "output_restriction": "choice"},
     "src": "equal_treatment",
     "dependency_list": [],

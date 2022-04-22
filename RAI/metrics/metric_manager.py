@@ -65,6 +65,7 @@ class MetricManager(object):
                 "complexity_class":self.metric_groups[group].complexity_class,
                 "dependency_list": self.metric_groups[group].dependency_list,
                 "compatiblity": self.metric_groups[group].compatiblity,
+                "display_name": self.metric_groups[group].display_name
             }
             for metric in self.metric_groups[group].metrics:
                 result[group][metric] = self.metric_groups[group].metrics[metric].config

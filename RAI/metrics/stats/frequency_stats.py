@@ -6,6 +6,7 @@ import scipy.stats
 # Move config to external .json? 
 _config = {
     "name": "frequency_stats",
+    "display_name" : "Frequency Statistics Metrics",
     "compatibility": {"type_restriction": None, "output_restriction": None},
     "dependency_list": [],
     "tags": ["stats", "Frequency Stats"],
