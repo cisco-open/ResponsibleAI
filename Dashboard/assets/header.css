@@ -31,3 +31,11 @@
 }
 
  
+
+.accordion-button {
+    text-align: left;
+    font-size: .4cm;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    /* display: block; */
+    background-color: #f6f9fadb
+}

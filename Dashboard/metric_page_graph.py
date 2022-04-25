@@ -43,31 +43,41 @@ def get_metric_page_graph():
         html.Div( 
         
             html.Div( [
-                    html.P( "select metric group"),
+                    dbc.Label("select metric group", html_for="select_group"),
+                    # html.P( "select metric group"),
                     dcc.Dropdown( groups,  id='select_group',value=v, persistence=True, persistence_type='session'),
                     html.P( ""),
-                    html.P( "select metric"),
+                    dbc.Label("select metric", html_for="select_metric_cnt"),
+                    # html.P( "select metric"),
                     html.Div(id='select_metric_cnt', 
                     children=html.Div(id="select_metrics")),
                 ], 
                 style={ "margin":"20px",
                     }),
 
-            style = {"background-color":"Azure",
-                    "border-width": "thin",
-                    "border-color":"Blue",
-                    "border-style":"solid",
-                    "border-radius": "10px",
-                    }
+            # style = {"background-color":"Azure",
+            #         "border-width": "thin",
+            #         "border-color":"Blue",
+            #         "border-style":"solid",
+            #         "border-radius": "10px",
+            #         }
+            style = {"background-color":"rgb(198,216,233)",
+                "border-width": "thin",
+                "border-color":"silver",
+                "border-style":"solid",
+                "border-radius": "10px",
+                "padding":"10px",
+                 "border-radius": "3px",
+                }
             ),
     
     
-            html.Hr(),
+            html.Br(),
             html.Div( 
                 html.Div(id='graph_cnt', children = [c],
                 style={ "margin":"2",
                         }), 
-            style = {"background-color":"Azure",
+            style = {"background-color":"rgb(198,216,233)",
                     "border-width": "thin",
                     "border-color":"LightGray",
                     "border-style":"solid",

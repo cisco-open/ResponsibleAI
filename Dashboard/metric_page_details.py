@@ -121,7 +121,7 @@ def get_metric_page_details():
         html.Div(get_form(),
         style={ "margin":"20px",
                 }),
-        style = {"background-color":"Azure",
+        style = {"background-color":"rgb(198,216,233)",
                 "border-width": "thin",
                 "border-color":"silver",
                 "border-style":"solid",
