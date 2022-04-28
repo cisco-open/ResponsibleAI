@@ -133,14 +133,34 @@ def update_metrics(value, children):
     Input('interval-component', 'n_intervals'),
     Input('select_metrics', 'value'),
     Input('select_group', 'value'),
+    Input('reset_graph', "n_clicks"),
     State('metric_graph', 'figure')
 )
 
 
 
-def update_graph( n,metric,group, old):
+def update_graph( n,metric,group, nC, old):
 
+    
+
+    ctx = dash.callback_context
      
+    if 'prop_id' in ctx.triggered[0] and ctx.triggered[0]['prop_id'] == 'reset_graph.n_clicks':
+        old["data"] = []
+        return old
+    
+    if 'prop_id' in ctx.triggered[0] and ctx.triggered[0]['prop_id'] == 'interval-component.n_intervals':
+        
+        if redisUtil.has_update("metric_graph", reset = True):
+            logger.info("new data")
+            redisUtil.subscribers["metric_graph"] = False
+        else:
+            # logger.info("ignore timer")
+            return old
+
+
+    # print( 'n = ', n, ctx.triggered ,'prop_id' in ctx.triggered )
+    # print ( 'nC = ', nC)
     if not metric or not group:
         return old
 
@@ -153,16 +173,6 @@ def update_graph( n,metric,group, old):
         if d['name'] ==  metric:
             return old
 
-    ctx = dash.callback_context
-     
-    
-    if 'prop_id' in ctx.triggered and ctx.triggered['prop_id'] == 'interval-component.n_intervals':
-        if redisUtil.has_update("metric_graph", reset = True):
-            logger.info("new data")
-            redisUtil.subscribers["metric_graph"] = False
-        else:
-            logger.info("ignore timer")
-            return old
 
 
     d = {"x":[], "y":[],"tag":[], "metric":[],"text":[]}
