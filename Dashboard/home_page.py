@@ -51,7 +51,7 @@ def get_card( t1, t2, t3, ic, n , id, c):
        
     ],
     style={"width": "30rem",
-    "background-color":"snow",
+    "background-color":"rgb(228,236,253)",
     "margin":"20px",
     "border-radius":"10px",
     "height":"180px"

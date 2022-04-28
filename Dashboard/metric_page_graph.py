@@ -5,27 +5,70 @@ from server import app, redisUtil
 import pandas as pd
 import logging
 logger = logging.getLogger(__name__)
-
+import json
 from dash import dcc
 import plotly.express as px
 import plotly.graph_objs as go
 
 # layout = None
 
-def get_metric_page_graph():
-     
+def get_selectors():
     groups = []
-    
     for g in redisUtil.get_metric_info():
         groups.append(g)
+        
+    return html.Div( 
+        
+        dbc.Form ([
 
+            dbc.Label("select metric group", html_for="select_group"),
+            dbc.Row( [
+                    dbc.Col([
+                            
+                            dcc.Dropdown( groups,  id='select_group',value=groups[0] if groups else None, persistence=True, persistence_type='session'),
+                            html.P( ""),
+                            dbc.Label("select metric", html_for="select_metric_cnt"),
+                            # html.P( "select metric"),
+                            html.Div(id='select_metric_cnt',children=html.Div(id="select_metrics")),
+                        ], style={"width":"70%"}),
+                        dbc.Col([
+                            dbc.Button( "Reset Graph", id="reset_graph",   style = {"margin-left":"20%"}, color="secondary")
+                        ],style={"width":"20%"})
+        
+                    ])
+                     
+            ], style = { "background-color":"rgb(240,250,255)", "width":"100%  ", "border":"solid", "border-color":"silver",  "border-radius":"5px", "padding": "50px"}            
+            ), 
+        style={ "margin":"2px","margin-bottom":"20px", 
+                    }
+        )
 
+ 
+     
+def get_graph():
     d = {"x":[], "value":[],"tag":[], "metric":[]}
     fig = px.line( pd.DataFrame(d), x="x", y="value", color="metric", markers ="True" )
-    c = dcc.Graph(figure=fig)
-    v = None
-    if groups:
-        v = groups[0]
+    return html.Div( 
+                    html.Div(id='graph_cnt', children = [dcc.Graph( figure = fig, id='metric_graph')],
+                    style={ "margin":"2",
+                            }), 
+            style = {
+                # "background-color":"rgb(198,216,233)",
+                    "border-width": "thin",
+                    "border-color":"LightGray",
+                    "border-style":"solid",
+                    "border-radius": "3px",
+                    "margin":"4"
+                    }
+                    )
+
+def get_metric_page_graph():
+
+    
+
+
+     
+     
     layout =   html.Div([
     
         dcc.Interval(
@@ -34,62 +77,34 @@ def get_metric_page_graph():
             n_intervals=0
          ),
 
-        html.P(""),
-        html.P(""),
-        html.P(""),
-        html.P(""),
-        html.P(""),
-    
+        
         html.Div( 
         
-            html.Div( [
-                    dbc.Label("select metric group", html_for="select_group"),
-                    # html.P( "select metric group"),
-                    dcc.Dropdown( groups,  id='select_group',value=v, persistence=True, persistence_type='session'),
-                    html.P( ""),
-                    dbc.Label("select metric", html_for="select_metric_cnt"),
-                    # html.P( "select metric"),
-                    html.Div(id='select_metric_cnt', 
-                    children=html.Div(id="select_metrics")),
-                ], 
-                style={ "margin":"20px",
-                    }),
+            html.Div( 
+                [
+                    get_selectors() 
+            ])
 
-            # style = {"background-color":"Azure",
-            #         "border-width": "thin",
-            #         "border-color":"Blue",
-            #         "border-style":"solid",
-            #         "border-radius": "10px",
-            #         }
-            style = {"background-color":"rgb(198,216,233)",
-                "border-width": "thin",
-                "border-color":"silver",
-                "border-style":"solid",
-                "border-radius": "10px",
-                "padding":"10px",
-                 "border-radius": "3px",
-                }
+            ,
+
+           
+            # style = {
+            #     # "background-color":"rgb(198,216,233)",
+            #     "border-width": "thin",
+            #     "border-color":"silver",
+            #     "border-style":"solid",
+            #     "border-radius": "10px",
+            #     "padding":"10px",
+            #      "border-radius": "3px",
+            #     }
             ),
     
-    
-            html.Br(),
-            html.Div( 
-                html.Div(id='graph_cnt', children = [c],
-                style={ "margin":"2",
-                        }), 
-            style = {"background-color":"rgb(198,216,233)",
-                    "border-width": "thin",
-                    "border-color":"LightGray",
-                    "border-style":"solid",
-                    "border-radius": "3px",
-                    "margin":"4"
-                    })
+            get_graph()
+           
         ])
 
     return layout
-# callback for group combo
-#
-#
+ 
 
 @app.callback(
     Output('select_metric_cnt', 'children'),
@@ -97,7 +112,6 @@ def get_metric_page_graph():
     State('select_metric_cnt', 'children')
     
 )
-
 def update_metrics(value, children):
      
     if not value:
@@ -115,17 +129,30 @@ def update_metrics(value, children):
     return  dcc.Dropdown( metrics,  id='select_metrics',persistence=True, persistence_type='session') 
   
 @app.callback(
-    Output('graph_cnt', 'children'),
+    Output('metric_graph', 'figure'),
     Input('interval-component', 'n_intervals'),
     Input('select_metrics', 'value'),
     Input('select_group', 'value'),
-    State('graph_cnt', 'children')
+    State('metric_graph', 'figure')
 )
 
 
 
-def update_graph(n,metric,group, old):
-    
+def update_graph( n,metric,group, old):
+
+     
+    if not metric or not group:
+        return old
+
+    if 'data' in old:
+        fig_data = old['data']
+    else:
+        fig_data = []
+   
+    for d in fig_data:
+        if d['name'] ==  metric:
+            return old
+
     ctx = dash.callback_context
      
     
@@ -138,25 +165,33 @@ def update_graph(n,metric,group, old):
             return old
 
 
-    d = {"x":[], "value":[],"tag":[], "metric":[],"text":[]}
-    if not metric or not group:
-        fig = px.line( pd.DataFrame(d), x="x", y="value", color="metric" )
-        return dcc.Graph(figure=fig)
+    d = {"x":[], "y":[],"tag":[], "metric":[],"text":[]}
     
+     
     for i,data in enumerate(redisUtil.get_metric_values() ):
         d["x"].append(i+1)
-        d["value"].append(data[group][metric])
+        d["y"].append(data[group][metric])
         d["tag"].append(data["metadata"]["tag"])
         # d["metric"].append( f"{group} : {metric}")
         d["metric"].append( f"{metric}")
         d["text"].append( "%.2f"%data[group][metric])
 
-    df = pd.DataFrame(d)
-    # fig = px.line(df, x="x", y="value", color="metric" )
-    # fig.update_traces(textposition="bottom right")
+     
+    sc_data = { 'mode': 'lines+markers+text' , 
+                'name': f"{metric}", 'orientation': 'v', 'showlegend': True,
+                'text':d["text"], 'x': d["x"], 'xaxis': 'x', 'y': d['y'], 'yaxis': 'y' ,'type': 'scatter', 'textposition': 'top center',
+                'hovertemplate': 'metric=' + metric + '<br>x=%{x}<br>value=%{y}<br>text=%{text}<extra></extra>'}
+
+    fig = go.Figure()
     
     
-    fig = px.line(df, x="x", y="value", color="metric", markers=True, text="text" ) 
+    fig_data.append(sc_data)
+
+    
+    for sc_data in fig_data:
+        fig.add_traces( go.Scatter(**sc_data))
+
+   
     fig.update_traces(textposition="top center")
     fig.update_layout(
         
@@ -169,7 +204,6 @@ def update_graph(n,metric,group, old):
         ,
         legend=dict(
             
-            
             title_font_family="Times New Roman",
             font=dict(
                 family="Times New Roman",
@@ -181,9 +215,8 @@ def update_graph(n,metric,group, old):
             borderwidth=1 
              
             )
-       
-
-        
-        
+         
     )   
-    return dcc.Graph(figure=fig ) 
+    
+    
+    return fig
