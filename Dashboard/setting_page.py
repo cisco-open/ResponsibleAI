@@ -7,28 +7,7 @@ logger = logging.getLogger(__name__)
 import urllib 
 from dash import dash_table
 import pandas as pd
-
-tbl_styling = { 
-    'style_data':{
-        'color': 'black',
-        'backgroundColor': 'white',
-        'textAlign': 'left',
-        "whiteSpace": "pre-line"
-    },
-    'style_data_conditional':[
-        {
-            'if': {'row_index': 'odd'},
-            'backgroundColor': 'rgb(220, 220, 220)',
-        }
-    ],
-    'style_header':{
-        'backgroundColor': 'rgb(210, 210, 210)',
-        'color': 'black',
-        'fontWeight': 'bold',
-        'textAlign': 'center'
-    }}
  
-    
  
 
   

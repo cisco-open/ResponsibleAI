@@ -13,7 +13,7 @@ external_stylesheets=[
 
 # print("??????????????????", __name__)
 try:
-    print("redis = ", redisUtil)
+    t =  type(redisUtil) 
 except:
     redisUtil = RedisUtils()
     

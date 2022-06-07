@@ -15,11 +15,13 @@ class RedisUtils(object):
     
 
     def __init__(self, host="localhost", port=6379, db=0, precision=3, text_maxlen=100):
+        
+        
         self._host = host
         self._port = port 
         self._db = db
         
-        
+        self._threads = []
         
         self._precision = precision
         self._maxlen = text_maxlen
@@ -56,9 +58,9 @@ class RedisUtils(object):
         self._redis_pub = self._redis.pubsub()
         
         try:
-            logger.info( "channel subsribed : %s"%(self._model_name+"|update") )
-            self._redis_pub.subscribe( **{ self._model_name+"|update": sub_handler} )
-            # self._redis_pub.run_in_thread(sleep_time=.1)
+            logger.info( "channel subsribed" )
+            self._redis_pub.subscribe( **{   "update": sub_handler} )
+            self._threads.append( self._redis_pub.run_in_thread(sleep_time=.1) )
         except:
             logger.warning("unable to subscribe to redis pub/sub")
 
@@ -101,6 +103,8 @@ class RedisUtils(object):
     def close(self):
         if self._redis_pub is not None:
             try:
+                for t in self._threads:
+                    t.stop()
                 self._redis_pub.unsubscribe(self._model_name+"|update")
                 self._redis_pub.close()
             except:

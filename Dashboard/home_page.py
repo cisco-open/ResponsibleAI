@@ -34,7 +34,7 @@ def get_card( t1, t2, t3, ic, n , id, c):
                 card_title ( t1,  ic, c),
                 dbc.Row( [
                     dbc.Col( daq.Gauge(
-                                color={"gradient":True,"ranges":{"red":[0,4],"yellow":[4,8],"green":[8,10]}},
+                                color={"gradient":True,"ranges":{"red":[0,40],"yellow":[40,80],"green":[80,100]}},
                                 value=100*np.mean(n),
                                 label='',
                                 max=100,
@@ -51,7 +51,7 @@ def get_card( t1, t2, t3, ic, n , id, c):
        
     ],
     style={"width": "30rem",
-    "background-color":"rgb(228,236,253)",
+    "background-color":"rgb(218,226,234)",
     "margin":"20px",
     "border-radius":"10px",
     "height":"180px"
