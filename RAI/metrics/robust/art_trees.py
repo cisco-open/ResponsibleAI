@@ -58,8 +58,8 @@ class ArtAdversarialRobustnessTreeGroup(MetricGroup, config=_config):
         compatible = _config["compatibility"]["type_restriction"] is None \
                     or ai_system.task.type == _config["compatibility"]["type_restriction"] \
                     or ai_system.task.type == "binary_classification" and _config["compatibility"]["type_restriction"] == "classification"
-        compatible = compatible and ai_system.task.model.agent.__class__.__module__.split(".")[0] == "sklearn" \
-                     and compare_runtimes(ai_system.user_config.get("time_complexity"), _config["complexity_class"])
+        compatible = compatible and ai_system.task.model.agent.__class__.__module__.split(".")[0] == "sklearn"  
+                      
 
         return compatible
 
