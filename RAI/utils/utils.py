@@ -3,9 +3,13 @@ import pandas as pd
 import math
 from RAI.dataset import Feature, Data, MetaDatabase, Dataset
 from sklearn.preprocessing import StandardScaler
-__all__ = [ 'jsonify', 'compare_runtimes', 'df_to_meta_database', 'df_to_RAI']
+__all__ = [ 'jsonify', 'compare_runtimes', 'df_to_meta_database', 'df_to_RAI','Reweighing']
 
-
+def Reweighing():
+    pass
+import pickle
+def isPrimitive(obj):
+    return not hasattr(obj, '__dict__')
 def jsonify(v):
         if type(v) is np.ma.MaskedArray:
             return np.ma.getdata(v).tolist()
@@ -17,6 +21,12 @@ def jsonify(v):
             return bool(v)
         if (isinstance(v, int) or isinstance(v, float)) and (math.isinf(v) or math.isnan(v)):  # CURRENTLY REPLACING INF VALUES WITH NULL
             return None
+        if isPrimitive(v):
+            return v
+
+        # if isPrimitive(v):
+        return  pickle.dumps(v).decode('ISO-8859-1')
+
         return v
 
 
