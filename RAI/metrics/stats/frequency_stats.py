@@ -12,13 +12,6 @@ _config = {
     "tags": ["stats", "Frequency Stats"],
     "complexity_class": "linear",
     "metrics": {
-        "cumfreq": {
-            "display_name": "Cumulative Frequency",
-            "type": "vector-dict",
-            "has_range": True,
-            "range": [0, None],
-            "explanation": "Indicates the cumulative count of each subclass.",
-        },
         "relfreq": {
             "display_name": "Relative Frequency",
             "type": "vector-dict",
@@ -26,7 +19,15 @@ _config = {
             "range": [0, None],
             "explanation": "Indicates the relative count of each subclass.",
         },
-    }
+        
+        "cumfreq": {
+            "display_name": "Cumulative Frequency",
+            "type": "vector-dict",
+            "has_range": True,
+            "range": [0, None],
+            "explanation": "Indicates the cumulative count of each subclass.",
+        },
+            }
 }
 
 # Type (Regression, Classification, Data | probability, numeric)
@@ -50,9 +51,9 @@ class FrequencyStatMetricGroup(MetricGroup, config=_config):
 
 
             # MAKES ASSUMPTION DATA IS FACTORIZED. So categorical variables start at 0 and no numbers are skipped.
-            self.metrics["cumfreq"].value = _cumulative_freq(data.X, self.ai_system.meta_database.features)
             self.metrics["relfreq"].value = _rel_freq(data.X, self.ai_system.meta_database.features)
- 
+            self.metrics["cumfreq"].value = _cumulative_freq(data.X, self.ai_system.meta_database.features)
+            
 
 def _cumulative_freq(X, features=None):
     result = {}
