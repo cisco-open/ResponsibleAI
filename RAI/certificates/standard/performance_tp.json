@@ -1,6 +1,6 @@
 {
     "meta":{
-        "display_name": "Accuracy Certification",
+        "display_name": "Accuracy Certification 2",
         "description": "Certifies whether or not the agent contains high enough accuracy for the domain.",
         "tags": ["performance"],
         "level":["1"]

@@ -9,8 +9,8 @@
     "condition": {
             "op": "and",
             "terms": [              
-                [ "&performance_cl > accuracy" , ">=" , 0.9 ],
-                [ "&performance_cl > balanced_accuracy" , ">=" , 0.9 ]
+                [ "&performance_cl > accuracy" , ">=" , 0.7 ],
+                [ "&performance_cl > balanced_accuracy" , ">=" , 0.5 ]
             ]
         }
 }     
