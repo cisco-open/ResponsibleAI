@@ -56,6 +56,7 @@ ai.initialize(user_config=configuration)
 
 if use_dashboard:
     r = RaiRedis( ai )
+    r.connect()
     r.reset_redis()
 
 

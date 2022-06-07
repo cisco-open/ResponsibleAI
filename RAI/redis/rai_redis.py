@@ -11,7 +11,7 @@ class RaiRedis:
     def __init__(self, ai_system:RAI.AISystem = None) -> None:
         self.ai_system = ai_system
          
-
+         
 
 
     def connect(self, host:str = "localhost", port:int = 6379) -> bool:
@@ -29,7 +29,7 @@ class RaiRedis:
 
         if export_metadata:
             self.export_metadata()
-        self.redis_connection.publish( self.ai_system.name + '|update',  "cleared")
+        self.redis_connection.publish(  'update',  "cleared")
 
             
     def export_metadata(self) -> None :
@@ -59,12 +59,12 @@ class RaiRedis:
         
         # metrics['metadata']['tag'] = tag
         self.redis_connection.rpush(self.ai_system.name + '|metric_values', json.dumps(metrics))  # True
-        self.redis_connection.publish( self.ai_system.name + '|update',  "New measurement: %s"% metrics["metadata"]["date"])
+        self.redis_connection.publish(  'update',  "New measurement: %s"% metrics["metadata"]["date"])
 
     def viewGUI(self):
         gui_launcher = threading.Thread(target=self._view_gui_thread, args=[])
         gui_launcher.start()
 
     def _view_gui_thread(self):
-        subprocess.call("start /wait python GUI\\app.py " + self.ai_system.task.model.name, shell=True)
+        subprocess.call("start /wait python Dashboard\\main.py " , shell=True)
         print("GUI can be viewed in new terminal")
