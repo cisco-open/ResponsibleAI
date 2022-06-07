@@ -16,7 +16,7 @@ from sklearn.model_selection import train_test_split
 use_dashboard  = True
 
 # Get Dataset
-data_path = "./data/adult/"
+data_path = "../data/adult/"
 
 train_data = pd.read_csv(data_path+"train.csv", header=0,
                     skipinitialspace=True, na_values="?")
@@ -32,7 +32,7 @@ xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=1, stratify=y
   
 # Create a model to make predictions
 from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
-reg = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=0)
+reg = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=0, min_samples_leaf=5, max_depth=2)
 
 model = Model(agent=reg, model_class="Random Forest Classifier")
 task = Task(model=model, type='binary_classification', description="Detect Cancer in patients using skin measurements")
@@ -42,7 +42,7 @@ configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivil
 
 dataset = Dataset(  train_data = Data(xTrain , yTrain), 
                         test_data = Data(xTest , yTest)) 
-ai = AISystem("new Adult", meta_database=meta, dataset=dataset, task=task )
+ai = AISystem("AdultDB", meta_database=meta, dataset=dataset, task=task )
 ai.initialize(user_config=configuration)
 
 
@@ -57,25 +57,25 @@ if use_dashboard:
     r.connect()
     r.reset_redis()
     r.add_measurement()
-    # r.viewGUI()
+    r.viewGUI()
 
 
-reg2 = AdaBoostClassifier()
-reg2.fit(xTrain,yTrain)
-ai.set_agent( reg2 )
+# reg2 = AdaBoostClassifier()
+# reg2.fit(xTrain,yTrain)
+# ai.set_agent( reg2 )
 
-# ai.compute( reg.predict(xTest), data_type="test", tag="model2")
-# v = ai.get_metric_values()
-# info = ai.get_metric_info()
-# if use_dashboard:
-#     r.add_measurement()
+# # ai.compute( reg.predict(xTest), data_type="test", tag="model2")
+# # v = ai.get_metric_values()
+# # info = ai.get_metric_info()
+# # if use_dashboard:
+# #     r.add_measurement()
 
 
-for g in v:
+# for g in v:
     
-    for m in v[g]:
-        if "type" in info[g][m]:
-            if info[g][m]["type"]in ("numeric","vector-dict", "text"):
-                print (g,  m, v[g][m])
+#     for m in v[g]:
+#         if "type" in info[g][m]:
+#             if info[g][m]["type"]in ("numeric","vector-dict", "text"):
+#                 print (g,  m, v[g][m])
             
  
