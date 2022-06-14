@@ -8,12 +8,14 @@ import site
 
 # choose the first site packages folder
 site_pkgs_path = site.getsitepackages()[0]
+print("path: ", site_pkgs_path)
 rai_pkg_path = os.path.join(site_pkgs_path, "RAI")
 if not os.path.isdir(rai_pkg_path):
     rai_pkg_path = "RAI"
 
-cert_file_folder = os.path.join(rai_pkg_path, "certificates", "standard")
-cert_list_file_name = os.path.join(cert_file_folder, "cert_list.json")
+cert_file_folder = os.path.join(os.path.dirname(__file__), "standard")
+cert_list_file_name = os.path.join(os.path.dirname(__file__), 'standard/cert_list.json')
+
 
 # class Certificate(object):
 
