@@ -29,14 +29,10 @@ class MetricManager(object):
                                             "time_complexity": "exponential"}
         
     def initialize(self, user_config:dict = None, metric_groups:list[str] = None, max_complexity:str = "linear"):
-        
-        
-        
         if user_config:
             for key in user_config:
                 self.user_config[key] = user_config[key]
-        
-        
+
         for metric_group_name in registry:
             if metric_groups is not None and metric_group_name not in metric_groups:
                 continue
@@ -45,7 +41,7 @@ class MetricManager(object):
             if metric_class.is_compatible(self.ai_system):
                 # if self._is_compatible(temp.compatibility):
                 self.metric_groups[metric_group_name] = metric_class(self.ai_system)
-                print( f"metric group : {metric_group_name} was loaded" )
+                print(f"metric group : {metric_group_name} was loaded")
 
     def reset_measurements(self) -> None:
         for metric_group_name in self.metric_groups:

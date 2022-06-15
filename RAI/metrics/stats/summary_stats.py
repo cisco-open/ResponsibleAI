@@ -281,10 +281,6 @@ class StatMetricGroup(MetricGroup, config=_config):
 
             # Singular Valued
             self.metrics["kstat-1"].value = scipy.stats.kstat(scalar_data, 1)
-            print(scalar_data)
-            print("DATA.x:\n")
-            print(data.X)
-
             self.metrics["kstat-2"].value = scipy.stats.kstat(scalar_data, 2)
             self.metrics["kstat-3"].value = scipy.stats.kstat(scalar_data, 3)
             self.metrics["kstat-4"].value = scipy.stats.kstat(scalar_data, 4)

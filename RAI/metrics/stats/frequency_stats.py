@@ -69,7 +69,7 @@ def _rel_freq(X, features=None):
     for i in range(len(features)):
         if features[i].categorical:
            numbins = len(features[i].values)
-           result[features[i].name]  = _convert_to_feature_dict(scipy.stats.relfreq(X[:, i], numbins=numbins)[0].tolist(), features[i])
+           result[features[i].name] = _convert_to_feature_dict(scipy.stats.relfreq(X[:, i], numbins=numbins)[0], features[i])
     return result
 
 

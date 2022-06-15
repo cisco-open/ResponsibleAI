@@ -48,7 +48,7 @@ class CorrelationStatRegressionSlow(MetricGroup, config=_config):
                 args = self.ai_system.metric_manager.user_config["stats"]["args"]
             data = data_dict["data"]
 
-            scalar_data = data.X[:,self.ai_system.meta_database.scalar_mask]
+            scalar_data = data.X[:,self.ai_system.meta_database.scalar_mask.astype('bool')]
 
             self.metrics["siegel-slopes"].value = _masked_calculate_per_feature(scipy.stats.siegelslopes, scalar_data, data.y)
             self.metrics["theil-slopes"].value = _masked_calculate_per_feature(scipy.stats.theilslopes, scalar_data, data.y)

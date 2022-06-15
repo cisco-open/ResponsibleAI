@@ -44,8 +44,6 @@ class AISystem:
         self.certificate_manager.load_stock_certificates()
         if custom_certificate_location is not None:
             self.certificate_manager.load_custom_certificates(custom_certificate_location)
-
-
         self.metric_manager.initialize( user_config, *kw_args)    
      
     
@@ -54,8 +52,6 @@ class AISystem:
 
     def get_certificate_values(self) -> dict:
         return self._last_certificate_values
-
- 
 
     def get_data(self, data_type:str) ->  Data :
         if data_type == "train":
@@ -75,7 +71,6 @@ class AISystem:
         return result
     
     def compute(self, predictions: np.ndarray, data_type:str = "test", tag = None) -> None:
-        
         self.auto_id+=1
         if tag is None:
             tag = f"{self.auto_id}"
@@ -84,7 +79,7 @@ class AISystem:
             data_dict["predictions"] = predictions
         data_dict["tag"] = tag
        
-        self._last_metric_values = self.metric_manager.compute( data_dict )
+        self._last_metric_values = self.metric_manager.compute(data_dict)
         
         if self.enable_certificates:
             self._last_certificate_values = self.certificate_manager.compute(self._last_metric_values)

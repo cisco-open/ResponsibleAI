@@ -51,14 +51,12 @@ class TreeModels(MetricGroup, config=_config):
 
         return compatible
 
-
     def compute(self, data_dict):
-        
         model = self.ai_system.task.model.agent
         self.metrics["estimator_counts"].value = model.n_estimators
         self.metrics["estimator_params"].value = model.estimators_
         self.metrics["feature_names"].value = [f.name for f in self.ai_system.meta_database.features]
-        
+
     def _get_time(self):
         now = datetime.datetime.now()
         return "{:02d}".format(now.year) + "-" + "{:02d}".format(now.month) + "-" + "{:02d}".format(now.day) + " " + "{:02d}".format(now.hour) + ":" + "{:02d}".format(now.minute) + ":" + "{:02d}".format(now.second)

@@ -13,9 +13,13 @@ class Feature:
         self.values = values
         self.possibleValues = None
         if values is not None:
-            self.possibleValues = []
+            self.possibleValues = values
+            '''
+            print("values: ", values)
             for value in values:
                 self.possibleValues.append(value)
+            print("Possible values: ", self.possibleValues)
+            '''
     def __repr__(self) -> str:
         return f"{self.name}:{self.dtype}"
 
