@@ -47,10 +47,8 @@ dataset = Dataset(train_data=Data(xTrain, yTrain),
 ai = AISystem("AdultDB_Test1", meta_database=meta, dataset=dataset, task=task, enable_certificates=False)
 ai.initialize(user_config=configuration)
 
-mdl = RandomForestClassifier(n_estimators=5, min_samples_leaf=20, max_depth=2)
-mdl.fit(xTrain, yTrain)
-ai.set_agent(mdl)
-predictions = mdl.predict(xTest)
+clf.fit(xTrain, yTrain)
+predictions = clf.predict(xTest)
 ai.compute(predictions, data_type="test", tag="Random Forest")
 
 metrics = ai.get_metric_values()

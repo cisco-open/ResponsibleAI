@@ -75,4 +75,3 @@ def test_moment_2():
 def test_moment_3():
     """Tests that the RAI moment 3 calculation is correct."""
     assert_almost_equal(scipy.stats.moment(xTest, 3), metrics['stat_moment_group']['moment-3'], 6)
-
