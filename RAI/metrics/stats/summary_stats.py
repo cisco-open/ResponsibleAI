@@ -252,8 +252,7 @@ class StatMetricGroup(MetricGroup, config=_config):
                 args = self.ai_system.metric_manager.user_config["stats"]["args"]
             data = data_dict["data"]
 
-            scalar_data = data.X[:,self.ai_system.meta_database.scalar_mask]
-
+            scalar_data = data.X[:,self.ai_system.meta_database.scalar_mask.astype('bool')]
             self.metrics["mean"].value = np.mean(scalar_data, **args.get("mean", {}), axis=0)
             self.metrics["covariance"].value = np.cov(scalar_data.T, **args.get("covariance", {}))
             self.metrics["num-Nan-rows"].value = np.count_nonzero(np.isnan(data.X).any(axis=1))
@@ -262,13 +261,11 @@ class StatMetricGroup(MetricGroup, config=_config):
                 warnings.filterwarnings('ignore')
                 self.metrics["geometric-mean"].value = scipy.stats.mstats.gmean(scalar_data)
             
-            self.metrics["mode"].value  = scipy.stats.mstats.mode(scalar_data)[0][0]
+            self.metrics["mode"].value = scipy.stats.mstats.mode(scalar_data)[0][0]
             self.metrics["skew"].value = scipy.stats.mstats.skew(scalar_data)
             self.metrics["variation"].value = scipy.stats.mstats.variation(scalar_data)
             self.metrics["sem"].value = scipy.stats.mstats.sem(scalar_data)
             self.metrics['kurtosis'].value = scipy.stats.mstats.kurtosis(scalar_data)
-
-            scalar_data = data.X[:,self.ai_system.meta_database.scalar_mask]
 
             # Singular Valued
             fMean, fVar, fStd = scipy.stats.mvsdist(scalar_data)
@@ -284,6 +281,10 @@ class StatMetricGroup(MetricGroup, config=_config):
 
             # Singular Valued
             self.metrics["kstat-1"].value = scipy.stats.kstat(scalar_data, 1)
+            print(scalar_data)
+            print("DATA.x:\n")
+            print(data.X)
+
             self.metrics["kstat-2"].value = scipy.stats.kstat(scalar_data, 2)
             self.metrics["kstat-3"].value = scipy.stats.kstat(scalar_data, 3)
             self.metrics["kstat-4"].value = scipy.stats.kstat(scalar_data, 4)
