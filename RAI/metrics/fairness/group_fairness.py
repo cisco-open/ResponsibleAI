@@ -177,7 +177,6 @@ def _generalized_entropy_index(b, alpha=2):
 
 
 def statistical_parity_difference(*y, prot_attr=None, priv_group=1, pos_label=1, sample_weight=None):
-
     rate = base_rate if len(y) == 1 or y[1] is None else selection_rate
     return difference(rate, *y, prot_attr=prot_attr, priv_group=priv_group,
                       pos_label=pos_label, sample_weight=sample_weight)

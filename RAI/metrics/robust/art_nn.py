@@ -106,10 +106,6 @@ _config = {
 '''
 
 
-
-
-
-
 class ArtAdversarialRobustnessGroup(MetricGroup, config=_config):
     def __init__(self, ai_system) -> None:
         super().__init__(ai_system)

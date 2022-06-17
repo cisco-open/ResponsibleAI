@@ -68,6 +68,7 @@ class SampleDistortionFairnessGroup(MetricGroup, config=_config):
 
             self.metrics['average'].value = 0
 
+# TODO: Remove this?
 
 def get_bin_dataset(metric_group, data, priv_group):
     names = [feature.name for feature in metric_group.ai_system.meta_database.features]
