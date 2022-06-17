@@ -11,6 +11,7 @@ all_complexity_classes = {"constant",  "linear",  "multi_linear", "polynomial", 
 class MetricGroup(object):    
     name = ""
     config = None
+
     @classmethod
     def is_compatible(cls, ai_system):
         compatible = cls.config["compatibility"]["type_restriction"] is None \

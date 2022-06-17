@@ -33,15 +33,49 @@ class MetricManager(object):
             for key in user_config:
                 self.user_config[key] = user_config[key]
 
+        compatible_metrics = []  # Stores compatible metrics
+        dependencies = {}  # Stores a metrics dependencies
+        dependent = {}  # Maps metrics to metrics dependent on it
+
         for metric_group_name in registry:
             if metric_groups is not None and metric_group_name not in metric_groups:
                 continue
-
             metric_class = registry[metric_group_name]
             if metric_class.is_compatible(self.ai_system):
-                # if self._is_compatible(temp.compatibility):
-                self.metric_groups[metric_group_name] = metric_class(self.ai_system)
-                print(f"metric group : {metric_group_name} was loaded")
+                compatible_metrics.append(metric_class)
+                dependencies[metric_class.config["name"]] = metric_class.config["dependency_list"]
+                for dependency in metric_class.config["dependency_list"]:
+                    if dependent.get(dependency) is None:
+                        dependent[dependency] = []
+                    dependent[dependency].append(metric_class.config["name"])
+
+        # Remove metrics with missing dependencies
+        removed = True
+        while removed:
+            removed = False
+            for metric in compatible_metrics:
+                for metric_dependency in dependencies[metric.config["name"]]:
+                    if metric_dependency not in dependencies:
+                        compatible_metrics.remove(metric)
+                        dependencies.pop(metric.config["name"])
+                        print("Missing dependency ", metric_dependency, " for ", metric.config["name"])
+                        removed = True
+                        break
+
+        # Check for circular dependencies
+        while len(compatible_metrics) != 0:
+            removed = False
+            for metric in compatible_metrics:
+                metric_name = metric.config["name"]
+                if len(dependencies[metric_name]) == 0:
+                    for dependent_metric in dependent.get(metric_name, []):
+                        dependencies[dependent_metric].remove(metric_name)
+                    self.metric_groups[metric_name] = metric(self.ai_system)
+                    print(f"metric group : {metric_name} was loaded")
+                    compatible_metrics.remove(metric)
+                    removed = True
+            if not removed:
+                raise AttributeError("Circular dependency detected in ", [val.name for val in compatible_metrics])
 
     def reset_measurements(self) -> None:
         for metric_group_name in self.metric_groups:

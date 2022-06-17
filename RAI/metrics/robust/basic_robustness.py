@@ -5,8 +5,8 @@ import numpy as np
 
 # Move config to external .json? 
 _config = {
-    "name" : "basic_robustness",
-    "display_name" : "Basic Robustness Metrics",
+    "name": "basic_robustness",
+    "display_name": "Basic Robustness Metrics",
     "compatibility": {"type_restriction": None, "output_restriction": None},
     "dependency_list": [],
     "tags": ["robustness", "Normalization"],
@@ -32,7 +32,7 @@ _config = {
 # Type (Regression, Classification, Data | probability, numeric)
 
 
-class BasicRobustMetricGroup(MetricGroup, config = _config):
+class BasicRobustMetricGroup(MetricGroup, config=_config):
      
     def __init__(self, ai_system) -> None:
         super().__init__(ai_system)

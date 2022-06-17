@@ -19,7 +19,7 @@ __all__ = ['compatibility']
 
 compatibility = {"type_restriction": "binary_classification", "output_restriction": "choice"}
 
-# Log loss, roc and brier score have been removed. s
+# Log loss, roc and brier score have been removed.
 
 _config = {
     "name": "adversarial_validation_tree",
@@ -58,9 +58,7 @@ class ArtAdversarialRobustnessTreeGroup(MetricGroup, config=_config):
         compatible = _config["compatibility"]["type_restriction"] is None \
                     or ai_system.task.type == _config["compatibility"]["type_restriction"] \
                     or ai_system.task.type == "binary_classification" and _config["compatibility"]["type_restriction"] == "classification"
-        compatible = compatible and ai_system.task.model.agent.__class__.__module__.split(".")[0] == "sklearn"  
-                      
-
+        compatible = compatible and ai_system.task.model.agent.__class__.__module__.split(".")[0] == "sklearn"
         return compatible
 
     def update(self, data):

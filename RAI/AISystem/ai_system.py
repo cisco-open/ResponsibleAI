@@ -28,9 +28,6 @@ class AISystem:
         self.dataset = dataset
         # self.user_config = user_config
         self.enable_certificates = enable_certificates
-        
-        
-        
         self.auto_id = 0
         self._last_metric_values = None
         self._last_certificate_values=None

@@ -127,3 +127,5 @@ class AdversarialRobustnessMetricGroup(MetricGroup, config=_config):
                 self.metrics["l-2-model-score"].value = l_2_distortions[model_class]
             if model_class in clever_distortions:
                 self.metrics["clever-model-score"].value = clever_distortions[model_class]
+
+# TODO: Remove these?
