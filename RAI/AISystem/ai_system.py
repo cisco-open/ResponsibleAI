@@ -1,14 +1,9 @@
-from math import exp
-import pandas as pd
-from typing import Any
 import numpy as np
-import RAI
 from RAI.AISystem.task import Task
 from RAI.dataset.dataset import Data, Dataset, MetaDatabase
 from RAI.certificates import CertificateManager
 from RAI.metrics import MetricManager
 
- 
 
 class AISystem:
     def __init__(self,
@@ -66,7 +61,7 @@ class AISystem:
         return result
     
     def compute(self, predictions: np.ndarray, data_type:str = "test", tag=None) -> None:
-        self.auto_id+=1
+        self.auto_id += 1
         if tag is None:
             tag = f"{self.auto_id}"
         data_dict = {"data": self.get_data(data_type)}

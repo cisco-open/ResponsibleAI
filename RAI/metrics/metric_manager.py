@@ -28,7 +28,7 @@ class MetricManager(object):
                                             "protected_attributes": [], "positive_label": 1},
                                             "time_complexity": "exponential"}
         
-    def initialize(self, user_config:dict = None, metric_groups:list[str] = None, max_complexity:str = "linear"):
+    def initialize(self, user_config: dict = None, metric_groups: list[str] = None, max_complexity: str = "linear"):
         if user_config:
             for key in user_config:
                 self.user_config[key] = user_config[key]
@@ -37,11 +37,15 @@ class MetricManager(object):
         dependencies = {}  # Stores a metrics dependencies
         dependent = {}  # Maps metrics to metrics dependent on it
 
+        whitelist = user_config.get("whitelist", registry)
+        blacklist = user_config.get("blacklist", [])
+
+        # Find all compatible metric groups
         for metric_group_name in registry:
             if metric_groups is not None and metric_group_name not in metric_groups:
                 continue
             metric_class = registry[metric_group_name]
-            if metric_class.is_compatible(self.ai_system):
+            if metric_class.is_compatible(self.ai_system) and metric_group_name in whitelist and metric_group_name not in blacklist:
                 compatible_metrics.append(metric_class)
                 dependencies[metric_class.config["name"]] = metric_class.config["dependency_list"]
                 for dependency in metric_class.config["dependency_list"]:

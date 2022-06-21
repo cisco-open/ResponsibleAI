@@ -47,7 +47,8 @@ task = Task(model=model, type='binary_classification', description="Detect Cance
 
 # Create AISystem from previous objects. AISystems are what users will primarily interact with.
 configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}},
-                              "protected_attributes": ["race"], "positive_label": 1}}
+                              "protected_attributes": ["race"], "positive_label": 1},
+                 "blacklist": []}
 ai = AISystem("cancer_detection", meta_database=meta, dataset=dataset, task=task)
 ai.initialize(user_config=configuration)
 

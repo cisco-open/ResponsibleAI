@@ -1,5 +1,4 @@
 from RAI.metrics.metric_group import MetricGroup
-import math
 import numpy as np
 import scipy.stats
 import warnings
@@ -7,8 +6,8 @@ import warnings
 # Move config to external .json? 
 _config = {
     "name": "summary_stats",
-    "display_name" : "Summary Statistics Metrics",
-    "compatibility" : {"type_restriction": None, "output_restriction": None},
+    "display_name": "Summary Statistics Metrics",
+    "compatibility": {"type_restriction": None, "output_restriction": None},
     "dependency_list": [],
     "tags": ["stats", "Summary Stats"],
     "complexity_class": "linear",
@@ -295,5 +294,3 @@ class StatMetricGroup(MetricGroup, config=_config):
             self.metrics["bayes-var-avg"].value = bVar[0]
             self.metrics["bayes-std"].value = bStd[1]
             self.metrics["bayes-std-avg"].value = bStd[0]
-
- 
