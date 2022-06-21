@@ -113,9 +113,9 @@ class ArtAdversarialRobustnessGroup(MetricGroup, config=_config):
 
     def is_compatible(ai_system):
         compatible = _config["compatibility"]["type_restriction"] is None \
-                    or ai_system.task.type == _config["compatibility"]["type_restriction"] \
-                    or ai_system.task.type == "binary_classification" and _config["compatibility"]["type_restriction"] == "classification"
-        compatible = compatible and 'torch.nn' in str(ai_system.task.model.agent.__class__.__bases__) \
+                    or ai_system.model.task == _config["compatibility"]["type_restriction"] \
+                    or ai_system.model.task == "binary_classification" and _config["compatibility"]["type_restriction"] == "classification"
+        compatible = compatible and 'torch.nn' in str(ai_system.model.agent.__class__.__bases__) \
                      and compare_runtimes(ai_system.user_config.get("time_complexity"), _config["complexity_class"])
         return compatible
 
@@ -130,10 +130,12 @@ class ArtAdversarialRobustnessGroup(MetricGroup, config=_config):
             data = data_dict["data"]
             preds = data_dict["predictions"]
 
-            classifier = PyTorchClassifier(model=self.ai_system.task.model.agent,
-                                                                                 loss=self.ai_system.task.model.loss_function,
-                                                                                 optimizer=self.ai_system.task.model.optimizer,
+            classifier = PyTorchClassifier(model=self.ai_system.model.agent,
+                                                                                 loss=self.ai_system.model.loss_function,
+                                                                                 optimizer=self.ai_system.model.optimizer,
                                                                                  input_shape=[1, 30], nb_classes=2)
+            # TODO: Remove limitation on input shape
+
 
             # CLEVER PARAMS: classifier, input sample, target class, estimate repetitions, random examples to sample per batch, radius of max pertubation, param norm, Weibull distribution init, pool_factor
 

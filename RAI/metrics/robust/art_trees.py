@@ -56,9 +56,9 @@ class ArtAdversarialRobustnessTreeGroup(MetricGroup, config=_config):
 
     def is_compatible(ai_system):
         compatible = _config["compatibility"]["type_restriction"] is None \
-                    or ai_system.task.type == _config["compatibility"]["type_restriction"] \
-                    or ai_system.task.type == "binary_classification" and _config["compatibility"]["type_restriction"] == "classification"
-        compatible = compatible and ai_system.task.model.agent.__class__.__module__.split(".")[0] == "sklearn"
+                    or ai_system.model.task == _config["compatibility"]["type_restriction"] \
+                    or ai_system.model.task == "binary_classification" and _config["compatibility"]["type_restriction"] == "classification"
+        compatible = compatible and ai_system.model.agent.__class__.__module__.split(".")[0] == "sklearn"
         return compatible
 
     def update(self, data):
@@ -71,7 +71,7 @@ class ArtAdversarialRobustnessTreeGroup(MetricGroup, config=_config):
         if "data" and "predictions" in data_dict:
             data = data_dict["data"]
 
-            classifier = SklearnClassifier(model=self.ai_system.task.model.agent)
+            classifier = SklearnClassifier(model=self.ai_system.model.agent)
 
             rt = RobustnessVerificationTreeModelsCliqueMethod(classifier=classifier, verbose=False)
 

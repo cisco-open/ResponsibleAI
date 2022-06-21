@@ -67,11 +67,11 @@ class MetadataGroup(MetricGroup, config=_config):
 
     def compute(self, data_dict):
         self.metrics["date"].value = self._get_time()
-        self.metrics["description"].value = self.ai_system.task.description
+        self.metrics["description"].value = self.ai_system.model.description
         self.metrics["sample_count"].value = data_dict["data"].X.shape[0]
-        self.metrics["task_type"].value = self.ai_system.task.type
-        if self.ai_system.task.model: 
-            self.metrics["model"].value = str(self.ai_system.task.model.agent)
+        self.metrics["task_type"].value = self.ai_system.model.task
+        if self.ai_system.model.agent:
+            self.metrics["model"].value = str(self.ai_system.model.agent)
         else:
             self.metrics["model"].value = "None"
 

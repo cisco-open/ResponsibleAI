@@ -120,7 +120,7 @@ class AdversarialRobustnessMetricGroup(MetricGroup, config=_config):
             clever_distortions = {"alexnet": 8E-6, "vgg": 6.5E-6, "resnet": 3.7E-6, "inception": 3E-6, "mobilenet": 2E-6,
                                  "densenet": 3E-6, "nasnet": 3.5E-6}
 
-            model_class = self.ai_system.task.model.model_class
+            model_class = self.ai_system.model.model_class
             if model_class in l_inf_distortions:
                 self.metrics["l-inf-model-score"].value = l_inf_distortions[model_class]
             if model_class in l_2_distortions:

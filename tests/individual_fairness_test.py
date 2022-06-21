@@ -1,23 +1,19 @@
-import math
-
 from numpy.testing import assert_almost_equal
 from aif360.sklearn.metrics import generalized_entropy_error
-
 import os
 import sys
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from RAI.dataset import Data, Dataset
-from RAI.AISystem import AISystem, Model, Task
+from RAI.AISystem import AISystem, Model
 from RAI.utils import df_to_RAI
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
-
 from aif360.datasets import BinaryLabelDataset
 from aif360.metrics import ClassificationMetric
-from aif360.sklearn.metrics import average_odds_error
 
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 use_dashboard = False
 np.random.seed(21)
 
@@ -40,14 +36,14 @@ xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=1, stratify=y
 
 clf = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=0, min_samples_leaf=5, max_depth=2)
 
-model = Model(agent=clf, model_class="Random Forest Classifier")
-task = Task(model=model, type='binary_classification', description="Detect Cancer in patients using skin measurements")
+model = Model(agent=clf, task='binary_classification', description="Detect Cancer in patients using skin measurements",
+              model_class="Random Forest Classifier")
 configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}},
                               "protected_attributes": ["race"], "positive_label": 1},
                  "time_complexity": "polynomial"}
 
 dataset = Dataset(train_data=Data(xTrain, yTrain), test_data=Data(xTest, yTest))
-ai = AISystem("AdultDB_Test1", meta_database=meta, dataset=dataset, task=task, enable_certificates=False)
+ai = AISystem("AdultDB_Test1", meta_database=meta, dataset=dataset, model=model, enable_certificates=False)
 ai.initialize(user_config=configuration)
 
 clf.fit(xTrain, yTrain)
@@ -97,4 +93,3 @@ def test_theil_index():
 def test_consistency():
     """Tests that the RAI consistency calculation is correct."""
     assert_almost_equal(metrics['individual_fairness']['consistency_score'], benchmark.consistency(), 4)
-

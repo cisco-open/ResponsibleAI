@@ -1,5 +1,5 @@
 import numpy as np
-from RAI.AISystem.task import Task
+from RAI.AISystem.model import Model
 from RAI.dataset.dataset import Data, Dataset, MetaDatabase
 from RAI.certificates import CertificateManager
 from RAI.metrics import MetricManager
@@ -10,7 +10,7 @@ class AISystem:
                 name:str,
                 meta_database:MetaDatabase, 
                 dataset:Dataset, 
-                task:Task,
+                model:Model,
                 enable_certificates:bool = True,
                 ) -> None:
         
@@ -19,7 +19,7 @@ class AISystem:
         
         self.name = name
         self.meta_database = meta_database
-        self.task = task
+        self.model = model
         self.dataset = dataset
         # self.user_config = user_config
         self.enable_certificates = enable_certificates
@@ -83,6 +83,3 @@ class AISystem:
     # we have not implemented the incremental update as of now and each call to compute process all the data
     def update(self, data):
         raise NotImplemented()
-
-    def set_agent(self, agent):
-        self.task.model.agent = agent

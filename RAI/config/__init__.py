@@ -2,7 +2,7 @@
 
 import yaml
 
-from ..AISystem.task import task_types
+from ..AISystem.model import task_types
 from ..dataset import Feature
 
 KEY_TASK_TYPE = 'taskType'

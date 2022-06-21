@@ -80,8 +80,8 @@ class GroupFairnessMetricGroup(MetricGroup, config=_config):
 
     def is_compatible(ai_system):
         compatible = _config["compatibility"]["type_restriction"] is None \
-                    or ai_system.task.type == _config["compatibility"]["type_restriction"] \
-                    or ai_system.task.type == "binary_classification" and _config["compatibility"]["type_restriction"] == "classification"
+                    or ai_system.model.task == _config["compatibility"]["type_restriction"] \
+                    or ai_system.model.task == "binary_classification" and _config["compatibility"]["type_restriction"] == "classification"
         compatible = compatible and "fairness" in ai_system.metric_manager.user_config \
                      and "protected_attributes" in ai_system.metric_manager.user_config["fairness"] \
                      and  len(ai_system.metric_manager.user_config["fairness"]["protected_attributes"])>0 \

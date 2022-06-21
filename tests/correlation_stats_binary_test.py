@@ -1,6 +1,6 @@
 import RAI
 from RAI.dataset import Feature, Data, MetaDatabase, Dataset
-from RAI.AISystem import AISystem, Model, Task
+from RAI.AISystem import AISystem, Model
 import numpy as np
 import scipy
 
@@ -42,14 +42,13 @@ meta = MetaDatabase(features)
 # Create a model to make predictions
 from sklearn.ensemble import RandomForestClassifier
 rfc = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=0)
-model = Model(agent=rfc, name="cisco_cancer_ai", display_name="Cisco Health AI", model_class="Random Forest Classifier", adaptive=False)
-# Indicate the task of the model
-task = Task(model=model, type='binary_classification', description="Detect Cancer in patients using skin measurements")
+model = Model(agent=rfc, task='binary_classification', name="cisco_cancer_ai", display_name="Cisco Health AI",
+              model_class="Random Forest Classifier", description="Detect Cancer in patients using skin measurements")
 
 # Create AISystem from previous objects. AISystems are what users will primarily interact with.
 configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}},
                               "protected_attributes": ["race"], "positive_label": 1}}
-ai = AISystem("cancer_detection", meta_database=meta, dataset=dataset, task=task)
+ai = AISystem("cancer_detection", meta_database=meta, dataset=dataset, model=model)
 ai.initialize(user_config=configuration)
 
 # Train model
