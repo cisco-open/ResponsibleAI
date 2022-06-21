@@ -31,8 +31,6 @@ class AISystem:
         self.auto_id = 0
         self._last_metric_values = None
         self._last_certificate_values=None
-    
-        
 
     def initialize(self, user_config:dict, custom_certificate_location:str = None , **kw_args):
         self.metric_manager = MetricManager(self)
@@ -41,16 +39,16 @@ class AISystem:
         self.certificate_manager.load_stock_certificates()
         if custom_certificate_location is not None:
             self.certificate_manager.load_custom_certificates(custom_certificate_location)
-        self.metric_manager.initialize( user_config, *kw_args)    
-     
-    
+        self.metric_manager.initialize(user_config, *kw_args)
+        self.dataset.separate_data(self.meta_database.scalar_mask)
+
     def get_metric_values(self) -> dict:
         return self._last_metric_values
 
     def get_certificate_values(self) -> dict:
         return self._last_certificate_values
 
-    def get_data(self, data_type:str) ->  Data :
+    def get_data(self, data_type:str) -> Data:
         if data_type == "train":
             return self.dataset.train_data
         if data_type == "val":
@@ -67,7 +65,7 @@ class AISystem:
             result['features'].append(self.meta_database.features[i].name)
         return result
     
-    def compute(self, predictions: np.ndarray, data_type:str = "test", tag = None) -> None:
+    def compute(self, predictions: np.ndarray, data_type:str = "test", tag=None) -> None:
         self.auto_id+=1
         if tag is None:
             tag = f"{self.auto_id}"
@@ -86,12 +84,10 @@ class AISystem:
 
     def get_certificate_info(self):
         return self.certificate_manager.get_metadata()
-        
- 
+
     # we have not implemented the incremental update as of now and each call to compute process all the data
     def update(self, data):
         raise NotImplemented()
-     
- 
+
     def set_agent(self, agent):
         self.task.model.agent = agent

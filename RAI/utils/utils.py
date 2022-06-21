@@ -1,39 +1,47 @@
+import math
+import pickle
+
 import numpy as np
 import pandas as pd
-import math
-from RAI.dataset import Feature, Data, MetaDatabase, Dataset
 from sklearn.preprocessing import StandardScaler
-__all__ = [ 'jsonify', 'compare_runtimes', 'df_to_meta_database', 'df_to_RAI','Reweighing']
+
+from RAI.dataset import Feature, MetaDatabase
+
+__all__ = ['jsonify', 'compare_runtimes', 'df_to_meta_database', 'df_to_RAI', 'Reweighing', 'calculate_per_all_features', 'convert_to_feature_dict']
+
 
 def Reweighing():
     pass
-import pickle
+
+
 def isPrimitive(obj):
     return not hasattr(obj, '__dict__')
+
+
 def jsonify(v):
-        if type(v) is np.ma.MaskedArray:
-            return np.ma.getdata(v).tolist()
-        if type(v) is np.ndarray:
-            return clean_list(v.tolist())
-        if type(v) is list:
-            return clean_list(v)
-        if type(v) in (np.bool, '_bool', 'bool_') or v.__class__.__name__ == "bool_":
-            return bool(v)
-        if (isinstance(v, int) or isinstance(v, float)) and (math.isinf(v) or math.isnan(v)):  # CURRENTLY REPLACING INF VALUES WITH NULL
-            return None
-        if isPrimitive(v):
-            return v
-
-        # if isPrimitive(v):
-        return  pickle.dumps(v).decode('ISO-8859-1')
-
+    if type(v) is np.ma.MaskedArray:
+        return np.ma.getdata(v).tolist()
+    if type(v) is np.ndarray:
+        return clean_list(v.tolist())
+    if type(v) is list:
+        return clean_list(v)
+    if type(v) in (np.bool, '_bool', 'bool_') or v.__class__.__name__ == "bool_":
+        return bool(v)
+    if (isinstance(v, int) or isinstance(v, float)) and (
+            math.isinf(v) or math.isnan(v)):  # CURRENTLY REPLACING INF VALUES WITH NULL
+        return None
+    if isPrimitive(v):
         return v
+    # if isPrimitive(v):
+    return pickle.dumps(v).decode('ISO-8859-1')
+    return v
 
 
 def clean_list(v):
     for i in range(len(v)):
         v[i] = jsonify(v[i])
     return v
+
 
 def compare_runtimes(required, seen):
     required = complexity_to_integer(required)
@@ -54,7 +62,8 @@ def complexity_to_integer(complexity):
     return result
 
 
-def df_to_meta_database(df, categorical_values=None, protected_attribute_names=None, privileged_info=None, positive_label=None):
+def df_to_meta_database(df, categorical_values=None, protected_attribute_names=None, privileged_info=None,
+                        positive_label=None):
     features = []
     fairness_config = {}
     for col in df.columns:
@@ -70,59 +79,72 @@ def df_to_meta_database(df, categorical_values=None, protected_attribute_names=N
     return meta, fairness_config
 
 
-
-
-def df_remove_nans( df, extra_symbols):
-     
+def df_remove_nans(df, extra_symbols):
     for i in df:
         df[i].replace('nan', np.nan, inplace=True)
-        
         for s in extra_symbols:
             df[i].replace(s, np.nan, inplace=True)
     df.dropna(inplace=True)
 
 
-    
-def df_to_RAI (  df, test_tf=None, target_column = None, clear_nans = True, extra_symbols="?", normalize="Scalar", max_categorical_threshold = None):
-
+def df_to_RAI(df, test_tf=None, target_column=None, clear_nans=True, extra_symbols="?", normalize="Scalar",
+              max_categorical_threshold=None):
     if clear_nans:
-        df_remove_nans(df,extra_symbols) 
-
+        df_remove_nans(df, extra_symbols)
     if max_categorical_threshold:
         for col in df:
-            if len( df[col].unique())<max_categorical_threshold:
-                df[col] = pd.Categorical( df[col] )
-
+            if len(df[col].unique()) < max_categorical_threshold:
+                df[col] = pd.Categorical(df[col])
     if normalize is not None:
         if normalize == "Scalar":
-            num_d = df.select_dtypes(exclude=['object','category'])
-            df[num_d.columns] = StandardScaler().fit_transform(num_d)    
-
+            num_d = df.select_dtypes(exclude=['object', 'category'])
+            df[num_d.columns] = StandardScaler().fit_transform(num_d)
     features = []
-
     cat_columns = []
     if target_column:
         y = df.pop(target_column)
-        if y.dtype in ("object","category"):
-           y = y.factorize(sort=True)[0] 
+        if y.dtype in ("object", "category"):
+            y = y.factorize(sort=True)[0]
     else:
         y = None
-        
+
     features = []
 
     for c in df:
         if str(df.dtypes[c]) in ["object", "category"]:
             fact = df[c].factorize(sort=True)
             df[c] = fact[0]
-
-            f = Feature( c, "integer", c, categorical=True, 
-                values= { i:v for i,v in enumerate(fact[1]) } )
+            f = Feature(c, "integer", c, categorical=True,
+                        values={i: v for i, v in enumerate(fact[1])})
         else:
             f = Feature(c, "float32", c)
         features.append(f)
-    
-    return MetaDatabase(features), df.to_numpy().astype('float32'),y 
+    return MetaDatabase(features), df.to_numpy().astype('float32'), y
 
 
+def map_feature_results(values, features, mapping):
+    result = [None] * len(features)
+    for i in range(len(values)):
+        result[mapping[i]] = values[i]
+    return result
 
 
+def calculate_per_feature(function, X, y):
+    result = []
+    for i in range(np.shape(X)[1]):
+        result.append(function(X[:, i], y))
+    return result
+
+
+def calculate_per_all_features(function, X, y, mapping, features):
+    result = []
+    for i in range(np.shape(X)[1]):
+        result.append(function(X[:, i], y))
+    return map_feature_results(result, features, mapping)
+
+
+def convert_to_feature_dict(values, feature):
+    result = {}
+    for i in range(len(values)):
+        result[feature.values[i]] = values[i]
+    return result

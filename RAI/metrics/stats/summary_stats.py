@@ -252,7 +252,7 @@ class StatMetricGroup(MetricGroup, config=_config):
                 args = self.ai_system.metric_manager.user_config["stats"]["args"]
             data = data_dict["data"]
 
-            scalar_data = data.X[:,self.ai_system.meta_database.scalar_mask.astype('bool')]
+            scalar_data = data.scalar
             self.metrics["mean"].value = np.mean(scalar_data, **args.get("mean", {}), axis=0)
             self.metrics["covariance"].value = np.cov(scalar_data.T, **args.get("covariance", {}))
             self.metrics["num-Nan-rows"].value = np.count_nonzero(np.isnan(data.X).any(axis=1))

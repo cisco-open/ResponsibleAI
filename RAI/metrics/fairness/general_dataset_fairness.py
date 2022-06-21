@@ -1,19 +1,19 @@
-from RAI.metrics.metric_group import MetricGroup
-from RAI.metrics.ai360_helper.AI360_helper import *
 import pandas as pd
+
 from RAI.metrics.AIF360.datasets import BinaryLabelDataset
 from RAI.metrics.AIF360.metrics import BinaryLabelDatasetMetric
+from RAI.metrics.metric_group import MetricGroup
 from RAI.utils import compare_runtimes
 
 __all__ = ['compatibility']
 
 compatibility = {"type_restriction": "binary_classification", "output_restriction": "choice"}
 
-# Log loss, roc and brier score have been removed. s
+# Log loss, roc and brier score have been removed.
 
 _config = {
     "name": "dataset_fairness",
-    "display_name" : "Dataset Fairness Metrics",
+    "display_name": "Dataset Fairness Metrics",
     "compatibility": {"type_restriction": "classification", "output_restriction": "choice"},
     "src": "equal_treatment",
     "dependency_list": [],
@@ -62,13 +62,15 @@ class GeneralDatasetFairnessGroup(MetricGroup, config=_config):
 
     def is_compatible(ai_system):
         compatible = _config["compatibility"]["type_restriction"] is None \
-                    or ai_system.task.type == _config["compatibility"]["type_restriction"] \
-                    or ai_system.task.type == "binary_classification" and _config["compatibility"]["type_restriction"] == "classification"
+                     or ai_system.task.type == _config["compatibility"]["type_restriction"] \
+                     or ai_system.task.type == "binary_classification" and _config["compatibility"][
+                         "type_restriction"] == "classification"
         compatible = compatible \
                      and "fairness" in ai_system.metric_manager.user_config \
                      and "protected_attributes" in ai_system.metric_manager.user_config["fairness"] \
-                     and  len(ai_system.metric_manager.user_config["fairness"]["protected_attributes"])>0 \
-                     and compare_runtimes(ai_system.metric_manager.user_config.get("time_complexity"), _config["complexity_class"])
+                     and len(ai_system.metric_manager.user_config["fairness"]["protected_attributes"]) > 0 \
+                     and compare_runtimes(ai_system.metric_manager.user_config.get("time_complexity"),
+                                          _config["complexity_class"])
         return compatible
 
     def update(self, data):
@@ -81,7 +83,8 @@ class GeneralDatasetFairnessGroup(MetricGroup, config=_config):
         if "data" and "predictions" in data_dict:
             data = data_dict["data"]
             prot_attr = []
-            if self.ai_system.metric_manager.user_config is not None and "fairness" in self.ai_system.metric_manager.user_config and "priv_group" in self.ai_system.metric_manager.user_config["fairness"]:
+            if self.ai_system.metric_manager.user_config is not None and "fairness" in self.ai_system.metric_manager.user_config and "priv_group" in \
+                    self.ai_system.metric_manager.user_config["fairness"]:
                 prot_attr = self.ai_system.metric_manager.user_config["fairness"]["protected_attributes"]
 
             bin_dataset = get_bin_dataset(self, data, prot_attr)

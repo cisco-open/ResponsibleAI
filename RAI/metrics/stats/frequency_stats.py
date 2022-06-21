@@ -2,6 +2,8 @@ from RAI.metrics.metric_group import MetricGroup
 import math
 import numpy as np
 import scipy.stats
+from RAI.utils.utils import calculate_per_all_features, convert_to_feature_dict
+
 
 # Move config to external .json? 
 _config = {
@@ -60,7 +62,7 @@ def _cumulative_freq(X, features=None):
     for i in range(len(features)):
         if features[i].categorical:
             numbins = len(features[i].values)
-            result[features[i].name] = _convert_to_feature_dict(scipy.stats.cumfreq(X[:, i], numbins=numbins)[0].tolist(), features[i]) 
+            result[features[i].name] = convert_to_feature_dict(scipy.stats.cumfreq(X[:, i], numbins=numbins)[0].tolist(), features[i])
     return result
 
 
@@ -69,47 +71,5 @@ def _rel_freq(X, features=None):
     for i in range(len(features)):
         if features[i].categorical:
            numbins = len(features[i].values)
-           result[features[i].name] = _convert_to_feature_dict(scipy.stats.relfreq(X[:, i], numbins=numbins)[0], features[i])
-    return result
-
-
-def _convert_to_feature_dict(values, feature):
-    result = {}
-    for i in range(len(values)):
-        result[feature.values[i]] = values[i]
-    return result
-
-
-
-# Old functions, may reuse.
-def _calculate_per_feature(function, X, feature):
-    result = {}
-    for value in feature.values:
-        result[feature.values[value]] = function(X, value)
-    return result
-
-
-
-def _calculate_per_categorical_value(function, X, features=None, per_feature=False):
-    result = []
-    for i in range(len(features)):
-        if not features[i].categorical:
-            result.append(None)
-        else:
-            if per_feature:
-                result.append(_calculate_per_feature(function, X[:, i], features[i]))
-            else:
-                result.append(function(X[:, i]))
-                print("DATA: ")
-                print(X[:, i])
-    return result
-
-
-def _get_scalar_data(X, mask):
-    result = np.copy(X)
-    i = len(mask)-1
-    while i >= 0:
-        if mask[i] == 1:
-            result = np.delete(result, i, axis=1)
-        i = i-1
+           result[features[i].name] = convert_to_feature_dict(scipy.stats.relfreq(X[:, i], numbins=numbins)[0], features[i])
     return result

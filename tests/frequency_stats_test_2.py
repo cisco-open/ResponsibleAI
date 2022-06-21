@@ -2,7 +2,6 @@ import RAI
 from RAI.dataset import Feature, Data, MetaDatabase, Dataset
 from RAI.AISystem import AISystem, Model, Task
 import numpy as np
-import scipy
 
 from sklearn.datasets import load_breast_cancer
 from sklearn.model_selection import train_test_split
@@ -67,12 +66,3 @@ for g in metrics:
         if "type" in info[g][m]:
             if info[g][m]["type"] in ("numeric", "vector-dict", "text"):
                 print(g, m, metrics[g][m])
-
-
-def test_point_biserial_r():
-    """Tests that the RAI relfreq calculation is correct."""
-    for i in range(len(features_raw)):
-        assert metrics['correlation_stats_binary']['point-biserial-r'][i] == \
-               scipy.stats.pointbiserialr(xTest[:, i], yTest)
-
-# TODO: Should be from binary X values to continuous y values

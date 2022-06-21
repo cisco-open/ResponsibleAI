@@ -114,9 +114,7 @@ class MetricManager(object):
     def compute(self, data_dict) -> dict :
         for metric_group_name in self.metric_groups:
             self.metric_groups[metric_group_name].compute(data_dict)
-        
-         
-        
+
         result = {}
         for group in self.metric_groups:
             result[group] = {}
@@ -124,10 +122,8 @@ class MetricManager(object):
                 metric_obj = self.metric_groups[group].metrics[metric]
                 result[group][metric] =  utils.jsonify(metric_obj.value)
         return result
-    
-    
 
-   # Searches all metrics. Queries based on Metric Name, Metric Group Name, Category, and Tags.
+    # Searches all metrics. Queries based on Metric Name, Metric Group Name, Category, and Tags.
     def search(self, query:str) -> dict :
         query = query.lower()
         results = {}
@@ -142,4 +138,4 @@ class MetricManager(object):
                         if tag.lower().find(query) > -1:
                             results[metric] = metric_obj.value
                             break
-        return results            
+        return results

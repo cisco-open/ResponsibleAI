@@ -55,10 +55,9 @@ class StatMomentGroup(MetricGroup, config=_config):
                 args = self.ai_system.metric_manager.user_config["stats"]["args"]
             data = data_dict["data"]
 
-            scalar_data = data.X[:, self.ai_system.meta_database.scalar_mask.astype('bool')]
+            scalar_data = data.scalar
 
             self.metrics["moment-1"].value = scipy.stats.moment(scalar_data, 1)
             self.metrics["moment-2"].value = scipy.stats.moment(scalar_data, 2)
             self.metrics["moment-3"].value = scipy.stats.moment(scalar_data, 3)
-
  

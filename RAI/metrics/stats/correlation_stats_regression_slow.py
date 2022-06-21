@@ -2,6 +2,7 @@ from RAI.metrics.metric_group import MetricGroup
 import math
 import numpy as np
 import scipy.stats
+from RAI.utils.utils import calculate_per_all_features
 
 # Move config to external .json? 
 _config = {
@@ -47,21 +48,9 @@ class CorrelationStatRegressionSlow(MetricGroup, config=_config):
             if self.ai_system.metric_manager.user_config is not None and "stats" in self.ai_system.metric_manager.user_config and "args" in self.ai_system.metric_manager.user_config["stats"]:
                 args = self.ai_system.metric_manager.user_config["stats"]["args"]
             data = data_dict["data"]
+            scalar_data = data.scalar
+            map = self.ai_system.meta_database.scalar_map
+            features = self.ai_system.meta_database.features
 
-            scalar_data = data.X[:,self.ai_system.meta_database.scalar_mask.astype('bool')]
-
-            self.metrics["siegel-slopes"].value = _masked_calculate_per_feature(scipy.stats.siegelslopes, scalar_data, data.y)
-            self.metrics["theil-slopes"].value = _masked_calculate_per_feature(scipy.stats.theilslopes, scalar_data, data.y)
-
-
-def _calculate_per_feature(function, X, y):
-    result = []
-    for i in range(np.shape(X)[1]):
-        result.append(function(X[:, i], y))
-    return result
-
-def _masked_calculate_per_feature(function, X, y, mask):
-    result = []
-    for i in range(np.shape(X)[1]):
-        result.append(function(X[:, i], y))
-    return result
+            self.metrics["siegel-slopes"].value = calculate_per_all_features(scipy.stats.siegelslopes, scalar_data, data.y, map, features)
+            self.metrics["theil-slopes"].value = calculate_per_all_features(scipy.stats.theilslopes, scalar_data, data.y, map, features)

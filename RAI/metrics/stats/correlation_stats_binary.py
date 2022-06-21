@@ -2,6 +2,8 @@ from RAI.metrics.metric_group import MetricGroup
 import math
 import numpy as np
 import scipy.stats
+from RAI.utils.utils import calculate_per_all_features
+
 
 # Are these metrics meaningful?
 
@@ -42,11 +44,7 @@ class BinaryCorrelationStats(MetricGroup, config=_config):
                 args = self.ai_system.metric_manager.user_config["stats"]["args"]
 
             data = data_dict["data"]
-            self.metrics["point-biserial-r"].value = _calculate_per_feature(scipy.stats.pointbiserialr, data.X, data.y)
+            map = self.ai_system.meta_database.categorical_map
+            features = self.ai_system.meta_database.features
 
-
-def _calculate_per_feature(function, X, y):
-    result = []
-    for i in range(np.shape(X)[1]):
-        result.append(function(y, X[:, i]))
-    return result
+            self.metrics["point-biserial-r"].value = calculate_per_all_features(scipy.stats.pointbiserialr, data.categorical, data.y, map, features)

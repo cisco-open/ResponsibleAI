@@ -1,7 +1,7 @@
 from RAI.metrics.metric_group import MetricGroup
-import math
-import numpy as np
 import scipy.stats
+from RAI.utils.utils import calculate_per_all_features
+
 
 # Move config to external .json? 
 _config = {
@@ -56,26 +56,9 @@ class CorrelationStatRegression(MetricGroup, config=_config):
             args = {}
             if self.ai_system.metric_manager.user_config is not None and "stats" in self.ai_system.metric_manager.user_config and "args" in self.ai_system.metric_manager.user_config["stats"]:
                 args = self.ai_system.metric_manager.user_config["stats"]["args"]
-
-            mask = self.ai_system.meta_database.scalar_mask
-
             data = data_dict["data"]
-            self.metrics["pearson-correlation"].value = _masked_calculate_per_feature(scipy.stats.pearsonr, data.X, data.y, mask)
-            self.metrics["spearman-correlation"].value = _masked_calculate_per_feature(scipy.stats.spearmanr, data.X, data.y, mask)
-            # self.metrics["lin-regress"].value = _masked_calculate_per_feature(scipy.stats.linregress, data.X, data.y, mask)
+            map = self.ai_system.meta_database.scalar_map
+            features = self.ai_system.meta_database.features
 
-
-def _calculate_per_feature(function, X, y):
-    result = []
-    for i in range(np.shape(X)[1]):
-        result.append(function(X[:, i], y))
-    return result
-
-def _masked_calculate_per_feature(function, X, y, mask):
-    result = []
-    for i in range(np.shape(X)[1]):
-        if(mask[i]):
-            result.append(function(X[:, i], y))
-        else:
-            result.append(None)
-    return result
+            self.metrics["pearson-correlation"].value = calculate_per_all_features(scipy.stats.pearsonr, data.scalar, data.y, map, features)
+            self.metrics["spearman-correlation"].value = calculate_per_all_features(scipy.stats.spearmanr, data.scalar, data.y, map, features)
