@@ -16,7 +16,7 @@ use_dashboard = False
 np.random.seed(21)
 
 # Hook data in with our Representation
-dataset = Dataset(train_data=Data(xTrain, yTrain), test_data=Data(xTest, yTest))
+dataset = Dataset({"train": Data(xTrain, yTrain), "test": Data(xTest, yTest)})
 
 # Indicate the features of the dataset (Columns)
 features = [

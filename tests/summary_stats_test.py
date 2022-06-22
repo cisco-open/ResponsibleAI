@@ -14,7 +14,7 @@ use_dashboard = False
 np.random.seed(21)
 
 # Hook data in with our Representation
-dataset = Dataset(train_data=Data(xTrain, yTrain), test_data=Data(xTest, yTest))
+dataset = Dataset({"train": Data(xTrain, yTrain), "test": Data(xTest, yTest)})
 
 # Indicate the features of the dataset (Columns)
 features = [
@@ -36,7 +36,7 @@ model = Model(agent=reg, task='regression', name="Cisco_RealEstate_AI", model_cl
 
 # Create AISystem from previous objects. AISystems are what users will primarily interact with.
 configuration = {"equal_treatment": {"priv_groups": [("Gender", 1)]}}
-ai = AISystem("Regression example", meta_database=meta, dataset=dataset, task=task, enable_certificates=False)
+ai = AISystem("Regression example", meta_database=meta, dataset=dataset, model=model, enable_certificates=False)
 ai.initialize(user_config=configuration)
 
 # Train model

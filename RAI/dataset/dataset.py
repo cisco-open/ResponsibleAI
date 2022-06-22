@@ -1,5 +1,3 @@
-# Dataset Requires Metrics as well
-
 __all__ = ['Feature', 'MetaDatabase', 'Data', 'Dataset']
 import numpy as np
 
@@ -32,7 +30,7 @@ class MetaDatabase:
         self.categorical_map = []
         for i, f in enumerate(features):
             self.scalar_mask[i] = not f.categorical
-            if f.categorical:
+            if not f.categorical:
                 self.scalar_map.append(i)
             else:
                 self.categorical_map.append(i)
@@ -72,15 +70,9 @@ class Data:
 
 
 class Dataset:
-    def __init__(self, train_data, val_data=None, test_data=None) -> None:
-        self.train_data = train_data
-        self.val_data = val_data
-        self.test_data = test_data
+    def __init__(self, data_dict) -> None:
+        self.data_dict = data_dict
 
     def separate_data(self, scalar_mask):
-        if self.train_data is not None:
-            self.train_data.separate(scalar_mask)
-        if self.val_data is not None:
-            self.val_data.separate(scalar_mask)
-        if self.test_data is not None:
-            self.test_data.separate(scalar_mask)
+        for data in self.data_dict:
+            self.data_dict[data].separate(scalar_mask)

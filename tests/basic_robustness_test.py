@@ -41,8 +41,7 @@ configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivil
                               "protected_attributes": ["race"], "positive_label": 1},
                  "time_complexity": "polynomial"}
 
-dataset = Dataset(train_data=Data(xTrain, yTrain),
-                  test_data=Data(xTest, yTest))
+dataset = Dataset({"train": Data(xTrain, yTrain), "test": Data(xTest, yTest)})
 ai = AISystem("AdultDB_Test1", meta_database=meta, dataset=dataset, model=model, enable_certificates=False)
 ai.initialize(user_config=configuration)
 

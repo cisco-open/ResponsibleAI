@@ -44,13 +44,9 @@ class AISystem:
         return self._last_certificate_values
 
     def get_data(self, data_type:str) -> Data:
-        if data_type == "train":
-            return self.dataset.train_data
-        if data_type == "val":
-            return self.dataset.val_data
-        if data_type == "test":
-            return self.dataset.test_data
-        raise Exception(f"unknown data type : {data_type}" )
+        if data_type not in self.dataset.data_dict:
+            raise Exception(f"data_type must be found in Dataset. Got : {data_type}")
+        return self.dataset.data_dict[data_type]
 
     def get_project_info(self) -> dict :
         result = {"id": self.name,  

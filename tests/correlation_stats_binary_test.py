@@ -36,7 +36,7 @@ features.append(Feature("gender", "integer", "race value", categorical=True, val
 # Hook data in with our Representation
 training_data = Data(xTrain, yTrain)  # Accepts Data and GT
 test_data = Data(xTest, yTest)
-dataset = Dataset(train_data=training_data, test_data=test_data)  # Accepts Training, Test and Validation Set
+dataset = Dataset({"train": training_data, "test": test_data})  # Accepts Training, Test and Validation Set
 meta = MetaDatabase(features)
 
 # Create a model to make predictions

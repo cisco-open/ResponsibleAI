@@ -26,9 +26,6 @@ all_data = pd.concat([train_data, test_data], ignore_index=True)
 idx = all_data['race'] != 'White'
 all_data['race'][idx] = 'Black'
 
-print(all_data.columns)
-print(type(all_data))
-
 meta, X, y = df_to_RAI(all_data, target_column="income-per-year", normalize=None, max_categorical_threshold=5)
 xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=1, stratify=y)
 
@@ -40,7 +37,7 @@ configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivil
                               "protected_attributes": ["race"], "positive_label": 1},
                  "time_complexity": "polynomial"}
 
-dataset = Dataset(train_data=Data(xTrain, yTrain), test_data=Data(xTest, yTest))
+dataset = Dataset({"train": Data(xTrain, yTrain), "test": Data(xTest, yTest)})
 ai = AISystem("AdultDB_Test1", meta_database=meta, dataset=dataset, model=model, enable_certificates=False)
 ai.initialize(user_config=configuration)
 

@@ -12,18 +12,18 @@ use_dashboard = False
 np.random.seed(21)
 
 # Hook data in with our Representation
-dataset = Dataset(train_data=Data(xTrain, yTrain), test_data=Data(xTest, yTest))
+dataset = Dataset({"train": Data(xTrain, yTrain), "test": Data(xTest, yTest)})
 
 # Indicate the features of the dataset (Columns)
 features = [
-    Feature("MedInc", 'float32', "Median Income"),
-    Feature("HouseAge", 'float32', "Median House age in Block Group"),
-    Feature("AveRooms", 'float32', "Average number of rooms per household"),
-    Feature("AveBedrms", 'float32', "Average number of bedrooms per household"),
-    Feature("Population", 'float32', "Block group population"),
-    Feature("AveOccup", 'float32', "Average Number of Household members"),
-    Feature("Latitude", 'float32', "Block group Latitude"),
-    Feature("Longitude", 'float32', "Block group Longitude")
+    Feature("MedInc", 'float32', "Median Income", categorical=False),
+    Feature("HouseAge", 'float32', "Median House age in Block Group", categorical=False),
+    Feature("AveRooms", 'float32', "Average number of rooms per household", categorical=False),
+    Feature("AveBedrms", 'float32', "Average number of bedrooms per household", categorical=False),
+    Feature("Population", 'float32', "Block group population", categorical=False),
+    Feature("AveOccup", 'float32', "Average Number of Household members", categorical=False),
+    Feature("Latitude", 'float32', "Block group Latitude", categorical=False),
+    Feature("Longitude", 'float32', "Block group Longitude", categorical=False)
 ]
 meta = MetaDatabase(features)
 
@@ -35,7 +35,7 @@ model = Model(agent=reg, task='regression', name="Cisco_RealEstate_AI", model_cl
 # Create AISystem from previous objects. AISystems are what users will primarily interact with.
 
 configuration = {"equal_treatment": {"priv_groups": [("Gender", 1)]}}
-ai = AISystem("Regression example", meta_database=meta, dataset=dataset, enable_certificates=False)
+ai = AISystem("Regression example", meta_database=meta, dataset=dataset, model=model, enable_certificates=False)
 ai.initialize(user_config=configuration)
 
 # Train model
