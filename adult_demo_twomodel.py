@@ -36,7 +36,7 @@ xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=1, stratify=y
 
 # %%
 # Create a model to make predictions
-model = Model(agent=clf, type='binary_classification', description="Detect Cancer in patients using skin measurements",
+model = Model(agent=clf, task='binary_classification', description="Detect Cancer in patients using skin measurements",
               model_class="Random Forest Classifier")
 configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}},
                               "protected_attributes": ["race"], "positive_label": 1},
