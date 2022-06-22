@@ -54,9 +54,10 @@ rfc.fit(xTrain, yTrain)
 predictions = rfc.predict(xTest)
 
 # Make Predictions
-ai.compute(predictions, data_type='test', tag="binary classification")
+ai.compute({"test": predictions}, tag="binary classification")
 
 metrics = ai.get_metric_values()
+metrics = metrics["test"]
 info = ai.get_metric_info()
 
 # frequency_stats relfreq {'race': {'black': 0.4965034965034965, 'white': 0.5034965034965035}, 'gender': {'female': 0.4965034965034965, 'male': 0.5034965034965035}}

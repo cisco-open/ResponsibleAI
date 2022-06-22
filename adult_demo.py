@@ -40,7 +40,7 @@ reg.fit(xTrain, yTrain)
 
 print("\n\nTESTING PREDICTING METRICS:")
 test_preds = reg.predict(xTest)
-ai.compute(reg.predict(xTest), data_type="test", tag='model1')
+ai.compute({"test": reg.predict(xTest)}, tag='model1')
 
 if use_dashboard:
     r = RaiRedis(ai)
@@ -53,8 +53,9 @@ reg2 = AdaBoostClassifier()
 reg2.fit(xTrain, yTrain)
 ai.set_agent(reg2)
 
-ai.compute(reg.predict(xTest), data_type="test", tag="model2")
+ai.compute({"test": reg.predict(xTest)}, tag="model2")
 v = ai.get_metric_values()
+v = v["test"]
 info = ai.get_metric_info()
 if use_dashboard:
     r.add_measurement()

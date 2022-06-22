@@ -47,9 +47,10 @@ reg.fit(xTrain, yTrain)
 predictions = reg.predict(xTest)
 
 # Make Predictions
-ai.compute(predictions, data_type='test', tag="regression")
+ai.compute({"test": predictions}, tag="regression")
 
 metrics = ai.get_metric_values()
+metrics = metrics["test"]
 info = ai.get_metric_info()
 
 for g in metrics:

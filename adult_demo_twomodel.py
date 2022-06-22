@@ -55,7 +55,7 @@ if use_dashboard:
 def test_model(mdl, name, sample_weight=None):
     mdl.fit(xTrain, yTrain, sample_weight=sample_weight)
     ai.set_agent(mdl)
-    ai.compute(mdl.predict(xTest), data_type="test", tag=name)
+    ai.compute({"test": mdl.predict(xTest)}, tag=name)
 
     if use_dashboard:
         r.add_measurement()
@@ -101,6 +101,7 @@ test_model(mdl, "Random Forest with Reweighting")
 
 
 metrics = ai.get_metric_values()
+metrics = metrics["test"]
 info = ai.get_metric_info()
 
 for g in metrics:

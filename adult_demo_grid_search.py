@@ -46,7 +46,7 @@ if use_dashboard:
 def test_model(mdl, name):
     mdl.fit(xTrain, yTrain)
     ai.set_agent(mdl)
-    ai.compute(mdl.predict(xTest), data_type="test", tag=name)
+    ai.compute({"test": mdl.predict(xTest)}, tag=name)
 
     if use_dashboard:
         r.add_measurement()

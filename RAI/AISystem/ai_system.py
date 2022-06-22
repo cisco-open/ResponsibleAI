@@ -24,10 +24,10 @@ class AISystem:
         # self.user_config = user_config
         self.enable_certificates = enable_certificates
         self.auto_id = 0
-        self._last_metric_values = None
+        self._last_metric_values = {}
         self._last_certificate_values=None
 
-    def initialize(self, user_config:dict, custom_certificate_location:str = None , **kw_args):
+    def initialize(self, user_config: dict, custom_certificate_location:str = None , **kw_args):
         self.metric_manager = MetricManager(self)
         self.certificate_manager = CertificateManager()
         
@@ -56,7 +56,7 @@ class AISystem:
             result['features'].append(self.meta_database.features[i].name)
         return result
     
-    def compute(self, predictions: np.ndarray, data_type:str = "test", tag=None) -> None:
+    def single_compute(self, predictions: np.ndarray, data_type: str = "test", tag=None) -> None:
         self.auto_id += 1
         if tag is None:
             tag = f"{self.auto_id}"
@@ -64,11 +64,17 @@ class AISystem:
         if predictions is not None:
             data_dict["predictions"] = predictions
         data_dict["tag"] = tag
-       
-        self._last_metric_values = self.metric_manager.compute(data_dict)
-        
+        self._last_metric_values[data_type] = self.metric_manager.compute(data_dict)
         if self.enable_certificates:
             self._last_certificate_values = self.certificate_manager.compute(self._last_metric_values)
+
+    def compute(self, predictions: dict, tag=None) -> None:
+        if not (isinstance(predictions, dict) and all(isinstance(v, np.ndarray) for v in predictions.values()) \
+                and all(isinstance(k, str) for k in predictions.keys())):
+            raise Exception("Predictions should be a dictionary of strings mapping to np.ndarrays")
+        for key in predictions.keys():
+            if key in self.dataset.data_dict.keys():
+                self.single_compute(predictions[key], key, tag=tag)
 
     def get_metric_info(self):
         return self.metric_manager.get_metadata()

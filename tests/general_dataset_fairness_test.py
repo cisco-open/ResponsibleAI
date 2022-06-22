@@ -63,9 +63,10 @@ benchmark = BinaryLabelDatasetMetric(binDataset)
 
 clf.fit(xTrain, yTrain)
 predictions = clf.predict(xTest)
-ai.compute(predictions, data_type="test", tag="Random Forest")
+ai.compute({"test": predictions}, tag="Random Forest")
 
 metrics = ai.get_metric_values()
+metrics = metrics["test"]
 info = ai.get_metric_info()
 
 

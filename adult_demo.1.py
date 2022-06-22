@@ -16,10 +16,10 @@ train_data = pd.read_csv(data_path+"train.csv", header=0,
                     skipinitialspace=True, na_values="?")
 test_data = pd.read_csv(data_path+"test.csv", header=0,
                 skipinitialspace=True, na_values="?")
-all_data = pd.concat( [train_data, test_data],ignore_index=True)
+all_data = pd.concat([train_data, test_data],ignore_index=True)
 
 #convert aggregated data into RAI format
-meta, X,y  = df_to_RAI(all_data, target_column="income-per-year", normalize="Scalar", max_categorical_threshold=5)
+meta, X,y = df_to_RAI(all_data, target_column="income-per-year", normalize="Scalar", max_categorical_threshold=5)
 
 xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=1, stratify=y)
  
@@ -48,7 +48,7 @@ if use_dashboard:
 def test_model(mdl, name):
     mdl.fit(xTrain, yTrain)
     ai.set_agent(mdl)
-    ai.compute(mdl.predict(xTest), data_type="test", tag=name)
+    ai.compute({"test": mdl.predict(xTest)}, tag=name)
  
     if use_dashboard:
         r.add_measurement()

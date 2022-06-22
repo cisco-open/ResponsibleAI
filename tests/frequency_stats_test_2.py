@@ -57,10 +57,12 @@ rfc.fit(xTrain, yTrain)
 predictions = rfc.predict(xTest)
 
 # Make Predictions
-ai.compute(predictions, data_type='test', tag="binary classification")
+ai.compute({"test": predictions})
 
 metrics = ai.get_metric_values()
+metrics = metrics["test"]
 info = ai.get_metric_info()
+
 
 for g in metrics:
     for m in metrics[g]:
