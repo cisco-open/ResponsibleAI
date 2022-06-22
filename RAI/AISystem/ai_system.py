@@ -1,4 +1,5 @@
 import numpy as np
+import time
 from RAI.AISystem.model import Model
 from RAI.dataset.dataset import Data, Dataset, MetaDatabase
 from RAI.certificates import CertificateManager
@@ -7,30 +8,26 @@ from RAI.metrics import MetricManager
 
 class AISystem:
     def __init__(self,
-                name:str,
-                meta_database:MetaDatabase, 
-                dataset:Dataset, 
-                model:Model,
-                enable_certificates:bool = True,
-                ) -> None:
-        
-        # if type(user_config) is not dict:
-        #     raise TypeError("User config must be of type Dictionary")
-        
+                 name: str,
+                 meta_database: MetaDatabase,
+                 dataset: Dataset,
+                 model: Model,
+                 enable_certificates: bool = True) -> None:
+
         self.name = name
         self.meta_database = meta_database
         self.model = model
         self.dataset = dataset
-        # self.user_config = user_config
         self.enable_certificates = enable_certificates
         self.auto_id = 0
         self._last_metric_values = {}
-        self._last_certificate_values=None
+        self._last_certificate_values = None
+        self.metric_manager = None
+        self.certificate_manager = None
 
-    def initialize(self, user_config: dict, custom_certificate_location:str = None , **kw_args):
+    def initialize(self, user_config: dict, custom_certificate_location: str = None, **kw_args):
         self.metric_manager = MetricManager(self)
         self.certificate_manager = CertificateManager()
-        
         self.certificate_manager.load_stock_certificates()
         if custom_certificate_location is not None:
             self.certificate_manager.load_custom_certificates(custom_certificate_location)
@@ -75,6 +72,16 @@ class AISystem:
         for key in predictions.keys():
             if key in self.dataset.data_dict.keys():
                 self.single_compute(predictions[key], key, tag=tag)
+
+    def run_compute(self, tag=None) -> None:
+        # TODO: Generalize across all model functions, different model types
+        # Prediction generation and computation must be separated due to some weird sklearn bug
+        preds = {}
+        for category in self.dataset.data_dict:
+            data = self.dataset.data_dict[category].X
+            preds[category] = self.model.predict_fun(data)
+        for key in preds:
+            self.single_compute(preds[key], key)
 
     def get_metric_info(self):
         return self.metric_manager.get_metadata()

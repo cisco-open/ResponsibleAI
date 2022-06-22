@@ -105,7 +105,6 @@ metrics = metrics["test"]
 info = ai.get_metric_info()
 
 for g in metrics:
-
     for m in metrics[g]:
         if "type" in info[g][m]:
             if info[g][m]["type"] in ("numeric", "vector-dict", "text"):
