@@ -47,7 +47,7 @@
         "kurtosis": {
             "display_name": "Kurtosis",
             "type": "vector",
-            "has_range": null,
+            "has_range": false,
             "range": [null, null],
             "explanation": "Kurtosis is the tailedness of skewdness of data. "
         },

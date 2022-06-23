@@ -8,7 +8,6 @@ import site
 
 # choose the first site packages folder
 site_pkgs_path = site.getsitepackages()[0]
-print("path: ", site_pkgs_path)
 rai_pkg_path = os.path.join(site_pkgs_path, "RAI")
 if not os.path.isdir(rai_pkg_path):
     rai_pkg_path = "RAI"
