@@ -35,7 +35,8 @@ meta, X, y = df_to_RAI(all_data, target_column="income-per-year", normalize=None
 xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=1, stratify=y)
 
 # Create a model to make predictions
-model = Model(agent=clf, task=task_type, description=description, model_class="Random Forest Classifier")
+model = Model(agent=clf, task=task_type, predict_fun=clf.predict, predict_prob_fun=clf.predict_proba,
+              description=description, model_class="Random Forest Classifier")
 configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}},
                               "protected_attributes": ["race"], "positive_label": 1},
                  "time_complexity": "polynomial"}

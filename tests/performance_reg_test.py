@@ -4,45 +4,36 @@ import numpy as np
 from sklearn.datasets import fetch_california_housing
 from sklearn.model_selection import train_test_split
 import sklearn
-
+from sklearn.ensemble import RandomForestRegressor
 
 x, y = fetch_california_housing(return_X_y=True)
 xTrain, xTest, yTrain, yTest = train_test_split(x, y)
 use_dashboard = False
 np.random.seed(21)
 
-# Hook data in with our Representation
 dataset = Dataset({"train": Data(xTrain, yTrain), "test": Data(xTest, yTest)})
-
-# Indicate the features of the dataset (Columns)
 features = [
-    Feature("MedInc", 'float32', "Median Income"),
-    Feature("HouseAge", 'float32', "Median House age in Block Group"),
-    Feature("AveRooms", 'float32', "Average number of rooms per household"),
-    Feature("AveBedrms", 'float32', "Average number of bedrooms per household"),
-    Feature("Population", 'float32', "Block group population"),
-    Feature("AveOccup", 'float32', "Average Number of Household members"),
-    Feature("Latitude", 'float32', "Block group Latitude"),
-    Feature("Longitude", 'float32', "Block group Longitude")
+    Feature("MedInc", 'float', "Median Income"),
+    Feature("HouseAge", 'float', "Median House age in Block Group"),
+    Feature("AveRooms", 'float', "Average number of rooms per household"),
+    Feature("AveBedrms", 'float', "Average number of bedrooms per household"),
+    Feature("Population", 'float', "Block group population"),
+    Feature("AveOccup", 'float', "Average Number of Household members"),
+    Feature("Latitude", 'float', "Block group Latitude"),
+    Feature("Longitude", 'float', "Block group Longitude")
 ]
+
 meta = MetaDatabase(features)
-
-# Create a model to make predictions
-from sklearn.ensemble import RandomForestRegressor
 reg = RandomForestRegressor(n_estimators=15, max_depth=20)
-model = Model(agent=reg, task='regression', name="Cisco_RealEstate_AI", model_class="Random Forest Regressor")
-
-# Create AISystem from previous objects. AISystems are what users will primarily interact with.
+model = Model(agent=reg, task='regression', predict_fun=reg.predict, name="Cisco_RealEstate_AI", model_class="Random Forest Regressor")
 
 configuration = {"equal_treatment": {"priv_groups": [("Gender", 1)]}}
 ai = AISystem("Regression example", meta_database=meta, dataset=dataset, model=model, enable_certificates=False)
 ai.initialize(user_config=configuration)
 
-# Train model
 reg.fit(xTrain, yTrain)
 predictions = reg.predict(xTest)
 
-# Make Predictions
 ai.compute({"test": predictions}, tag="regression")
 
 metrics = ai.get_metric_values()
@@ -58,10 +49,10 @@ for g in metrics:
 
 def test_dataset_equality():
     """Tests that the old and new datasets match exactly."""
-    assert (xTest == ai.dataset.test_data.X).all()
-    assert (yTest == ai.dataset.test_data.y).all()
-    assert (xTrain == ai.dataset.train_data.X).all()
-    assert (yTrain == ai.dataset.train_data.y).all()
+    assert (xTest == ai.dataset.data_dict["test"].X).all()
+    assert (yTest == ai.dataset.data_dict["test"].y).all()
+    assert (xTrain == ai.dataset.data_dict["train"].X).all()
+    assert (yTrain == ai.dataset.data_dict["train"].y).all()
 
 
 def test_explained_variance():

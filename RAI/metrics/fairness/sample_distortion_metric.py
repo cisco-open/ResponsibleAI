@@ -1,55 +1,25 @@
 from RAI.metrics.metric_group import MetricGroup
-from RAI.metrics.ai360_helper.AI360_helper import *
 import pandas as pd
 from RAI.metrics.AIF360.datasets import BinaryLabelDataset
 from RAI.metrics.AIF360.metrics import BinaryLabelDatasetMetric
-from RAI.utils import compare_runtimes
-
-__all__ = ['compatibility']
-
-compatibility = {"type_restriction": "binary_classification", "output_restriction": "choice"}
+import os
 
 
-# IMPROVE CONFIG ONCE METRICS ARE SET UP.
-_config = {
-    "name": "sample_distortion_fairness",
-    "display_name" : "Sample Distortion Fairness Metrics",
-    "compatibility": {"type_restriction": "classification", "output_restriction": "choice"},
-    "src": "equal_treatment",
-    "dependency_list": [],
-    "tags": ["fairness", "General Fairness"],
-    "complexity_class": "linear",
-    "metrics": {
-        "average": {
-            "display_name": "Average",
-            "type": "numeric",
-            "tags": [],
-            "has_range": True,
-            "range": [0, 2],
-            "explanation": ""
-        },
-    }
-}
-
-
-class SampleDistortionFairnessGroup(MetricGroup, config=_config):
+class SampleDistortionFairnessGroup(MetricGroup, class_location=os.path.abspath(__file__)):
     def __init__(self, ai_system) -> None:
         super().__init__(ai_system)
         
     def update(self, data):
         pass
 
-    def is_compatible(ai_system):
-        compatible = _config["compatibility"]["type_restriction"] is None \
-                    or ai_system.model.task == _config["compatibility"]["type_restriction"] \
-                    or ai_system.model.task == "binary_classification" and _config["compatibility"]["type_restriction"] == "classification"
-        compatible = compatible \
-                     and "fairness" in ai_system.metric_manager.user_config \
-                     and "protected_attributes" in ai_system.metric_manager.user_config["fairness"] \
-                     and  len(ai_system.metric_manager.user_config["fairness"]["protected_attributes"])>0 \
-                     and "positive_label" in ai_system.metric_manager.user_config["fairness"] \
-                     and compare_runtimes(ai_system.metric_manager.user_config.get("time_complexity"), _config["complexity_class"])
-        return compatible
+    @classmethod
+    def is_compatible(cls, ai_system):
+        compatible = super().is_compatible(ai_system)
+        return compatible \
+            and "fairness" in ai_system.metric_manager.user_config \
+            and "protected_attributes" in ai_system.metric_manager.user_config["fairness"] \
+            and len(ai_system.metric_manager.user_config["fairness"]["protected_attributes"]) > 0 \
+            and "positive_label" in ai_system.metric_manager.user_config["fairness"]
 
     def getConfig(self):
         return self.config

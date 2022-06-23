@@ -1,0 +1,34 @@
+{
+    "name": "Tree Models",
+    "display_name" : "SKlearn Tree Based Models",
+    "compatibility": {"task_type": null,
+                      "data_type": [],
+                      "output_requirements": [],
+                      "dataset_requirements": []},
+    "dependency_list": [],
+    "tags": ["metadata"],
+    "complexity_class": "linear",
+    "metrics": {
+        "estimator_counts": {
+            "display_name": "Number of estimators",
+            "type": "numeric",
+            "has_range": true,
+            "range": [1, null],
+            "explanation": "Number of estimators"
+        },
+        "estimator_params": {
+            "display_name": "estimators data",
+            "type": "vector",
+            "has_range": false,
+            "range": [null, null],
+            "explanation": "estimators data"
+        }, 
+        "feature_names": {
+            "display_name": "feature names",
+            "type": "vector",
+            "has_range": false,
+            "range": [null, null],
+            "explanation": "feature names"
+        }
+    }
+}

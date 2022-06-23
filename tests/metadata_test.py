@@ -17,8 +17,6 @@ clf = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=
 use_dashboard = False
 np.random.seed(21)
 
-# %%
-# Get Dataset
 data_path = "../data/adult/"
 train_data = pd.read_csv(data_path + "train.csv", header=0,
                          skipinitialspace=True, na_values="?")
@@ -35,7 +33,8 @@ meta, X, y = df_to_RAI(all_data, target_column="income-per-year", normalize=None
 xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=1, stratify=y)
 
 # Create a model to make predictions
-model = Model(agent=clf, task=task_type, description=description, model_class="Random Forest Classifier")
+model = Model(agent=clf, task=task_type, predict_fun=clf.predict, predict_prob_fun=clf.predict_proba,
+              model_class="Random Forest Classifier", description=description)
 configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}},
                               "protected_attributes": ["race"], "positive_label": 1},
                  "time_complexity": "polynomial"}
@@ -72,7 +71,7 @@ def test_task_type():
 def test_model():
     """Tests that the accuracy is correct."""
     print("\nTEST: ", metrics['metadata']['model'])
-    assert metrics['metadata']['model'] == str(ai.task.model.agent)
+    assert metrics['metadata']['model'] == str(ai.model.agent)
 
 
 def test_sample_count():

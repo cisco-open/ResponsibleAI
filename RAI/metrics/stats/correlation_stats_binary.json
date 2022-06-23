@@ -1,0 +1,20 @@
+{
+    "name": "correlation_stats_binary",
+    "display_name": "Binary Classification Metrics",
+    "compatibility": {"task_type": "binary_classification",
+                      "data_type": ["numeric"],
+                      "output_requirements": [],
+                      "dataset_requirements": ["X", "y"]},
+    "dependency_list": [],
+    "tags": ["stats", "Binary Correlation"],
+    "complexity_class": "linear",
+    "metrics": {
+        "point-biserial-r": {
+            "display_name": "Point Biserial Coefficient",
+            "type": "vector",
+            "has_range": true,
+            "range": [-1, 1],
+            "explanation": "Indicates the relationship between a binary variable and a continuous variable."
+        }
+    }
+}

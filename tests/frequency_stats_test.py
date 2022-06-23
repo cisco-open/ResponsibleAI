@@ -1,12 +1,11 @@
 from RAI.dataset import Feature, Data, MetaDatabase, Dataset
 from RAI.AISystem import AISystem, Model
 import numpy as np
-
 from sklearn.datasets import load_breast_cancer
 from sklearn.model_selection import train_test_split
+
 x, y = load_breast_cancer(return_X_y=True)
 xTrain, xTest, yTrain, yTest = train_test_split(x, y)
-
 val_0_count = 20
 
 nums = np.ones((xTrain.shape[0], 1))
@@ -27,21 +26,20 @@ features_raw = ["id", "radius_mean", "texture_mean", "perimeter_mean", "area_mea
 features = []
 
 for feature in features_raw:
-    features.append(Feature(feature, "float32", feature))
-features.append(Feature("race", "integer", "race value", categorical=True, values={0:"black", 1:"white"}))
-features.append(Feature("gender", "integer", "race value", categorical=True, values={1:"male", 0:"female"}))
+    features.append(Feature(feature, "float", feature))
+features.append(Feature("race", "integer", "race value", categorical=True, values={0: "black", 1: "white"}))
+features.append(Feature("gender", "integer", "race value", categorical=True, values={1: "male", 0: "female"}))
 
-# Hook data in with our Representation
-training_data = Data(xTrain, yTrain)  # Accepts Data and GT
+training_data = Data(xTrain, yTrain)
 test_data = Data(xTest, yTest)
-dataset = Dataset({"train": training_data, "test": test_data})  # Accepts Training, Test and Validation Set
+dataset = Dataset({"train": training_data, "test": test_data})
 meta = MetaDatabase(features)
 
-# Create a model to make predictions
 from sklearn.ensemble import RandomForestClassifier
 rfc = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=0)
-model = Model(agent=rfc, task='binary_classification', description="Detect Cancer in patients using skin measurements",
-              name="cisco_cancer_ai", display_name="Cisco Health AI", model_class="Random Forest Classifier")
+model = Model(agent=rfc, task='binary_classification', predict_fun=rfc.predict, predict_prob_fun=rfc.predict_proba,
+              description="Detect Cancer in patients using skin measurements", name="cisco_cancer_ai",
+              model_class="Random Forest Classifier")
 
 # Create AISystem from previous objects. AISystems are what users will primarily interact with.
 configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}},
@@ -59,9 +57,6 @@ ai.compute({"test": predictions}, tag="binary classification")
 metrics = ai.get_metric_values()
 metrics = metrics["test"]
 info = ai.get_metric_info()
-
-# frequency_stats relfreq {'race': {'black': 0.4965034965034965, 'white': 0.5034965034965035}, 'gender': {'female': 0.4965034965034965, 'male': 0.5034965034965035}}
-# frequency_stats cumfreq {'race': {'black': 71.0, 'white': 143.0}, 'gender': {'female': 71.0, 'male': 143.0}}
 
 
 def test_relfreq():

@@ -1,64 +1,9 @@
 from RAI.metrics.metric_group import MetricGroup
 import datetime
+import os
 
 
-
-_config = {
-    "name": "metadata",
-    "display_name": "Metadata for the measurement",
-    "compatibility": {"type_restriction": None, "output_restriction": None},
-    "dependency_list": [],
-    "tags": [],
-    "complexity_class": "linear",
-    "metrics": {
-        "date": {
-            "display_name": "Date",
-            "type": "text",
-            "has_range": False,
-            "range": [None, None],
-            "explanation": "The Date in which a measurement was taken.",
-        },
-        "description": {
-            "display_name": "Measurement Description",
-            "type": "text",
-            "has_range": False,
-            "range": [None, None],
-            "explanation": "The user description of collected metric data.",
-        }, 
-         "sample_count": {
-            "display_name": "Number of samples",
-            "type": "numeric",
-            "tags": [],
-            "has_range": True,
-            "range": [0, None],
-            "explanation": "Number of samples",
-        }, 
-        "task_type": {
-            "display_name": "Task Type",
-            "type": "text",
-            "has_range": False,
-            "range": [None, None],
-            "explanation": "Task Type",
-        },
-        "model": {
-            "display_name": "model",
-            "type": "text",
-            "has_range": False,
-            "range": [None, None],
-            "explanation": "model description",
-        },
-         "tag": {
-            "display_name": "tag",
-            "type": "text",
-            "has_range": False,
-            "range": [None, None],
-            "explanation": "measurement tag",
-        },
-    }
-}
-
-
-class MetadataGroup(MetricGroup, config=_config):
+class MetadataGroup(MetricGroup, class_location=os.path.abspath(__file__)):
     def __init__(self, ai_system) -> None:
         super().__init__(ai_system)
         

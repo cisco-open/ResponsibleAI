@@ -1,0 +1,56 @@
+{
+    "name": "metadata",
+    "display_name": "Metadata for the measurement",
+    "compatibility": {"task_type": null,
+                      "data_type": [],
+                      "output_requirements": [],
+                      "dataset_requirements": []},
+    "dependency_list": [],
+    "tags": [],
+    "complexity_class": "linear",
+    "metrics": {
+        "date": {
+            "display_name": "Date",
+            "type": "text",
+            "has_range": false,
+            "range": [null, null],
+            "explanation": "The Date in which a measurement was taken."
+        },
+        "description": {
+            "display_name": "Measurement Description",
+            "type": "text",
+            "has_range": false,
+            "range": [null, null],
+            "explanation": "The user description of collected metric data."
+        }, 
+         "sample_count": {
+            "display_name": "Number of samples",
+            "type": "numeric",
+            "tags": [],
+            "has_range": true,
+            "range": [0, null],
+            "explanation": "Number of samples"
+        }, 
+        "task_type": {
+            "display_name": "Task Type",
+            "type": "text",
+            "has_range": false,
+            "range": [null, null],
+            "explanation": "Task Type"
+        },
+        "model": {
+            "display_name": "model",
+            "type": "text",
+            "has_range": false,
+            "range": [null, null],
+            "explanation": "model description"
+        },
+         "tag": {
+            "display_name": "tag",
+            "type": "text",
+            "has_range": false,
+            "range": [null, null],
+            "explanation": "measurement tag"
+        }
+    }
+}

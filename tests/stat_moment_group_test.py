@@ -17,21 +17,21 @@ dataset = Dataset({"train": Data(xTrain, yTrain), "test": Data(xTest, yTest)})
 
 # Indicate the features of the dataset (Columns)
 features = [
-    Feature("MedInc", 'float32', "Median Income"),
-    Feature("HouseAge", 'float32', "Median House age in Block Group"),
-    Feature("AveRooms", 'float32', "Average number of rooms per household"),
-    Feature("AveBedrms", 'float32', "Average number of bedrooms per household"),
-    Feature("Population", 'float32', "Block group population"),
-    Feature("AveOccup", 'float32', "Average Number of Household members"),
-    Feature("Latitude", 'float32', "Block group Latitude"),
-    Feature("Longitude", 'float32', "Block group Longitude")
+    Feature("MedInc", 'float', "Median Income"),
+    Feature("HouseAge", 'float', "Median House age in Block Group"),
+    Feature("AveRooms", 'float', "Average number of rooms per household"),
+    Feature("AveBedrms", 'float', "Average number of bedrooms per household"),
+    Feature("Population", 'float', "Block group population"),
+    Feature("AveOccup", 'float', "Average Number of Household members"),
+    Feature("Latitude", 'float', "Block group Latitude"),
+    Feature("Longitude", 'float', "Block group Longitude")
 ]
 meta = MetaDatabase(features)
 
 # Create a model to make predictions
 from sklearn.ensemble import RandomForestRegressor
 reg = RandomForestRegressor(n_estimators=15, max_depth=20)
-model = Model(agent=reg, task='regression', name="Cisco_RealEstate_AI", model_class="Random Forest Regressor")
+model = Model(agent=reg, task='regression', predict_fun=reg.predict, name="Cisco_RealEstate_AI", model_class="Random Forest Regressor")
 
 # Create AISystem from previous objects. AISystems are what users will primarily interact with.
 

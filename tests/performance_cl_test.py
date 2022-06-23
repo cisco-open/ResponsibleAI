@@ -2,7 +2,7 @@ import sklearn
 import os
 import sys
 from RAI.dataset import Data, Dataset
-from RAI.AISystem import AISystem, Model, Task
+from RAI.AISystem import AISystem, Model
 from RAI.utils import df_to_RAI
 import numpy as np
 import pandas as pd
@@ -32,8 +32,8 @@ meta, X, y = df_to_RAI(all_data, target_column="income-per-year", normalize=None
 xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=1, stratify=y)
 
 # Create a model to make predictions
-model = Model(agent=clf, task='binary_classification', description="Detect Cancer in patients using skin measurements",
-              model_class="Random Forest Classifier")
+model = Model(agent=clf, task='binary_classification', predict_fun=clf.predict, predict_prob_fun=clf.predict_proba,
+              description="Detect Cancer in patients using skin measurements", model_class="Random Forest Classifier")
 configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}},
                               "protected_attributes": ["race"], "positive_label": 1},
                  "time_complexity": "polynomial"}

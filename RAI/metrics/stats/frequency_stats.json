@@ -1,0 +1,27 @@
+{
+    "name": "frequency_stats",
+    "display_name" : "Frequency Statistics Metrics",
+    "compatibility": {"task_type": null,
+                      "data_type": ["numeric"],
+                      "output_requirements": [],
+                      "dataset_requirements": ["X", "y"]},
+    "dependency_list": [],
+    "tags": ["stats", "Frequency Stats"],
+    "complexity_class": "linear",
+    "metrics": {
+        "relfreq": {
+            "display_name": "Relative Frequency",
+            "type": "vector-dict",
+            "has_range": true,
+            "range": [0, null],
+            "explanation": "Indicates the relative count of each subclass."
+        },
+        "cumfreq": {
+            "display_name": "Cumulative Frequency",
+            "type": "vector-dict",
+            "has_range": true,
+            "range": [0, null],
+            "explanation": "Indicates the cumulative count of each subclass."
+        }
+    }
+}

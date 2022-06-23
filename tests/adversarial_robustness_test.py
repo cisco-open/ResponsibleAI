@@ -32,12 +32,13 @@ meta, X, y = df_to_RAI(all_data, target_column="income-per-year", normalize=None
 xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=1, stratify=y)
 
 # Create a model to make predictions
-model = Model(agent=clf, task='binary_classification', model_class="Random Forest Classifier", description="Detect Cancer in patients using skin measurements")
+model = Model(agent=clf, task='binary_classification', predict_fun=clf.predict, predict_prob_fun=clf.predict_proba,
+              model_class="Random Forest Classifier", description="Detect Cancer in patients using skin measurements")
 configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}},
                               "protected_attributes": ["race"], "positive_label": 1},
                  "time_complexity": "polynomial"}
 
-dataset = Dataset({"train": Data(xTrain, yTrain), "test_data": Data(xTest, yTest)})
+dataset = Dataset({"train": Data(xTrain, yTrain), "test": Data(xTest, yTest)})
 ai = AISystem("AdultDB_Test1", meta_database=meta, dataset=dataset, model=model, enable_certificates=False)
 ai.initialize(user_config=configuration)
 

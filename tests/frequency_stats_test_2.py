@@ -28,7 +28,7 @@ features_raw = ["id", "radius_mean", "texture_mean", "perimeter_mean", "area_mea
 features = []
 
 for feature in features_raw:
-    features.append(Feature(feature, "float32", feature))
+    features.append(Feature(feature, "float", feature))
 features.append(Feature("race", "integer", "race value", categorical=True, values={0:"black", 1:"white"}))
 features.append(Feature("gender", "integer", "race value", categorical=True, values={1:"male", 0:"female"}))
 
@@ -41,8 +41,9 @@ meta = MetaDatabase(features)
 # Create a model to make predictions
 from sklearn.ensemble import RandomForestClassifier
 rfc = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=0)
-model = Model(agent=rfc, task='binary_classification', name="cisco_cancer_ai", display_name="Cisco Health AI",
-              description="Detect Cancer in patients using skin measurements", model_class="Random Forest Classifier")
+model = Model(agent=rfc, task='binary_classification', predict_fun=rfc.predict, predict_prob_fun=rfc.predict_proba,
+              name="cisco_cancer_ai", display_name="Cisco Health AI", description="Detect Cancer in patients using skin measurements",
+              model_class="Random Forest Classifier")
 
 
 # Create AISystem from previous objects. AISystems are what users will primarily interact with.

@@ -2,92 +2,24 @@ from RAI.metrics.metric_group import MetricGroup
 from RAI.metrics.ai360_helper.AI360_helper import *
 import numpy as np
 import pandas as pd
-from RAI.utils import compare_runtimes
-
-__all__ = ['compatibility']
-
-compatibility = {"type_restriction": "classification", "output_restriction": "choice"}
-
-# Log loss, roc and brier score have been removed. s
-
-_config = {
-    "name" : "group_fairness",
-    "display_name" : "Group Fairness Metrics",
-    "compatibility": {"type_restriction": "classification", "output_restriction": "choice"},
-    "src": "equal_treatment",
-    "dependency_list": [],
-    "tags": ["fairness", "Group Fairness"],
-    "complexity_class": "linear",
-    "metrics": {
-        "disparate_impact_ratio": {
-            "display_name": "Disparate Impact",
-            "type": "numeric",
-            "tags": [],
-            "has_range": True,
-            "range": [0, None],
-            "explanation": "Compares the proportion of individuals that receive a positive outcome between two groups."
-        },
-        "statistical_parity_difference": {
-            "display_name": "Statistical Parity Difference",
-            "type": "numeric",
-            "tags": [],
-            "has_range": True,
-            "range": [-1, 1],
-            "explanation": "Finds the difference in positive outcomes seen between a privileged and unprivileged group groups."
-        },
-        "between_group_generalized_entropy_error": {
-            "display_name": "BG Generalized Entropy Error",
-            "type": "numeric",
-            "tags": [],
-            "has_range": False,
-            "range": [None, None],
-            "explanation": "Fairness metric from T. Speicher, H. Heidari, N. Grgic-Hlaca, K. P. Gummadi, A. Singla, A. Weller, and M. B. Zafar, “A Unified Approach to Quantifying Algorithmic Unfairness: Measuring Individual and Group Unfairness via Inequality Indices,” ACM SIGKDD International Conference on Knowledge Discovery and Data Mining, 2018."
-        },
-        "equal_opportunity_difference": {
-            "display_name": "Equal Opportunity Difference",
-            "type": "numeric",
-            "tags": [],
-            "has_range": True,
-            "range": [-1, 1],
-            "explanation": "Indicates difference in recall scores between unprivileged groups and privileged groups. Values close to 0 are better."
-        },
-        "average_odds_difference": {
-            "display_name": "Average Odds Difference",
-            "type": "numeric",
-            "tags": [],
-            "has_range": True,
-            "range": [-1, 1],
-            "explanation": "Returns the average difference in False positive rate and true positive rate between privileged and unprivileged groups."
-        },
-        "average_odds_error": {
-            "display_name": "Average Odds Error",
-            "type": "numeric",
-            "tags": [],
-            "has_range": True,
-            "range": [0, 1],
-            "explanation": "Indicates the average of the absolute difference in FPR and TPR for the unprivileged and privileged groups"
-        }
-    }
-}
+import os
 
 
-class GroupFairnessMetricGroup(MetricGroup, config=_config):
+class GroupFairnessMetricGroup(MetricGroup, class_location=os.path.abspath(__file__)):
     def __init__(self, ai_system) -> None:
         super().__init__(ai_system)
         
     def update(self, data):
         pass
 
-    def is_compatible(ai_system):
-        compatible = _config["compatibility"]["type_restriction"] is None \
-                    or ai_system.model.task == _config["compatibility"]["type_restriction"] \
-                    or ai_system.model.task == "binary_classification" and _config["compatibility"]["type_restriction"] == "classification"
-        compatible = compatible and "fairness" in ai_system.metric_manager.user_config \
-                     and "protected_attributes" in ai_system.metric_manager.user_config["fairness"] \
-                     and  len(ai_system.metric_manager.user_config["fairness"]["protected_attributes"])>0 \
-                     and "positive_label" in ai_system.metric_manager.user_config["fairness"] \
-                     and compare_runtimes(ai_system.metric_manager.user_config.get("time_complexity"), _config["complexity_class"])
-        return compatible
+    @classmethod
+    def is_compatible(cls, ai_system):
+        compatible = super().is_compatible(ai_system)
+        return compatible \
+            and "fairness" in ai_system.metric_manager.user_config \
+            and "protected_attributes" in ai_system.metric_manager.user_config["fairness"] \
+            and len(ai_system.metric_manager.user_config["fairness"]["protected_attributes"]) > 0 \
+            and "positive_label" in ai_system.metric_manager.user_config["fairness"]
 
     def getConfig(self):
         return self.config

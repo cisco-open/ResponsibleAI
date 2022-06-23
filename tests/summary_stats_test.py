@@ -60,10 +60,10 @@ for g in metrics:
 # TODO: Set up another set of tests with data that has a category in it
 def test_dataset_equality():
     """Tests that the old and new datasets match exactly."""
-    assert (xTest == ai.dataset.test_data.X).all()
-    assert (yTest == ai.dataset.test_data.y).all()
-    assert (xTrain == ai.dataset.train_data.X).all()
-    assert (yTrain == ai.dataset.train_data.y).all()
+    assert (xTest == ai.dataset.data_dict["test"].X).all()
+    assert (yTest == ai.dataset.data_dict["test"].y).all()
+    assert (xTrain == ai.dataset.data_dict["train"].X).all()
+    assert (yTrain == ai.dataset.data_dict["train"].y).all()
 
 
 # TODO: remove caps from metric name

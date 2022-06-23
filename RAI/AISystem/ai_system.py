@@ -26,13 +26,14 @@ class AISystem:
         self.certificate_manager = None
 
     def initialize(self, user_config: dict, custom_certificate_location: str = None, **kw_args):
+        self.dataset.separate_data(self.meta_database.scalar_mask)
+        self.meta_database.initialize_requirements(list(self.dataset.data_dict.values())[0], "fairness" in user_config)
         self.metric_manager = MetricManager(self)
         self.certificate_manager = CertificateManager()
         self.certificate_manager.load_stock_certificates()
         if custom_certificate_location is not None:
             self.certificate_manager.load_custom_certificates(custom_certificate_location)
         self.metric_manager.initialize(user_config, *kw_args)
-        self.dataset.separate_data(self.meta_database.scalar_mask)
 
     def get_metric_values(self) -> dict:
         return self._last_metric_values
@@ -47,7 +48,7 @@ class AISystem:
 
     def get_project_info(self) -> dict :
         result = {"id": self.name,  
-                  "task_type": self.task.type, "configuration": self.metric_manager.user_config, "features": [], "description": self.task.description,
+                  "task_type": self.model.task, "configuration": self.metric_manager.user_config, "features": [], "description": self.model.description,
                   }
         for i in range(len(self.meta_database.features)):
             result['features'].append(self.meta_database.features[i].name)

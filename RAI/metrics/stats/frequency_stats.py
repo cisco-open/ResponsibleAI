@@ -1,43 +1,10 @@
 from RAI.metrics.metric_group import MetricGroup
-import math
-import numpy as np
 import scipy.stats
-from RAI.utils.utils import calculate_per_all_features, convert_to_feature_dict
+from RAI.utils.utils import convert_to_feature_dict
+import os
 
 
-# Move config to external .json? 
-_config = {
-    "name": "frequency_stats",
-    "display_name" : "Frequency Statistics Metrics",
-    "compatibility": {"type_restriction": None, "output_restriction": None},
-    "dependency_list": [],
-    "tags": ["stats", "Frequency Stats"],
-    "complexity_class": "linear",
-    "metrics": {
-        "relfreq": {
-            "display_name": "Relative Frequency",
-            "type": "vector-dict",
-            "has_range": True,
-            "range": [0, None],
-            "explanation": "Indicates the relative count of each subclass.",
-        },
-        
-        "cumfreq": {
-            "display_name": "Cumulative Frequency",
-            "type": "vector-dict",
-            "has_range": True,
-            "range": [0, None],
-            "explanation": "Indicates the cumulative count of each subclass.",
-        },
-            }
-}
-
-# Type (Regression, Classification, Data | probability, numeric)
-
-
-class FrequencyStatMetricGroup(MetricGroup, config=_config):
-    compatibility = {"type_restriction": None, "output_restriction": None}
-
+class FrequencyStatMetricGroup(MetricGroup, class_location=os.path.abspath(__file__)):
     def __init__(self, ai_system) -> None:
         super().__init__(ai_system)
         

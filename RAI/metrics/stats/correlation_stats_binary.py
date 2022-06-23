@@ -1,36 +1,10 @@
 from RAI.metrics.metric_group import MetricGroup
-import math
-import numpy as np
 import scipy.stats
 from RAI.utils.utils import calculate_per_all_features
+import os
 
 
-# Are these metrics meaningful?
-
-_config = {
-    "name": "correlation_stats_binary",
-    "display_name" : "Binary Classification Metrics",
-    "compatibility": {"type_restriction": "binary_classification", "output_restriction": None},
-    "dependency_list": [],
-    "tags": ["stats", "Binary Correlation"],
-    "complexity_class": "linear",
-    "metrics": {
-        "point-biserial-r": {
-            "display_name": "Point Biserial Coefficient",
-            "type": "vector",
-            "has_range": True,
-            "range": [-1, 1],
-            "explanation": "Indicates the relationship between a binary variable and a continuous variable.",
-        },
-    }
-}
-
-# Type (Regression, Classification, Data | probability, numeric)
-
-
-class BinaryCorrelationStats(MetricGroup, config=_config):
-    compatibility = {"type_restriction": "binary_classification", "output_restriction": None}
-
+class BinaryCorrelationStats(MetricGroup, class_location=os.path.abspath(__file__)):
     def __init__(self, ai_system) -> None:
         super().__init__(ai_system)
         

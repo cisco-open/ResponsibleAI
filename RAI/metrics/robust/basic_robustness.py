@@ -1,39 +1,9 @@
 from RAI.metrics.metric_group import MetricGroup
-import math
 import numpy as np
+import os
 
 
-# Move config to external .json? 
-_config = {
-    "name": "basic_robustness",
-    "display_name": "Basic Robustness Metrics",
-    "compatibility": {"type_restriction": None, "output_restriction": None},
-    "dependency_list": [],
-    "tags": ["robustness", "Normalization"],
-    "complexity_class": "linear",
-    "metrics": {
-        "normalized_feature_01": {
-            "display_name": "Normalized Features 0-1",
-            "type": "boolean",
-            "has_range": False,
-            "range": [None, None],
-            "explanation": "Whether of not each training feature is normalized to 0/1.",
-        },
-        "normalized_feature_std": {
-            "display_name": "Normalized Features Standard",
-            "type": "boolean",
-            "has_range": False,
-            "range": [None, None],
-            "explanation": "Whether of not each training feature is normalized to standard.",
-        }, 
-    }
-}
-
-# Type (Regression, Classification, Data | probability, numeric)
-
-
-class BasicRobustMetricGroup(MetricGroup, config=_config):
-     
+class BasicRobustMetricGroup(MetricGroup, class_location=os.path.abspath(__file__)):
     def __init__(self, ai_system) -> None:
         super().__init__(ai_system)
         

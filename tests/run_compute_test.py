@@ -1,10 +1,9 @@
-import RAI
 from RAI.dataset import Feature, Data, MetaDatabase, Dataset
 from RAI.AISystem import AISystem, Model
 import numpy as np
-
 from sklearn.datasets import load_breast_cancer
 from sklearn.model_selection import train_test_split
+
 x, y = load_breast_cancer(return_X_y=True)
 xTrain, xTest, yTrain, yTest = train_test_split(x, y)
 
@@ -19,7 +18,7 @@ nums[:val_0_count] = 0
 xTest = np.hstack((xTest, nums))
 xTest = np.hstack((xTest, nums))
 
-# Set up features
+
 features_raw = ["id", "radius_mean", "texture_mean", "perimeter_mean", "area_mean", "smoothness_mean", "compactness_mean", "concavity_mean", "concave points_mean", "symmetry_mean",
                 "fractal_dimension_mean", "radius_se", "texture_se", "compactness_se", "concavity_se",
                 "concave points_se", "symmetry_se", "fractal_dimension_se", "radius_worst", "texture_worst", "texture_worst", "perimeter_worst", "area_worst",
@@ -27,11 +26,10 @@ features_raw = ["id", "radius_mean", "texture_mean", "perimeter_mean", "area_mea
 features = []
 
 for feature in features_raw:
-    features.append(Feature(feature, "float32", feature))
+    features.append(Feature(feature, "float", feature))
 features.append(Feature("race", "integer", "race value", categorical=True, values={0:"black", 1:"white"}))
 features.append(Feature("gender", "integer", "race value", categorical=True, values={1:"male", 0:"female"}))
 
-# Hook data in with our Representation
 training_data = Data(xTrain, yTrain)  # Accepts Data and GT
 test_data = Data(xTest, yTest)
 dataset = Dataset({"train": training_data, "test": test_data})  # Accepts Training, Test and Validation Set
@@ -41,18 +39,15 @@ meta = MetaDatabase(features)
 from sklearn.ensemble import RandomForestClassifier
 rfc = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=0)
 
-model = Model(agent=rfc, task='binary_classification', predict_fun=rfc.predict, name="cisco_cancer_ai", display_name="Cisco Health AI",
-              description="Detect Cancer in patients using skin measurements", model_class="Random Forest Classifier")
+model = Model(agent=rfc, task='binary_classification', predict_fun=rfc.predict, predict_prob_fun=rfc.predict_proba,
+              name="cisco_cancer_ai", description="Detect Cancer in patients using skin measurements", model_class="Random Forest Classifier")
 
-
-# Create AISystem from previous objects. AISystems are what users will primarily interact with.
 configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}},
                               "protected_attributes": ["race"], "positive_label": 1},
                  "blacklist": []}
 ai = AISystem("cancer_detection", meta_database=meta, dataset=dataset, model=model)
 ai.initialize(user_config=configuration)
 
-# Train model
 rfc.fit(xTrain, yTrain)
 
 assert(ai.dataset.data_dict['train'].X == training_data.X).all()

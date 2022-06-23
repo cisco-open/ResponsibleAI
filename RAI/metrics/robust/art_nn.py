@@ -1,123 +1,25 @@
 from RAI.metrics.metric_group import MetricGroup
 import numpy as np
-import torch
 import math
 from art.estimators.classification import PyTorchClassifier
-from art.metrics import empirical_robustness, clever_t, clever_u, clever, loss_sensitivity, wasserstein_distance
+from art.metrics import clever_t, clever_u
 from RAI.utils import compare_runtimes
+import os
+
 
 R_L1 = 40
 R_L2 = 2
 R_LI = 0.1
 
-__all__ = ['compatibility']
 
-compatibility = {"type_restriction": "binary_classification", "output_restriction": "choice"}
-
-# Log loss, roc and brier score have been removed. s
-
-_config = {
-    "name": "adversarial_classification_art",
-    "display_name" : "Adverserial Classification (ART) Metrics",
-    "compatibility": {"type_restriction": "classification", "output_restriction": "choice"},
-    "src": "art",
-    "dependency_list": [],
-    "tags": ["robustness", "Adversarial"],
-    "complexity_class": "polynomial",
-    "metrics": {
-        "clever-t-l1": {
-            "display_name": "Targeted L1 CLEVER",
-            "type": "numeric",
-            "tags": [],
-            "has_range": True,
-            "range": [0, None],
-            "explanation": "Calculates the rate at which at which a groups with a protected attribute recieve a positive outcome."
-        },
-        "clever-t-l2": {
-            "display_name": "Targeted L2 CLEVER",
-            "type": "numeric",
-            "tags": [],
-            "has_range": True,
-            "range": [0, None],
-            "explanation": "Calculates the rate at which at which a groups with a protected attribute recieve a positive outcome."
-        },
-        "clever-t-li": {
-            "display_name": "Targeted Li CLEVER",
-            "type": "numeric",
-            "tags": [],
-            "has_range": True,
-            "range": [0, None],
-            "explanation": "Calculates the rate at which at which a groups with a protected attribute recieve a positive outcome."
-        },
-        "clever-u-l1": {
-            "display_name": "Untargeted L1 CLEVER",
-            "type": "numeric",
-            "tags": [],
-            "has_range": True,
-            "range": [0, None],
-            "explanation": "Calculates the rate at which at which a groups with a protected attribute recieve a positive outcome."
-        },
-        "clever-u-l2": {
-            "display_name": "Untargeted L2 CLEVER",
-            "type": "numeric",
-            "tags": [],
-            "has_range": True,
-            "range": [0, None],
-            "explanation": "Calculates the rate at which at which a groups with a protected attribute recieve a positive outcome."
-        },
-        "clever-u-li": {
-            "display_name": "Untargeted Li CLEVER",
-            "type": "numeric",
-            "tags": [],
-            "has_range": True,
-            "range": [0, None],
-            "explanation": "Calculates the rate at which at which a groups with a protected attribute recieve a positive outcome."
-        }
-    }
-}
-
-
-# Other metrics to consider adding
-'''
-        "loss-sensitivity": {
-            "display_name": "Loss Sensitivity",
-            "type": "numeric",
-            "tags": [],
-            "has_range": True,
-            "range": [0, None],
-            "explanation": "Calculates the number of instances classified"
-        },
-        "wasserstein-distance": {
-            "display_name": "Wassterstein Distance",
-            "type": "numeric",
-            "tags": [],
-            "has_range": True,
-            "range": [0, None],
-            "explanation": "Measures distribution samples between two inputs."
-        },
-        "empirical-robustness": {
-            "display_name": "Empirical Robustness",
-            "type": "numeric",
-            "tags": [],
-            "has_range": True,
-            "range": [0, 1],
-            "explanation": "Calculates the rate at which at which a groups with a protected attribute recieve a positive outcome."
-        },
-'''
-
-
-class ArtAdversarialRobustnessGroup(MetricGroup, config=_config):
+class ArtAdversarialRobustnessGroup(MetricGroup, class_location=os.path.abspath(__file__)):
     def __init__(self, ai_system) -> None:
         super().__init__(ai_system)
         self.MAX_COMPUTES = 10
 
     def is_compatible(ai_system):
-        compatible = _config["compatibility"]["type_restriction"] is None \
-                    or ai_system.model.task == _config["compatibility"]["type_restriction"] \
-                    or ai_system.model.task == "binary_classification" and _config["compatibility"]["type_restriction"] == "classification"
-        compatible = compatible and 'torch.nn' in str(ai_system.model.agent.__class__.__bases__) \
-                     and compare_runtimes(ai_system.user_config.get("time_complexity"), _config["complexity_class"])
-        return compatible
+        compatible = super().is_compatible(ai_system)
+        return compatible and 'torch.nn' in str(ai_system.model.agent.__class__.__bases__)
 
     def update(self, data):
         pass
@@ -130,12 +32,9 @@ class ArtAdversarialRobustnessGroup(MetricGroup, config=_config):
             data = data_dict["data"]
             preds = data_dict["predictions"]
 
-            classifier = PyTorchClassifier(model=self.ai_system.model.agent,
-                                                                                 loss=self.ai_system.model.loss_function,
-                                                                                 optimizer=self.ai_system.model.optimizer,
-                                                                                 input_shape=[1, 30], nb_classes=2)
+            classifier = PyTorchClassifier(model=self.ai_system.model.agent, loss=self.ai_system.model.loss_function,
+                                           optimizer=self.ai_system.model.optimizer, input_shape=[1, 30], nb_classes=2)
             # TODO: Remove limitation on input shape
-
 
             # CLEVER PARAMS: classifier, input sample, target class, estimate repetitions, random examples to sample per batch, radius of max pertubation, param norm, Weibull distribution init, pool_factor
 

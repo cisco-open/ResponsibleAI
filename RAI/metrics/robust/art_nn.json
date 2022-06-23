@@ -1,0 +1,62 @@
+{
+    "name": "adversarial_classification_art",
+    "display_name" : "Adversarial Classification (ART) Metrics",
+    "compatibility": {"task_type": "classification",
+                      "data_type": ["numeric"],
+                      "output_requirements": ["predict"],
+                      "dataset_requirements": ["X", "y"]},
+    "src": "art",
+    "dependency_list": [],
+    "tags": ["robustness", "Adversarial"],
+    "complexity_class": "polynomial",
+    "metrics": {
+        "clever-t-l1": {
+            "display_name": "Targeted L1 CLEVER",
+            "type": "numeric",
+            "tags": [],
+            "has_range": true,
+            "range": [0, null],
+            "explanation": "Calculates the rate at which at which a groups with a protected attribute recieve a positive outcome."
+        },
+        "clever-t-l2": {
+            "display_name": "Targeted L2 CLEVER",
+            "type": "numeric",
+            "tags": [],
+            "has_range": true,
+            "range": [0, null],
+            "explanation": "Calculates the rate at which at which a groups with a protected attribute recieve a positive outcome."
+        },
+        "clever-t-li": {
+            "display_name": "Targeted Li CLEVER",
+            "type": "numeric",
+            "tags": [],
+            "has_range": true,
+            "range": [0, null],
+            "explanation": "Calculates the rate at which at which a groups with a protected attribute recieve a positive outcome."
+        },
+        "clever-u-l1": {
+            "display_name": "Untargeted L1 CLEVER",
+            "type": "numeric",
+            "tags": [],
+            "has_range": true,
+            "range": [0, null],
+            "explanation": "Calculates the rate at which at which a groups with a protected attribute recieve a positive outcome."
+        },
+        "clever-u-l2": {
+            "display_name": "Untargeted L2 CLEVER",
+            "type": "numeric",
+            "tags": [],
+            "has_range": true,
+            "range": [0, null],
+            "explanation": "Calculates the rate at which at which a groups with a protected attribute recieve a positive outcome."
+        },
+        "clever-u-li": {
+            "display_name": "Untargeted Li CLEVER",
+            "type": "numeric",
+            "tags": [],
+            "has_range": true,
+            "range": [0, null],
+            "explanation": "Calculates the rate at which at which a groups with a protected attribute recieve a positive outcome."
+        }
+    }
+}

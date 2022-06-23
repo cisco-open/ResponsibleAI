@@ -1,0 +1,230 @@
+{
+    "name": "summary_stats",
+    "display_name": "Summary Statistics Metrics",
+    "compatibility": {"task_type": null,
+                      "data_type": ["numeric"],
+                      "output_requirements": [],
+                      "dataset_requirements": ["X"]},
+    "dependency_list": [],
+    "tags": ["stats", "Summary Stats"],
+    "complexity_class": "linear",
+    "metrics": {
+        "mean": {
+            "display_name": "Mean",
+            "type": "vector",
+            "has_range": false,
+            "range": null,
+            "explanation": "Mean is the expected value of data."
+        },
+        "covariance": {
+            "display_name": "Covariance Matrix",
+            "type": "matrix",
+            "has_range": false,
+            "range": null,
+            "explanation": "A Covariance Matrix shows the directional relationship between different data members."
+        },
+        "num-Nan-rows": {
+            "display_name": "Number of NaN Rows",
+            "type": "numeric",
+            "has_range": true,
+            "range": [0, null],
+            "explanation": "Num Nan Rows indicates the number of NaN rows found in the data."
+        },
+        "percent-Nan-rows": {
+            "display_name": "Percentage of NaN Rows",
+            "type": "numeric",
+            "has_range": true,
+            "range": [0, 1],
+            "explanation": "Percent Nan Rows indicates the percentage of rows that are NaN in the data."
+        },
+        "geometric-mean": {
+            "display_name": "Geometric Mean",
+            "type": "vector",
+            "has_range": false,
+            "range": [null, null],
+            "explanation": "The Geometric Mean shows the central tendency of a set of numbers. It is calculated by taking the n-th root of the product of n numbers."
+        },
+        "kurtosis": {
+            "display_name": "Kurtosis",
+            "type": "vector",
+            "has_range": null,
+            "range": [null, null],
+            "explanation": "Kurtosis is the tailedness of skewdness of data. "
+        },
+        "mode": {
+            "display_name": "Mode",
+            "type": "vector",
+            "has_range": false,
+            "range": [null, null],
+            "explanation": "Mode is the most often appearing value in a set of data values."
+        },
+        "skew": {
+            "display_name": "Skew",
+            "type": "vector",
+            "has_range": false,
+            "range": [null, null],
+            "explanation": "Skew measures the symmetry of a data set."
+        },
+        "kstat-1": {
+            "display_name": "K-Statistic 1",
+            "type": "numeric",
+            "has_range": false,
+            "range": [null, null],
+            "explanation": "A unique, symmetric and unbiased estimator of the first cumulant kappa-n"
+        },
+        "kstat-2": {
+            "display_name": "K-Statistic 2",
+            "type": "numeric",
+            "has_range": false,
+            "range": [null, null],
+            "explanation": "A unique, symmetric and unbiased estimator of the second cumulant kappa-n"
+        },
+        "kstat-3": {
+            "display_name": "K-Statistic 3",
+            "type": "numeric",
+            "has_range": false,
+            "range": [null, null],
+            "explanation": "A unique, symmetric and unbiased estimator of the third cumulant kappa-n"
+        },
+        "kstat-4": {
+            "display_name": "K-Statistic 4",
+            "type": "numeric",
+            "has_range": false,
+            "range": [null, null],
+            "explanation": "A unique, symmetric and unbiased estimator of the fourth cumulant kappa-n"
+        },
+        "kstatvar": {
+            "display_name": "K-Statistic Variance",
+            "type": "numeric",
+            "has_range": true,
+            "range": [0, null],
+            "explanation": ""
+        },
+        "variation": {
+            "display_name": "Coefficient of Variation",
+            "type": "vector",
+            "has_range": true,
+            "range": [0, null],
+            "explanation": "Indicates the ratio of the standard deviation to the mean. Higher values indicate higher spread."
+        },
+        "iqr": {
+            "display_name": "Interquartile Range",
+            "type": "numeric",
+            "has_range": false,
+            "range": [null, null],
+            "explanation": "IQR is the difference between the 75th and 25th percentile of data. A robust measure of dispersion."
+        },
+        "sem": {
+            "display_name": "Standard Error of the Mean",
+            "type": "vector",
+            "has_range": true,
+            "range": [0, null],
+            "explanation": "Standard Error of the mean is the standard deviation of the sampling distribution of the mean. Calculated by dividing the standard deviation by the root of the sample size."
+        },
+        "bayes-mean": {
+            "display_name": "Mean Confidence Interval",
+            "type": "vector",
+            "has_range": false,
+            "range": [null, null],
+            "explanation": "Bayesian estimate of upper and lower bounds of the population mean"
+        },
+        "bayes-mean-avg": {
+            "display_name": "Mean Confidence Interval Average",
+            "type": "numeric",
+            "has_range": false,
+            "range": [null, null],
+            "explanation": "Bayesian estimate of the population mean"
+        },
+        "bayes-var": {
+            "display_name": "Variance Confidence Interval",
+            "type": "vector",
+            "has_range": true,
+            "range": [0, null],
+            "explanation": "Bayesian estimate of upper and lower bounds of the population mean"
+        },
+        "bayes-var-avg": {
+            "display_name": "Variance Confidence Interval Avg",
+            "type": "numeric",
+            "has_range": true,
+            "range": [0, null],
+            "explanation": "Bayesian estimate of the population mean"
+        },
+        "bayes-std": {
+            "display_name": "Stdev Confidence Interval",
+            "type": "vector",
+            "has_range": true,
+            "range": [0, null],
+            "explanation": "Bayesian estimate of upper and lower bounds of the population standard deviation"
+        },
+        "bayes-std-avg": {
+            "display_name": "Stdev Confidence Interval Avg",
+            "type": "numeric",
+            "has_range": true,
+            "range": [0, null],
+            "explanation": "Bayesian estimate of the population standard deviation."
+        },
+        "frozen-mean-mean": {
+            "display_name": "Frozen Mean Mean",
+            "type": "numeric",
+            "has_range": false,
+            "range": [null, null],
+            "explanation": "Population mean estimator. https://scholarsarchive.byu.edu/facpub/278/"
+        },
+        "frozen-mean-var": {
+            "display_name": "Frozen Mean Variance",
+            "type": "numeric",
+            "has_range": true,
+            "range": [0, null],
+            "explanation": "Population variance of the mean estimator. https://scholarsarchive.byu.edu/facpub/278/"
+        },
+        "frozen-mean-std": {
+            "display_name": "Frozen Mean Standard Deviation",
+            "type": "numeric",
+            "has_range": true,
+            "range": [0, null],
+            "explanation": "Population standard deviation of the mean estimator. https://scholarsarchive.byu.edu/facpub/278/"
+        },
+        "frozen-variance-mean": {
+            "display_name": "Frozen Variance Mean",
+            "type": "numeric",
+            "has_range": true,
+            "range": [0, null],
+            "explanation": "Population variance of the mean estimator. https://scholarsarchive.byu.edu/facpub/278/"
+        },
+        "frozen-variance-var": {
+            "display_name": "Frozen Variance Variance",
+            "type": "numeric",
+            "has_range": true,
+            "range": [0, null],
+            "explanation": "Population variance of the variance estimator. https://scholarsarchive.byu.edu/facpub/278/"
+        },
+        "frozen-variance-std": {
+            "display_name": "Frozen Variance Standard Deviation",
+            "type": "numeric",
+            "has_range": true,
+            "range": [0, null],
+            "explanation": "Population variance of the standard deviation estimator. https://scholarsarchive.byu.edu/facpub/278/"
+        },
+        "frozen-std-mean": {
+            "display_name": "Frozen Standard Deviation Mean",
+            "type": "numeric",
+            "has_range": true,
+            "range": [0, null],
+            "explanation": "Population mean of the standard deviation estimator. https://scholarsarchive.byu.edu/facpub/278/"
+        },
+        "frozen-std-var": {
+            "display_name": "Frozen Stdev Variance",
+            "type": "numeric",
+            "has_range": true,
+            "range": [0, null],
+            "explanation": "Population variance of the standard deviation estimator. https://scholarsarchive.byu.edu/facpub/278/"
+        },
+        "frozen-std-std": {
+            "display_name": "Frozen Stdev Standard Deviation",
+            "type": "numeric",
+            "has_range": true,
+            "range": [0, null],
+            "explanation": "Population Standard deviation of the standard deviation estimator. https://scholarsarchive.byu.edu/facpub/278/"
+        }
+    }
+}

@@ -1,14 +1,12 @@
-import RAI
 from RAI.dataset import Feature, Data, MetaDatabase, Dataset
 from RAI.AISystem import AISystem, Model
 import numpy as np
 import scipy
-
 from sklearn.datasets import load_breast_cancer
 from sklearn.model_selection import train_test_split
+
 x, y = load_breast_cancer(return_X_y=True)
 xTrain, xTest, yTrain, yTest = train_test_split(x, y)
-
 val_0_count = 20
 
 nums = np.ones((xTrain.shape[0], 1))
@@ -29,9 +27,9 @@ features_raw = ["id", "radius_mean", "texture_mean", "perimeter_mean", "area_mea
 features = []
 
 for feature in features_raw:
-    features.append(Feature(feature, "float32", feature))
-features.append(Feature("race", "integer", "race value", categorical=True, values={0:"black", 1:"white"}))
-features.append(Feature("gender", "integer", "race value", categorical=True, values={1:"male", 0:"female"}))
+    features.append(Feature(feature, "float", feature))
+features.append(Feature("race", "integer", "race value", categorical=True, values={0: "black", 1: "white"}))
+features.append(Feature("gender", "integer", "race value", categorical=True, values={1: "male", 0: "female"}))
 
 # Hook data in with our Representation
 training_data = Data(xTrain, yTrain)  # Accepts Data and GT
@@ -42,8 +40,8 @@ meta = MetaDatabase(features)
 # Create a model to make predictions
 from sklearn.ensemble import RandomForestClassifier
 rfc = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=0)
-model = Model(agent=rfc, task='binary_classification', name="cisco_cancer_ai", display_name="Cisco Health AI",
-              model_class="Random Forest Classifier", description="Detect Cancer in patients using skin measurements")
+model = Model(agent=rfc, task='binary_classification', predict_fun=rfc.predict, predict_prob_fun=rfc.predict_proba,
+              name="cisco_cancer_ai", model_class="Random Forest Classifier", description="Detect Cancer in patients using skin measurements")
 
 # Create AISystem from previous objects. AISystems are what users will primarily interact with.
 configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}},
@@ -70,6 +68,8 @@ for g in metrics:
                 print(g, m, metrics[g][m])
 
 
+'''
+
 def test_point_biserial_r():
     """Tests that the RAI relfreq calculation is correct."""
     for i in range(len(features_raw)):
@@ -77,3 +77,4 @@ def test_point_biserial_r():
                scipy.stats.pointbiserialr(xTest[:, i], yTest)
 
 # TODO: Should be from binary X values to continuous y values
+'''

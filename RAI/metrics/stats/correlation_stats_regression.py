@@ -1,50 +1,10 @@
 from RAI.metrics.metric_group import MetricGroup
 import scipy.stats
 from RAI.utils.utils import calculate_per_all_features
+import os
 
 
-# Move config to external .json? 
-_config = {
-    "name": "correlation_stats_regression",
-    "display_name" : "Correlation Stats for Regression Metrics",
-    "compatibility": {"type_restriction": "regression", "output_restriction": None},
-    "dependency_list": [],
-    "tags": ["stats", "Regression Correlation"],
-    "complexity_class": "linear",
-    "metrics": {
-        "pearson-correlation": {
-            "display_name": "Pearson's Correlation'",
-            "type": "vector",
-            "has_range": True,
-            "range": [-1, 1],
-            "explanation": "Indicates if a statistically significance relationship is found between variables.",
-        },
-        "spearman-correlation": {
-            "display_name": "Spearman's Correlation",
-            "type": "vector",
-            "has_range": True,
-            "range": [-1, 1],
-            "explanation": "Measures rank correlation. Indicates how well can two variables be described with a monotonic function.",
-        },
-    }
-}
-
-'''  TEMPORARILY REMOVED LINEAR REGRESSION. 
-"lin-regress": {
-            "display_name": "Linear Regression",
-            "type": "vector",
-            "has_range": False,
-            "range": None,
-            "explanation": "",
-        },
-'''
-
-# Type (Regression, Classification, Data | probability, numeric)
-
-
-class CorrelationStatRegression(MetricGroup, config=_config):
-    compatibility = {"type_restriction": None, "output_restriction": None}
-
+class CorrelationStatRegression(MetricGroup, class_location=os.path.abspath(__file__)):
     def __init__(self, ai_system) -> None:
         super().__init__(ai_system)
         

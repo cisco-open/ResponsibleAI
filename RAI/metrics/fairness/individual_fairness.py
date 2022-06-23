@@ -4,76 +4,24 @@ from RAI.metrics.metric_group import MetricGroup
 from RAI.metrics.ai360_helper.AI360_helper import *
 import numpy as np
 import pandas as pd
-from RAI.utils import compare_runtimes
-
-__all__ = ['compatibility']
-
- 
-# Log loss, roc and brier score have been removed. s
-
-_config = {
-    "name": "individual_fairness",
-    "display_name" : "Individual Fairness Metrics",
-    "compatibility": {"type_restriction": "classification", "output_restriction": "choice"},
-    "src": "equal_treatment",
-    "dependency_list": [],
-    "tags": ["fairness", "Individual Fairness"],
-    "complexity_class": "linear",
-    "metrics": {
-        "generalized_entropy_error": {
-            "display_name": "Generalized Entropy Error",
-            "type": "numeric",
-            "tags": [],
-            "has_range": True,
-            "range": [0, None],
-            "explanation": "Measures inequality over a population. Lower values are better."
-        },
-        "theil_index": {
-            "display_name": "Theil Index",
-            "type": "numeric",
-            "tags": [],
-            "has_range": True,
-            "range": [0, None],
-            "explanation": "Measures the entropic distances between real data and an ideal and equal population. Lower values are better."
-        },
-        "coefficient_of_variation": {
-            "display_name": "Coefficient of Variance",
-            "type": "numeric",
-            "tags": [],
-            "has_range": True,
-            "range": [0, None],
-            "explanation": "Two times the square root of the generalzed entropy index with a=2. "
-        },
-        "consistency_score": {
-            "display_name": "Consistency Score",
-            "type": "numeric",
-            "tags": [],
-            "has_range": True,
-            "range": [0, 1],
-            "explanation": "Measures how similiar labels are for similiar instances. R. Zemel, Y. Wu, K. Swersky, T. Pitassi, and C. Dwork, “Learning Fair Representations,” International Conference on Machine Learning, 2013."
-        }
-    }
-}
+import os
 
 
-class IndividualFairnessMetricGroup(MetricGroup, config=_config):
+class IndividualFairnessMetricGroup(MetricGroup, class_location=os.path.abspath(__file__)):
     def __init__(self, ai_system) -> None:
         super().__init__(ai_system)
 
     def update(self, data):
         pass
 
-    def is_compatible(ai_system):
-        compatible = _config["compatibility"]["type_restriction"] is None \
-                    or ai_system.model.task == _config["compatibility"]["type_restriction"] \
-                    or ai_system.model.task == "binary_classification" and _config["compatibility"]["type_restriction"] == "classification"
-        compatible = compatible \
-                     and "fairness" in ai_system.metric_manager.user_config \
-                     and "protected_attributes" in ai_system.metric_manager.user_config["fairness"] \
-                     and  len(ai_system.metric_manager.user_config["fairness"]["protected_attributes"])>0 \
-                     and "positive_label" in ai_system.metric_manager.user_config["fairness"] \
-                     and compare_runtimes(ai_system.metric_manager.user_config.get("time_complexity"), _config["complexity_class"])
-        return compatible
+    @classmethod
+    def is_compatible(cls, ai_system):
+        compatible = super().is_compatible(ai_system)
+        return compatible \
+            and "fairness" in ai_system.metric_manager.user_config \
+            and "protected_attributes" in ai_system.metric_manager.user_config["fairness"] \
+            and len(ai_system.metric_manager.user_config["fairness"]["protected_attributes"]) > 0 \
+            and "positive_label" in ai_system.metric_manager.user_config["fairness"]
 
     def getConfig(self):
         return self.config

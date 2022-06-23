@@ -1,41 +1,10 @@
 from RAI.metrics.metric_group import MetricGroup
-import math
-import numpy as np
 import scipy.stats
 from RAI.utils.utils import calculate_per_all_features
-
-# Move config to external .json? 
-_config = {
-    "name": "correlation_stats_regression_slow",
-    "display_name" : "Regression Correlation Stats Metrics",
-    "compatibility": {"type_restriction": "regression", "output_restriction": None},
-    "dependency_list": [],
-    "tags": ["stats", "Regression Correlation"],
-    "complexity_class": "nLog(n)",
-    "metrics": {
-        "siegel-slopes": {
-            "display_name": "Siegel Estimator",
-            "type": "vector",
-            "has_range": False,
-            "range": None,
-            "explanation": "",
-        },
-        "theil-slopes": {
-            "display_name": "Theil-Sen Estimator",
-            "type": "vector",
-            "has_range": False,
-            "range": None,
-            "explanation": "",
-        },
-    }
-}
-
-# Type (Regression, Classification, Data | probability, numeric)
+import os
 
 
-class CorrelationStatRegressionSlow(MetricGroup, config=_config):
-    compatibility = {"type_restriction": None, "output_restriction": None}
-
+class CorrelationStatRegressionSlow(MetricGroup, class_location=os.path.abspath(__file__)):
     def __init__(self, ai_system) -> None:
         super().__init__(ai_system)
         

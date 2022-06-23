@@ -1,34 +1,11 @@
 import numpy as np
-
 from RAI.metrics.metric_group import MetricGroup
-
-# Move config to external .json?
-_config = {
-    "name": "basic_explainablity",
-    "display_name": "Basic Robustness Metrics",
-    "compatibility": {"type_restriction": None, "output_restriction": None},
-    "dependency_list": [],
-    "tags": ["robustness", "Normalization"],
-    "complexity_class": "linear",
-    "metrics": {
-        "explainable_model": {
-            "display_name": "explainable model",
-            "type": "boolean",
-            "has_range": False,
-            "range": [None, None],
-            "explanation": "Whether of not model is explainable",
-        },
-
-    }
-}
+import os
 
 
-# Type (Regression, Classification, Data | probability, numeric)
-
-
-class BasicExplainablityGroup(MetricGroup, config=_config):
-
+class BasicExplainablityGroup(MetricGroup, class_location=os.path.abspath(__file__)):
     def __init__(self, ai_system) -> None:
+        print("test")
         super().__init__(ai_system)
 
     def update(self, data):
@@ -48,8 +25,5 @@ class BasicExplainablityGroup(MetricGroup, config=_config):
             min_v = np.min(scalar_data, axis=0, keepdims=True)
 
             self.metrics["explainable_model"].value = True
-
-            # bool(np.all(np.isclose(max_v, np.ones_like(max_v))) and \
-            #                                         np.all(np.isclose(min_v, np.zeros_like(min_v))))
 
 # TODO: clarify basic explainability

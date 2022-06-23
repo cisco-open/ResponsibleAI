@@ -1,0 +1,77 @@
+{
+    "name" : "performance_reg",
+    "display_name": "Regression Performance Metrics",
+    "compatibility": {"task_type": "regression",
+                      "data_type": ["numeric"],
+                      "output_requirements": ["predict"],
+                      "dataset_requirements": ["X", "y"]},
+    "src": "stats",
+    "dependency_list": [],
+    "tags": ["performance", "Regression"],
+    "complexity_class": "linear",
+    "metrics": {
+        "explained_variance": {
+            "display_name": "Explained Variance",
+            "type": "numeric",
+            "has_range": true,
+            "range": [0, 1],
+            "explanation": "Measures discrepancy between a model and actual data, higher values are better"
+        },
+        "mean_absolute_error": {
+            "display_name": "Mean Absolute Error",
+            "type": "numeric",
+            "has_range": true,
+            "range": [0, null],
+            "explanation": "Indicates the average residual error, lower is better."
+        },
+        "mean_absolute_percentage_error": {
+            "display_name": "Mean Absolute Percentage Error",
+            "type": "numeric",
+            "has_range": true,
+            "range": [0, null],
+            "explanation": "Indicates the how inaccurate predictions were from actual values, lower is better."
+        },
+        "mean_gamma_deviance": {
+            "display_name": "Mean Gamma Deviance",
+            "type": "numeric",
+            "has_range": true,
+            "range": [0, null],
+            "explanation": "Calculated by taking the Tweedie Deviance with a power of 2."
+        },
+        "mean_poisson_deviance": {
+            "display_name": "Mean Poisson Deviance",
+            "type": "numeric",
+            "has_range": true,
+            "range": [0, null],
+            "explanation": "Calculated by taking the Tweedie Deviance with a power of 1."
+        },
+        "mean_squared_error": {
+            "display_name": "Mean Squared Error",
+            "type": "numeric",
+            "has_range": true,
+            "range": [0, null],
+            "explanation": "Mean Squared Error indicates the the performance of a model, lower is better."
+        },
+        "mean_squared_log_error": {
+            "display_name": "Mean Squared Log Error",
+            "type": "numeric",
+            "has_range": true,
+            "range": [0, null],
+            "explanation": "Mean Squared Log Error indicates the average squared logarithmic residual error, lower is better."
+        },
+        "median_absolute_error": {
+            "display_name": "Median Absolute Error",
+            "type": "numeric",
+            "has_range": true,
+            "range": [0, null],
+            "explanation": "Median Absolute Error indicates the median value for absolute residual error, lower is better."
+        },
+        "r2": {
+            "display_name": "R2 Score",
+            "type": "numeric",
+            "has_range": true,
+            "range": [0, 1],
+            "explanation": "Indicates how well a model fits the data, higher is better."
+        }
+    }
+}

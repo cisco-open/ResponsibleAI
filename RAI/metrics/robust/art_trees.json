@@ -1,0 +1,30 @@
+{
+    "name": "adversarial_validation_tree",
+    "display_name": "Adversarial Validation Tree Metrics",
+    "compatibility": {"task_type": "binary_classification",
+                      "data_type": ["numeric"],
+                      "output_requirements": ["predict"],
+                      "dataset_requirements": ["X", "y"]},
+    "src": "art",
+    "dependency_list": [],
+    "tags": ["robustness", "Adversarial Tree"],
+    "complexity_class": "polynomial",
+    "metrics": {
+        "adversarial-tree-verification-bound": {
+            "display_name": "Adversarial Tree Avg Verification Bound",
+            "type": "numeric",
+            "tags": [],
+            "has_range": true,
+            "range": [0, 1],
+            "explanation": "Lower bound on minimum adversarial distortion averaged over all test samples. Larger is better. Chen, Hongge, et al. 'Robustness verification of tree-based models.' arXiv preprint arXiv:1906.03849 (2019)."
+        },
+        "adversarial-tree-verification-error": {
+            "display_name": "Adversarial Tree Verified Error",
+            "type": "numeric",
+            "tags": [],
+            "has_range": true,
+            "range": [0, 1],
+            "explanation": "Upper bound of error for adversarial examples with L_infinity perturbation of specified size. From Chen, Hongge, et al. 'Robustness verification of tree-based models.' arXiv preprint arXiv:1906.03849 (2019)."
+        }
+    }
+}

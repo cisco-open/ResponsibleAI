@@ -1,11 +1,17 @@
+from RAI.utils import compare_runtimes
 from .metric import Metric
 from RAI.metrics.registry import register_class
 import numpy as np
-from RAI.utils import compare_runtimes
+import os
+import json
 
-__all__ = ['MetricGroup']
+__all__ = ['MetricGroup', 'all_complexity_classes', 'all_task_types', 'all_data_types', 'all_output_requirements', 'all_data_requirements']
 
 all_complexity_classes = {"constant",  "linear",  "multi_linear", "polynomial", "exponential"}
+all_task_types = {"binary_classification", "classification", "clustering", "regression"}
+all_data_types = {"numeric", "image", "text"}
+all_output_requirements = {"predict", "predict_proba", "generate_text"}
+all_dataset_requirements = {"X", "y", "sensitive_features"}
 
 
 class MetricGroup(object):    
@@ -14,16 +20,23 @@ class MetricGroup(object):
 
     @classmethod
     def is_compatible(cls, ai_system):
-        compatible = cls.config["compatibility"]["type_restriction"] is None \
-                    or ai_system.model.task in cls.config["compatibility"]["type_restriction"] \
-                    or ai_system.model.task == "binary_classification" and cls.config["compatibility"]["type_restriction"] == "classification"
+        compatible = cls.config["compatibility"]["task_type"] is None or cls.config["compatibility"]["task_type"] == "" \
+                     or cls.config["compatibility"]["task_type"] == ai_system.model.task \
+                     or (cls.config["compatibility"]["task_type"] == "classification" and ai_system.model.task == "binary_classification")
+        compatible = compatible and (cls.config["compatibility"]["data_type"] is None or cls.config["compatibility"]["data_type"] == [] or\
+                     all(item in ai_system.meta_database.data_format for item in cls.config["compatibility"]["data_type"]))
+        compatible = compatible and (cls.config["compatibility"]["output_requirements"] is None or \
+                     all(item in ai_system.model.output_types for item in cls.config["compatibility"]["output_requirements"]))
+        compatible = compatible and (cls.config["compatibility"]["dataset_requirements"] is None or \
+                     all(item in ai_system.meta_database.stored_data for item in cls.config["compatibility"]["dataset_requirements"]))
         compatible = compatible and compare_runtimes(ai_system.metric_manager.user_config.get("time_complexity"), cls.config["complexity_class"])
         return compatible
 
-    def __init_subclass__(cls, config=None, **kwargs):
+    def __init_subclass__(cls, class_location=None, **kwargs):
         super().__init_subclass__(**kwargs)
-        cls.config = config
-        cls.name = config["name"]
+        config_file = class_location[:-2]+"json"
+        cls.config = json.load(open(config_file))
+        cls.name = cls.config["name"]
         register_class(cls.name, cls)
 
     def __init__(self, ai_system) -> None:
@@ -106,5 +119,3 @@ class MetricGroup(object):
 
     def update(self, data):
         pass
-
-

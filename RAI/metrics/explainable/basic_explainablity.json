@@ -1,0 +1,20 @@
+{
+    "name": "basic_explainablity",
+    "display_name": "Basic Robustness Metrics",
+    "compatibility": {"task_type": null,
+                      "data_type": ["numeric"],
+                      "output_requirements": [],
+                      "dataset_requirements": ["numeric"]},
+    "dependency_list": [],
+    "tags": ["robustness", "Normalization"],
+    "complexity_class": "linear",
+    "metrics": {
+        "explainable_model": {
+            "display_name": "explainable model",
+            "type": "boolean",
+            "has_range": false,
+            "range": [null, null],
+            "explanation": "Whether of not model is explainable"
+        }
+    }
+}

@@ -117,7 +117,7 @@ def df_to_RAI(df, test_tf=None, target_column=None, clear_nans=True, extra_symbo
             f = Feature(c, "integer", c, categorical=True,
                         values={i: v for i, v in enumerate(fact[1])})
         else:
-            f = Feature(c, "float32", c)
+            f = Feature(c, "float", c)
         features.append(f)
     return MetaDatabase(features), df.to_numpy().astype('float32'), y
 

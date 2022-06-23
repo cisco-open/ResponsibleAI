@@ -1,33 +1,25 @@
 import scipy.stats
-
-import RAI
 from RAI.dataset import Feature, Data, MetaDatabase, Dataset
 from RAI.AISystem import AISystem, Model
 import numpy as np
-
-# Get Dataset
 from sklearn.datasets import fetch_california_housing
 from sklearn.model_selection import train_test_split
-import sklearn
+
+np.random.seed(21)
 x, y = fetch_california_housing(return_X_y=True)
 xTrain, xTest, yTrain, yTest = train_test_split(x, y)
 
-use_dashboard = False
-np.random.seed(21)
-
-# Hook data in with our Representation
 dataset = Dataset({"train": Data(xTrain, yTrain), "test": Data(xTest, yTest)})
 
-# Indicate the features of the dataset (Columns)
 features = [
-    Feature("MedInc", 'float32', "Median Income"),
-    Feature("HouseAge", 'float32', "Median House age in Block Group"),
-    Feature("AveRooms", 'float32', "Average number of rooms per household"),
-    Feature("AveBedrms", 'float32', "Average number of bedrooms per household"),
-    Feature("Population", 'float32', "Block group population"),
-    Feature("AveOccup", 'float32', "Average Number of Household members"),
-    Feature("Latitude", 'float32', "Block group Latitude"),
-    Feature("Longitude", 'float32', "Block group Longitude")
+    Feature("MedInc", 'float', "Median Income"),
+    Feature("HouseAge", 'float', "Median House age in Block Group"),
+    Feature("AveRooms", 'float', "Average number of rooms per household"),
+    Feature("AveBedrms", 'float', "Average number of bedrooms per household"),
+    Feature("Population", 'float', "Block group population"),
+    Feature("AveOccup", 'float', "Average Number of Household members"),
+    Feature("Latitude", 'float', "Block group Latitude"),
+    Feature("Longitude", 'float', "Block group Longitude")
 ]
 meta = MetaDatabase(features)
 

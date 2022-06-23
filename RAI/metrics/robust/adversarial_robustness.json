@@ -1,0 +1,41 @@
+{
+    "name": "adversarial_robustness",
+    "display_name" : "Adversarial Robustness Metrics",
+    "compatibility": {"task_type": "classification",
+                      "data_type": ["numeric"],
+                      "output_requirements": ["predict"],
+                      "dataset_requirements": ["X", "y"]},
+    "dependency_list": [],
+    "tags": ["robustness", "Adversarial"],
+    "complexity_class": "linear",
+    "metrics": {
+        "inaccuracy": {
+            "display_name": "Inaccuracy",
+            "type": "numeric",
+            "has_range": true,
+            "range": [0, 1],
+            "explanation": "Distortion metrics scale linearly with the log of inaccuracy. Is Robustness the Cost of Accuracy? A comprehensive Study on the Robustness of 18 Deep Image Classification Models"
+        },
+        "l-inf-model-score": {
+            "display_name": "L Infinity Model Score",
+            "type": "numeric",
+            "has_range": false,
+            "range": [null, null],
+            "explanation": "Robustness Score determined by the type of model and depth. Is Robustness the Cost of Accuracy? A comprehensive Study on the Robustness of 18 Deep Image Classification Models"
+        },
+        "l-2-model-score": {
+            "display_name": "L2 Model Score",
+            "type": "numeric",
+            "has_range": false,
+            "range": [null, null],
+            "explanation": "Robustness Score determined by the type of model and depth. Is Robustness the Cost of Accuracy? A comprehensive Study on the Robustness of 18 Deep Image Classification Models"
+        },
+        "data-dimensionality": {
+            "display_name": "Adversarial Data Dimensionality",
+            "type": "numeric",
+            "has_range": false,
+            "range": [null, null],
+            "explanation": "Dimensionality of Data correlates to its robustness against adversarial attacks."
+        }
+    }
+}

@@ -1,0 +1,27 @@
+{
+    "name": "correlation_stats_regression_slow",
+    "display_name": "Regression Correlation Stats Metrics",
+    "compatibility": {"task_type": "regression",
+                      "data_type": ["numeric"],
+                      "output_requirements": [],
+                      "dataset_requirements": ["X", "y"]},
+    "dependency_list": [],
+    "tags": ["stats", "Regression Correlation"],
+    "complexity_class": "nLog(n)",
+    "metrics": {
+        "siegel-slopes": {
+            "display_name": "Siegel Estimator",
+            "type": "vector",
+            "has_range": false,
+            "range": null,
+            "explanation": ""
+        },
+        "theil-slopes": {
+            "display_name": "Theil-Sen Estimator",
+            "type": "vector",
+            "has_range": false,
+            "range": null,
+            "explanation": ""
+        }
+    }
+}

@@ -1,54 +1,19 @@
 from RAI.metrics.metric_group import MetricGroup
 import datetime
+import os
 
 
-
-_config = {
-    "name": "Tree Models",
-    "display_name" : "SKlearn Tree Based Models",
-    "compatibility": {"type_restriction": "classification", "output_restriction": "choice"},
-    "dependency_list": [],
-    "tags": ["metadata"],
-    "complexity_class": "linear",
-    "metrics": {
-        "estimator_counts": {
-            "display_name": "Number of estimators",
-            "type": "numeric",
-            "has_range": True,
-            "range": [1, None],
-            "explanation": "Number of estimators",
-        },
-        "estimator_params": {
-            "display_name": "estimators data",
-            "type": "vector",
-            "has_range": False,
-            "range": [None, None],
-            "explanation": "estimators data",
-        }, 
-        "feature_names": {
-            "display_name": "feature names",
-            "type": "vector",
-            "has_range": False,
-            "range": [None, None],
-            "explanation": "feature names",
-        }, 
-    }
-}
-
-
-class TreeModels(MetricGroup, config=_config):
+class TreeModels(MetricGroup, class_location=os.path.abspath(__file__)):
     def __init__(self, ai_system) -> None:
         super().__init__(ai_system)
         
     def update(self, data):
         pass
-    
-    def is_compatible(ai_system):
-        compatible = _config["compatibility"]["type_restriction"] is None \
-                    or ai_system.model.task == _config["compatibility"]["type_restriction"] \
-                    or ai_system.model.task == "binary_classification" and _config["compatibility"]["type_restriction"] == "classification"
-        compatible = compatible and ai_system.model.agent.__class__.__module__.split(".")[0] == "sklearn"
-        return compatible
+
+    @classmethod
+    def is_compatible(cls, ai_system):
+        compatible = super().is_compatible(ai_system)
+        return compatible and ai_system.model.agent.__class__.__module__.split(".")[0] == "sklearn"
 
     def compute(self, data_dict):
         model = self.ai_system.model.agent

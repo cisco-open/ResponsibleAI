@@ -26,8 +26,8 @@ from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
 
 reg = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=0)
 
-model = Model(agent=reg, task='binary_classification', description="Detect Cancer in patients using skin measurements",
-              model_class="Random Forest Classifier", )
+model = Model(agent=reg, task='binary_classification', predict_fun=reg.predict, predict_prob_fun=reg.predict_proba,
+              description="Detect Cancer in patients using skin measurements", model_class="Random Forest Classifier", )
 configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}},
                               "protected_attributes": ["race"], "positive_label": 1},
                  "time_complexity": "polynomial"}

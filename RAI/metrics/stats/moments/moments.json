@@ -1,0 +1,34 @@
+{
+    "name": "stat_moment_group",
+    "display_name" : "Statistical Moments Metrics",
+    "compatibility": {"task_type": null,
+                      "data_type": ["numeric"],
+                      "output_requirements": ["predict"],
+                      "dataset_requirements": ["X"]},
+    "dependency_list": [],
+    "tags": ["stats", "Moments"],
+    "complexity_class": "linear",
+    "metrics": {
+        "moment-1": {
+            "display_name": "First Moment",
+            "type": "vector",
+            "has_range": false,
+            "range": null,
+            "explanation": "Mean is the expected value of data."
+        },
+        "moment-2": {
+            "display_name": "Second Moment",
+            "type": "vector",
+            "has_range": false,
+            "range": null,
+            "explanation": "Mean is the expected value of data."
+        },
+        "moment-3": {
+            "display_name": "Third Moment",
+            "type": "vector",
+            "has_range": false,
+            "range": null,
+            "explanation": "Mean is the expected value of data."
+        }
+    }
+}

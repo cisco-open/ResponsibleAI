@@ -16,21 +16,21 @@ dataset = Dataset({"train": Data(xTrain, yTrain), "test": Data(xTest, yTest)})
 
 # Indicate the features of the dataset (Columns)
 features = [
-    Feature("MedInc", 'float32', "Median Income", categorical=False),
-    Feature("HouseAge", 'float32', "Median House age in Block Group", categorical=False),
-    Feature("AveRooms", 'float32', "Average number of rooms per household", categorical=False),
-    Feature("AveBedrms", 'float32', "Average number of bedrooms per household", categorical=False),
-    Feature("Population", 'float32', "Block group population", categorical=False),
-    Feature("AveOccup", 'float32', "Average Number of Household members", categorical=False),
-    Feature("Latitude", 'float32', "Block group Latitude", categorical=False),
-    Feature("Longitude", 'float32', "Block group Longitude", categorical=False)
+    Feature("MedInc", 'float', "Median Income", categorical=False),
+    Feature("HouseAge", 'float', "Median House age in Block Group", categorical=False),
+    Feature("AveRooms", 'float', "Average number of rooms per household", categorical=False),
+    Feature("AveBedrms", 'float', "Average number of bedrooms per household", categorical=False),
+    Feature("Population", 'float', "Block group population", categorical=False),
+    Feature("AveOccup", 'float', "Average Number of Household members", categorical=False),
+    Feature("Latitude", 'float', "Block group Latitude", categorical=False),
+    Feature("Longitude", 'float', "Block group Longitude", categorical=False)
 ]
 meta = MetaDatabase(features)
 
 # Create a model to make predictions
 from sklearn.ensemble import RandomForestRegressor
 reg = RandomForestRegressor(n_estimators=15, max_depth=20)
-model = Model(agent=reg, task='regression', name="Cisco_RealEstate_AI", model_class="Random Forest Regressor")
+model = Model(agent=reg, task='regression', predict_fun=reg.predict, name="Cisco_RealEstate_AI", model_class="Random Forest Regressor")
 
 # Create AISystem from previous objects. AISystems are what users will primarily interact with.
 

@@ -23,7 +23,6 @@ class MetricManager(object):
         super().__init__()
         self.ai_system = ai_system
         self.metric_groups = {}
-        
         self.user_config = {"fairness": {   "priv_group": {},
                                             "protected_attributes": [], "positive_label": 1},
                                             "time_complexity": "exponential"}
