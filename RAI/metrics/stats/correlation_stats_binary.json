@@ -9,7 +9,7 @@
     "tags": ["stats", "Binary Correlation"],
     "complexity_class": "linear",
     "metrics": {
-        "point-biserial-r": {
+        "point_biserial_r": {
             "display_name": "Point Biserial Coefficient",
             "type": "vector",
             "has_range": true,

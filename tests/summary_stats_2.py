@@ -51,6 +51,10 @@ info = ai.get_metric_info()
 
 for g in metrics:
     for m in metrics[g]:
+        if g!="tree_model_metadata":
+            print(g, " ", m, " ", metrics[g][m])
+        '''
         if "type" in info[g][m]:
             if info[g][m]["type"] in ("numeric", "vector-dict", "text"):
                 print(g, m, metrics[g][m])
+        '''

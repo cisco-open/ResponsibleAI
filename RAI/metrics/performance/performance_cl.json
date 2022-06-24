@@ -58,7 +58,6 @@
             "range": [0, 1],
             "explanation": "The F1 score is a weighted average between a models precision and recall scores"
         },
-
         "fp_rate_avg": {
             "display_name": "Average False Positive Rate",
             "type": "numeric",
@@ -75,7 +74,6 @@
             "range": [0, 1],
             "explanation": "FP Rate describes what percentage of wrong predictions were false positives."
         },
-        
         "jaccard_score": {
             "display_name": "Jaccard Score",
             "type": "vector",
@@ -92,7 +90,6 @@
             "range": [0, 1],
             "explanation": "Jaccard Score measures the similarity of two two sets of data, and returns a result from 0 to 100%."
         },
-        
         "precision_score": {
             "display_name": "Precision Score",
             "type": "vector",
@@ -109,7 +106,6 @@
             "range": [0, 1],
             "explanation": "Precision Scores indicates a models ability to not label a positive sample as negative."
         },
-
         "recall_score": {
             "display_name": "Recall Score",
             "type": "vector",
@@ -125,15 +121,6 @@
             "has_range": true,
             "range": [0, 1],
             "explanation": "Recall Scores indicates a models ability to classify all positive image samples"
-        },
-
-        "tp_rate": {
-            "display_name": "True Positive Rate",
-            "type": "vector",
-            "tags": [],
-            "has_range": true,
-            "range": [0, 1],
-            "explanation": "True Positive Rate is the probability that a positive example will be predicted to be positive."
         },
         "tp_rate_avg": {
             "display_name": "Average True Positive Rate",

@@ -66,40 +66,36 @@ def test_dataset_equality():
     assert (yTrain == ai.dataset.data_dict["train"].y).all()
 
 
-# TODO: remove caps from metric name
 def test_num_nan_rows():
     """Tests that the RAI num nan rows calculation is correct."""
     xTestDf = pd.DataFrame(xTest, columns=features)
-    assert metrics['summary_stats']['num-Nan-rows'] == xTestDf.shape[0] - xTestDf.dropna().shape[0]
+    assert metrics['summary_stats']['num_nan_rows'] == xTestDf.shape[0] - xTestDf.dropna().shape[0]
 
 
-# TODO: remove capitals
 def test_percent_Nan_rows():
     """Tests that the RAI percent nan rows calculation is correct."""
     xTestDf = pd.DataFrame(xTest, columns=features)
-    assert metrics['summary_stats']['percent-Nan-rows'] == (xTestDf.shape[0] - xTestDf.copy().dropna().shape[0])/len(xTestDf)
+    assert metrics['summary_stats']['percent_nan_rows'] == (xTestDf.shape[0] - xTestDf.copy().dropna().shape[0])/len(xTestDf)
 
 
-# TODO: replace all of these names with underscores rather than dash
-# TODO: Is this applicable across multiple columns, or should it be ran per column?
 def test_kstat_1():
-    """Tests that the RAI kstat-1 calculation is correct."""
-    assert metrics['summary_stats']['kstat-1'] == scipy.stats.kstat(xTest, 1)
+    """Tests that the RAI kstat_1 calculation is correct."""
+    assert metrics['summary_stats']['kstat_1'] == scipy.stats.kstat(xTest, 1)
 
 
 def test_kstat_2():
-    """Tests that the RAI kstat-2 calculation is correct."""
-    assert metrics['summary_stats']['kstat-2'] == scipy.stats.kstat(xTest, 2)
+    """Tests that the RAI kstat_2 calculation is correct."""
+    assert metrics['summary_stats']['kstat_2'] == scipy.stats.kstat(xTest, 2)
 
 
 def test_kstat_3():
-    """Tests that the RAI kstat-3 calculation is correct."""
-    assert metrics['summary_stats']['kstat-3'] == scipy.stats.kstat(xTest, 3)
+    """Tests that the RAI kstat_3 calculation is correct."""
+    assert metrics['summary_stats']['kstat_3'] == scipy.stats.kstat(xTest, 3)
 
 
 def test_kstat_4():
-    """Tests that the RAI kstat-1 calculation is correct."""
-    assert metrics['summary_stats']['kstat-4'] == scipy.stats.kstat(xTest, 4)
+    """Tests that the RAI kstat_1 calculation is correct."""
+    assert metrics['summary_stats']['kstat_4'] == scipy.stats.kstat(xTest, 4)
 
 
 def test_kstatvar():
@@ -112,30 +108,27 @@ def test_iqr():
     assert metrics['summary_stats']['iqr'] == scipy.stats.iqr(xTest)
 
 
-# TODO: Is this applicable across multiple columns, or should it be ran per column?
 def test_bayes_mvs():
     """Tests that the RAI kstatvar calculation is correct."""
     mean, var, std = scipy.stats.bayes_mvs(xTest)
-    assert metrics['summary_stats']['bayes-mean-avg'] == mean[0]
-    assert metrics['summary_stats']['bayes-var-avg'] == var[0]
-    assert metrics['summary_stats']['bayes-std-avg'] == std[0]
+    assert metrics['summary_stats']['bayes_mean_avg'] == mean[0]
+    assert metrics['summary_stats']['bayes_var_avg'] == var[0]
+    assert metrics['summary_stats']['bayes_std_avg'] == std[0]
 
 
-# TODO: Is this applicable across multiple columns, or should it be ran per column?
-# TODO: Consistency: chance variance to var, or var globally to variance
 def test_frozen_mvs():
     """Tests that the RAI kstatvar calculation is correct."""
     mean, var, std = scipy.stats.mvsdist(xTest)
-    assert metrics['summary_stats']['frozen-mean-mean'] == mean.mean()
-    assert metrics['summary_stats']['frozen-mean-var'] == mean.var()
-    assert metrics['summary_stats']['frozen-mean-std'] == mean.std()
+    assert metrics['summary_stats']['frozen_mean_mean'] == mean.mean()
+    assert metrics['summary_stats']['frozen_mean_variance'] == mean.var()
+    assert metrics['summary_stats']['frozen_mean_std'] == mean.std()
 
-    assert metrics['summary_stats']['frozen-variance-mean'] == var.mean()
-    assert metrics['summary_stats']['frozen-variance-var'] == var.var()
-    assert metrics['summary_stats']['frozen-variance-std'] == var.std()
+    assert metrics['summary_stats']['frozen_variance_mean'] == var.mean()
+    assert metrics['summary_stats']['frozen_variance_variance'] == var.var()
+    assert metrics['summary_stats']['frozen_variance_std'] == var.std()
 
-    assert metrics['summary_stats']['frozen-std-mean'] == std.mean()
-    assert metrics['summary_stats']['frozen-std-var'] == std.var()
-    assert metrics['summary_stats']['frozen-std-std'] == std.std()
+    assert metrics['summary_stats']['frozen_std_mean'] == std.mean()
+    assert metrics['summary_stats']['frozen_std_variance'] == std.var()
+    assert metrics['summary_stats']['frozen_std_std'] == std.std()
 
-# TODO: Most of these statistic metrics only make when looking at just one variable. Rework.
+# TODO: Rework test to look for array

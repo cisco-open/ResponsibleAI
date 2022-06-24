@@ -33,8 +33,8 @@ import plotly.tools as tls
 
 def get_mdl_image(nM, nD):
     vs = redisUtil.get_metric_values()
-    rf =  pickle.loads(vs[nM]['Tree Models']['estimator_params'][nD].encode('ISO-8859-1') )
-    feat_names = vs[nM]['Tree Models']['feature_names']
+    rf =  pickle.loads(vs[nM]['tree_model_metadata']['estimator_params'][nD].encode('ISO-8859-1') )
+    feat_names = vs[nM]['tree_model_metadata']['feature_names']
     
     fig = plt.figure( figsize=[6,4])
     sklearn.tree.plot_tree(rf, filled=True,fontsize=8,feature_names = feat_names  )
@@ -50,8 +50,8 @@ def get_mdl_image(nM, nD):
 
 def get_mdl_text(nM, nD):
     vs = redisUtil.get_metric_values()
-    rf =  pickle.loads(vs[nM]['Tree Models']['estimator_params'][nD].encode('ISO-8859-1') )
-    feat_names = vs[nM]['Tree Models']['feature_names']
+    rf =  pickle.loads(vs[nM]['tree_model_metadata']['estimator_params'][nD].encode('ISO-8859-1') )
+    feat_names = vs[nM]['tree_model_metadata']['feature_names']
     
     
     text_representation = sklearn.tree.export_text(rf, feature_names = feat_names)
@@ -95,7 +95,7 @@ def get_form():
             dbc.Label("Select Decision Tree", html_for="dropdown"),
             dcc.Dropdown(
                 id="tree_selector",
-                options= list(range(len(vs[-1]['Tree Models']['estimator_params']))) ,
+                options= list(range(len(vs[-1]['tree_model_metadata']['estimator_params']))) ,
                 value= 0
             ),
         ],

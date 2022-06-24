@@ -9,14 +9,14 @@
     "tags": ["stats", "Regression Correlation"],
     "complexity_class": "nLog(n)",
     "metrics": {
-        "siegel-slopes": {
+        "siegel_slopes": {
             "display_name": "Siegel Estimator",
             "type": "vector",
             "has_range": false,
             "range": null,
             "explanation": ""
         },
-        "theil-slopes": {
+        "theil_slopes": {
             "display_name": "Theil-Sen Estimator",
             "type": "vector",
             "has_range": false,

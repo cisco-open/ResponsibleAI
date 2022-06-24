@@ -32,8 +32,8 @@ meta, X, y = df_to_RAI(all_data, target_column="income-per-year", normalize=None
 xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=1, stratify=y)
 
 # Create a model to make predictions
-model = Model(agent=clf, task='binary_classification', predict_fun=clf.predict, predict_prob_fun=clf.predict_proba,
-              description="Detect Cancer in patients using skin measurements", model_class="Random Forest Classifier")
+model = Model(agent=clf, name="income ai", task='binary_classification', predict_fun=clf.predict, predict_prob_fun=clf.predict_proba,
+              model_class="Random Forest Classifier")
 configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}},
                               "protected_attributes": ["race"], "positive_label": 1},
                  "time_complexity": "polynomial"}
@@ -59,10 +59,10 @@ for g in metrics:
 
 def test_dataset_equality():
     """Tests that the old and new datasets match exactly."""
-    assert (xTest == ai.dataset.test_data.X).all()
-    assert (yTest == ai.dataset.test_data.y).all()
-    assert (xTrain == ai.dataset.train_data.X).all()
-    assert (yTrain == ai.dataset.train_data.y).all()
+    assert (xTest == ai.dataset.data_dict["test"].X).all()
+    assert (yTest == ai.dataset.data_dict["test"].y).all()
+    assert (xTrain == ai.dataset.data_dict["train"].X).all()
+    assert (yTrain == ai.dataset.data_dict["train"].y).all()
 
 
 def test_accuracy():
@@ -106,13 +106,6 @@ def test_fp_rate():
     assert metrics['performance_cl']['fp_rate_avg'] == fp/(fp+tn)
 
 
-def test_tp_rate():
-    """Tests that the RAI tp rate calculation is correct."""
-    tn, fp, fn, tp = sklearn.metrics.confusion_matrix(yTest, predictions).ravel()
-    assert metrics['performance_cl']['tp_rate_avg'] == tp / (tp + fn)
-
-
-# TODO: Recall score is TPR, remove TPR.
 # TODO: Do we want Macro?
 def test_recall_score():
     """Tests that the RAI recall score calculation is correct."""

@@ -36,6 +36,6 @@ class ArtAdversarialRobustnessTreeGroup(MetricGroup, class_location=os.path.absp
                 y = np.stack([data.y == 0, data.y == 1], 1)
             else:
                 y = data.y
-            self.metrics['adversarial-tree-verification-bound'].value, \
-            self.metrics['adversarial-tree-verification-error'].value = \
+            self.metrics['adversarial_tree_verification_bound'].value, \
+            self.metrics['adversarial_tree_verification_error'].value = \
                 rt.verify(data.X, y, eps_init=0.3, nb_search_steps=2, max_clique=2, max_level=2)

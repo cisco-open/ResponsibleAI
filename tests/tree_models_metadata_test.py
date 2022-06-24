@@ -59,21 +59,19 @@ for g in metrics:
             if info[g][m]["type"] in ("numeric", "vector-dict", "text"):
                 print(g, m, metrics[g][m])
 
-print(metrics['Tree Models'])
+print(metrics['tree_model_metadata'])
 
 
 def test_feature_names():
     """Tests that the feature names are correct."""
-    assert metrics['Tree Models']['feature_names'] == [f.name for f in ai.meta_database.features]
+    assert metrics['tree_model_metadata']['feature_names'] == [f.name for f in ai.meta_database.features]
 
 
 def test_estimator_counts():
     """Tests that the feature names are correct."""
-    assert metrics['Tree Models']['estimator_counts'] == clf.n_estimators
+    assert metrics['tree_model_metadata']['estimator_counts'] == clf.n_estimators
 
 
 def test_estimators():
     """Tests that the feature names are correct."""
-    assert metrics['Tree Models']['estimator_params'] == clf.estimators_
-
-# TODO change name to match the convention
+    assert metrics['tree_model_metadata']['estimator_params'] == clf.estimators_

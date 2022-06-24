@@ -21,4 +21,4 @@ class BinaryCorrelationStats(MetricGroup, class_location=os.path.abspath(__file_
             map = self.ai_system.meta_database.categorical_map
             features = self.ai_system.meta_database.features
 
-            self.metrics["point-biserial-r"].value = calculate_per_all_features(scipy.stats.pointbiserialr, data.categorical, data.y, map, features)
+            self.metrics["point_biserial_r"].value = calculate_per_all_features(scipy.stats.pointbiserialr, map, features, data.categorical, data.y)

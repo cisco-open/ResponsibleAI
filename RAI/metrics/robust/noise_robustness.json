@@ -9,28 +9,28 @@
     "tags": ["robustness", "Noise"],
     "complexity_class": "linear",
     "metrics": {
-        "certified-adversarial-noise": {
+        "certified_adversarial_noise": {
             "display_name": "Certified Adversarial Robustness with Additive Noise Score",
             "type": "numeric",
             "has_range": false,
             "range": [null, null],
             "explanation": "https://github.com/Bai-Li/STN-Code"
         },
-        "robust-signal-noise-ratio": {
+        "robust_signal_noise_ratio": {
             "display_name": "Robust SNR",
             "type": "numeric",
             "has_range": false,
             "range": [null, null],
             "explanation": "Signal-to-Noise Ratio: A Robust Distance Metric for Deep Metric Learning . https://kevinmusgrave.github.io/pytorch-metric-learning/distances/#snrdistance"
         },
-        "decision-curve-upper-bound": {
+        "decision_curve_upper_bound": {
             "display_name": "Robustness of classifiers: from adversarial to random noise score",
             "type": "numeric",
             "has_range": false,
             "range": [null, null],
             "explanation": "Robustness of classifiers: from adversarial to random noise. Requires hand coding their math."
         },
-        "decision-curve-lower-bound": {
+        "decision_curve_lower_bound": {
             "display_name": "Robustness of classifiers: from adversarial to random noise score",
             "type": "numeric",
             "has_range": false,
@@ -38,7 +38,7 @@
             "explanation": "Robustness of classifiers: from adversarial to random noise. Requires hand coding their math"
         },
 
-        "added-noise": {
+        "added_noise": {
             "display_name": "Accuracy After Noise",
             "type": "numeric",
             "has_range": false,

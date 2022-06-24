@@ -18,7 +18,7 @@ class StatMomentGroup(MetricGroup, class_location=os.path.abspath(__file__)):
             data = data_dict["data"]
             scalar_data = data.scalar
 
-            self.metrics["moment-1"].value = scipy.stats.moment(scalar_data, 1)
-            self.metrics["moment-2"].value = scipy.stats.moment(scalar_data, 2)
-            self.metrics["moment-3"].value = scipy.stats.moment(scalar_data, 3)
+            self.metrics["moment_1"].value = scipy.stats.moment(scalar_data, 1)
+            self.metrics["moment_2"].value = scipy.stats.moment(scalar_data, 2)
+            self.metrics["moment_3"].value = scipy.stats.moment(scalar_data, 3)
  

@@ -26,9 +26,22 @@ class MetricManager(object):
         self.user_config = {"fairness": {   "priv_group": {},
                                             "protected_attributes": [], "positive_label": 1},
                                             "time_complexity": "exponential"}
-        
+
+    def standardizeUserConfig(self, user_config: dict):
+        if "fairness" in user_config:
+            protected_classes = []
+            if "priv_group" in user_config["fairness"]:
+                for attr in user_config["fairness"]["priv_group"]:
+                    protected_classes.append(attr)
+                    assert "privileged" in user_config["fairness"]["priv_group"][attr]
+                    assert "unprivileged" in user_config["fairness"]["priv_group"][attr]
+                assert "positive_label" in user_config["fairness"]
+                user_config["fairness"]["protected_attributes"] = protected_classes
+                print("protected attributes: ", protected_classes)
+
     def initialize(self, user_config: dict = None, metric_groups: list[str] = None, max_complexity: str = "linear"):
         if user_config:
+            self.standardizeUserConfig(user_config)
             for key in user_config:
                 self.user_config[key] = user_config[key]
 

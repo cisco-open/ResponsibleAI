@@ -32,10 +32,10 @@ class GeneralDatasetFairnessGroup(MetricGroup, class_location=os.path.abspath(__
                 prot_attr = self.ai_system.metric_manager.user_config["fairness"]["protected_attributes"]
 
             bin_dataset = get_bin_dataset(self, data, prot_attr)
-            self.metrics['base-rate'].value = bin_dataset.base_rate()
-            self.metrics['num-instances'].value = bin_dataset.num_instances()
-            self.metrics['num-negatives'].value = bin_dataset.num_negatives()
-            self.metrics['num-positives'].value = bin_dataset.num_positives()
+            self.metrics['base_rate'].value = bin_dataset.base_rate()
+            self.metrics['num_instances'].value = bin_dataset.num_instances()
+            self.metrics['num_negatives'].value = bin_dataset.num_negatives()
+            self.metrics['num_positives'].value = bin_dataset.num_positives()
 
 
 def get_bin_dataset(metric_group, data, prot_attr):

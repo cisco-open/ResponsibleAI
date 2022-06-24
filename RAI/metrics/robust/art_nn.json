@@ -10,7 +10,7 @@
     "tags": ["robustness", "Adversarial"],
     "complexity_class": "polynomial",
     "metrics": {
-        "clever-t-l1": {
+        "clever_t_l1": {
             "display_name": "Targeted L1 CLEVER",
             "type": "numeric",
             "tags": [],
@@ -18,7 +18,7 @@
             "range": [0, null],
             "explanation": "Calculates the rate at which at which a groups with a protected attribute recieve a positive outcome."
         },
-        "clever-t-l2": {
+        "clever_t_l2": {
             "display_name": "Targeted L2 CLEVER",
             "type": "numeric",
             "tags": [],
@@ -26,7 +26,7 @@
             "range": [0, null],
             "explanation": "Calculates the rate at which at which a groups with a protected attribute recieve a positive outcome."
         },
-        "clever-t-li": {
+        "clever_t_li": {
             "display_name": "Targeted Li CLEVER",
             "type": "numeric",
             "tags": [],
@@ -34,7 +34,7 @@
             "range": [0, null],
             "explanation": "Calculates the rate at which at which a groups with a protected attribute recieve a positive outcome."
         },
-        "clever-u-l1": {
+        "clever_u_l1": {
             "display_name": "Untargeted L1 CLEVER",
             "type": "numeric",
             "tags": [],
@@ -42,7 +42,7 @@
             "range": [0, null],
             "explanation": "Calculates the rate at which at which a groups with a protected attribute recieve a positive outcome."
         },
-        "clever-u-l2": {
+        "clever_u_l2": {
             "display_name": "Untargeted L2 CLEVER",
             "type": "numeric",
             "tags": [],
@@ -50,7 +50,7 @@
             "range": [0, null],
             "explanation": "Calculates the rate at which at which a groups with a protected attribute recieve a positive outcome."
         },
-        "clever-u-li": {
+        "clever_u_li": {
             "display_name": "Untargeted Li CLEVER",
             "type": "numeric",
             "tags": [],

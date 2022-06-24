@@ -129,17 +129,17 @@ def map_feature_results(values, features, mapping):
     return result
 
 
-def calculate_per_feature(function, X, y):
+def calculate_per_feature(function, X, *args, **kwargs):
     result = []
     for i in range(np.shape(X)[1]):
-        result.append(function(X[:, i], y))
+        result.append(function(X[:, i], *args, **kwargs))
     return result
 
 
-def calculate_per_all_features(function, X, y, mapping, features):
+def calculate_per_all_features(function, mapping, features, X, *args, **kwargs):
     result = []
     for i in range(np.shape(X)[1]):
-        result.append(function(X[:, i], y))
+        result.append(function(X[:, i], *args, **kwargs))
     return map_feature_results(result, features, mapping)
 
 

@@ -47,8 +47,7 @@ model = Model(agent=rfc, task='binary_classification', predict_fun=rfc.predict, 
 
 
 # Create AISystem from previous objects. AISystems are what users will primarily interact with.
-configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}},
-                              "protected_attributes": ["race"], "positive_label": 1},
+configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}}, "positive_label": 1},
                  "blacklist": []}
 ai = AISystem("cancer_detection", meta_database=meta, dataset=dataset, model=model)
 ai.initialize(user_config=configuration)
@@ -67,6 +66,7 @@ info = ai.get_metric_info()
 
 for g in metrics:
     for m in metrics[g]:
-        if "type" in info[g][m]:
-            if info[g][m]["type"] in ("numeric", "vector-dict", "text"):
-                print(g, m, metrics[g][m])
+        print(g, " ", m, " ", metrics[g][m])
+        # if "type" in info[g][m]:
+            # if info[g][m]["type"] in ("numeric", "vector-dict", "text"):
+            #     print(g, m, metrics[g][m])

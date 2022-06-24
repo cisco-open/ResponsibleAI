@@ -10,7 +10,7 @@
     "tags": ["fairness", "General Fairness"],
     "complexity_class": "linear",
     "metrics": {
-        "average-abs-odds-difference": {
+        "average_abs_odds_difference": {
             "display_name": "Average Abs Odds Difference",
             "type": "numeric",
             "tags": [],
@@ -18,7 +18,7 @@
             "range": [0, 1],
             "explanation": "Average of absolute difference in FPR and TPR for unprivileged and privileged groups:"
         },
-        "between-all-groups-coefficient-of-variation": {
+        "between_all_groups_coefficient_of_variation": {
             "display_name": "BG Coefficient of Variation",
             "type": "numeric",
             "tags": [],
@@ -26,7 +26,7 @@
             "range": [0, null],
             "explanation": "The between-group coefficient of variation is two times the square root of the entropy index between all groups."
         },
-        "between-all-groups-generalized-entropy-index": {
+        "between_all_groups_generalized_entropy_index": {
             "display_name": "All Groups Gen Entropy Index",
             "type": "numeric",
             "tags": [],
@@ -34,7 +34,7 @@
             "range": [0, null],
             "explanation": "Entropy index for all groups with protected attributes."
         },
-        "between-all-groups-theil-index": {
+        "between_all_groups_theil_index": {
             "display_name": "Between all Groups Theil Index",
             "type": "numeric",
             "tags": [],
@@ -42,7 +42,7 @@
             "range": [0, null],
             "explanation": "Equivalent to the between group generalized entropy index with a=1"
         },
-        "between-group-coefficient-of-variation": {
+        "between_group_coefficient_of_variation": {
             "display_name": "BG Coefficient of Var",
             "type": "numeric",
             "tags": [],
@@ -50,7 +50,7 @@
             "range": [null, null],
             "explanation": "Two times the square root of the between group generalized entropy index with α=2."
         },
-        "between-group-generalized-entropy-index": {
+        "between_group_generalized_entropy_index": {
             "display_name": "BG General Entropy Index",
             "type": "numeric",
             "tags": [],
@@ -58,7 +58,7 @@
             "range": [0, null],
             "explanation": "Entropy index between the privileged and unprivileged groups."
         },
-        "between-group-theil-index": {
+        "between_group_theil_index": {
             "display_name": "BG Theil Index",
             "type": "numeric",
             "tags": [],
@@ -66,7 +66,7 @@
             "range": [0, null],
             "explanation": "Equals tthe between group generalized entropy index with α=1"
         },
-        "coefficient-of-variation": {
+        "coefficient_of_variation": {
             "display_name": "Coefficient of Variation",
             "type": "numeric",
             "tags": [],
@@ -82,7 +82,7 @@
             "range": [null, null],
             "explanation": "Indicates the similarity of labels for similiar instances."
         },
-        "differential-fairness-bias-amplification": {
+        "differential_fairness_bias_amplification": {
             "display_name": "Diff Fairness Bias Amplification",
             "type": "numeric",
             "tags": [],
@@ -90,7 +90,7 @@
             "range": [null, null],
             "explanation": "Bias amplification is the difference in smoothed EDF between the classifier and the original dataset. Positive values mean the bias increased due to the classifier."
         },
-        "error-rate": {
+        "error_rate": {
             "display_name": "Error Rate",
             "type": "numeric",
             "tags": [],
@@ -98,7 +98,7 @@
             "range": [0, 1],
             "explanation": "The percentage of predictions that were incorrect."
         },
-        "error-rate-difference": {
+        "error_rate_difference": {
             "display_name": "Error Rate Difference",
             "type": "numeric",
             "tags": [],
@@ -106,7 +106,7 @@
             "range": [-1, 1],
             "explanation": "Compares error rate between an unprivileged group and a privileged group."
         },
-        "error-rate-ratio": {
+        "error_rate_ratio": {
             "display_name": "Error Rate Ratio",
             "type": "numeric",
             "tags": [],
@@ -114,7 +114,7 @@
             "range": [0, null],
             "explanation": "The ratio of error rate between privileged and unprivileged groups."
         },
-        "false-discovery-rate": {
+        "false_discovery_rate": {
             "display_name": "False Discovery Rate",
             "type": "numeric",
             "tags": [],
@@ -122,7 +122,7 @@
             "range": [0, 1],
             "explanation": "The percentage of positive predictions that were false positives."
         },
-        "false-discovery-rate-difference": {
+        "false_discovery_rate_difference": {
             "display_name": "False Discovery Rate Diff",
             "type": "numeric",
             "tags": [],
@@ -130,7 +130,7 @@
             "range": [-1, 1],
             "explanation": "The difference in false discovery rate between unprivileged and privileged groups."
         },
-        "false-discovery-rate-ratio": {
+        "false_discovery_rate_ratio": {
             "display_name": "False Discovery Rate Ratio",
             "type": "numeric",
             "tags": [],
@@ -138,7 +138,7 @@
             "range": [0, null],
             "explanation": "The ratio of false discovery rates between unprivileged and privileged groups."
         },
-        "false-negative-rate": {
+        "false_negative_rate": {
             "display_name": "False Negative Rate",
             "type": "numeric",
             "tags": [],
@@ -146,7 +146,7 @@
             "range": [0, null],
             "explanation": "The probability of falsely predicting a false outcome."
         },
-        "false-negative-rate-difference": {
+        "false_negative_rate_difference": {
             "display_name": "False Negative Rate Diff",
             "type": "numeric",
             "tags": [],
@@ -154,7 +154,7 @@
             "range": [null, null],
             "explanation": "The difference in false negative rate between unprivileged and privileged groups."
         },
-        "false-negative-rate-ratio": {
+        "false_negative_rate_ratio": {
             "display_name": "False Negative Rate Ratio",
             "type": "numeric",
             "tags": [],
@@ -162,7 +162,7 @@
             "range": [0, null],
             "explanation": "The ratio of false negative rate between unprivileged and privileged groups."
         },
-        "generalized-entropy-index": {
+        "generalized_entropy_index": {
             "display_name": "Generalized Entropy Index",
             "type": "numeric",
             "tags": [],
@@ -170,7 +170,7 @@
             "range": [null, null],
             "explanation": "Unified individual and group fairness metric. From T. Speicher, H. Heidari, N. Grgic-Hlaca, K. P. Gummadi, A. Singla, A. Weller, and M. B. Zafar, 'A Unified Approach to Quantifying Algorithmic Unfairness: Measuring Individual and Group Unfairness via Inequality Indices,' ACM SIGKDD International Conference on Knowledge Discovery and Data Mining, 2018"
         },
-        "generalized-true-negative-rate": {
+        "generalized_true_negative_rate": {
             "display_name": "Gen True Negative Rate",
             "type": "numeric",
             "tags": [],
@@ -178,7 +178,7 @@
             "range": [0, null],
             "explanation": "The number of generalized true negatives divided by the number of negatives."
         },
-        "generalized-true-positive-rate": {
+        "generalized_true_positive_rate": {
             "display_name": "Gen True Positive Rate",
             "type": "numeric",
             "tags": [],
@@ -186,7 +186,7 @@
             "range": [0, null],
             "explanation": "The number of generalized true positives divided by the number of positives."
         },
-        "negative-predictive-value": {
+        "negative_predictive_value": {
             "display_name": "Negative Predictive Value",
             "type": "numeric",
             "tags": [],
@@ -194,7 +194,7 @@
             "range": [0, 1],
             "explanation": "The chance that negative prediction is correct."
         },
-        "num-false-negatives": {
+        "num_false_negatives": {
             "display_name": "False Negative Count",
             "type": "numeric",
             "tags": [],
@@ -202,7 +202,7 @@
             "range": [0, null],
             "explanation": "The number of false negatives."
         },
-        "num-false-positives": {
+        "num_false_positives": {
             "display_name": "False Positive Count",
             "type": "numeric",
             "tags": [],
@@ -210,7 +210,7 @@
             "range": [0, null],
             "explanation": "The number of false positives"
         },
-        "num-generalized-false-negatives": {
+        "num_generalized_false_negatives": {
             "display_name": "Gen False Negative Count",
             "type": "numeric",
             "tags": [],
@@ -218,7 +218,7 @@
             "range": [0, null],
             "explanation": "Weighted sum of 1-predicted scores where true labels are favorable."
         },
-        "num-generalized-false-positives": {
+        "num_generalized_false_positives": {
             "display_name": "Gen False Positive Count",
             "type": "numeric",
             "tags": [],
@@ -226,7 +226,7 @@
             "range": [0, null],
             "explanation": "Weighted sum of predicted scores where true labels are unfavorable."
         },
-        "num-generalized-true-negatives": {
+        "num_generalized_true_negatives": {
             "display_name": "Gen True Negative Count",
             "type": "numeric",
             "tags": [],
@@ -234,7 +234,7 @@
             "range": [0, null],
             "explanation": "Weighted sum of 1 - predicted scores where true labels are unfavorable."
         },
-        "num-generalized-true-positives": {
+        "num_generalized_true_positives": {
             "display_name": "Generalized True Positive Count",
             "type": "numeric",
             "tags": [],
@@ -242,7 +242,7 @@
             "range": [0, null],
             "explanation": "Weighted sum of predicted scores where true labels are favorable."
         },
-        "num-instances": {
+        "num_instances": {
             "display_name": "Instance Count",
             "type": "numeric",
             "tags": [],
@@ -250,7 +250,7 @@
             "range": [0, null],
             "explanation": "The number of examples seen."
         },
-        "num-negatives": {
+        "num_negatives": {
             "display_name": "Negative Count",
             "type": "numeric",
             "tags": [],
@@ -258,7 +258,7 @@
             "range": [0, null],
             "explanation": "The number of negative examples seen."
         },
-        "num-positives": {
+        "num_positives": {
             "display_name": "Positive Count",
             "type": "numeric",
             "tags": [],
@@ -266,7 +266,7 @@
             "range": [0, null],
             "explanation": "The number of positive examples seen."
         },
-        "num-pred-negatives": {
+        "num_pred_negatives": {
             "display_name": "Negative Prediction Count",
             "type": "numeric",
             "tags": [],
@@ -274,7 +274,7 @@
             "range": [0, null],
             "explanation": "The number of negative predictions seen."
         },
-        "num-pred-positives": {
+        "num_pred_positives": {
             "display_name": "Positive Prediction Count",
             "type": "numeric",
             "tags": [],
@@ -282,7 +282,7 @@
             "range": [0, null],
             "explanation": "The number of positive predictions seen."
         },
-        "num-true-negatives": {
+        "num_true_negatives": {
             "display_name": "True Negative Count",
             "type": "numeric",
             "tags": [],
@@ -290,7 +290,7 @@
             "range": [0, null],
             "explanation": "The number of times the classifier correctly predicted an example to be negative."
         },
-        "num-true-positives": {
+        "num_true_positives": {
             "display_name": "True Positive Count",
             "type": "numeric",
             "tags": [],
@@ -298,7 +298,7 @@
             "range": [0, null],
             "explanation": "The number of times the classifier correctly predicted an example to be positive."
         },
-        "positive-predictive-value": {
+        "positive_predictive_value": {
             "display_name": "Positive Predictive Value",
             "type": "numeric",
             "tags": [],
@@ -306,7 +306,7 @@
             "range": [null, null],
             "explanation": ""
         },
-        "smoothed-empirical-differential-fairness": {
+        "smoothed_empirical_differential_fairness": {
             "display_name": "Smoothed Emp Diff Fairness",
             "type": "numeric",
             "tags": [],
@@ -314,7 +314,7 @@
             "range": [0, 1],
             "explanation": "Fairness metric from: Foulds, James R., et al. 'An intersectional definition of fairness.' 2020 IEEE 36th International Conference on Data Engineering (ICDE). IEEE, 2020."
         },
-        "true-negative-rate": {
+        "true_negative_rate": {
             "display_name": "True Negative Rate",
             "type": "numeric",
             "tags": [],
@@ -322,7 +322,7 @@
             "range": [0, 1],
             "explanation": "The number of true negatives divided by the total number of negatives."
         },
-        "true-positive-rate": {
+        "true_positive_rate": {
             "display_name": "True Positive Rate",
             "type": "numeric",
             "tags": [],
@@ -330,7 +330,7 @@
             "range": [0, 1],
             "explanation": "The number of true positives divided by the total number of positives."
         },
-        "true-positive-rate-difference": {
+        "true_positive_rate_difference": {
             "display_name": "True Positive Rate Difference",
             "type": "numeric",
             "tags": [],

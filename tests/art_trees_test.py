@@ -36,10 +36,10 @@ meta, X, y = df_to_RAI(all_data, target_column="income-per-year", normalize=None
 xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=1, stratify=y)
 
 # Create a model to make predictions
-model = Model(agent=clf, task=task_type, predict_fun=clf.predict, predict_prob_fun=clf.predict_proba,
+model = Model(agent=clf, name="Income classifier", task=task_type, predict_fun=clf.predict, predict_prob_fun=clf.predict_proba,
               description=description, model_class="Random Forest Classifier")
 configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}},
-                              "protected_attributes": ["race"], "positive_label": 1},
+                              "positive_label": 1},
                  "time_complexity": "polynomial"}
 
 dataset = Dataset({"train": Data(xTrain, yTrain), "test": Data(xTest, yTest)})
@@ -61,15 +61,15 @@ for g in metrics:
             if info[g][m]["type"] in ("numeric", "vector-dict", "text"):
                 print(g, m, metrics[g][m])
 
-print(metrics['Tree Models'])
+print(metrics['tree_model_metadata'])
 
 
 def test_adversarial_tree():
     """Tests that the feature names are correct."""
     rt = RobustnessVerificationTreeModelsCliqueMethod(classifier=clf, verbose=False)
     bound, error = rt.verify(xTrain, y, eps_init=0.3, nb_search_steps=2, max_clique=2, max_level=2)
-    assert metrics['art-trees']['adversarial-tree-verification-bound'] == bound
-    assert metrics['art-trees']['adversarial-tree-verification-error'] == error
+    assert metrics['art_trees']['adversarial_tree_verification_bound'] == bound
+    assert metrics['art_trees']['adversarial_tree_verification_error'] == error
 
 
 # TODO: These tests run extremely slow on my laptop

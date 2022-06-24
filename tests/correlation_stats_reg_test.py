@@ -55,14 +55,14 @@ for g in metrics:
 def test_pearson_correlation():
     """Tests that the RAI pearson correlation calculation is correct."""
     for i in range(len(features)):
-        assert metrics['correlation_stats_regression']['pearson-correlation'][i] == \
+        assert metrics['correlation_stats_regression']['pearson_correlation'][i] == \
                scipy.stats.pearsonr(xTest[:, i], yTest)
 
 
 def test_spearman_correlation():
     """Tests that the RAI spearman correlation calculation is correct."""
     for i in range(len(features)):
-        assert metrics['correlation_stats_regression']['spearman-correlation'][i] == \
+        assert metrics['correlation_stats_regression']['spearman_correlation'][i] == \
                scipy.stats.spearmanr(xTest[:, i], yTest)
 
 # TODO: update regression to reg, need to figure this out globally.

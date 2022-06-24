@@ -10,7 +10,7 @@
     "tags": ["fairness", "Data Fairness"],
     "complexity_class": "linear",
     "metrics": {
-        "base-rate": {
+        "base_rate": {
             "display_name": "Base Rate",
             "type": "numeric",
             "tags": [],
@@ -18,7 +18,7 @@
             "range": [0, 1],
             "explanation": "Calculates the rate at which at which a groups with a protected attribute recieve a positive outcome."
         },
-        "num-instances": {
+        "num_instances": {
             "display_name": "Num Instances",
             "type": "numeric",
             "tags": [],
@@ -26,7 +26,7 @@
             "range": [0, null],
             "explanation": "Calculates the number of instances classified"
         },
-        "num-negatives": {
+        "num_negatives": {
             "display_name": "Num Negatives",
             "type": "numeric",
             "tags": [],
@@ -34,7 +34,7 @@
             "range": [0, null],
             "explanation": "Calculates the number of negative instances predicted"
         },
-        "num-positives": {
+        "num_positives": {
             "display_name": "Num Positives",
             "type": "numeric",
             "tags": [],

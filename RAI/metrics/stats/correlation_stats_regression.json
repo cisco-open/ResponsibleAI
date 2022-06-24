@@ -9,14 +9,14 @@
     "tags": ["stats", "Regression Correlation"],
     "complexity_class": "linear",
     "metrics": {
-        "pearson-correlation": {
+        "pearson_correlation": {
             "display_name": "Pearson's Correlation'",
             "type": "vector",
             "has_range": true,
             "range": [-1, 1],
             "explanation": "Indicates if a statistically significance relationship is found between variables."
         },
-        "spearman-correlation": {
+        "spearman_correlation": {
             "display_name": "Spearman's Correlation",
             "type": "vector",
             "has_range": true,

@@ -21,5 +21,5 @@ class CorrelationStatRegressionSlow(MetricGroup, class_location=os.path.abspath(
             map = self.ai_system.meta_database.scalar_map
             features = self.ai_system.meta_database.features
 
-            self.metrics["siegel-slopes"].value = calculate_per_all_features(scipy.stats.siegelslopes, scalar_data, data.y, map, features)
-            self.metrics["theil-slopes"].value = calculate_per_all_features(scipy.stats.theilslopes, scalar_data, data.y, map, features)
+            self.metrics["siegel_slopes"].value = calculate_per_all_features(scipy.stats.siegelslopes, map, features, scalar_data, data.y)
+            self.metrics["theil_slopes"].value = calculate_per_all_features(scipy.stats.theilslopes, map, features, scalar_data, data.y,)

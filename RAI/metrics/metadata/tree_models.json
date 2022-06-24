@@ -1,5 +1,5 @@
 {
-    "name": "Tree Models",
+    "name": "tree_model_metadata",
     "display_name" : "SKlearn Tree Based Models",
     "compatibility": {"task_type": null,
                       "data_type": [],

@@ -16,21 +16,21 @@
             "range": [0, 1],
             "explanation": "Distortion metrics scale linearly with the log of inaccuracy. Is Robustness the Cost of Accuracy? A comprehensive Study on the Robustness of 18 Deep Image Classification Models"
         },
-        "l-inf-model-score": {
+        "l_inf_model_score": {
             "display_name": "L Infinity Model Score",
             "type": "numeric",
             "has_range": false,
             "range": [null, null],
             "explanation": "Robustness Score determined by the type of model and depth. Is Robustness the Cost of Accuracy? A comprehensive Study on the Robustness of 18 Deep Image Classification Models"
         },
-        "l-2-model-score": {
+        "l_2_model_score": {
             "display_name": "L2 Model Score",
             "type": "numeric",
             "has_range": false,
             "range": [null, null],
             "explanation": "Robustness Score determined by the type of model and depth. Is Robustness the Cost of Accuracy? A comprehensive Study on the Robustness of 18 Deep Image Classification Models"
         },
-        "data-dimensionality": {
+        "data_dimensionality": {
             "display_name": "Adversarial Data Dimensionality",
             "type": "numeric",
             "has_range": false,

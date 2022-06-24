@@ -40,12 +40,12 @@ meta = MetaDatabase(features)
 # Create a model to make predictions
 from sklearn.ensemble import RandomForestClassifier
 rfc = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=0)
-model = Model(agent=rfc, task='binary_classification', predict_fun=rfc.predict, predict_prob_fun=rfc.predict_proba,
-              name="cisco_cancer_ai", model_class="Random Forest Classifier", description="Detect Cancer in patients using skin measurements")
+model = Model(agent=rfc, name="cisco_cancer_ai", task='binary_classification', predict_fun=rfc.predict,
+              predict_prob_fun=rfc.predict_proba, model_class="Random Forest Classifier")
 
 # Create AISystem from previous objects. AISystems are what users will primarily interact with.
 configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}},
-                              "protected_attributes": ["race"], "positive_label": 1}}
+                              "positive_label": 1}}
 ai = AISystem("cancer_detection", meta_database=meta, dataset=dataset, model=model)
 ai.initialize(user_config=configuration)
 

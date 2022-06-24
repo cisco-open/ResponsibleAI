@@ -31,10 +31,9 @@ xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=1, stratify=y
 
 clf = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=0, min_samples_leaf=5, max_depth=2)
 
-model = Model(agent=clf, task='binary_classification', predict_fun=clf.predict, predict_prob_fun=clf.predict_proba,
+model = Model(agent=clf, name="Cancer detection AI", task='binary_classification', predict_fun=clf.predict, predict_prob_fun=clf.predict_proba,
               description="Detect Cancer in patients using skin measurements", model_class="Random Forest Classifier")
-configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}},
-                              "protected_attributes": ["race"], "positive_label": 1},
+configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}}, "positive_label": 1},
                  "time_complexity": "polynomial"}
 
 dataset = Dataset({"train": Data(xTrain, yTrain), "test": Data(xTest, yTest)})
@@ -71,42 +70,42 @@ for g in metrics:
 
 def test_average_abs_odds_difference():
     """Tests that the RAI average abs odds difference calculation is correct."""
-    assert metrics['prediction_fairness']['average-abs-odds-difference'] == benchmark.average_odds_difference()
+    assert metrics['prediction_fairness']['average_abs_odds_difference'] == benchmark.average_odds_difference()
 
 
 def test_between_all_groups_coefficient_of_variation():
     """Tests that the RAI between_all_groups_coefficient_of_variation calculation is correct."""
-    assert metrics['prediction_fairness']['between-all-groups-coefficient-of-variation'] == benchmark.between_all_groups_coefficient_of_variation()
+    assert metrics['prediction_fairness']['between_all_groups_coefficient_of_variation'] == benchmark.between_all_groups_coefficient_of_variation()
 
 
 def test_between_all_groups_generalized_entropy_index():
     """Tests that the RAI between_all_groups_generalized_entropy_index calculation is correct."""
-    assert metrics['prediction_fairness']['between-all-groups-generalized-entropy-index'] == benchmark.between_all_groups_generalized_entropy_index()
+    assert metrics['prediction_fairness']['between_all_groups_generalized_entropy_index'] == benchmark.between_all_groups_generalized_entropy_index()
 
 
 def test_between_all_groups_theil_index():
     """Tests that the RAI between_all_groups_theil_index calculation is correct."""
-    assert metrics['prediction_fairness']['between-all-groups-theil-index'] == benchmark.between_all_groups_theil_index()
+    assert metrics['prediction_fairness']['between_all_groups_theil_index'] == benchmark.between_all_groups_theil_index()
 
 
 def test_between_group_coefficient_of_variation():
     """Tests that the RAI between_group_coefficient_of_variation calculation is correct."""
-    assert metrics['prediction_fairness']['between-group-coefficient-of-variation'] == benchmark.between_group_coefficient_of_variation()
+    assert metrics['prediction_fairness']['between_group_coefficient_of_variation'] == benchmark.between_group_coefficient_of_variation()
 
 
 def test_between_group_generalized_entropy_index():
     """Tests that the RAI between_group_generalized_entropy_index calculation is correct."""
-    assert metrics['prediction_fairness']['between-group-generalized-entropy-index'] == benchmark.between_group_generalized_entropy_index()
+    assert metrics['prediction_fairness']['between_group_generalized_entropy_index'] == benchmark.between_group_generalized_entropy_index()
 
 
 def test_between_group_theil_index():
     """Tests that the RAI between_group_theil_index calculation is correct."""
-    assert metrics['prediction_fairness']['between-group-theil-index'] == benchmark.between_group_theil_index()
+    assert metrics['prediction_fairness']['between_group_theil_index'] == benchmark.between_group_theil_index()
 
 
 def test_coefficient_of_variation():
     """Tests that the RAI coefficient_of_variation calculation is correct."""
-    assert metrics['prediction_fairness']['coefficient-of-variation'] == benchmark.coefficient_of_variation()
+    assert metrics['prediction_fairness']['coefficient_of_variation'] == benchmark.coefficient_of_variation()
 
 
 def test_consistency():
@@ -116,39 +115,39 @@ def test_consistency():
 
 def test_differential_fairness_bias_amplification():
     """Tests that the RAI differential_fairness_bias_amplification calculation is correct."""
-    assert metrics['prediction_fairness']['differential-fairness-bias-amplification'] == benchmark.differential_fairness_bias_amplification()
+    assert metrics['prediction_fairness']['differential_fairness_bias_amplification'] == benchmark.differential_fairness_bias_amplification()
 
 
 def test_error_rate():
     """Tests that the RAI error_rate calculation is correct."""
-    assert metrics['prediction_fairness']['error-rate'] == benchmark.error_rate()
+    assert metrics['prediction_fairness']['error_rate'] == benchmark.error_rate()
 
 
 def test_error_rate_difference():
     """Tests that the RAI error_rate_difference calculation is correct."""
-    assert metrics['prediction_fairness']['error-rate-difference'] == benchmark.error_rate_difference()
+    assert metrics['prediction_fairness']['error_rate_difference'] == benchmark.error_rate_difference()
 
 
 def test_error_rate_ratio():
     """Tests that the RAI error_rate_difference calculation is correct."""
-    assert metrics['prediction_fairness']['error-rate-ratio'] == benchmark.error_rate_ratio()
+    assert metrics['prediction_fairness']['error_rate_ratio'] == benchmark.error_rate_ratio()
 
 
 def test_false_discovery_rate():
     """Tests that the RAI false_discovery_rate calculation is correct."""
-    assert metrics['prediction_fairness']['false-discovery-rate'] == benchmark.false_discovery_rate()
+    assert metrics['prediction_fairness']['false_discovery_rate'] == benchmark.false_discovery_rate()
 
 
 def test_false_discovery_rate_difference():
     """Tests that the RAI false_discovery_rate_difference calculation is correct."""
-    assert metrics['prediction_fairness']['false-discovery-rate-difference'] == benchmark.false_discovery_rate_difference()
+    assert metrics['prediction_fairness']['false_discovery_rate_difference'] == benchmark.false_discovery_rate_difference()
 
 
 def test_false_discovery_rate_ratio():
     """Tests that the RAI false_discovery_rate calculation is correct."""
     print("ITS MY TEST AHHH: ", benchmark.false_discovery_rate_ratio())
 
-    assert metrics['prediction_fairness']['false-discovery-rate-ratio'] == benchmark.false_discovery_rate_ratio()
+    assert metrics['prediction_fairness']['false_discovery_rate_ratio'] == benchmark.false_discovery_rate_ratio()
 
 
 # TODO: Why is this none?
@@ -157,139 +156,139 @@ def test_false_discovery_rate_ratio():
     result = benchmark.false_discovery_rate_ratio()
     if math.isnan(result):
         result = None
-    assert metrics['prediction_fairness']['false-discovery-rate-ratio'] == result
+    assert metrics['prediction_fairness']['false_discovery_rate_ratio'] == result
 
 
 def test_false_negative_rate():
     """Tests that the RAI false_negative_rate calculation is correct."""
-    assert metrics['prediction_fairness']['false-negative-rate'] == benchmark.false_negative_rate()
+    assert metrics['prediction_fairness']['false_negative_rate'] == benchmark.false_negative_rate()
 
 
 def test_false_negative_rate_difference():
     """Tests that the RAI false_negative_rate_difference calculation is correct."""
-    assert metrics['prediction_fairness']['false-negative-rate-difference'] == benchmark.false_negative_rate_difference()
+    assert metrics['prediction_fairness']['false_negative_rate_difference'] == benchmark.false_negative_rate_difference()
 
 
 def test_false_negative_rate_ratio():
     """Tests that the RAI false_negative_rate_ratio calculation is correct."""
-    assert metrics['prediction_fairness']['false-negative-rate-ratio'] == benchmark.false_negative_rate_ratio()
+    assert metrics['prediction_fairness']['false_negative_rate_ratio'] == benchmark.false_negative_rate_ratio()
 
 
 def test_false_negative_rate():
     """Tests that the RAI false_negative_rate calculation is correct."""
-    assert metrics['prediction_fairness']['false-negative-rate'] == benchmark.false_negative_rate()
+    assert metrics['prediction_fairness']['false_negative_rate'] == benchmark.false_negative_rate()
 
 
 def test_generalized_entropy_index():
     """Tests that the RAI generalized_entropy_index calculation is correct."""
-    assert metrics['prediction_fairness']['generalized-entropy-index'] == benchmark.generalized_entropy_index()
+    assert metrics['prediction_fairness']['generalized_entropy_index'] == benchmark.generalized_entropy_index()
 
 
 def test_generalized_true_negative_rate():
     """Tests that the RAI generalized_true_negative_rate calculation is correct."""
-    assert metrics['prediction_fairness']['generalized-true-negative-rate'] == benchmark.generalized_true_negative_rate()
+    assert metrics['prediction_fairness']['generalized_true_negative_rate'] == benchmark.generalized_true_negative_rate()
 
 
 def test_generalized_true_positive_rate():
     """Tests that the RAI generalized_true_positive_rate calculation is correct."""
-    assert metrics['prediction_fairness']['generalized-true-positive-rate'] == benchmark.generalized_true_positive_rate()
+    assert metrics['prediction_fairness']['generalized_true_positive_rate'] == benchmark.generalized_true_positive_rate()
 
 
 def test_negative_predictive_value():
     """Tests that the RAI negative_predictive_value calculation is correct."""
-    assert metrics['prediction_fairness']['negative-predictive-value'] == benchmark.negative_predictive_value()
+    assert metrics['prediction_fairness']['negative_predictive_value'] == benchmark.negative_predictive_value()
 
 
 def test_num_false_negatives():
     """Tests that the RAI num_false_negatives calculation is correct."""
-    assert metrics['prediction_fairness']['num-false-negatives'] == benchmark.num_false_negatives()
+    assert metrics['prediction_fairness']['num_false_negatives'] == benchmark.num_false_negatives()
 
 
 def test_num_false_positives():
     """Tests that the RAI num_false_positives calculation is correct."""
-    assert metrics['prediction_fairness']['num-false-positives'] == benchmark.num_false_positives()
+    assert metrics['prediction_fairness']['num_false_positives'] == benchmark.num_false_positives()
 
 
 def test_num_generalized_false_negatives():
     """Tests that the RAI num_generalized_false_negatives calculation is correct."""
-    assert metrics['prediction_fairness']['num-generalized-false-negatives'] == benchmark.num_generalized_false_negatives()
+    assert metrics['prediction_fairness']['num_generalized_false_negatives'] == benchmark.num_generalized_false_negatives()
 
 
 def test_num_generalized_false_positives():
     """Tests that the RAI num_generalized_false_negatives calculation is correct."""
-    assert metrics['prediction_fairness']['num-generalized-false-positives'] == benchmark.num_generalized_false_positives()
+    assert metrics['prediction_fairness']['num_generalized_false_positives'] == benchmark.num_generalized_false_positives()
 
 
 def test_num_generalized_true_negatives():
     """Tests that the RAI num_generalized_true_negatives calculation is correct."""
-    assert metrics['prediction_fairness']['num-generalized-true-negatives'] == benchmark.num_generalized_true_negatives()
+    assert metrics['prediction_fairness']['num_generalized_true_negatives'] == benchmark.num_generalized_true_negatives()
 
 
 def test_num_generalized_true_positives():
     """Tests that the RAI num_generalized_true_negatives calculation is correct."""
-    assert metrics['prediction_fairness']['num-generalized-true-positives'] == benchmark.num_generalized_true_positives()
+    assert metrics['prediction_fairness']['num_generalized_true_positives'] == benchmark.num_generalized_true_positives()
 
 
 def test_num_instances():
     """Tests that the RAI num_instances calculation is correct."""
-    assert metrics['prediction_fairness']['num-instances'] == benchmark.num_instances()
+    assert metrics['prediction_fairness']['num_instances'] == benchmark.num_instances()
 
 
 def test_num_negatives():
     """Tests that the RAI num_negatives calculation is correct."""
-    assert metrics['prediction_fairness']['num-negatives'] == benchmark.num_negatives()
+    assert metrics['prediction_fairness']['num_negatives'] == benchmark.num_negatives()
 
 
 def test_num_positives():
     """Tests that the RAI num_positives calculation is correct."""
-    assert metrics['prediction_fairness']['num-positives'] == benchmark.num_positives()
+    assert metrics['prediction_fairness']['num_positives'] == benchmark.num_positives()
 
 
 def test_num_pred_negatives():
     """Tests that the RAI num_pred_negatives calculation is correct."""
-    assert metrics['prediction_fairness']['num-pred-negatives'] == benchmark.num_pred_negatives()
+    assert metrics['prediction_fairness']['num_pred_negatives'] == benchmark.num_pred_negatives()
 
 
 def test_num_pred_positives():
     """Tests that the RAI num_pred_positives calculation is correct."""
-    assert metrics['prediction_fairness']['num-pred-positives'] == benchmark.num_pred_positives()
+    assert metrics['prediction_fairness']['num_pred_positives'] == benchmark.num_pred_positives()
 
 
 def test_num_true_negatives():
     """Tests that the RAI num_true_negatives calculation is correct."""
-    assert metrics['prediction_fairness']['num-true-negatives'] == benchmark.num_true_negatives()
+    assert metrics['prediction_fairness']['num_true_negatives'] == benchmark.num_true_negatives()
 
 
 def test_num_true_positives():
     """Tests that the RAI num_true_positives calculation is correct."""
-    assert metrics['prediction_fairness']['num-true-positives'] == benchmark.num_true_positives()
+    assert metrics['prediction_fairness']['num_true_positives'] == benchmark.num_true_positives()
 
 
 def test_positive_predictive_value():
     """Tests that the RAI positive_predictive_value calculation is correct."""
-    assert metrics['prediction_fairness']['positive-predictive-value'] == benchmark.positive_predictive_value()
+    assert metrics['prediction_fairness']['positive_predictive_value'] == benchmark.positive_predictive_value()
 
 
 def test_smoothed_empirical_differential_fairness():
     """Tests that the RAI smoothed_empirical_differential_fairness calculation is correct."""
-    assert metrics['prediction_fairness']['smoothed-empirical-differential-fairness'] == benchmark.smoothed_empirical_differential_fairness()
+    assert metrics['prediction_fairness']['smoothed_empirical_differential_fairness'] == benchmark.smoothed_empirical_differential_fairness()
 
 
 def test_true_negative_rate():
     """Tests that the RAI true_negative_rate calculation is correct."""
-    assert metrics['prediction_fairness']['true-negative-rate'] == benchmark.true_negative_rate()
+    assert metrics['prediction_fairness']['true_negative_rate'] == benchmark.true_negative_rate()
 
 
 def test_true_positive_rate():
     """Tests that the RAI true_positive_rate calculation is correct."""
-    assert metrics['prediction_fairness']['true-positive-rate'] == benchmark.true_positive_rate()
+    assert metrics['prediction_fairness']['true_positive_rate'] == benchmark.true_positive_rate()
 
 
 def test_true_positive_rate_difference():
     """Tests that the RAI true_positive_rate_difference calculation is correct."""
-    assert metrics['prediction_fairness']['true-positive-rate-difference'] == benchmark.true_positive_rate_difference()
+    assert metrics['prediction_fairness']['true_positive_rate_difference'] == benchmark.true_positive_rate_difference()
 
 
 def test_true_positive_rate_difference():
     """Tests that the RAI true_positive_rate_difference calculation is correct."""
-    assert metrics['prediction_fairness']['true-positive-rate-difference'] == benchmark.true_positive_rate_difference()
+    assert metrics['prediction_fairness']['true_positive_rate_difference'] == benchmark.true_positive_rate_difference()

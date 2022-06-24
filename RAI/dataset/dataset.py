@@ -6,7 +6,7 @@ all_data_types = {"numeric", "image", "text"}
 all_data_types_lax = {"integer", "float", "numeric", "image", "text"}
 
 class Feature:
-    def __init__(self, name, dtype: str, description, categorical=False, values=None, sensitive=False) -> None:
+    def __init__(self, name: str, dtype: str, description: str, categorical=False, values=None, sensitive=False) -> None:
         self.name = name
         self.dtype = dtype
         if dtype not in all_data_types_lax and not dtype.startswith("float") and not dtype.startswith("integer"):

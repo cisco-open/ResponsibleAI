@@ -59,14 +59,14 @@ for g in metrics:
 
 def test_moment_1():
     """Tests that the RAI moment 1 calculation is correct."""
-    assert_almost_equal(scipy.stats.moment(xTest, 1), metrics['stat_moment_group']['moment-1'], 6)
+    assert_almost_equal(scipy.stats.moment(xTest, 1), metrics['stat_moment_group']['moment_1'], 6)
 
 
 def test_moment_2():
     """Tests that the RAI moment 2 calculation is correct."""
-    assert_almost_equal(scipy.stats.moment(xTest, 2), metrics['stat_moment_group']['moment-2'], 6)
+    assert_almost_equal(scipy.stats.moment(xTest, 2), metrics['stat_moment_group']['moment_2'], 6)
 
 
 def test_moment_3():
     """Tests that the RAI moment 3 calculation is correct."""
-    assert_almost_equal(scipy.stats.moment(xTest, 3), metrics['stat_moment_group']['moment-3'], 6)
+    assert_almost_equal(scipy.stats.moment(xTest, 3), metrics['stat_moment_group']['moment_3'], 6)

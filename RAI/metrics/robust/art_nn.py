@@ -57,27 +57,27 @@ class ArtAdversarialRobustnessGroup(MetricGroup, class_location=os.path.abspath(
             #self.metrics['empirical-robustness'].value = empirical_robustness(classifier, X_t, attack_name="fgsm")
 
             if len(example_nums) >= 1:
-                self.metrics['clever-t-l1'].value = 0
-                self.metrics['clever-t-l2'].value = 0
-                self.metrics['clever-t-li'].value = 0
-                self.metrics['clever-u-l1'].value = 0
-                self.metrics['clever-u-l2'].value = 0
-                self.metrics['clever-u-li'].value = 0
+                self.metrics['clever_t_l1'].value = 0
+                self.metrics['clever_t_l2'].value = 0
+                self.metrics['clever_t_li'].value = 0
+                self.metrics['clever_u_l1'].value = 0
+                self.metrics['clever_u_l2'].value = 0
+                self.metrics['clever_u_li'].value = 0
                 to_compute = self.get_selection(example_nums)
                 for example_num in to_compute:
-                    self.metrics['clever-t-l1'].value += clever_t(classifier, np.float32(data.X[example_num]), data.y[example_num], 10, 5, R_L1, norm=1, pool_factor=3)
-                    self.metrics['clever-t-l2'].value += clever_t(classifier, np.float32(data.X[example_num]), data.y[example_num], 10, 5, R_L2, norm=2, pool_factor=3)
-                    self.metrics['clever-t-li'].value += clever_t(classifier, np.float32(data.X[example_num]), data.y[example_num], 10, 5, R_LI, norm=np.inf, pool_factor=3)
-                    self.metrics['clever-u-l1'].value += clever_u(classifier, np.float32(data.X[example_num]), 10, 5, R_L1, norm=1, pool_factor=3, verbose=False)
-                    self.metrics['clever-u-l2'].value += clever_u(classifier, np.float32(data.X[example_num]), 10, 5, R_L2, norm=2, pool_factor=3, verbose=False)
-                    self.metrics['clever-u-li'].value += clever_u(classifier, np.float32(data.X[example_num]), 10, 5, R_LI, norm=np.inf, pool_factor=3, verbose=False)
+                    self.metrics['clever_t_l1'].value += clever_t(classifier, np.float32(data.X[example_num]), data.y[example_num], 10, 5, R_L1, norm=1, pool_factor=3)
+                    self.metrics['clever_t_l2'].value += clever_t(classifier, np.float32(data.X[example_num]), data.y[example_num], 10, 5, R_L2, norm=2, pool_factor=3)
+                    self.metrics['clever_t_li'].value += clever_t(classifier, np.float32(data.X[example_num]), data.y[example_num], 10, 5, R_LI, norm=np.inf, pool_factor=3)
+                    self.metrics['clever_u_l1'].value += clever_u(classifier, np.float32(data.X[example_num]), 10, 5, R_L1, norm=1, pool_factor=3, verbose=False)
+                    self.metrics['clever_u_l2'].value += clever_u(classifier, np.float32(data.X[example_num]), 10, 5, R_L2, norm=2, pool_factor=3, verbose=False)
+                    self.metrics['clever_u_li'].value += clever_u(classifier, np.float32(data.X[example_num]), 10, 5, R_LI, norm=np.inf, pool_factor=3, verbose=False)
 
-                self.metrics['clever-t-l1'].value /= len(to_compute)
-                self.metrics['clever-t-l2'].value /= len(to_compute)
-                self.metrics['clever-t-li'].value /= len(to_compute)
-                self.metrics['clever-u-l1'].value /= len(to_compute)
-                self.metrics['clever-u-l2'].value /= len(to_compute)
-                self.metrics['clever-u-li'].value /= len(to_compute)
+                self.metrics['clever_t_l1'].value /= len(to_compute)
+                self.metrics['clever_t_l2'].value /= len(to_compute)
+                self.metrics['clever_t_li'].value /= len(to_compute)
+                self.metrics['clever_u_l1'].value /= len(to_compute)
+                self.metrics['clever_u_l2'].value /= len(to_compute)
+                self.metrics['clever_u_li'].value /= len(to_compute)
 
     def get_selection(self, list):
         result = []

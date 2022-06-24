@@ -20,5 +20,5 @@ class CorrelationStatRegression(MetricGroup, class_location=os.path.abspath(__fi
             map = self.ai_system.meta_database.scalar_map
             features = self.ai_system.meta_database.features
 
-            self.metrics["pearson-correlation"].value = calculate_per_all_features(scipy.stats.pearsonr, data.scalar, data.y, map, features)
-            self.metrics["spearman-correlation"].value = calculate_per_all_features(scipy.stats.spearmanr, data.scalar, data.y, map, features)
+            self.metrics["pearson_correlation"].value = calculate_per_all_features(scipy.stats.pearsonr, map, features, data.scalar, data.y)
+            self.metrics["spearman_correlation"].value = calculate_per_all_features(scipy.stats.spearmanr, map, features, data.scalar, data.y)

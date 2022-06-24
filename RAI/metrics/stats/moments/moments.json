@@ -9,21 +9,21 @@
     "tags": ["stats", "Moments"],
     "complexity_class": "linear",
     "metrics": {
-        "moment-1": {
+        "moment_1": {
             "display_name": "First Moment",
             "type": "vector",
             "has_range": false,
             "range": null,
             "explanation": "Mean is the expected value of data."
         },
-        "moment-2": {
+        "moment_2": {
             "display_name": "Second Moment",
             "type": "vector",
             "has_range": false,
             "range": null,
             "explanation": "Mean is the expected value of data."
         },
-        "moment-3": {
+        "moment_3": {
             "display_name": "Third Moment",
             "type": "vector",
             "has_range": false,

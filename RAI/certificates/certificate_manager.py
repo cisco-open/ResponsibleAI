@@ -1,10 +1,9 @@
 from .certificate import Certificate
-
-__all__ = ['CertificateManager']
-
 import json
 import os.path
 import site
+
+__all__ = ['CertificateManager']
 
 # choose the first site packages folder
 site_pkgs_path = site.getsitepackages()[0]
@@ -16,9 +15,6 @@ cert_file_folder = os.path.join(os.path.dirname(__file__), "standard")
 cert_list_file_name = os.path.join(os.path.dirname(__file__), 'standard/empty_cert_list.json')
 
 
-# class Certificate(object):
-
-
 class CertificateManager(object):
 
     def __init__(self) -> None:
@@ -27,7 +23,6 @@ class CertificateManager(object):
         self.metadata = {}
         self.results = {}
         # self.pre
-
 
     def load_stock_certificates(self):
         f = open(cert_list_file_name, "r")
@@ -50,7 +45,6 @@ class CertificateManager(object):
             self.metadata[name] = c.cert_spec["meta"]
             self.metadata[name]["condition"] = c.cert_spec["condition"]
             self.certificates[name] = c
-
 
     def get_metadata(self) -> dict:
         return self.metadata

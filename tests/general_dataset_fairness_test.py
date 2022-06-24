@@ -61,19 +61,19 @@ info = ai.get_metric_info()
 
 def test_base_rate():
     """Tests that the RAI pearson correlation calculation is correct."""
-    assert metrics['dataset_fairness']['base-rate'] == benchmark.base_rate()
+    assert metrics['dataset_fairness']['base_rate'] == benchmark.base_rate()
 
 
 def test_num_instances():
     """Tests that the RAI pearson correlation calculation is correct."""
-    assert metrics['dataset_fairness']['num-instances'] == benchmark.num_instances()
+    assert metrics['dataset_fairness']['num_instances'] == benchmark.num_instances()
 
 
 def test_num_negatives():
     """Tests that the RAI num negatives calculation is correct."""
-    assert metrics['dataset_fairness']['num-negatives'] == benchmark.num_negatives()
+    assert metrics['dataset_fairness']['num_negatives'] == benchmark.num_negatives()
 
 
 def test_num_positives():
     """Tests that the RAI num positives calculation is correct."""
-    assert metrics['dataset_fairness']['num-positives'] == benchmark.num_positives()
+    assert metrics['dataset_fairness']['num_positives'] == benchmark.num_positives()
