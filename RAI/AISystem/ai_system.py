@@ -24,8 +24,10 @@ class AISystem:
         self._last_certificate_values = None
         self.metric_manager = None
         self.certificate_manager = None
+        self.user_config = None
 
     def initialize(self, user_config: dict, custom_certificate_location: str = None, **kw_args):
+        self.user_config = user_config
         self.dataset.separate_data(self.meta_database.scalar_mask)
         self.meta_database.initialize_requirements(list(self.dataset.data_dict.values())[0], "fairness" in user_config)
         self.metric_manager = MetricManager(self)
@@ -33,7 +35,6 @@ class AISystem:
         self.certificate_manager.load_stock_certificates()
         if custom_certificate_location is not None:
             self.certificate_manager.load_custom_certificates(custom_certificate_location)
-        self.metric_manager.initialize(user_config, *kw_args)
 
     def get_metric_values(self) -> dict:
         return self._last_metric_values
@@ -67,6 +68,7 @@ class AISystem:
             self._last_certificate_values = self.certificate_manager.compute(self._last_metric_values)
 
     def compute(self, predictions: dict, tag=None) -> None:
+        self.metric_manager.initialize(self.user_config)
         if not (isinstance(predictions, dict) and all(isinstance(v, np.ndarray) for v in predictions.values()) \
                 and all(isinstance(k, str) for k in predictions.keys())):
             raise Exception("Predictions should be a dictionary of strings mapping to np.ndarrays")
@@ -75,6 +77,7 @@ class AISystem:
                 self.single_compute(predictions[key], key, tag=tag)
 
     def run_compute(self, tag=None) -> None:
+        self.metric_manager.initialize(self.user_config)
         # TODO: Generalize across all model functions, different model types
         # Prediction generation and computation must be separated due to some weird sklearn bug
         preds = {}

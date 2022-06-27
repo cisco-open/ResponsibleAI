@@ -51,7 +51,6 @@ metrics = metrics["test"]
 info = ai.get_metric_info()
 
 
-# TODO: Set up another set of tests with data that has a category in it
 def test_dataset_equality():
     """Tests that the old and new datasets match exactly."""
     assert (xTest == ai.dataset.data_dict["test"].X).all()

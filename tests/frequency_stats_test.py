@@ -28,7 +28,7 @@ features = []
 for feature in features_raw:
     features.append(Feature(feature, "float", feature))
 features.append(Feature("race", "integer", "race value", categorical=True, values={0: "black", 1: "white"}))
-features.append(Feature("gender", "integer", "race value", categorical=True, values={1: "male", 0: "female"}))
+features.append(Feature("gender", "integer", "race value", categorical=True, values={0: "female", 1: "male"}))
 
 training_data = Data(xTrain, yTrain)
 test_data = Data(xTest, yTest)
@@ -73,5 +73,3 @@ def test_cumfreq():
     assert metrics['frequency_stats']['cumfreq']['race']['white'] == xTest.shape[0]
     assert metrics['frequency_stats']['cumfreq']['gender']['female'] == val_0_count
     assert metrics['frequency_stats']['cumfreq']['gender']['male'] == xTest.shape[0]
-
-# TODO: Clarify data assumption that categorical features must start with 0 and increase by 1.

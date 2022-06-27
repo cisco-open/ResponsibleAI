@@ -73,7 +73,8 @@ class MetaDatabase:
         self.sensitive_features = []
 
         for i, f in enumerate(features):
-            self.scalar_mask[i] = not f.categorical  # TODO: this needs to also work with images for separate, start with numerical then apply scalar
+            self.scalar_mask[i] = not f.categorical
+            # TODO: Once images are added, this will also need incorporate images
             if f.dtype.startswith("int") or f.dtype.startswith("float") or f.dtype == "numeric":
                 self.numerical_mask[i] = True
                 if not f.categorical:
