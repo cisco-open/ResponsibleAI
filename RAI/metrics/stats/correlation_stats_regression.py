@@ -12,13 +12,12 @@ class CorrelationStatRegression(MetricGroup, class_location=os.path.abspath(__fi
         pass
 
     def compute(self, data_dict):
-        if "data" in data_dict:
-            args = {}
-            if self.ai_system.metric_manager.user_config is not None and "stats" in self.ai_system.metric_manager.user_config and "args" in self.ai_system.metric_manager.user_config["stats"]:
-                args = self.ai_system.metric_manager.user_config["stats"]["args"]
-            data = data_dict["data"]
-            map = self.ai_system.meta_database.scalar_map
-            features = self.ai_system.meta_database.features
+        args = {}
+        if self.ai_system.metric_manager.user_config is not None and "stats" in self.ai_system.metric_manager.user_config and "args" in self.ai_system.metric_manager.user_config["stats"]:
+            args = self.ai_system.metric_manager.user_config["stats"]["args"]
+        data = data_dict["data"]
+        map = self.ai_system.meta_database.scalar_map
+        features = self.ai_system.meta_database.features
 
-            self.metrics["pearson_correlation"].value = calculate_per_all_features(scipy.stats.pearsonr, map, features, data.scalar, data.y)
-            self.metrics["spearman_correlation"].value = calculate_per_all_features(scipy.stats.spearmanr, map, features, data.scalar, data.y)
+        self.metrics["pearson_correlation"].value = calculate_per_all_features(scipy.stats.pearsonr, map, features, data.scalar, data.y)
+        self.metrics["spearman_correlation"].value = calculate_per_all_features(scipy.stats.spearmanr, map, features, data.scalar, data.y)

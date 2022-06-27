@@ -12,17 +12,14 @@ class FrequencyStatMetricGroup(MetricGroup, class_location=os.path.abspath(__fil
         pass
 
     def compute(self, data_dict):
-        if "data" in data_dict:
-            args = {}
-            if self.ai_system.metric_manager.user_config is not None and "stats" in self.ai_system.metric_manager.user_config and "args" in self.ai_system.metric_manager.user_config["stats"]:
-                args = self.ai_system.metric_manager.user_config["stats"]["args"]
-            data = data_dict["data"]
+        args = {}
+        if self.ai_system.metric_manager.user_config is not None and "stats" in self.ai_system.metric_manager.user_config and "args" in self.ai_system.metric_manager.user_config["stats"]:
+            args = self.ai_system.metric_manager.user_config["stats"]["args"]
+        data = data_dict["data"]
 
+        self.metrics["relfreq"].value = _rel_freq(data.X, self.ai_system.meta_database.features)
+        self.metrics["cumfreq"].value = _cumulative_freq(data.X, self.ai_system.meta_database.features)
 
-            # MAKES ASSUMPTION DATA IS FACTORIZED. So categorical variables start at 0 and no numbers are skipped.
-            self.metrics["relfreq"].value = _rel_freq(data.X, self.ai_system.meta_database.features)
-            self.metrics["cumfreq"].value = _cumulative_freq(data.X, self.ai_system.meta_database.features)
-            
 
 def _cumulative_freq(X, features=None):
     result = {}

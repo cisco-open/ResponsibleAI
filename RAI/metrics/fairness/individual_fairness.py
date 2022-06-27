@@ -27,22 +27,21 @@ class IndividualFairnessMetricGroup(MetricGroup, class_location=os.path.abspath(
         return self.config
 
     def compute(self, data_dict):
-        if "data" and "predictions" in data_dict:
-            data = data_dict["data"]
-            preds = data_dict["predictions"]
-            prot_attr = []
-            pos_label = 1
-            if self.ai_system.metric_manager.user_config is not None and "fairness" in self.ai_system.metric_manager.user_config and "priv_group" in \
-                    self.ai_system.metric_manager.user_config["fairness"]:
-                prot_attr = self.ai_system.metric_manager.user_config["fairness"]["protected_attributes"]
-                pos_label = self.ai_system.metric_manager.user_config["fairness"]["positive_label"]
+        data = data_dict["data"]
+        preds = data_dict["predict"]
+        prot_attr = []
+        pos_label = 1
+        if self.ai_system.metric_manager.user_config is not None and "fairness" in self.ai_system.metric_manager.user_config and "priv_group" in \
+                self.ai_system.metric_manager.user_config["fairness"]:
+            prot_attr = self.ai_system.metric_manager.user_config["fairness"]["protected_attributes"]
+            pos_label = self.ai_system.metric_manager.user_config["fairness"]["positive_label"]
 
-            y = _convert_to_ai360(self, data, prot_attr)
-            # MAY REQUIRE ADJUSTMENT DEPENDING ON AI360'S USE.
-            self.metrics['generalized_entropy_error'].value = _generalized_entropy_error(y, preds, pos_label=pos_label)
-            self.metrics['theil_index'].value = _theil_index(_get_b(y, preds, 1))
-            self.metrics['coefficient_of_variation'].value = _coefficient_of_variation(_get_b(y, preds, 1))
-            self.metrics['consistency_score'].value = _consistency_score(data.X, data.y)
+        y = _convert_to_ai360(self, data, prot_attr)
+        # MAY REQUIRE ADJUSTMENT DEPENDING ON AI360'S USE.
+        self.metrics['generalized_entropy_error'].value = _generalized_entropy_error(y, preds, pos_label=pos_label)
+        self.metrics['theil_index'].value = _theil_index(_get_b(y, preds, 1))
+        self.metrics['coefficient_of_variation'].value = _coefficient_of_variation(_get_b(y, preds, 1))
+        self.metrics['consistency_score'].value = _consistency_score(data.X, data.y)
 
 
 def _convert_to_ai360(metric_group, data, prot_attr):

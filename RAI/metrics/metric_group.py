@@ -26,7 +26,7 @@ class MetricGroup(object):
         compatible = compatible and (cls.config["compatibility"]["data_type"] is None or cls.config["compatibility"]["data_type"] == [] or\
                      all(item in ai_system.meta_database.data_format for item in cls.config["compatibility"]["data_type"]))
         compatible = compatible and (cls.config["compatibility"]["output_requirements"] is None or \
-                     all(item in ai_system.model.output_types for item in cls.config["compatibility"]["output_requirements"]))
+                     all(item in ai_system.data_dict for item in cls.config["compatibility"]["output_requirements"]))
         compatible = compatible and (cls.config["compatibility"]["dataset_requirements"] is None or \
                      all(item in ai_system.meta_database.stored_data for item in cls.config["compatibility"]["dataset_requirements"]))
         compatible = compatible and compare_runtimes(ai_system.metric_manager.user_config.get("time_complexity"), cls.config["complexity_class"])

@@ -48,7 +48,7 @@ ai.initialize(user_config=configuration)
 rfc.fit(xTrain, yTrain)
 predictions = rfc.predict(xTest)
 
-ai.compute({"test": predictions}, tag="binary classification")
+ai.compute({"test": {"predict": predictions}}, tag="binary classification")
 
 metrics = ai.get_metric_values()
 metrics = metrics["test"]

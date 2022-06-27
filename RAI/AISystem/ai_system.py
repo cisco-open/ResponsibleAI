@@ -3,6 +3,7 @@ from RAI.AISystem.model import Model
 from RAI.dataset.dataset import Data, Dataset, MetaDatabase
 from RAI.certificates import CertificateManager
 from RAI.metrics import MetricManager
+from RAI.metrics.metric_group import all_output_requirements
 task_types = ["binary_classification", "multiclass_classification", "regression"]
 
 
@@ -27,6 +28,7 @@ class AISystem:
         self.metric_manager = None
         self.certificate_manager = None
         self.user_config = None
+        self.data_dict = {}
 
     def initialize(self, user_config: dict, custom_certificate_location: str = None, **kw_args):
         self.user_config = user_config
@@ -57,35 +59,38 @@ class AISystem:
             result['features'].append(self.meta_database.features[i].name)
         return result
     
-    def single_compute(self, predictions: np.ndarray, data_type: str = "test", tag=None) -> None:
+    def single_compute(self, predictions: dict, data_type: str = "test", tag=None) -> None:
         self.auto_id += 1
         if tag is None:
             tag = f"{self.auto_id}"
         data_dict = {"data": self.get_data(data_type)}
-        if predictions is not None:
-            data_dict["predictions"] = predictions
+        for output_type in all_output_requirements:
+            if output_type in predictions:
+                data_dict[output_type] = predictions[output_type]
+            elif output_type in data_dict:
+                data_dict.pop(output_type)
         data_dict["tag"] = tag
+        self.data_dict = data_dict
+        self.metric_manager.initialize(self.user_config)
         self._last_metric_values[data_type] = self.metric_manager.compute(data_dict)
         if self.enable_certificates:
             self._last_certificate_values = self.certificate_manager.compute(self._last_metric_values)
 
     def compute(self, predictions: dict, tag=None) -> None:
-        self.metric_manager.initialize(self.user_config)
-        if not (isinstance(predictions, dict) and all(isinstance(v, np.ndarray) for v in predictions.values()) \
+        if not (isinstance(predictions, dict) and all(isinstance(v, dict) for v in predictions.values()) \
                 and all(isinstance(k, str) for k in predictions.keys())):
-            raise Exception("Predictions should be a dictionary of strings mapping to np.ndarrays")
+            raise Exception("Prediction dictionary should be in the form [dataset][output_type] -> nd.array")
         for key in predictions.keys():
             if key in self.dataset.data_dict.keys():
                 self.single_compute(predictions[key], key, tag=tag)
 
     def run_compute(self, tag=None) -> None:
-        self.metric_manager.initialize(self.user_config)
-        # TODO: Generalize across all model functions, different model types
-        # Prediction generation and computation must be separated due to some weird sklearn bug
         preds = {}
         for category in self.dataset.data_dict:
+            preds[category] = {}
             data = self.dataset.data_dict[category].X
-            preds[category] = self.model.predict_fun(data)
+            for function_type in self.model.output_types:
+                preds[category][function_type] = self.model.output_types[function_type](data)
         for key in preds:
             self.single_compute(preds[key], key)
 

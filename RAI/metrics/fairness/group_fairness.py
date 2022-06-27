@@ -25,19 +25,18 @@ class GroupFairnessMetricGroup(MetricGroup, class_location=os.path.abspath(__fil
         return self.config
 
     def compute(self, data_dict):
-        if "data" and "predictions" in data_dict:
-            data = data_dict["data"]
-            preds = data_dict["predictions"]
-            prot_attr = self.ai_system.metric_manager.user_config["fairness"]["protected_attributes"]
-            pos_label = self.ai_system.metric_manager.user_config["fairness"]["positive_label"]
+        data = data_dict["data"]
+        preds = data_dict["predict"]
+        prot_attr = self.ai_system.metric_manager.user_config["fairness"]["protected_attributes"]
+        pos_label = self.ai_system.metric_manager.user_config["fairness"]["positive_label"]
 
-            y = _convert_to_ai360(self, data, prot_attr)
-            self.metrics['disparate_impact_ratio'].value = _disparate_impact_ratio(y, preds, prot_attr=prot_attr[0], pos_label=pos_label)
-            self.metrics['statistical_parity_difference'].value = _statistical_parity_difference(y, preds, prot_attr=prot_attr[0], pos_label=pos_label)
-            self.metrics['equal_opportunity_difference'].value = _equal_opportunity_difference(y, preds, prot_attr=prot_attr[0], pos_label=pos_label)
-            self.metrics['average_odds_difference'].value = _average_odds_difference(y, preds, prot_attr=prot_attr[0], pos_label=pos_label)
-            self.metrics['average_odds_error'].value = _average_odds_error(y, preds, prot_attr=prot_attr[0], pos_label=pos_label)
-            self.metrics['between_group_generalized_entropy_error'].value = _between_group_generalized_entropy_error(y, preds, prot_attr=prot_attr[0], pos_label=pos_label)
+        y = _convert_to_ai360(self, data, prot_attr)
+        self.metrics['disparate_impact_ratio'].value = _disparate_impact_ratio(y, preds, prot_attr=prot_attr[0], pos_label=pos_label)
+        self.metrics['statistical_parity_difference'].value = _statistical_parity_difference(y, preds, prot_attr=prot_attr[0], pos_label=pos_label)
+        self.metrics['equal_opportunity_difference'].value = _equal_opportunity_difference(y, preds, prot_attr=prot_attr[0], pos_label=pos_label)
+        self.metrics['average_odds_difference'].value = _average_odds_difference(y, preds, prot_attr=prot_attr[0], pos_label=pos_label)
+        self.metrics['average_odds_error'].value = _average_odds_error(y, preds, prot_attr=prot_attr[0], pos_label=pos_label)
+        self.metrics['between_group_generalized_entropy_error'].value = _between_group_generalized_entropy_error(y, preds, prot_attr=prot_attr[0], pos_label=pos_label)
 
 
 def _convert_to_ai360(metric_group, data, prot_attr):

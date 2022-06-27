@@ -34,7 +34,7 @@ ai.initialize(user_config=configuration)
 reg.fit(xTrain, yTrain)
 predictions = reg.predict(xTest)
 
-ai.compute({"test": predictions}, tag="regression")
+ai.compute({"test": {"predict": predictions}}, tag="regression")
 
 metrics = ai.get_metric_values()
 metrics = metrics["test"]

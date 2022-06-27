@@ -43,7 +43,7 @@ ai.initialize(user_config=configuration)
 
 clf.fit(xTrain, yTrain)
 predictions = clf.predict(xTest)
-ai.compute({"test": predictions}, tag=tag)
+ai.compute({"test":  {"predict": predictions}}, tag=tag)
 
 metrics = ai.get_metric_values()
 metrics = metrics["test"]

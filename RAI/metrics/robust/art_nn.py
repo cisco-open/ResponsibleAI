@@ -28,56 +28,48 @@ class ArtAdversarialRobustnessGroup(MetricGroup, class_location=os.path.abspath(
         return self.config
 
     def compute(self, data_dict):
-        if "data" and "predictions" in data_dict:
-            data = data_dict["data"]
-            preds = data_dict["predictions"]
+        data = data_dict["data"]
+        preds = data_dict["predict"]
 
-            classifier = PyTorchClassifier(model=self.ai_system.model.agent, loss=self.ai_system.model.loss_function,
-                                           optimizer=self.ai_system.model.optimizer, input_shape=[1, 30], nb_classes=2)
-            # TODO: Remove limitation on input shape
+        classifier = PyTorchClassifier(model=self.ai_system.model.agent, loss=self.ai_system.model.loss_function,
+                                       optimizer=self.ai_system.model.optimizer, input_shape=[1, 30], nb_classes=2)
+        # TODO: Remove limitation on input shape
 
-            # CLEVER PARAMS: classifier, input sample, target class, estimate repetitions, random examples to sample per batch, radius of max pertubation, param norm, Weibull distribution init, pool_factor
+        # CLEVER PARAMS: classifier, input sample, target class, estimate repetitions, random examples to sample per batch, radius of max pertubation, param norm, Weibull distribution init, pool_factor
 
-            '''
-            X_t = torch.from_numpy(data.X).to(torch.float32).to("cpu")
-            n_values = np.max(data.y) + 1
-            y_one_hot = np.eye(n_values)[data.y]
-            y_t = torch.from_numpy(y_one_hot).to(torch.long).to("cpu")
-            '''
+        preds = preds.to("cpu")
+        example_nums = []
+        for i in range(len(preds)):
+            if preds[i] != data.y[i]:
+                example_nums.append(i)
 
-            preds = preds.to("cpu")
-            example_nums = []
-            for i in range(len(preds)):
-                if preds[i] != data.y[i]:
-                    example_nums.append(i)
+        #self.metrics['wasserstein-distance'].value = wasserstein_distance(preds, data.y)
+        #self.metrics['loss-sensitivity'].value = loss_sensitivity(classifier, X_t, y_t)
+        #params = {"eps_step": 1.0, "eps": 1.0}
+        #self.metrics['empirical-robustness'].value = empirical_robustness(classifier, X_t, attack_name="fgsm")
 
-            #self.metrics['wasserstein-distance'].value = wasserstein_distance(preds, data.y)
-            #self.metrics['loss-sensitivity'].value = loss_sensitivity(classifier, X_t, y_t)
-            #params = {"eps_step": 1.0, "eps": 1.0}
-            #self.metrics['empirical-robustness'].value = empirical_robustness(classifier, X_t, attack_name="fgsm")
+        if len(example_nums) >= 1:
+            self.metrics['clever_t_l1'].value = 0
+            self.metrics['clever_t_l2'].value = 0
+            self.metrics['clever_t_li'].value = 0
+            self.metrics['clever_u_l1'].value = 0
+            self.metrics['clever_u_l2'].value = 0
+            self.metrics['clever_u_li'].value = 0
+            to_compute = self.get_selection(example_nums)
+            for example_num in to_compute:
+                self.metrics['clever_t_l1'].value += clever_t(classifier, np.float32(data.X[example_num]), data.y[example_num], 10, 5, R_L1, norm=1, pool_factor=3)
+                self.metrics['clever_t_l2'].value += clever_t(classifier, np.float32(data.X[example_num]), data.y[example_num], 10, 5, R_L2, norm=2, pool_factor=3)
+                self.metrics['clever_t_li'].value += clever_t(classifier, np.float32(data.X[example_num]), data.y[example_num], 10, 5, R_LI, norm=np.inf, pool_factor=3)
+                self.metrics['clever_u_l1'].value += clever_u(classifier, np.float32(data.X[example_num]), 10, 5, R_L1, norm=1, pool_factor=3, verbose=False)
+                self.metrics['clever_u_l2'].value += clever_u(classifier, np.float32(data.X[example_num]), 10, 5, R_L2, norm=2, pool_factor=3, verbose=False)
+                self.metrics['clever_u_li'].value += clever_u(classifier, np.float32(data.X[example_num]), 10, 5, R_LI, norm=np.inf, pool_factor=3, verbose=False)
 
-            if len(example_nums) >= 1:
-                self.metrics['clever_t_l1'].value = 0
-                self.metrics['clever_t_l2'].value = 0
-                self.metrics['clever_t_li'].value = 0
-                self.metrics['clever_u_l1'].value = 0
-                self.metrics['clever_u_l2'].value = 0
-                self.metrics['clever_u_li'].value = 0
-                to_compute = self.get_selection(example_nums)
-                for example_num in to_compute:
-                    self.metrics['clever_t_l1'].value += clever_t(classifier, np.float32(data.X[example_num]), data.y[example_num], 10, 5, R_L1, norm=1, pool_factor=3)
-                    self.metrics['clever_t_l2'].value += clever_t(classifier, np.float32(data.X[example_num]), data.y[example_num], 10, 5, R_L2, norm=2, pool_factor=3)
-                    self.metrics['clever_t_li'].value += clever_t(classifier, np.float32(data.X[example_num]), data.y[example_num], 10, 5, R_LI, norm=np.inf, pool_factor=3)
-                    self.metrics['clever_u_l1'].value += clever_u(classifier, np.float32(data.X[example_num]), 10, 5, R_L1, norm=1, pool_factor=3, verbose=False)
-                    self.metrics['clever_u_l2'].value += clever_u(classifier, np.float32(data.X[example_num]), 10, 5, R_L2, norm=2, pool_factor=3, verbose=False)
-                    self.metrics['clever_u_li'].value += clever_u(classifier, np.float32(data.X[example_num]), 10, 5, R_LI, norm=np.inf, pool_factor=3, verbose=False)
-
-                self.metrics['clever_t_l1'].value /= len(to_compute)
-                self.metrics['clever_t_l2'].value /= len(to_compute)
-                self.metrics['clever_t_li'].value /= len(to_compute)
-                self.metrics['clever_u_l1'].value /= len(to_compute)
-                self.metrics['clever_u_l2'].value /= len(to_compute)
-                self.metrics['clever_u_li'].value /= len(to_compute)
+            self.metrics['clever_t_l1'].value /= len(to_compute)
+            self.metrics['clever_t_l2'].value /= len(to_compute)
+            self.metrics['clever_t_li'].value /= len(to_compute)
+            self.metrics['clever_u_l1'].value /= len(to_compute)
+            self.metrics['clever_u_l2'].value /= len(to_compute)
+            self.metrics['clever_u_li'].value /= len(to_compute)
 
     def get_selection(self, list):
         result = []
