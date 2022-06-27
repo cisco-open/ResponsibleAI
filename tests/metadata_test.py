@@ -7,8 +7,8 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
-
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 tag = "Random Forest"
 task_type = "binary_classification"
 description = "Detect Cancer in patients using skin measurements"
@@ -27,20 +27,17 @@ all_data = pd.concat([train_data, test_data], ignore_index=True)
 idx = all_data['race'] != 'White'
 all_data['race'][idx] = 'Black'
 
-# %%
-# convert aggregated data into RAI format
 meta, X, y = df_to_RAI(all_data, target_column="income-per-year", normalize=None, max_categorical_threshold=5)
 xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=1, stratify=y)
 
-# Create a model to make predictions
-model = Model(agent=clf, name="test_classifier", task=task_type, predict_fun=clf.predict, predict_prob_fun=clf.predict_proba,
+model = Model(agent=clf, name="test_classifier", predict_fun=clf.predict, predict_prob_fun=clf.predict_proba,
               model_class="Random Forest Classifier", description=description)
 configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}},
                               "protected_attributes": ["race"], "positive_label": 1},
                  "time_complexity": "polynomial"}
 
 dataset = Dataset({"train": Data(xTrain, yTrain), "test": Data(xTest, yTest)})
-ai = AISystem("AdultDB_Test1", meta_database=meta, dataset=dataset, model=model, enable_certificates=False)
+ai = AISystem("AdultDB_Test1", task=task_type, meta_database=meta, dataset=dataset, model=model, enable_certificates=False)
 ai.initialize(user_config=configuration)
 
 clf.fit(xTrain, yTrain)

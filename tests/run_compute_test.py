@@ -3,6 +3,7 @@ from RAI.AISystem import AISystem, Model
 import numpy as np
 from sklearn.datasets import load_breast_cancer
 from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
 
 x, y = load_breast_cancer(return_X_y=True)
 xTrain, xTest, yTrain, yTest = train_test_split(x, y)
@@ -18,7 +19,6 @@ nums[:val_0_count] = 0
 xTest = np.hstack((xTest, nums))
 xTest = np.hstack((xTest, nums))
 
-
 features_raw = ["id", "radius_mean", "texture_mean", "perimeter_mean", "area_mean", "smoothness_mean", "compactness_mean", "concavity_mean", "concave points_mean", "symmetry_mean",
                 "fractal_dimension_mean", "radius_se", "texture_se", "compactness_se", "concavity_se",
                 "concave points_se", "symmetry_se", "fractal_dimension_se", "radius_worst", "texture_worst", "texture_worst", "perimeter_worst", "area_worst",
@@ -30,29 +30,23 @@ for feature in features_raw:
 features.append(Feature("race", "integer", "race value", categorical=True, values={0:"black", 1:"white"}))
 features.append(Feature("gender", "integer", "race value", categorical=True, values={1:"male", 0:"female"}))
 
-training_data = Data(xTrain, yTrain)  # Accepts Data and GT
+training_data = Data(xTrain, yTrain)
 test_data = Data(xTest, yTest)
-dataset = Dataset({"train": training_data, "test": test_data})  # Accepts Training, Test and Validation Set
+dataset = Dataset({"train": training_data, "test": test_data})
 meta = MetaDatabase(features)
 
-# Create a model to make predictions
-from sklearn.ensemble import RandomForestClassifier
 rfc = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=0)
 
-model = Model(agent=rfc, task='binary_classification', predict_fun=rfc.predict, predict_prob_fun=rfc.predict_proba,
+model = Model(agent=rfc, predict_fun=rfc.predict, predict_prob_fun=rfc.predict_proba,
               name="cisco_cancer_ai", description="Detect Cancer in patients using skin measurements", model_class="Random Forest Classifier")
 
 configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}},
                               "protected_attributes": ["race"], "positive_label": 1},
                  "blacklist": []}
-ai = AISystem("cancer_detection", meta_database=meta, dataset=dataset, model=model)
+ai = AISystem("cancer_detection", task='binary_classification', meta_database=meta, dataset=dataset, model=model)
 ai.initialize(user_config=configuration)
 
 rfc.fit(xTrain, yTrain)
-
-assert(ai.dataset.data_dict['train'].X == training_data.X).all()
-assert(ai.dataset.data_dict['test'].X == test_data.X).all()
-
 ai.run_compute()
 
 metrics = ai.get_metric_values()

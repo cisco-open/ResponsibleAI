@@ -1,20 +1,22 @@
 import numpy as np
-import time
 from RAI.AISystem.model import Model
 from RAI.dataset.dataset import Data, Dataset, MetaDatabase
 from RAI.certificates import CertificateManager
 from RAI.metrics import MetricManager
+task_types = ["binary_classification", "multiclass_classification", "regression"]
 
 
 class AISystem:
     def __init__(self,
                  name: str,
+                 task: str,
                  meta_database: MetaDatabase,
                  dataset: Dataset,
                  model: Model,
                  enable_certificates: bool = True) -> None:
-
+        assert task in task_types, "Task must be in " + str(task_types)
         self.name = name
+        self.task = task
         self.meta_database = meta_database
         self.model = model
         self.dataset = dataset
@@ -49,7 +51,7 @@ class AISystem:
 
     def get_project_info(self) -> dict :
         result = {"id": self.name,  
-                  "task_type": self.model.task, "configuration": self.metric_manager.user_config, "features": [], "description": self.model.description,
+                  "task_type": self.task, "configuration": self.metric_manager.user_config, "features": [], "description": self.model.description,
                   }
         for i in range(len(self.meta_database.features)):
             result['features'].append(self.meta_database.features[i].name)

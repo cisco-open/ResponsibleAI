@@ -4,6 +4,7 @@ from RAI.AISystem import AISystem, Model
 import numpy as np
 from sklearn.datasets import fetch_california_housing
 from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestRegressor
 
 np.random.seed(21)
 x, y = fetch_california_housing(return_X_y=True)
@@ -23,22 +24,16 @@ features = [
 ]
 meta = MetaDatabase(features)
 
-# Create a model to make predictions
-from sklearn.ensemble import RandomForestRegressor
 reg = RandomForestRegressor(n_estimators=15, max_depth=20)
-model = Model(agent=reg, task='regression', name="Cisco_RealEstate_AI", model_class="Random Forest Regressor")
-
-# Create AISystem from previous objects. AISystems are what users will primarily interact with.
+model = Model(agent=reg, name="Cisco_RealEstate_AI", model_class="Random Forest Regressor")
 
 configuration = {"equal_treatment": {"priv_groups": [("Gender", 1)]}}
-ai = AISystem("Regression example", meta_database=meta, dataset=dataset, model=model, enable_certificates=False)
+ai = AISystem("Regression example", task='regression', meta_database=meta, dataset=dataset, model=model, enable_certificates=False)
 ai.initialize(user_config=configuration)
 
-# Train model
 reg.fit(xTrain, yTrain)
 predictions = reg.predict(xTest)
 
-# Make Predictions
 ai.compute({"test": predictions}, tag="regression")
 
 metrics = ai.get_metric_values()

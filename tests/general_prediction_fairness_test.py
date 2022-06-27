@@ -15,7 +15,6 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 use_dashboard = False
 np.random.seed(21)
 
-# Get Dataset
 data_path = "../data/adult/"
 train_data = pd.read_csv(data_path + "train.csv", header=0,
                          skipinitialspace=True, na_values="?")
@@ -31,13 +30,13 @@ xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=1, stratify=y
 
 clf = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=0, min_samples_leaf=5, max_depth=2)
 
-model = Model(agent=clf, name="Cancer detection AI", task='binary_classification', predict_fun=clf.predict, predict_prob_fun=clf.predict_proba,
+model = Model(agent=clf, name="Cancer detection AI", predict_fun=clf.predict, predict_prob_fun=clf.predict_proba,
               description="Detect Cancer in patients using skin measurements", model_class="Random Forest Classifier")
 configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}}, "positive_label": 1},
                  "time_complexity": "polynomial"}
 
 dataset = Dataset({"train": Data(xTrain, yTrain), "test": Data(xTest, yTest)})
-ai = AISystem("AdultDB_Test1", meta_database=meta, dataset=dataset, model=model, enable_certificates=False)
+ai = AISystem("AdultDB_Test1", task='binary_classification', meta_database=meta, dataset=dataset, model=model, enable_certificates=False)
 ai.initialize(user_config=configuration)
 
 clf.fit(xTrain, yTrain)

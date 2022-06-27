@@ -30,14 +30,14 @@ xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=1, stratify=y
 
 clf = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=0, min_samples_leaf=5, max_depth=2)
 
-model = Model(agent=clf, name="test_classifier", task='binary_classification', predict_fun=clf.predict, predict_prob_fun=clf.predict_proba,
+model = Model(agent=clf, name="test_classifier", predict_fun=clf.predict, predict_prob_fun=clf.predict_proba,
               description="Detect Cancer in patients using skin measurements", model_class="Random Forest Classifier")
 configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}},
                               "protected_attributes": ["race"], "positive_label": 1},
                  "time_complexity": "polynomial"}
 
 dataset = Dataset({"train": Data(xTrain, yTrain), "test": Data(xTest, yTest)})
-ai = AISystem("AdultDB_Test1", meta_database=meta, dataset=dataset, model=model, enable_certificates=False)
+ai = AISystem("AdultDB_Test1", task='binary_classification', meta_database=meta, dataset=dataset, model=model, enable_certificates=False)
 ai.initialize(user_config=configuration)
 
 clf.fit(xTrain, yTrain)
@@ -89,7 +89,6 @@ def test_average_odds_difference():
 
 def test_average_odds_difference():
     """Tests that the RAI average_odds_difference calculation is correct."""
-    # Convert to pandas series.
     gt_series = df['y'].squeeze()
     gt_series.index = df['race']
     assert metrics['group_fairness']['average_odds_error'] == average_odds_error(gt_series, predictions, prot_attr='race')

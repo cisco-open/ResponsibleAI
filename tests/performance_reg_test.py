@@ -25,10 +25,10 @@ features = [
 
 meta = MetaDatabase(features)
 reg = RandomForestRegressor(n_estimators=15, max_depth=20)
-model = Model(agent=reg, task='regression', predict_fun=reg.predict, name="Cisco_RealEstate_AI", model_class="Random Forest Regressor")
+model = Model(agent=reg, predict_fun=reg.predict, name="Cisco_RealEstate_AI", model_class="Random Forest Regressor")
 
 configuration = {"equal_treatment": {"priv_groups": [("Gender", 1)]}}
-ai = AISystem("Regression example", meta_database=meta, dataset=dataset, model=model, enable_certificates=False)
+ai = AISystem("Regression example", task='regression', meta_database=meta, dataset=dataset, model=model, enable_certificates=False)
 ai.initialize(user_config=configuration)
 
 reg.fit(xTrain, yTrain)

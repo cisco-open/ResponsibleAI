@@ -14,8 +14,6 @@ clf = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=
 use_dashboard = False
 np.random.seed(21)
 
-# %%
-# Get Dataset
 data_path = "../data/adult/"
 train_data = pd.read_csv(data_path + "train.csv", header=0,
                          skipinitialspace=True, na_values="?")
@@ -26,20 +24,17 @@ all_data = pd.concat([train_data, test_data], ignore_index=True)
 idx = all_data['race'] != 'White'
 all_data['race'][idx] = 'Black'
 
-# %%
-# convert aggregated data into RAI format
 meta, X, y = df_to_RAI(all_data, target_column="income-per-year", normalize=None, max_categorical_threshold=5)
 xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=1, stratify=y)
 
-# Create a model to make predictions
-model = Model(agent=clf, name="income ai", task='binary_classification', predict_fun=clf.predict, predict_prob_fun=clf.predict_proba,
+model = Model(agent=clf, name="income ai", predict_fun=clf.predict, predict_prob_fun=clf.predict_proba,
               model_class="Random Forest Classifier")
 configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}},
                               "protected_attributes": ["race"], "positive_label": 1},
                  "time_complexity": "polynomial"}
 
 dataset = Dataset({"train": Data(xTrain, yTrain), "test": Data(xTest, yTest)})
-ai = AISystem("AdultDB_Test1", meta_database=meta, dataset=dataset, model=model, enable_certificates=False)
+ai = AISystem("AdultDB_Test1", task='binary_classification', meta_database=meta, dataset=dataset, model=model, enable_certificates=False)
 ai.initialize(user_config=configuration)
 
 clf.fit(xTrain, yTrain)
@@ -106,15 +101,12 @@ def test_fp_rate():
 # TODO: Macro?
 def test_recall_score():
     """Tests that the RAI recall score calculation is correct."""
-    tn, fp, fn, tp = sklearn.metrics.confusion_matrix(yTest, predictions).ravel()
     assert metrics['performance_cl']['recall_score_avg'] == sklearn.metrics.recall_score(yTest, predictions, average='macro')
 
 
 # TODO: macro?
 def test_jaccard_score():
     """Tests that the RAI jaccard score calculation is correct."""
-    result = sklearn.metrics.jaccard_score(yTest, predictions)
-    print("TESTTEST, ", result)
     assert metrics['performance_cl']['jaccard_score_avg'] == sklearn.metrics.jaccard_score(yTest, predictions, average='macro')
 
 
