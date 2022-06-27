@@ -59,12 +59,6 @@ def test_accuracy():
     assert metrics['performance_cl']['accuracy'] == sklearn.metrics.accuracy_score(yTest, predictions)
 
 
-def test_auc():
-    """Tests that the RAI auc function is correct."""
-    fpr, tpr, thresholds = sklearn.metrics.roc_curve(yTest, predictions)
-    assert metrics['performance_cl']['auc'] == sklearn.metrics.auc(fpr, tpr)
-
-
 def test_balanced_accuracy():
     """Tests that the RAI balanced accuracy calculation is correct."""
     assert metrics['performance_cl']['balanced_accuracy'] == \

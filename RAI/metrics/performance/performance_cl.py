@@ -41,9 +41,6 @@ class PerformanceClassificationMetricGroup(MetricGroup, class_location=os.path.a
         self.metrics["recall_score"].value = _recall_score(fptn, **args.get("recall_score", {}))
         self.metrics["recall_score_avg"].value = np.mean(self.metrics["recall_score"].value )
 
-        # Revisit this, should roc_curve be calculated per each label?
-        fpr, tpr, thresholds = sklearn.metrics.roc_curve(data.y, preds, pos_label=None)
-        self.metrics["auc"].value = sklearn.metrics.auc(fpr, tpr)
 
 
 

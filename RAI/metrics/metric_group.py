@@ -49,7 +49,6 @@ class MetricGroup(object):
         self.display_name = self.name
         self.compatiblity = {}
         self.status = "OK"
-        self._validate_config(self.config)
         self.reset()
         
         if self.load_config(self.config):
@@ -63,47 +62,6 @@ class MetricGroup(object):
         self.persistent_data = {}
         self.value = None
         self.status = "OK"
-
-    def _validate_config(self, config):
-        assert "name" in config and isinstance(config["name"], str), \
-            "All configs must contain names"
-        assert "display_name" in config and isinstance(config["display_name"], str), \
-            config["name"] + " must contain a valid display name"
-        assert "compatibility" in config, \
-            config["name"] + " must contain compatibility details"
-        assert "task_type" in config["compatibility"] and "task_type" in config["compatibility"] \
-            and (config["compatibility"]["task_type"] is None or config["compatibility"]["task_type"] in all_task_types), \
-            config["name"] + "['compatibility']['task_type'] must be one of " + str(all_task_types)
-        assert "data_type" in config["compatibility"] \
-            and all(x in all_data_types for x in config["compatibility"]["data_type"]), \
-            config["name"] + "['compatibility']['data_type'] must be one of " + str(all_data_types)
-        assert "output_requirements" in config["compatibility"] \
-            and all(x in all_output_requirements for x in config["compatibility"]["output_requirements"]), \
-            config["name"] + "['compatibility']['output_requirements'] must be one of " + str(all_output_requirements)
-        assert "dataset_requirements" in config["compatibility"] \
-            and all(x in all_dataset_requirements for x in config["compatibility"]["dataset_requirements"]), \
-            config["name"] + "['compatibility']['dataset_requirements'] must be one of " + str(all_dataset_requirements)
-        assert "dependency_list" in config and isinstance(config["dependency_list"], list) \
-            and all(isinstance(x, str) for x in config["dependency_list"]),\
-            config["name"] + " must contain a dependency list"
-        assert "tags" in config and isinstance(config["tags"], list) \
-            and all(isinstance(x, str) for x in config["tags"]), \
-            config["name"] + " must contain a list of 0 or more string tags"
-        assert "complexity_class" in config and config["complexity_class"] in all_complexity_classes, \
-            config["name"] + " must have a complexity class belong to " + str(all_complexity_classes)
-        assert "metrics" in config, config["name"] + " must contain metrics."
-        for metric in config["metrics"]:
-            assert "display_name" in config["metrics"][metric] and isinstance(config["metrics"][metric]["display_name"], str), \
-                metric + " must have a valid display name."
-            assert "type" in config["metrics"][metric] and isinstance(config["metrics"][metric]["type"], str), \
-                metric + " must contain a valid type."
-            assert "has_range" in config["metrics"][metric] and isinstance(config["metrics"][metric]["has_range"], bool), \
-                metric + " must contain a boolean for has_range."
-            assert "range" in config["metrics"][metric] and (config["metrics"][metric]["range"] is None or (isinstance(config["metrics"][metric]["range"], list) \
-                and len(config["metrics"][metric]["range"]) == 2 and (x in {None, False, True} for x in config["metrics"][metric]["range"]))), \
-                metric + " must contain a valid list of length 2 consisting of null, false or true."
-            assert "explanation" in config["metrics"][metric] and isinstance(config["metrics"][metric]["explanation"], str), \
-                metric + " must contain a valid explanation."
 
     def load_config(self, config):
         if "tags" in config:

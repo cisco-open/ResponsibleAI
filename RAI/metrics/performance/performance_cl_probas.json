@@ -1,0 +1,22 @@
+{
+    "name" : "performance_cl_probas",
+    "display_name": "Probability Classification Performance Metrics",
+    "compatibility": {"task_type": "binary_classification",
+                      "data_type": ["numeric"],
+                      "output_requirements": ["predict", "predict_proba"],
+                      "dataset_requirements": ["y"]},
+    "src": "stats",
+    "dependency_list": [],
+    "tags": ["performance", "Classification"],
+    "complexity_class": "linear",
+    "metrics": {
+        "auc": {
+            "display_name": "Area Under the Curve",
+            "type": "numeric",
+            "tags": [],
+            "has_range": true,
+            "range": [0, 1],
+            "explanation": "Describes the ability of a classifier to distinguish between classes."
+        }
+    }
+}

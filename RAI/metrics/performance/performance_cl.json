@@ -18,14 +18,6 @@
             "range": [0, 1],
             "explanation": "Accuracy describes how well a model performed at classifying data."
         },
-        "auc": {
-            "display_name": "Area Under the Curve",
-            "type": "numeric",
-            "tags": [],
-            "has_range": true,
-            "range": [0, 1],
-            "explanation": "Describes the ability of a classifier to distinguish between classes."
-        },
         "balanced_accuracy": {
             "display_name": "Balanced Accuracy",
             "type": "numeric",

@@ -4,7 +4,7 @@
     "compatibility": {"task_type": null,
                       "data_type": ["numeric"],
                       "output_requirements": [],
-                      "dataset_requirements": ["numeric"]},
+                      "dataset_requirements": []},
     "dependency_list": [],
     "tags": ["robustness", "Normalization"],
     "complexity_class": "linear",

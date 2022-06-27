@@ -1,2 +1,3 @@
 from .performance_cl import PerformanceClassificationMetricGroup
 from .performance_reg import PerformanceRegMetricGroup
+from .performance_cl_probas import PerformanceClassificationProbasMetricGroup
