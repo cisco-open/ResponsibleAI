@@ -68,13 +68,11 @@ for g in metrics:
                 print(g, m, metrics[g][m])
 
 
-'''
-
 def test_point_biserial_r():
     """Tests that the RAI relfreq calculation is correct."""
-    for i in range(len(features_raw)):
-        assert metrics['correlation_stats_binary']['point-biserial-r'][i] == \
-               scipy.stats.pointbiserialr(xTest[:, i], yTest)
-
-# TODO: Should be from binary X values to continuous y values
-'''
+    for i, feature in enumerate(features):
+        if feature.categorical:
+            assert metrics['correlation_stats_binary']['point_biserial_r'][i] == \
+                   scipy.stats.pointbiserialr(xTest[:, i], yTest)
+        else:
+            assert metrics['correlation_stats_binary']['point_biserial_r'][i] is None

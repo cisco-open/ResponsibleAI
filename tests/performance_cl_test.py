@@ -50,12 +50,6 @@ metrics = ai.get_metric_values()
 metrics = metrics["test"]
 info = ai.get_metric_info()
 
-for g in metrics:
-    for m in metrics[g]:
-        if "type" in info[g][m]:
-            if info[g][m]["type"] in ("numeric", "vector-dict", "text"):
-                print(g, m, metrics[g][m])
-
 
 def test_dataset_equality():
     """Tests that the old and new datasets match exactly."""
@@ -82,7 +76,7 @@ def test_balanced_accuracy():
            sklearn.metrics.balanced_accuracy_score(yTest, predictions)
 
 
-# TODO: Should we be using macro f1?
+# TODO: Macro?
 def test_f1_score():
     """Tests that the RAI f1 score calculation is correct."""
     assert metrics['performance_cl']['f1_avg'] == sklearn.metrics.f1_score(yTest, predictions, average='macro')
@@ -93,27 +87,30 @@ def test_fp_rate():
     assert metrics['performance_cl']['f1_avg'] == sklearn.metrics.f1_score(yTest, predictions, average='macro')
 
 
-# TODO: Should we be using macro precision score?
+# TODO: Macro?
 def test_precision_score():
     """Tests that the RAI precision score calculation is correct."""
     assert metrics['performance_cl']['precision_score_avg'] == sklearn.metrics.precision_score(yTest, predictions, average='macro')
 
 
-# TODO: Should fix metric calculation
 def test_fp_rate():
     """Tests that the RAI fp rate calculation is correct."""
-    tn, fp, fn, tp = sklearn.metrics.confusion_matrix(yTest, predictions).ravel()
-    assert metrics['performance_cl']['fp_rate_avg'] == fp/(fp+tn)
+    confusion_matrix = sklearn.metrics.confusion_matrix(yTest, predictions)
+    fp = confusion_matrix.sum(axis=0) - np.diag(confusion_matrix)
+    fn = confusion_matrix.sum(axis=1) - np.diag(confusion_matrix)
+    tp = np.diag(confusion_matrix)
+    tn = confusion_matrix.sum() - fp - fn - tp
+    assert metrics['performance_cl']['fp_rate_avg'] == np.average(fp / (fp + tn))
 
 
-# TODO: Do we want Macro?
+# TODO: Macro?
 def test_recall_score():
     """Tests that the RAI recall score calculation is correct."""
     tn, fp, fn, tp = sklearn.metrics.confusion_matrix(yTest, predictions).ravel()
     assert metrics['performance_cl']['recall_score_avg'] == sklearn.metrics.recall_score(yTest, predictions, average='macro')
 
 
-# TODO: Do we want macro?
+# TODO: macro?
 def test_jaccard_score():
     """Tests that the RAI jaccard score calculation is correct."""
     result = sklearn.metrics.jaccard_score(yTest, predictions)

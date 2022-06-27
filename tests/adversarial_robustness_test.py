@@ -51,13 +51,6 @@ metrics = metrics["test"]
 info = ai.get_metric_info()
 
 
-for g in metrics:
-    for m in metrics[g]:
-        if "type" in info[g][m]:
-            if info[g][m]["type"] in ("numeric", "vector-dict", "text"):
-                print(g, m, metrics[g][m])
-
-
 def test_inaccuracy():
     """Tests that the RAI inaccuracy calculation is correct."""
     assert metrics['adversarial_robustness']['inaccuracy'] == np.sqrt(1 - sklearn.metrics.accuracy_score(yTest, predictions))

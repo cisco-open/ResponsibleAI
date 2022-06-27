@@ -35,7 +35,7 @@ meta, X, y = df_to_RAI(all_data, target_column="income-per-year", normalize=None
 xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=1, stratify=y)
 
 # Create a model to make predictions
-model = Model(agent=clf, task=task_type, predict_fun=clf.predict, predict_prob_fun=clf.predict_proba,
+model = Model(agent=clf, name="test_tree", task=task_type, predict_fun=clf.predict, predict_prob_fun=clf.predict_proba,
               description=description, model_class="Random Forest Classifier")
 configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}},
                               "protected_attributes": ["race"], "positive_label": 1},
@@ -52,14 +52,6 @@ ai.compute({"test": predictions}, tag=tag)
 metrics = ai.get_metric_values()
 metrics = metrics["test"]
 info = ai.get_metric_info()
-
-for g in metrics:
-    for m in metrics[g]:
-        if "type" in info[g][m]:
-            if info[g][m]["type"] in ("numeric", "vector-dict", "text"):
-                print(g, m, metrics[g][m])
-
-print(metrics['tree_model_metadata'])
 
 
 def test_feature_names():

@@ -45,12 +45,6 @@ metrics = ai.get_metric_values()
 metrics = metrics["test"]
 info = ai.get_metric_info()
 
-for g in metrics:
-    for m in metrics[g]:
-        if "type" in info[g][m]:
-            if info[g][m]["type"] in ("numeric", "vector-dict", "text"):
-                print(g, m, metrics[g][m])
-
 
 def test_pearson_correlation():
     """Tests that the RAI pearson correlation calculation is correct."""
@@ -64,5 +58,3 @@ def test_spearman_correlation():
     for i in range(len(features)):
         assert metrics['correlation_stats_regression']['spearman_correlation'][i] == \
                scipy.stats.spearmanr(xTest[:, i], yTest)
-
-# TODO: update regression to reg, need to figure this out globally.

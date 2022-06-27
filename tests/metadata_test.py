@@ -33,7 +33,7 @@ meta, X, y = df_to_RAI(all_data, target_column="income-per-year", normalize=None
 xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=1, stratify=y)
 
 # Create a model to make predictions
-model = Model(agent=clf, task=task_type, predict_fun=clf.predict, predict_prob_fun=clf.predict_proba,
+model = Model(agent=clf, name="test_classifier", task=task_type, predict_fun=clf.predict, predict_prob_fun=clf.predict_proba,
               model_class="Random Forest Classifier", description=description)
 configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}},
                               "protected_attributes": ["race"], "positive_label": 1},
@@ -51,12 +51,6 @@ metrics = ai.get_metric_values()
 metrics = metrics["test"]
 info = ai.get_metric_info()
 
-for g in metrics:
-    for m in metrics[g]:
-        if "type" in info[g][m]:
-            if info[g][m]["type"] in ("numeric", "vector-dict", "text"):
-                print(g, m, metrics[g][m])
-
 
 def test_description():
     """Tests that the accuracy is correct."""
@@ -70,11 +64,9 @@ def test_task_type():
 
 def test_model():
     """Tests that the accuracy is correct."""
-    print("\nTEST: ", metrics['metadata']['model'])
     assert metrics['metadata']['model'] == str(ai.model.agent)
 
 
 def test_sample_count():
     """Tests that the accuracy is correct."""
-    print("\nTEST: ", metrics['metadata']['model'])
     assert metrics['metadata']['sample_count'] == xTest.shape[0]

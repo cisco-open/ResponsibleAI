@@ -28,7 +28,7 @@ xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=1, stratify=y
 
 clf = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=0, min_samples_leaf=5, max_depth=2)
 
-model = Model(agent=clf, task='binary_classification', predict_fun=clf.predict, predict_prob_fun=clf.predict_proba,
+model = Model(agent=clf, name="test_classifier", task='binary_classification', predict_fun=clf.predict, predict_prob_fun=clf.predict_proba,
               description="Detect Cancer in patients using skin measurements", model_class="Random Forest Classifier")
 configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}},
                               "protected_attributes": ["race"], "positive_label": 1},
@@ -45,10 +45,7 @@ df['y'] = yTest
 
 # structuredDataset = StructuredDataset(df, names, protected_attribute_names=['race'])
 binDataset = BinaryLabelDataset(df=df, label_names=['y'], protected_attribute_names=['race'])
-
-print("type: ", type(binDataset))
 benchmark = BinaryLabelDatasetMetric(binDataset)
-
 
 clf.fit(xTrain, yTrain)
 predictions = clf.predict(xTest)

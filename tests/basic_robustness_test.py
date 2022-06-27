@@ -50,13 +50,6 @@ metrics = metrics["test"]
 info = ai.get_metric_info()
 
 
-for g in metrics:
-    for m in metrics[g]:
-        if "type" in info[g][m]:
-            if info[g][m]["type"] in ("numeric", "vector-dict", "text"):
-                print(g, m, metrics[g][m])
-
-
 def test_normalized_feature_std():
     """Tests that the RAI normalized_feature_std calculation is correct."""
     mean_v = np.mean(xTest, axis=0, keepdims=True)

@@ -50,12 +50,6 @@ metrics = ai.get_metric_values()
 metrics = metrics["test"]
 info = ai.get_metric_info()
 
-for g in metrics:
-    for m in metrics[g]:
-        if "type" in info[g][m]:
-            if info[g][m]["type"] in ("numeric", "vector-dict", "text"):
-                print(g, m, metrics[g][m])
-
 
 # TODO: Set up another set of tests with data that has a category in it
 def test_dataset_equality():
@@ -80,55 +74,97 @@ def test_percent_Nan_rows():
 
 def test_kstat_1():
     """Tests that the RAI kstat_1 calculation is correct."""
-    assert metrics['summary_stats']['kstat_1'] == scipy.stats.kstat(xTest, 1)
+    for i, feature in enumerate(features):
+        if not feature.categorical:
+            assert metrics['summary_stats']['kstat_1'][i] == scipy.stats.kstat(xTest[:, i], 1)
+        else:
+            assert metrics['summary_stats']['kstat_1'][i] is None
 
 
 def test_kstat_2():
     """Tests that the RAI kstat_2 calculation is correct."""
-    assert metrics['summary_stats']['kstat_2'] == scipy.stats.kstat(xTest, 2)
+    for i, feature in enumerate(features):
+        if not feature.categorical:
+            assert metrics['summary_stats']['kstat_2'][i] == scipy.stats.kstat(xTest[:, i], 2)
+        else:
+            assert metrics['summary_stats']['kstat_2'][i] is None
 
 
 def test_kstat_3():
     """Tests that the RAI kstat_3 calculation is correct."""
-    assert metrics['summary_stats']['kstat_3'] == scipy.stats.kstat(xTest, 3)
+    for i, feature in enumerate(features):
+        if not feature.categorical:
+            assert metrics['summary_stats']['kstat_3'][i] == scipy.stats.kstat(xTest[:, i], 3)
+        else:
+            assert metrics['summary_stats']['kstat_3'][i] is None
 
 
 def test_kstat_4():
     """Tests that the RAI kstat_1 calculation is correct."""
-    assert metrics['summary_stats']['kstat_4'] == scipy.stats.kstat(xTest, 4)
+    for i, feature in enumerate(features):
+        if not feature.categorical:
+            assert metrics['summary_stats']['kstat_4'][i] == scipy.stats.kstat(xTest[:, i], 4)
+        else:
+            assert metrics['summary_stats']['kstat_4'][i] is None
 
 
 def test_kstatvar():
     """Tests that the RAI kstatvar calculation is correct."""
-    assert metrics['summary_stats']['kstatvar'] == scipy.stats.kstatvar(xTest)
+    for i, feature in enumerate(features):
+        if not feature.categorical:
+            assert metrics['summary_stats']['kstatvar'][i] == scipy.stats.kstatvar(xTest[:, i])
+        else:
+            assert metrics['summary_stats']['kstatvar'][i] is None
 
 
 def test_iqr():
     """Tests that the RAI kstatvar calculation is correct."""
-    assert metrics['summary_stats']['iqr'] == scipy.stats.iqr(xTest)
+    for i, feature in enumerate(features):
+        if not feature.categorical:
+            assert metrics['summary_stats']['iqr'][i] == scipy.stats.iqr(xTest[:, i])
+        else:
+            assert metrics['summary_stats']['iqr'][i] is None
 
 
 def test_bayes_mvs():
     """Tests that the RAI kstatvar calculation is correct."""
-    mean, var, std = scipy.stats.bayes_mvs(xTest)
-    assert metrics['summary_stats']['bayes_mean_avg'] == mean[0]
-    assert metrics['summary_stats']['bayes_var_avg'] == var[0]
-    assert metrics['summary_stats']['bayes_std_avg'] == std[0]
+    for i, feature in enumerate(features):
+        if not feature.categorical:
+            mean, var, std = scipy.stats.bayes_mvs(xTest[:, i])
+            assert metrics['summary_stats']['bayes_mean_avg'][i] == mean[0]
+            assert metrics['summary_stats']['bayes_variance_avg'][i] == var[0]
+            assert metrics['summary_stats']['bayes_std_avg'][i] == std[0]
+        else:
+            assert metrics['summary_stats']['bayes_mean_avg'][i] is None
+            assert metrics['summary_stats']['bayes_variance_avg'][i] is None
+            assert metrics['summary_stats']['bayes_std_avg'][i] is None
 
 
 def test_frozen_mvs():
     """Tests that the RAI kstatvar calculation is correct."""
-    mean, var, std = scipy.stats.mvsdist(xTest)
-    assert metrics['summary_stats']['frozen_mean_mean'] == mean.mean()
-    assert metrics['summary_stats']['frozen_mean_variance'] == mean.var()
-    assert metrics['summary_stats']['frozen_mean_std'] == mean.std()
+    for i, feature in enumerate(features):
+        if not feature.categorical:
+            mean, var, std = scipy.stats.mvsdist(xTest[:, i])
+            assert metrics['summary_stats']['frozen_mean_mean'][i] == mean.mean()
+            assert metrics['summary_stats']['frozen_mean_variance'][i] == mean.var()
+            assert metrics['summary_stats']['frozen_mean_std'][i] == mean.std()
 
-    assert metrics['summary_stats']['frozen_variance_mean'] == var.mean()
-    assert metrics['summary_stats']['frozen_variance_variance'] == var.var()
-    assert metrics['summary_stats']['frozen_variance_std'] == var.std()
+            assert metrics['summary_stats']['frozen_variance_mean'][i] == var.mean()
+            assert metrics['summary_stats']['frozen_variance_variance'][i] == var.var()
+            assert metrics['summary_stats']['frozen_variance_std'][i] == var.std()
 
-    assert metrics['summary_stats']['frozen_std_mean'] == std.mean()
-    assert metrics['summary_stats']['frozen_std_variance'] == std.var()
-    assert metrics['summary_stats']['frozen_std_std'] == std.std()
+            assert metrics['summary_stats']['frozen_std_mean'][i] == std.mean()
+            assert metrics['summary_stats']['frozen_std_variance'][i] == std.var()
+            assert metrics['summary_stats']['frozen_std_std'][i] == std.std()
+        else:
+            assert metrics['summary_stats']['frozen_mean_mean'][i] is None
+            assert metrics['summary_stats']['frozen_mean_variance'][i] is None
+            assert metrics['summary_stats']['frozen_mean_std'][i] is None
 
-# TODO: Rework test to look for array
+            assert metrics['summary_stats']['frozen_variance_mean'][i] is None
+            assert metrics['summary_stats']['frozen_variance_variance'][i] is None
+            assert metrics['summary_stats']['frozen_variance_std'][i] is None
+
+            assert metrics['summary_stats']['frozen_std_mean'][i] is None
+            assert metrics['summary_stats']['frozen_std_variance'][i] is None
+            assert metrics['summary_stats']['frozen_std_std'][i] is None

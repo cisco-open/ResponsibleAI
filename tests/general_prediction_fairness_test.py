@@ -61,12 +61,6 @@ metrics = ai.get_metric_values()
 metrics = metrics["test"]
 info = ai.get_metric_info()
 
-for g in metrics:
-    for m in metrics[g]:
-        if "type" in info[g][m]:
-            if info[g][m]["type"] in ("numeric", "vector-dict", "text"):
-                print(g, m, metrics[g][m])
-
 
 def test_average_abs_odds_difference():
     """Tests that the RAI average abs odds difference calculation is correct."""
@@ -150,7 +144,6 @@ def test_false_discovery_rate_ratio():
     assert metrics['prediction_fairness']['false_discovery_rate_ratio'] == benchmark.false_discovery_rate_ratio()
 
 
-# TODO: Why is this none?
 def test_false_discovery_rate_ratio():
     """Tests that the RAI false_discovery_rate calculation is correct."""
     result = benchmark.false_discovery_rate_ratio()

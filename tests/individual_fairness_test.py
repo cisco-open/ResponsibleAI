@@ -31,7 +31,7 @@ meta, X, y = df_to_RAI(all_data, target_column="income-per-year", normalize=None
 xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=1, stratify=y)
 
 clf = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=0, min_samples_leaf=5, max_depth=2)
-model = Model(agent=clf, task='binary_classification', predict_fun=clf.predict, predict_prob_fun=clf.predict_proba,
+model = Model(agent=clf, name="test_classifier", task='binary_classification', predict_fun=clf.predict, predict_prob_fun=clf.predict_proba,
               description="Detect Cancer in patients using skin measurements", model_class="Random Forest Classifier")
 configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}},
                               "protected_attributes": ["race"], "positive_label": 1},
@@ -61,12 +61,6 @@ ai.compute({"test": predictions}, tag="Random Forest")
 metrics = ai.get_metric_values()
 metrics = metrics["test"]
 info = ai.get_metric_info()
-
-for g in metrics:
-    for m in metrics[g]:
-        if "type" in info[g][m]:
-            if info[g][m]["type"] in ("numeric", "vector-dict", "text"):
-                print(g, m, metrics[g][m])
 
 
 def test_generalized_entropy_error():

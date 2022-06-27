@@ -30,7 +30,7 @@ xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=1, stratify=y
 
 clf = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=0, min_samples_leaf=5, max_depth=2)
 
-model = Model(agent=clf, task='binary_classification', predict_fun=clf.predict, predict_prob_fun=clf.predict_proba,
+model = Model(agent=clf, name="test_classifier", task='binary_classification', predict_fun=clf.predict, predict_prob_fun=clf.predict_proba,
               description="Detect Cancer in patients using skin measurements", model_class="Random Forest Classifier")
 configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}},
                               "protected_attributes": ["race"], "positive_label": 1},
@@ -61,12 +61,6 @@ metrics = ai.get_metric_values()
 metrics = metrics["test"]
 info = ai.get_metric_info()
 
-for g in metrics:
-    for m in metrics[g]:
-        if "type" in info[g][m]:
-            if info[g][m]["type"] in ("numeric", "vector-dict", "text"):
-                print(g, m, metrics[g][m])
-
 
 def test_disparate_impact():
     """Tests that the RAI disparate_impact calculation is correct."""
@@ -78,7 +72,6 @@ def test_statistical_parity_difference():
     assert metrics['group_fairness']['statistical_parity_difference'] == benchmark.statistical_parity_difference()
 
 
-# TODO: change name?
 def test_between_group_generalized_entropy_index():
     """Tests that the RAI between_group_generalized_entropy_index calculation is correct."""
     assert metrics['group_fairness']['between_group_generalized_entropy_error'] == benchmark.between_group_generalized_entropy_index()
