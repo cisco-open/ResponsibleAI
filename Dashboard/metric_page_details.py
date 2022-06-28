@@ -11,7 +11,8 @@ logger = logging.getLogger(__name__)
 def get_accordion(id):
     items = []
     # TODO: Add selector for dataset
-    values = redisUtil.get_metric_values()["test"][id]
+    dataset = "test"
+    values = redisUtil.get_metric_values()[dataset][id]
     for group in values:
         rows = []
         for k, v in values[group].items():
@@ -43,7 +44,8 @@ def get_accordion(id):
 def get_form():
     ops = []
     # TODO: Add selector for dataset
-    values = redisUtil.get_metric_values()["test"]
+    dataset = "test"
+    values = redisUtil.get_metric_values()[dataset]
     for i, m in enumerate(values):
         ops.append({"label": m["metadata"]["date"] + " - " + m["metadata"]["tag"], "value": i})
 

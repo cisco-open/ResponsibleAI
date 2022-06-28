@@ -8,10 +8,8 @@ logger = logging.getLogger(__name__)
 
 def get_form():
     ops = []
-    values = redisUtil.get_metric_values()
-
-    # TODO: Change this one we have categories for certs
     dataset = "test"
+    values = redisUtil.get_metric_values()[dataset]
 
     for i, m in enumerate(values):
         ops.append({"label": m[dataset]["metadata"]["date"] + " - " + m[dataset]["metadata"]["tag"], "value": i})
@@ -23,7 +21,6 @@ def get_form():
         ],
         className="mb-3",
     )
-
     return dbc.Form([dropdown])
 
 

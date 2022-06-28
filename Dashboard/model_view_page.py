@@ -12,7 +12,8 @@ logger = logging.getLogger(__name__)
 
 
 def get_mdl_image(nM, nD):
-    vs = redisUtil.get_metric_values()
+    dataset = "test"
+    vs = redisUtil.get_metric_values()[dataset]
     rf = pickle.loads(vs[nM]['tree_model_metadata']['estimator_params'][nD].encode('ISO-8859-1'))
     feat_names = vs[nM]['tree_model_metadata']['feature_names']
 
@@ -27,7 +28,8 @@ def get_mdl_image(nM, nD):
 
 
 def get_mdl_text(nM, nD):
-    vs = redisUtil.get_metric_values()
+    dataset = "test"
+    vs = redisUtil.get_metric_values()[dataset]
     rf = pickle.loads(vs[nM]['tree_model_metadata']['estimator_params'][nD].encode('ISO-8859-1'))
     feat_names = vs[nM]['tree_model_metadata']['feature_names']
     text_representation = sklearn.tree.export_text(rf, feature_names=feat_names)
@@ -40,7 +42,8 @@ def get_mdl_text(nM, nD):
 
 def get_form():
     ops = []
-    values = redisUtil.get_metric_values()
+    dataset = "test"
+    values = redisUtil.get_metric_values()[dataset]
     for i, m in enumerate(values):
         ops.append({"label": m["metadata"]["date"] + " - " + m["metadata"]["tag"], "value": i})
 
@@ -52,7 +55,7 @@ def get_form():
         className="mb-3",
     )
 
-    vs = redisUtil.get_metric_values()
+    vs = redisUtil.get_metric_values()[dataset]
     dropdown_tree = html.Div(
         [
             dbc.Label("Select Decision Tree", html_for="dropdown"),

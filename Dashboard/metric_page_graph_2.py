@@ -88,7 +88,8 @@ def update_metrics(value):
 
 def get_trc_data(group, metric):
     d = {"x": [], "y": [], "tag": [], "metric": [], "text": []}
-    for i, data in enumerate(redisUtil.get_metric_values()):
+    dataset = "test"
+    for i, data in enumerate(redisUtil.get_metric_values()[dataset]):
         d["x"].append(i + 1)
         d["y"].append(data[group][metric])
         d["tag"].append(data["metadata"]["tag"])
@@ -114,6 +115,7 @@ def get_trc_data(group, metric):
 )
 def update_graph(n, metric, group, nC, old):
     ctx = dash.callback_context
+    dataset = "test"
 
     if 'prop_id' in ctx.triggered[0] and ctx.triggered[0]['prop_id'] == 'reset_graph.n_clicks':
         old["data"] = []
@@ -122,7 +124,7 @@ def update_graph(n, metric, group, nC, old):
         if redisUtil.has_update("metric_graph", reset=True):
             logger.info("new data")
             redisUtil._subscribers["metric_graph"] = False
-            print("number of records = ", len(redisUtil.get_metric_values()), metric, group)
+            print("number of records = ", len(redisUtil.get_metric_values()[dataset]), metric, group)
         else:
             return old
 

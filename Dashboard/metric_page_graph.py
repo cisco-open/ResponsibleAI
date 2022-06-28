@@ -13,7 +13,8 @@ logger = logging.getLogger(__name__)
 def get_trc_data(group, metric):
     d = {"x": [], "y": [], "tag": [], "metric": [], "text": []}
     # TODO: Need selector value for dataset
-    for i, data in enumerate(redisUtil.get_metric_values()["test"]):
+    dataset = "test"
+    for i, data in enumerate(redisUtil.get_metric_values()[dataset]):
         d["x"].append(i + 1)
         d["y"].append(data[group][metric])
         d["tag"].append(data["metadata"]["tag"])
