@@ -2,16 +2,14 @@ from RAI.utils import compare_runtimes
 from .metric import Metric
 from RAI.metrics.registry import register_class
 import numpy as np
-import os
 import json
-
-__all__ = ['MetricGroup', 'all_complexity_classes', 'all_task_types', 'all_data_types', 'all_output_requirements', 'all_data_requirements']
-
+__all__ = ['MetricGroup', 'all_complexity_classes', 'all_task_types', 'all_data_types', 'all_output_requirements']
 all_complexity_classes = {"constant",  "linear",  "multi_linear", "polynomial", "exponential"}
 all_task_types = {"binary_classification", "classification", "clustering", "regression"}
 all_data_types = {"numeric", "image", "text"}
 all_output_requirements = {"predict", "predict_proba", "generate_text"}
 all_dataset_requirements = {"X", "y", "sensitive_features"}
+# TODO: move these to their own file, maybe in utils
 
 
 class MetricGroup(object):    

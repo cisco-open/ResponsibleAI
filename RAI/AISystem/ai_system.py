@@ -1,4 +1,3 @@
-import numpy as np
 from RAI.AISystem.model import Model
 from RAI.dataset.dataset import Data, Dataset, MetaDatabase
 from RAI.certificates import CertificateManager
@@ -59,7 +58,7 @@ class AISystem:
             result['features'].append(self.meta_database.features[i].name)
         return result
     
-    def single_compute(self, predictions: dict, data_type: str = "test", tag=None) -> None:
+    def _single_compute(self, predictions: dict, data_type: str = "test", tag=None) -> None:
         self.auto_id += 1
         if tag is None:
             tag = f"{self.auto_id}"
@@ -77,14 +76,16 @@ class AISystem:
             self._last_certificate_values = self.certificate_manager.compute(self._last_metric_values)
 
     def compute(self, predictions: dict, tag=None) -> None:
+        self._last_metric_values = {}
         if not (isinstance(predictions, dict) and all(isinstance(v, dict) for v in predictions.values()) \
                 and all(isinstance(k, str) for k in predictions.keys())):
             raise Exception("Prediction dictionary should be in the form [dataset][output_type] -> nd.array")
         for key in predictions.keys():
             if key in self.dataset.data_dict.keys():
-                self.single_compute(predictions[key], key, tag=tag)
+                self._single_compute(predictions[key], key, tag=tag)
 
     def run_compute(self, tag=None) -> None:
+        self._last_metric_values = {}
         preds = {}
         for category in self.dataset.data_dict:
             preds[category] = {}
@@ -92,7 +93,7 @@ class AISystem:
             for function_type in self.model.output_types:
                 preds[category][function_type] = self.model.output_types[function_type](data)
         for key in preds:
-            self.single_compute(preds[key], key)
+            self._single_compute(preds[key], key)
 
     def get_metric_info(self):
         return self.metric_manager.get_metadata()

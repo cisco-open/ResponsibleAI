@@ -5,7 +5,6 @@ import os
 
 class BasicExplainablityGroup(MetricGroup, class_location=os.path.abspath(__file__)):
     def __init__(self, ai_system) -> None:
-        print("test")
         super().__init__(ai_system)
 
     def update(self, data):

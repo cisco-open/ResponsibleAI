@@ -4,7 +4,6 @@ import os.path
 import site
 from RAI.metrics.metric_group import all_output_requirements, all_complexity_classes, all_dataset_requirements, all_data_types, all_task_types
 
-
 __all__ = ['MetricManager']
 
 
@@ -35,7 +34,7 @@ class MetricManager(object):
                     assert "unprivileged" in user_config["fairness"]["priv_group"][attr]
                 assert "positive_label" in user_config["fairness"]
                 user_config["fairness"]["protected_attributes"] = protected_classes
-                print("protected attributes: ", protected_classes)
+
 
     def initialize(self, user_config: dict = None, metric_groups: list[str] = None, max_complexity: str = "linear"):
         if user_config:
@@ -43,6 +42,7 @@ class MetricManager(object):
             for key in user_config:
                 self.user_config[key] = user_config[key]
 
+        self.metric_groups = {}
         compatible_metrics = []  # Stores compatible metrics
         dependencies = {}  # Stores a metrics dependencies
         dependent = {}  # Maps metrics to metrics dependent on it
@@ -126,7 +126,7 @@ class MetricManager(object):
                 metric_obj.config["tags"] = self.metric_groups[group].tags  # Change this up after
         return result
     
-    def compute(self, data_dict) -> dict :
+    def compute(self, data_dict) -> dict:
         for metric_group_name in self.metric_groups:
             self.metric_groups[metric_group_name].compute(data_dict)
 
@@ -139,7 +139,7 @@ class MetricManager(object):
         return result
 
     # Searches all metrics. Queries based on Metric Name, Metric Group Name, Category, and Tags.
-    def search(self, query:str) -> dict :
+    def search(self, query: str) -> dict:
         query = query.lower()
         results = {}
         for group in self.metric_groups:

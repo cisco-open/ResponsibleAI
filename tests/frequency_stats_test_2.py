@@ -50,12 +50,24 @@ ai.initialize(user_config=configuration)
 rfc.fit(xTrain, yTrain)
 predictions = rfc.predict(xTest)
 
+
+ai.run_compute(rfc)
+metrics = ai.get_metric_values()
+info = ai.get_metric_info()
+for d in metrics:
+    print("", d)
+    for g in metrics[d]:
+        for m in metrics[d][g]:
+            print(g, " ", m, " ", metrics[d][g][m])
+
+
 ai.compute({"test": {"predict": predictions}})
 
 metrics = ai.get_metric_values()
-metrics = metrics["test"]
 info = ai.get_metric_info()
 
-for g in metrics:
-    for m in metrics[g]:
-        print(g, " ", m, " ", metrics[g][m])
+for d in metrics:
+    print("", d)
+    for g in metrics[d]:
+        for m in metrics[d][g]:
+            print(g, " ", m, " ", metrics[d][g][m])
