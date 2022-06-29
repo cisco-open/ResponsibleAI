@@ -80,6 +80,14 @@ def get_sidebar():
                         value=redisUtil.get_projects_list()[0],
                         persistence=True,),
                     html.Hr(),
+                    html.P("Select the dataset"),
+                    html.Div(id="dummy_div_2", style={"display": "no"}),
+                    dcc.Dropdown(
+                        id="dataset_selector",
+                        options=redisUtil.get_dataset_list(),
+                        value=redisUtil.get_dataset_list()[0],
+                        persistence=True),
+                    html.Hr(),
                     dbc.NavLink(  
                         Iconify("Home", "fa-solid fa-home", "25px"),
                         href="/", active="exact"),
@@ -126,15 +134,18 @@ content = html.Div(id="page-content", style=CONTENT_STYLE)
     Output("page-content", "children"), 
     Input("url", "pathname"),
     Input('project_selector', 'value'),
-    Input("url", "search")
+    Input("url", "search"),
+    Input("dataset_selector", "value")
+
 )
-def render_page_content(pathname, value, search):
+def render_page_content(pathname, value, search, dataset_value):
     if search:
         parsed = urllib.parse.urlparse(search)
         parsed_dict = urllib.parse.parse_qs(parsed.query)
     ctx = dash.callback_context
 
     redisUtil.set_current_project(value)
+    redisUtil.set_current_dataset(dataset_value)
 
     if pathname == "/":
         return get_home_page() 
@@ -176,9 +187,9 @@ if __name__ == "__main__":
         model_name = sys.argv[1]
 
     redisUtil.initialize(subscribers={"metric_detail", "metric_graph", "certificate"})
-    list = get_project_list()  # TODO: Rework
-    # redisUtil.set_current_project(next(iter(redisUtil.get_projects_list())))
-    redisUtil.set_current_project(model_name)
+    project_list = redisUtil.get_projects_list()
+    redisUtil.set_current_project(project_list[0])
+    redisUtil.set_current_dataset(redisUtil.get_dataset_list()[0])
     app.layout = html.Div([dcc.Location(id="url"), get_sidebar(), content])
 
     app.run_server(debug=False)

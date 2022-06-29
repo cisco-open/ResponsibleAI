@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 
 def get_mdl_image(nM, nD):
-    dataset = "test"
+    dataset = redisUtil.get_current_dataset()
     vs = redisUtil.get_metric_values()
     rf = pickle.loads(vs[nM][dataset]['tree_model_metadata']['estimator_params'][nD].encode('ISO-8859-1'))
     feat_names = vs[nM][dataset]['tree_model_metadata']['feature_names']
@@ -28,7 +28,7 @@ def get_mdl_image(nM, nD):
 
 
 def get_mdl_text(nM, nD):
-    dataset = "test"
+    dataset = redisUtil.get_current_dataset()
     vs = redisUtil.get_metric_values()
     rf = pickle.loads(vs[nM][dataset]['tree_model_metadata']['estimator_params'][nD].encode('ISO-8859-1'))
     feat_names = vs[nM][dataset]['tree_model_metadata']['feature_names']
@@ -42,7 +42,7 @@ def get_mdl_text(nM, nD):
 
 def get_form():
     ops = []
-    dataset = "test"
+    dataset = redisUtil.get_current_dataset()
     values = redisUtil.get_metric_values()
     for i, m in enumerate(values):
         ops.append({"label": m[dataset]["metadata"]["date"] + " - " + m[dataset]["metadata"]["tag"], "value": i})

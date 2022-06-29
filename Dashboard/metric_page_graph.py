@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 def get_trc_data(group, metric):
     d = {"x": [], "y": [], "tag": [], "metric": [], "text": []}
     # TODO: Need selector value for dataset
-    dataset = "test"
+    dataset = redisUtil.get_current_dataset()
     for i, data in enumerate(redisUtil.get_metric_values()):
         data = data[dataset]
         d["x"].append(i + 1)

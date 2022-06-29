@@ -42,7 +42,7 @@ class RedisUtils(object):
         self._redis_pub = self._redis.pubsub()
 
         try:
-            logger.info("channel subsribed")
+            logger.info("channel subscribed")
             self._redis_pub.subscribe(**{"update": sub_handler})
             self._threads.append(self._redis_pub.run_in_thread(sleep_time=.1))
         except:
@@ -97,6 +97,9 @@ class RedisUtils(object):
     def get_metric_values(self):
         return self._current_project["metric_values"]
 
+    def get_current_dataset(self):
+        return self._current_project["current_dataset"]
+
     def set_current_project(self, project_name):
         logger.info(f"changing current project from {self._current_project_name} to {project_name}")
         if self._current_project_name == project_name:
@@ -107,6 +110,9 @@ class RedisUtils(object):
         self._update_values()
         self._current_project = self._reformat_data(self._current_project)
 
+    def set_current_dataset(self, dataset):
+        self._current_project["current_dataset"] = dataset
+
     def _update_projects(self):
         self._projects = self._redis.smembers("projects")
         self._projects = [s.decode('utf-8') for s in self._projects]
@@ -114,8 +120,12 @@ class RedisUtils(object):
     def get_projects_list(self):
         return self._projects
 
+    def get_dataset_list(self):
+        return self._current_project["dataset_values"]
+
     def _update_info(self):
         self.info = {}
+        print("current project name: ", self._current_project_name)
         self._current_project["project_info"] = \
             json.loads(self._redis.get(self._current_project_name + '|project_info'))
         self._current_project["certificate_info"] = \
@@ -132,6 +142,13 @@ class RedisUtils(object):
         self._current_project["certificate_values"] = []
         for data in self._redis.lrange(self._current_project_name + '|certificate_values', 0, -1):
             self._current_project["certificate_values"].append(json.loads(data))
+
+        self._current_project["dataset_values"] = []
+        for item in self._current_project["metric_values"]:
+            for val in item:
+                if val not in self._current_project["dataset_values"]:
+                    self._current_project["dataset_values"].append(val)
+
 
     def _reformat_data(self, x):
         if type(x) is float:

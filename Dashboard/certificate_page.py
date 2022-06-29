@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 def get_form():
     ops = []
-    dataset = "test"
+    dataset = redisUtil.get_current_dataset()
     values = redisUtil.get_metric_values()
 
     for i, m in enumerate(values):
