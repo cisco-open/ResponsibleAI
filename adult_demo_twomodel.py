@@ -49,7 +49,8 @@ if use_dashboard:
 
 clf.fit(xTrain, yTrain)
 predictions = clf.predict(xTest)
-ai.compute({"test": {"predict": predictions}}, tag="Random Forest")
+predictions_train = clf.predict(xTrain)
+ai.compute({"test": {"predict": predictions}, "train": {"predict": predictions_train}}, tag="Random Forest 5 Estimator")
 if use_dashboard:
     r.add_measurement()
     r.delete_data("AdultDB_2")
@@ -57,16 +58,11 @@ if use_dashboard:
     r.delete_data("AdultDB")
 
 
-xTrain = np.hstack([xTrain, yTrain[:, np.newaxis]])
-xTrain, yTrain = SMOTE().fit_resample(xTrain, xTrain[:, -1])
-yTrain = xTrain[:, -1].astype(int)
-xTrain = xTrain[:, :-1]
-
-
-mdl = RandomForestClassifier(n_estimators=5, min_samples_leaf=20, max_depth=2)
+mdl = RandomForestClassifier(n_estimators=10, min_samples_leaf=20, max_depth=2)
 mdl.fit(xTrain, yTrain)
 predictions = mdl.predict(xTest)
-ai.compute({"test": {"predict": predictions}}, tag="Random Forest with Reweighting")
+predictions_train = mdl.predict(xTrain)
+ai.compute({"test": {"predict": predictions}, "train": {"predict": predictions_train}}, tag="Random Forest 10 Estimator")
 if use_dashboard:
     r.add_measurement()
     r.export_metadata()

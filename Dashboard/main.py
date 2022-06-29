@@ -190,6 +190,7 @@ if __name__ == "__main__":
     project_list = redisUtil.get_projects_list()
     redisUtil.set_current_project(project_list[0])
     redisUtil.set_current_dataset(redisUtil.get_dataset_list()[0])
+    print("Dataset list: ", redisUtil.get_dataset_list())
     app.layout = html.Div([dcc.Location(id="url"), get_sidebar(), content])
 
     app.run_server(debug=False)
