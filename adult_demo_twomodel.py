@@ -38,7 +38,7 @@ configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivil
                  "time_complexity": "polynomial"}
 
 dataset = Dataset({"train": Data(xTrain, yTrain), "test": Data(xTest, yTest)})
-ai = AISystem("AdultDB_Test1", task='binary_classification', meta_database=meta, dataset=dataset, model=model)
+ai = AISystem("AdultDB_3", task='binary_classification', meta_database=meta, dataset=dataset, model=model)
 ai.initialize(user_config=configuration)
 
 if use_dashboard:
@@ -47,56 +47,41 @@ if use_dashboard:
     r.reset_redis()
 
 
-def test_model(mdl, name, sample_weight=None):
-    mdl.fit(xTrain, yTrain, sample_weight=sample_weight)
-    ai.set_agent(mdl)
-    ai.compute({"test": {"predict": mdl.predict(xTest)}}, tag=name)
+clf.fit(xTrain, yTrain)
+predictions = clf.predict(xTest)
+ai.compute({"test": {"predict": predictions}}, tag="Random Forest")
+if use_dashboard:
+    r.add_measurement()
+    r.delete_data("AdultDB_2")
+    r.delete_data("AdultDB_Test1")
+    r.delete_data("AdultDB")
 
-    if use_dashboard:
-        r.add_measurement()
-
-
-# test random forest
-# mdl = RandomForestClassifier(n_estimators=10, criterion='entropy',
-#                              random_state=0, min_samples_leaf=5, max_depth=1)
-# test_model( mdl, "Random Forest d1")
-
-
-mdl = RandomForestClassifier(n_estimators=5, min_samples_leaf=20, max_depth=2)
-test_model(mdl, "Random Forest")
-
-
-# #test Ada Boost
-# mdl = AdaBoostClassifier(n_estimators=10  )
-# test_model( mdl, "Ada Boost")
-
-# xTrain = BinaryLabelDataset(favorable_label=1,
-#                                 unfavorable_label=0,
-#                                 df=xTrain,
-#                                 label_names=['output'],
-#                                 protected_attribute_names=['group'],
-#                                 unprivileged_protected_attributes=['0'])
-
-# idx = 8
-# s =  pd.value_counts(xTrain[:,idx]  )
-# f = s/sum(s)
-# print(f)
-# w = f[ xTrain[:,idx].astype(int)]
 
 xTrain = np.hstack([xTrain, yTrain[:, np.newaxis]])
 xTrain, yTrain = SMOTE().fit_resample(xTrain, xTrain[:, -1])
 yTrain = xTrain[:, -1].astype(int)
 xTrain = xTrain[:, :-1]
 
+
 mdl = RandomForestClassifier(n_estimators=5, min_samples_leaf=20, max_depth=2)
-test_model(mdl, "Random Forest with Reweighting")
+mdl.fit(xTrain, yTrain)
+predictions = mdl.predict(xTest)
+ai.compute({"test": {"predict": predictions}}, tag="Random Forest with Reweighting")
+if use_dashboard:
+    r.add_measurement()
+    r.export_metadata()
+
 
 metrics = ai.get_metric_values()
-metrics = metrics["test"]
 info = ai.get_metric_info()
 
+print("info: ", info)
+
+
+'''
 for g in metrics:
     for m in metrics[g]:
         if "type" in info[g][m]:
             if info[g][m]["type"] in ("numeric", "vector-dict", "text"):
                 print(g, m, metrics[g][m])
+'''

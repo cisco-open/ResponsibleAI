@@ -29,7 +29,7 @@ configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivil
                  "time_complexity": "polynomial"}
 
 dataset = Dataset({"train": Data(xTrain, yTrain), "test": Data(xTest, yTest)})
-ai = AISystem(name="AdultDB",  task='binary_classification', meta_database=meta, dataset=dataset, model=model)
+ai = AISystem(name="AdultDB_2",  task='binary_classification', meta_database=meta, dataset=dataset, model=model)
 ai.initialize(user_config=configuration)
 
 reg.fit(xTrain, yTrain)
@@ -42,7 +42,7 @@ if use_dashboard:
     r = RaiRedis(ai)
     r.connect()
     r.reset_redis()
-    r.add_measurement("test")
+    r.add_measurement()
     # r.viewGUI()
 
 reg2 = AdaBoostClassifier()
@@ -55,7 +55,7 @@ v = ai.get_metric_values()
 v = v["test"]
 info = ai.get_metric_info()
 if use_dashboard:
-    r.add_measurement("test")
+    r.add_measurement()
 
 for g in v:
     for m in v[g]:

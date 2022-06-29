@@ -12,7 +12,9 @@ def get_accordion(id):
     items = []
     # TODO: Add selector for dataset
     dataset = "test"
-    values = redisUtil.get_metric_values()[dataset][id]
+    values = redisUtil.get_metric_values()[id][dataset]
+    metric_info = redisUtil.get_metric_info()
+
     for group in values:
         rows = []
         for k, v in values[group].items():
@@ -35,7 +37,7 @@ def get_accordion(id):
             bordered=True, striped=True, responsive=True, size='sm')
         items.append(
             dbc.AccordionItem(children=detail,
-                              title=redisUtil.get_metric_info()[group]["meta"]["display_name"],
+                              title=metric_info[group]["meta"]["display_name"],
                               item_id=group)
         )
     return dbc.Accordion(items, active_item=items[0].item_id, flush=True)
@@ -45,8 +47,9 @@ def get_form():
     ops = []
     # TODO: Add selector for dataset
     dataset = "test"
-    values = redisUtil.get_metric_values()[dataset]
+    values = redisUtil.get_metric_values()
     for i, m in enumerate(values):
+        m = m[dataset]
         ops.append({"label": m["metadata"]["date"] + " - " + m["metadata"]["tag"], "value": i})
 
     dropdown = html.Div([

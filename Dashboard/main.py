@@ -171,14 +171,14 @@ def render_page_content(pathname, value, search):
 
 
 if __name__ == "__main__":
-    model_name = "AdultDB"
+    model_name = "AdultDB_3"
     if len(sys.argv) == 2:
         model_name = sys.argv[1]
 
     redisUtil.initialize(subscribers={"metric_detail", "metric_graph", "certificate"})
-    get_project_list()
-    redisUtil.set_current_project(next(iter(redisUtil.get_projects_list())))
-    
+    list = get_project_list()  # TODO: Rework
+    # redisUtil.set_current_project(next(iter(redisUtil.get_projects_list())))
+    redisUtil.set_current_project(model_name)
     app.layout = html.Div([dcc.Location(id="url"), get_sidebar(), content])
 
     app.run_server(debug=False)

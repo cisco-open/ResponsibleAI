@@ -50,7 +50,6 @@ def get_home_page():
     cert_values = redisUtil.get_certificate_values()[-1]
 
     # TODO: Add a chooser for the dataset
-    certs = certs["test"]
 
     for c in certs:
         for t in certs[c]["tags"]:

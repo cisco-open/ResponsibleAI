@@ -14,7 +14,8 @@ def get_trc_data(group, metric):
     d = {"x": [], "y": [], "tag": [], "metric": [], "text": []}
     # TODO: Need selector value for dataset
     dataset = "test"
-    for i, data in enumerate(redisUtil.get_metric_values()[dataset]):
+    for i, data in enumerate(redisUtil.get_metric_values()):
+        data = data[dataset]
         d["x"].append(i + 1)
         d["y"].append(data[group][metric])
         d["tag"].append(data["metadata"]["tag"])
@@ -91,7 +92,7 @@ def update_metrics(value):
         # return dcc.Dropdown([], id='select_metrics', persistence=True, persistence_type='session')
     metrics = []
     # TODO: Dataset selection
-    for m in redisUtil.get_metric_info()["test"][value]:
+    for m in redisUtil.get_metric_info()[value]:
         if m == "meta":
             continue
         if redisUtil.get_metric_info()[value][m]["type"] in ["numeric"]:
@@ -136,7 +137,6 @@ def update_graph(n, options, old):
             return old
 
     fig = go.Figure()
-    print('options === ', options)
 
     for item in options:
         k, v = item.split(',')

@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 def get_form():
     ops = []
     dataset = "test"
-    values = redisUtil.get_metric_values()[dataset]
+    values = redisUtil.get_metric_values()
 
     for i, m in enumerate(values):
         ops.append({"label": m[dataset]["metadata"]["date"] + " - " + m[dataset]["metadata"]["tag"], "value": i})

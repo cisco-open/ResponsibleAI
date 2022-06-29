@@ -24,6 +24,14 @@ class RaiRedis:
             self.export_metadata()
         self.redis_connection.publish('update', "cleared")
 
+    def delete_data(self, system_name) -> None:
+        to_delete = ["metric_values", "model_info", "metric_info", "metric", "certificate_metadata",
+                     "certificate_values", "certificate", "certificate_info", "project_info"]
+        for key in to_delete:
+            self.redis_connection.delete(system_name + "|" + key)
+        self.redis_connection.srem("projects", system_name)
+        self.redis_connection.publish('update', "cleared")
+
     def export_metadata(self) -> None:
         metric_info = self.ai_system.get_metric_info()
         certificate_info = self.ai_system.get_certificate_info()
@@ -34,18 +42,13 @@ class RaiRedis:
         self.redis_connection.set(self.ai_system.name + '|project_info', json.dumps(project_info))
         self.redis_connection.sadd("projects", self.ai_system.name)
 
-    def add_measurement(self, dataset: str) -> None:
+    def add_measurement(self) -> None:
         certificates = self.ai_system.get_certificate_values()
         metrics = self.ai_system.get_metric_values()
 
-        # certificates['metadata > date'] = {"value": self.ai_system._timestamp,
-        #                              "description": "time certificates were measured", "level": 1, "tags": ["metadata"]}
-        # certificates['metadata > description'] = {"value": tag, "description": "Purpose of measurement.", "tags": ["metadata"]}
         self.redis_connection.rpush(self.ai_system.name + '|certificate_values', json.dumps(certificates))  # True
-
-        # metrics['metadata']['tag'] = tag
         self.redis_connection.rpush(self.ai_system.name + '|metric_values', json.dumps(metrics))  # True
-        self.redis_connection.publish('update', "New measurement: %s" % metrics[dataset]["metadata"]["date"])
+        self.redis_connection.publish('update', "New measurement: %s" % metrics[list(metrics.keys())[0]]["metadata"]["date"])
 
     def viewGUI(self):
         gui_launcher = threading.Thread(target=self._view_gui_thread, args=[])

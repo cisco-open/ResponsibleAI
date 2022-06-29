@@ -124,7 +124,6 @@ def update_graph(n, metric, group, nC, old):
         if redisUtil.has_update("metric_graph", reset=True):
             logger.info("new data")
             redisUtil._subscribers["metric_graph"] = False
-            print("number of records = ", len(redisUtil.get_metric_values()[dataset]), metric, group)
         else:
             return old
 

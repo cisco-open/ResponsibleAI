@@ -13,9 +13,9 @@ logger = logging.getLogger(__name__)
 
 def get_mdl_image(nM, nD):
     dataset = "test"
-    vs = redisUtil.get_metric_values()[dataset]
-    rf = pickle.loads(vs[nM]['tree_model_metadata']['estimator_params'][nD].encode('ISO-8859-1'))
-    feat_names = vs[nM]['tree_model_metadata']['feature_names']
+    vs = redisUtil.get_metric_values()
+    rf = pickle.loads(vs[nM][dataset]['tree_model_metadata']['estimator_params'][nD].encode('ISO-8859-1'))
+    feat_names = vs[nM][dataset]['tree_model_metadata']['feature_names']
 
     fig = plt.figure(figsize=[6, 4])
     sklearn.tree.plot_tree(rf, filled=True, fontsize=8, feature_names=feat_names)
@@ -29,9 +29,9 @@ def get_mdl_image(nM, nD):
 
 def get_mdl_text(nM, nD):
     dataset = "test"
-    vs = redisUtil.get_metric_values()[dataset]
-    rf = pickle.loads(vs[nM]['tree_model_metadata']['estimator_params'][nD].encode('ISO-8859-1'))
-    feat_names = vs[nM]['tree_model_metadata']['feature_names']
+    vs = redisUtil.get_metric_values()
+    rf = pickle.loads(vs[nM][dataset]['tree_model_metadata']['estimator_params'][nD].encode('ISO-8859-1'))
+    feat_names = vs[nM][dataset]['tree_model_metadata']['feature_names']
     text_representation = sklearn.tree.export_text(rf, feature_names=feat_names)
     return html.Div([
         dcc.Textarea(id='textarea-example', value=text_representation,
@@ -43,9 +43,9 @@ def get_mdl_text(nM, nD):
 def get_form():
     ops = []
     dataset = "test"
-    values = redisUtil.get_metric_values()[dataset]
+    values = redisUtil.get_metric_values()
     for i, m in enumerate(values):
-        ops.append({"label": m["metadata"]["date"] + " - " + m["metadata"]["tag"], "value": i})
+        ops.append({"label": m[dataset]["metadata"]["date"] + " - " + m[dataset]["metadata"]["tag"], "value": i})
 
     dropdown = html.Div(
         [
@@ -55,13 +55,13 @@ def get_form():
         className="mb-3",
     )
 
-    vs = redisUtil.get_metric_values()[dataset]
+    vs = redisUtil.get_metric_values()
     dropdown_tree = html.Div(
         [
             dbc.Label("Select Decision Tree", html_for="dropdown"),
             dcc.Dropdown(
                 id="tree_selector",
-                options=list(range(len(vs[-1]['tree_model_metadata']['estimator_params']))),
+                options=list(range(len(vs[-1][dataset]['tree_model_metadata']['estimator_params']))),
                 value=0
             ),
         ],
