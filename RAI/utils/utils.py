@@ -7,7 +7,9 @@ from sklearn.preprocessing import StandardScaler
 
 from RAI.dataset import Feature, MetaDatabase
 
-__all__ = ['jsonify', 'compare_runtimes', 'df_to_meta_database', 'df_to_RAI', 'Reweighing', 'calculate_per_all_features', 'convert_to_feature_dict']
+__all__ = ['jsonify', 'compare_runtimes', 'df_to_meta_database', 'df_to_RAI', 'Reweighing',
+           'calculate_per_mapped_features',
+           'convert_to_feature_value_dict', 'convert_to_feature_dict', 'map_to_feature_array', 'map_to_feature_dict']
 
 
 def Reweighing():
@@ -122,7 +124,16 @@ def df_to_RAI(df, test_tf=None, target_column=None, clear_nans=True, extra_symbo
     return MetaDatabase(features), df.to_numpy().astype('float32'), y
 
 
-def map_feature_results(values, features, mapping):
+def map_to_feature_dict(values, features, mapping):
+    result = {}
+    for feature in features:
+        result[feature] = None
+    for i in range(len(values)):
+        result[features[mapping[i]]] = values[i]
+    return result
+
+
+def map_to_feature_array(values, features, mapping):
     result = [None] * len(features)
     for i in range(len(values)):
         result[mapping[i]] = values[i]
@@ -136,15 +147,33 @@ def calculate_per_feature(function, X, *args, **kwargs):
     return result
 
 
-def calculate_per_all_features(function, mapping, features, X, *args, **kwargs):
+def calculate_per_mapped_features(function, mapping, features, X, *args, to_array=True, **kwargs):
     result = []
     for i in range(np.shape(X)[1]):
         result.append(function(X[:, i], *args, **kwargs))
-    return map_feature_results(result, features, mapping)
+    if to_array:
+        return map_to_feature_array(result, features, mapping)
+    else:
+        return map_to_feature_dict(result, features, mapping)
 
 
-def convert_to_feature_dict(values, feature):
+def convert_to_feature_dict(values, features):
+    result = {}
+    for i, feature in enumerate(features):
+        result[feature] = values[i]
+    return result
+
+
+def convert_to_feature_value_dict(values, feature):
     result = {}
     for i in range(len(values)):
         result[feature.values[i]] = values[i]
     return result
+
+
+def convert_float32_to_float64(values):
+    print("Values recieved: ", values)
+    for i in range(len(values)):
+        if isinstance(values[i], np.float32):
+            values[i] = np.float64(values[i])
+    return values

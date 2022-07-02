@@ -1,6 +1,6 @@
 from RAI.metrics.metric_group import MetricGroup
 import scipy.stats
-from RAI.utils.utils import calculate_per_all_features
+from RAI.utils.utils import calculate_per_mapped_features, convert_to_feature_dict
 import os
 
 
@@ -20,4 +20,9 @@ class BinaryCorrelationStats(MetricGroup, class_location=os.path.abspath(__file_
         map = self.ai_system.meta_database.categorical_map
         features = self.ai_system.meta_database.features
 
-        self.metrics["point_biserial_r"].value = calculate_per_all_features(scipy.stats.pointbiserialr, map, features, data.categorical, data.y)
+        self.metrics["point_biserial_r"].value = calculate_per_mapped_features(scipy.stats.pointbiserialr, map, features, data.categorical, data.y)
+        for i, value in enumerate(self.metrics["point_biserial_r"].value):
+            if value is not None:
+                temp = self.metrics["point_biserial_r"].value[i]
+                result = {"correlation": temp.correlation, "pvalue": temp.pvalue}
+                self.metrics["point_biserial_r"].value[i] = result

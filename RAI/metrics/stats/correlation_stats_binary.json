@@ -11,7 +11,7 @@
     "metrics": {
         "point_biserial_r": {
             "display_name": "Point Biserial Coefficient",
-            "type": "vector",
+            "type": "feature-array",
             "has_range": true,
             "range": [-1, 1],
             "explanation": "Indicates the relationship between a binary variable and a continuous variable."

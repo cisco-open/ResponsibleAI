@@ -51,6 +51,10 @@ clf.fit(xTrain, yTrain)
 predictions = clf.predict(xTest)
 predictions_train = clf.predict(xTrain)
 ai.compute({"test": {"predict": predictions}, "train": {"predict": predictions_train}}, tag="Random Forest 5 Estimator")
+
+metrics = ai.get_metric_values()
+info = ai.get_metric_info()
+
 if use_dashboard:
     r.add_measurement()
     r.delete_data("AdultDB_2")
@@ -71,13 +75,10 @@ if use_dashboard:
 metrics = ai.get_metric_values()
 info = ai.get_metric_info()
 
-print("info: ", info)
+# print("info: ", info)
 
 
-'''
-for g in metrics:
-    for m in metrics[g]:
-        if "type" in info[g][m]:
-            if info[g][m]["type"] in ("numeric", "vector-dict", "text"):
-                print(g, m, metrics[g][m])
-'''
+for d in metrics:
+    for g in metrics[d]:
+        for m in metrics[d][g]:
+            print(m, ": ", metrics[d][g][m])

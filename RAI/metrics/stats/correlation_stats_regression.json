@@ -11,14 +11,14 @@
     "metrics": {
         "pearson_correlation": {
             "display_name": "Pearson's Correlation'",
-            "type": "vector",
+            "type": "feature-array",
             "has_range": true,
             "range": [-1, 1],
             "explanation": "Indicates if a statistically significance relationship is found between variables."
         },
         "spearman_correlation": {
             "display_name": "Spearman's Correlation",
-            "type": "vector",
+            "type": "feature-array",
             "has_range": true,
             "range": [-1, 1],
             "explanation": "Measures rank correlation. Indicates how well can two variables be described with a monotonic function."

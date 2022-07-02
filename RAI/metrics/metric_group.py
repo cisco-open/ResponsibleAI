@@ -93,6 +93,11 @@ class MetricGroup(object):
                 if type(self.metrics[metric_name].value[1]) is np.ndarray:
                     val = val.tolist()
                 results[metric_name + "-individual"] = val  # Easily modify to export for each value.
+            elif self.metrics[metric_name].type == 'feature-array':
+                val = val = self.metrics[metric_name].value
+                if type(self.metrics[metric_name].value) is np.ndarray:
+                    val = val.tolist()
+                results[metric_name] = val
             else:
                 results[metric_name] = self.metrics[metric_name].value
         return results

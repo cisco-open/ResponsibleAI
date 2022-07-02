@@ -49,8 +49,6 @@ def get_home_page():
     score_perform = []
     cert_values = redisUtil.get_certificate_values()[-1]
 
-    # TODO: Add a chooser for the dataset
-
     for c in certs:
         for t in certs[c]["tags"]:
             if "explain" in t.lower():

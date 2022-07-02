@@ -11,14 +11,14 @@
     "metrics": {
         "siegel_slopes": {
             "display_name": "Siegel Estimator",
-            "type": "vector",
+            "type": "feature-array",
             "has_range": false,
             "range": null,
             "explanation": ""
         },
         "theil_slopes": {
             "display_name": "Theil-Sen Estimator",
-            "type": "vector",
+            "type": "feature-array",
             "has_range": false,
             "range": null,
             "explanation": ""

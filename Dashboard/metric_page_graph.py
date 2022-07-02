@@ -7,27 +7,39 @@ from server import app, redisUtil
 from dash import dcc
 import plotly.express as px
 import plotly.graph_objs as go
+from display_types import NumericalElement, FeatureArrayElement
 logger = logging.getLogger(__name__)
 
 
 def get_trc_data(group, metric):
     d = {"x": [], "y": [], "tag": [], "metric": [], "text": []}
-    # TODO: Need selector value for dataset
     dataset = redisUtil.get_current_dataset()
-    for i, data in enumerate(redisUtil.get_metric_values()):
-        data = data[dataset]
-        d["x"].append(i + 1)
-        d["y"].append(data[group][metric])
-        d["tag"].append(data["metadata"]["tag"])
-        d["metric"].append(f"{metric}")
-        d["text"].append("%.2f" % data[group][metric])
+    # TODO: Make a list of which metric_values instances use the dataset
+    metric_values = redisUtil.get_metric_values()
+    metric_type = redisUtil.get_metric_info()
+    type = metric_type[group][metric]["type"]
+    display_obj = None
+    if type == "numeric":
+        display_obj = NumericalElement(metric)
+    elif type == "feature-array":
+        display_obj = FeatureArrayElement(metric, redisUtil.get_project_info()["features"])
+    else:
+        assert("Metric type " + type + " must be one of (numeric, vector-array)")
 
+    for i, data in enumerate(metric_values):
+        data = data[dataset]
+        print("Value: ", data[group][metric])
+        display_obj.append(data[group][metric], data["metadata"]["tag"])
+    return display_obj.to_display()
+
+    '''
     sc_data = {'mode': 'lines+markers+text',
                'name': f"{group}, {metric}", 'orientation': 'v', 'showlegend': True,
                'text': d["text"], 'x': d["x"], 'xaxis': 'x', 'y': d['y'], 'yaxis': 'y', 'type': 'scatter',
                'textposition': 'top center',
                'hovertemplate': 'metric=' + metric + '<br>x=%{x}<br>value=%{y}<br>text=%{text}<extra></extra>'}
     return d["tag"], sc_data
+    '''
 
 
 def get_selectors():
@@ -55,7 +67,6 @@ def get_selectors():
         ),
         style={"margin": "2px", "margin-bottom": "20px",}
     )
-
 
 def get_graph():
     d = {"x": [], "value": [], "tag": [], "metric": []}
@@ -91,14 +102,13 @@ def update_metrics(value):
         return [], None
         # return dcc.Dropdown([], id='select_metrics', persistence=True, persistence_type='session')
     metrics = []
-    # TODO: Dataset selection
     for m in redisUtil.get_metric_info()[value]:
         if m == "meta":
             continue
-        if redisUtil.get_metric_info()[value][m]["type"] in ["numeric"]:
+        if redisUtil.get_metric_info()[value][m]["type"] in ["numeric", "feature-array"]:
             metrics.append(m)
     return metrics, None
-    # return  dcc.Dropdown( metrics,  id='select_metrics',persistence=True, persistence_type='session')
+    # return dcc.Dropdown( metrics,  id='select_metrics',persistence=True, persistence_type='session')
 
 
 @app.callback(
@@ -137,24 +147,12 @@ def update_graph(n, options, old):
             return old
 
     fig = go.Figure()
-
-    for item in options:
-        k, v = item.split(',')
-        print(k, v)
-        print('---------------------------')
-        tags, sc_data = get_trc_data(k, v)
-        fig.add_traces(go.Scatter(**sc_data))
-
-    if not options:
+    if len(options) == 0:
         return fig
 
-    fig.update_traces(textposition="top center")
-    fig.update_layout(
-        xaxis=dict(tickmode='array', tickvals=sc_data["x"], ticktext=tags),
-        legend=dict(title_font_family="Times New Roman",
-                    font=dict(family="Times New Roman", size=14, color="black"),
-                    bgcolor="Azure",
-                    bordercolor="Black",
-                    borderwidth=1)
-    )
+    item = options[-1]
+    k, v = item.split(',')
+    print(k, v)
+    print('---------------------------')
+    fig = get_trc_data(k, v)
     return fig

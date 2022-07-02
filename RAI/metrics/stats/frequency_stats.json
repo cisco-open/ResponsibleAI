@@ -11,14 +11,14 @@
     "metrics": {
         "relfreq": {
             "display_name": "Relative Frequency",
-            "type": "vector-dict",
+            "type": "feature-value-dict",
             "has_range": true,
             "range": [0, null],
             "explanation": "Indicates the relative count of each subclass."
         },
         "cumfreq": {
             "display_name": "Cumulative Frequency",
-            "type": "vector-dict",
+            "type": "feature-value-dict",
             "has_range": true,
             "range": [0, null],
             "explanation": "Indicates the cumulative count of each subclass."
