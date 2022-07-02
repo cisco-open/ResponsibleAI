@@ -172,7 +172,6 @@ def convert_to_feature_value_dict(values, feature):
 
 
 def convert_float32_to_float64(values):
-    print("Values recieved: ", values)
     for i in range(len(values)):
         if isinstance(values[i], np.float32):
             values[i] = np.float64(values[i])
