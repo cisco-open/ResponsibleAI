@@ -1,5 +1,4 @@
 from .traceable_element import TraceableElement
-import plotly.graph_objs as go
 
 
 # For single valued numeric metrics, like accuracy
@@ -21,38 +20,3 @@ class NumericalElement(TraceableElement):
 
     def to_string(self):
         print(self._data)
-
-    def to_display(self):
-        sc_data = {'mode': 'lines+markers+text',
-                   'name': f"{self._name}", 'orientation': 'v', 'showlegend': True,
-                   'text': self._data["text"], 'x': self._data["x"], 'xaxis': 'x', 'y': self._data['y'], 'yaxis': 'y',
-                   'type': 'scatter', 'textposition': 'top center',
-                   'hovertemplate': 'metric=' + self._name + '<br>x=%{x}<br>value=%{y}<br>text=%{text}<extra></extra>'}
-        fig = go.Figure()
-        fig.add_trace(go.Scatter(**sc_data))
-        fig.update_traces(textposition="top center")
-        fig.update_layout(
-            xaxis=dict(tickmode='array', tickvals=sc_data["x"], ticktext=self._data["tag"]),
-            legend=dict(title_font_family="Times New Roman",
-                        font=dict(family="Times New Roman", size=14, color="black"),
-                        bgcolor="Azure",
-                        bordercolor="Black",
-                        borderwidth=1))
-        return fig
-
-    def add_trace_to(self, fig):
-        sc_data = {'mode': 'lines+markers+text',
-                   'name': f"{self._name}", 'orientation': 'v', 'showlegend': True,
-                   'text': self._data["text"], 'x': self._data["x"], 'xaxis': 'x', 'y': self._data['y'], 'yaxis': 'y',
-                   'type': 'scatter', 'textposition': 'top center',
-                   'hovertemplate': 'metric=' + self._name + '<br>x=%{x}<br>value=%{y}<br>text=%{text}<extra></extra>'}
-        fig.add_trace(go.Scatter(**sc_data))
-        fig.update_traces(textposition="top center")
-        fig.update_layout(
-            xaxis=dict(tickmode='array', tickvals=sc_data["x"], ticktext=self._data["tag"]),
-            legend=dict(title_font_family="Times New Roman",
-                        font=dict(family="Times New Roman", size=14, color="black"),
-                        bgcolor="Azure",
-                        bordercolor="Black",
-                        borderwidth=1))
-        return fig

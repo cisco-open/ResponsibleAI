@@ -7,7 +7,7 @@ from server import app, redisUtil
 from dash import dcc
 import plotly.express as px
 import plotly.graph_objs as go
-from display_types import NumericalElement, FeatureArrayElement
+from display_types import NumericalElement, BooleanElement
 logger = logging.getLogger(__name__)
 
 
@@ -21,6 +21,8 @@ def add_trace_to(fig, group, metric):
     display_obj = None
     if type == "numeric":
         display_obj = NumericalElement(metric)
+    elif type == "boolean":
+        display_obj = BooleanElement(metric)
     for i, data in enumerate(metric_values):
         data = data[dataset]
         print("Metric value: ", metric, " ", data[group][metric])
@@ -43,11 +45,12 @@ def get_selectors():
                                  persistence_type='session', placeholder="Select a metric group", ),
                     html.P(""),
                     dbc.Label("select metric", html_for="select_metric_cnt"),
-                    dcc.Dropdown([], id='select_metric_dd', value=None, placeholder="Select a metric", ),
+                    dcc.Dropdown([], id='select_metric_dd', value=[], placeholder="Select a metric", persistence=True,
+                                 persistence_type='session'),
                 ], style={"width": "70%"}),
                 dbc.Col([
                     dbc.Button("Reset Graph", id="reset_graph", style={"margin-left": "20%"}, color="secondary")
-                ], style={"width": "20%"}),
+                ], style={"width": "20%"})
             ])],
             style={"background-color": "rgb(240,250,255)", "width": "100%  ", "border": "solid",
                   "border-color": "silver", "border-radius": "5px", "padding": "50px"}
@@ -82,21 +85,28 @@ def get_metric_page_graph():
 
 @app.callback(
     Output('select_metric_dd', 'options'),
-    Output('select_metric_dd', 'value'),
     Input('select_group', 'value'))
 def update_metrics(value):
+    print("updating metrics")
     if not value:
         logger.info("no value for update")
-        return [], None
+        return []
         # return dcc.Dropdown([], id='select_metrics', persistence=True, persistence_type='session')
     metrics = []
     for m in redisUtil.get_metric_info()[value]:
         if m == "meta":
             continue
-        if redisUtil.get_metric_info()[value][m]["type"] in ["numeric"]:
+        if redisUtil.get_metric_info()[value][m]["type"] in ["numeric", "boolean"]:
             metrics.append(m)
-    return metrics, None
+    return metrics
     # return dcc.Dropdown( metrics,  id='select_metrics',persistence=True, persistence_type='session')
+
+
+def create_options_children(options):
+    res = []
+    for item in options:
+        res.append(dbc.ListGroupItem(item))
+    return res
 
 
 @app.callback(
@@ -107,15 +117,16 @@ def update_metrics(value):
     State('legend_data', 'data')
 )
 def update_options(metric, clk, group, options):
+    print("metric: ", metric, ", group: ", group, ", options: ", options)
     ctx = dash.callback_context
     if 'prop_id' in ctx.triggered[0] and ctx.triggered[0]['prop_id'] == 'reset_graph.n_clicks':
         return []
     if metric is None or group is None:
-        return options
-
+        return options  # [] set to options to retain settings
     item = group + "," + metric
     if item not in options:
         options.append(item)
+    print("options: ", options)
     return options
 
 
@@ -137,8 +148,9 @@ def update_graph(n, options, old):
     fig = go.Figure()
     if len(options) == 0:
         return fig
-
+    print("options: ", options)
     for item in options:
+        print("split: ", item.split(','))
         k, v = item.split(',')
         print(k, v)
         print('---------------------------')

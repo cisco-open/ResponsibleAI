@@ -7,7 +7,7 @@ from server import app, redisUtil
 from dash import dcc
 import plotly.express as px
 import plotly.graph_objs as go
-from display_types import NumericalElement, FeatureArrayElement
+from display_types import NumericalElement, FeatureArrayElement, BooleanElement
 logger = logging.getLogger(__name__)
 
 
@@ -23,8 +23,10 @@ def get_trc_data(group, metric):
         display_obj = NumericalElement(metric)
     elif type == "feature-array":
         display_obj = FeatureArrayElement(metric, redisUtil.get_project_info()["features"])
+    elif type == "boolean":
+        display_obj = BooleanElement(metric)
     else:
-        assert("Metric type " + type + " must be one of (numeric, vector-array)")
+        assert("Metric type " + type + " must be one of (numeric, vector-array, bool)")
     for i, data in enumerate(metric_values):
         data = data[dataset]
         print("Value: ", data[group][metric])
@@ -46,7 +48,8 @@ def get_selectors():
                                  persistence_type='session', placeholder="Select a metric group"),
                     html.P(""),
                     dbc.Label("select metric", html_for="select_metric_cnt"),
-                    dcc.Dropdown([], id='indiv_select_metric_dd', value=None, placeholder="Select a metric"),
+                    dcc.Dropdown([], id='indiv_select_metric_dd', value=None, placeholder="Select a metric",
+                                 persistence=True, persistence_type='session'),
                 ], style={"width": "70%"}),
                 dbc.Col([
                     dbc.Button("Reset Graph", id="indiv_reset_graph", style={"margin-left": "20%"}, color="secondary")
@@ -55,7 +58,7 @@ def get_selectors():
             style={"background-color": "rgb(240,250,255)", "width": "100%  ", "border": "solid",
                   "border-color": "silver", "border-radius": "5px", "padding": "50px"}
         ),
-        style={"margin": "2px", "margin-bottom": "20px",}
+        style={"margin": "2px", "margin-bottom": "20px"}
     )
 
 
@@ -85,20 +88,19 @@ def get_single_metric_display():
 
 @app.callback(
     Output('indiv_select_metric_dd', 'options'),
-    Output('indiv_select_metric_dd', 'value'),
     Input('indiv_select_group', 'value'))
 def update_metrics(value):
     if not value:
         logger.info("no value for update")
-        return [], None
+        return []
         # return dcc.Dropdown([], id='select_metrics', persistence=True, persistence_type='session')
     metrics = []
     for m in redisUtil.get_metric_info()[value]:
         if m == "meta":
             continue
-        if redisUtil.get_metric_info()[value][m]["type"] in ["numeric", "feature-array"]:
+        if redisUtil.get_metric_info()[value][m]["type"] in ["numeric", "feature-array", "boolean"]:
             metrics.append(m)
-    return metrics, None
+    return metrics
     # return dcc.Dropdown( metrics,  id='select_metrics',persistence=True, persistence_type='session')
 
 
@@ -109,12 +111,12 @@ def update_metrics(value):
     State('indiv_select_group', 'value'),
     State('indiv_legend_data', 'data')
 )
-def update_options(metric, clk, group, options):
+def update_options(metric, btn, group, options):
     ctx = dash.callback_context
     if 'prop_id' in ctx.triggered[0] and ctx.triggered[0]['prop_id'] == 'indiv_reset_graph.n_clicks':
-        return ""
+        return None
     if metric is None or group is None:
-        return options
+        return options  # None set to options to retain settings
     return group + "," + metric
 
 

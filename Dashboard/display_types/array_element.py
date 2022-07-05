@@ -12,6 +12,3 @@ class ArrayElement(DisplayElement):
 
     def to_display(self):
         pass
-
-
-
