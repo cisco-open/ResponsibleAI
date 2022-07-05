@@ -26,6 +26,7 @@ from single_metric_info_page import get_single_model_info_page
 from certificate_info_page import get_certificate_info_page
 from metric_page_details import get_metric_page_details
 from metric_page_graph import get_metric_page_graph
+from single_metric_view_page import get_single_metric_display
 from setting_page import get_setting_page
 from model_view_page import get_model_view_page
 from utils import Iconify
@@ -102,6 +103,9 @@ def get_sidebar():
                         Iconify("Metrics Graphs", "fa-solid fa-chart-gantt", "18px"),
                         href="/metrics_graphs", active="exact"),
                     dbc.NavLink(
+                        Iconify("Individual Metric View", "fa-solid fa-chart-gantt", "18px"),
+                        href="/individual_metric_view", active="exact"),
+                    dbc.NavLink(
                         Iconify("Certificates", "fa-solid fa-list-check", "45px"),
                         href="/certificates", active="exact"),
                     html.Hr(),
@@ -158,6 +162,8 @@ def render_page_content(pathname, value, search, dataset_value):
         return get_metric_page_details() 
     elif pathname == "/metrics_graphs":
         return get_metric_page_graph()
+    elif pathname == "/individual_metric_view":
+        return get_single_metric_display()
     elif pathname == "/certificates":
         return get_certificate_page()
     elif pathname == "/modelInfo":
