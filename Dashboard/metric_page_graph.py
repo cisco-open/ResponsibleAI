@@ -54,6 +54,18 @@ def get_search_options():
     return valid_searches
 
 
+def get_default_metric_options(groups):
+    if len(groups) == 0:
+        return []
+    result = []
+    for m in redisUtil.get_metric_info()[groups[0]]:
+        if m == "meta":
+            continue
+        if redisUtil.get_metric_info()[groups[0]][m]["type"] in requirements:
+            result.append(m)
+    return result
+
+
 def get_selectors():
     groups = []
     for g in redisUtil.get_metric_info():
@@ -68,8 +80,8 @@ def get_selectors():
                                  persistence_type='session', placeholder="Select a metric group", ),
                     html.P(""),
                     dbc.Label("select metric", html_for="select_metric_cnt"),
-                    dcc.Dropdown([], id='select_metric_dd', value=[], placeholder="Select a metric", persistence=True,
-                                 persistence_type='session'),
+                    dcc.Dropdown(get_default_metric_options(groups), id='select_metric_dd', value=None,
+                                 placeholder="Select a metric", persistence=True, persistence_type='session'),
                 ], style={"width": "70%"}),
                 dbc.Col([
                     dbc.Button("Reset Graph", id="reset_graph", style={"margin-left": "20%"}, color="secondary"),
@@ -160,7 +172,7 @@ def update_options(metric, metric_search, clk_reset, clk_display_group, group, o
     print("metric: ", metric, ", group: ", group, ", options: ", options)
     ctx = dash.callback_context
     if 'prop_id' in ctx.triggered[0] and ctx.triggered[0]['prop_id'] == 'reset_graph.n_clicks':
-        return [], None, None, None
+        return [], group, None, None
     elif 'prop_id' in ctx.triggered[0] and ctx.triggered[0]['prop_id'] == 'display_group.n_clicks':
         print("Add all")
         for metric in metric_choices:

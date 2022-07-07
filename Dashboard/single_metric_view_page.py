@@ -89,7 +89,7 @@ def get_selectors():
                 html.P(""),
                 dbc.Label("Select Tag", html_for="select_metric_tag"),
                 dcc.Dropdown([], id='indiv_select_metric_tag', value=None, placeholder="Select a tag",
-                     persistence=True, persistence_type='session')], id="select_metric_tag_col", style={"display": 'none'})],
+                     persistence=True, persistence_type='session')], id="indiv_select_metric_tag_col", style={"display": 'none'})],
                 id="indiv_tag_selector_row")],
             style={"background-color": "rgb(240,250,255)", "width": "100%  ", "border": "solid",
                   "border-color": "silver", "border-radius": "5px", "padding": "50px"}
@@ -154,15 +154,14 @@ def update_metrics(value):
 def update_options(metric, metric_search, btn, group, options):
     ctx = dash.callback_context
     if 'prop_id' in ctx.triggered[0] and ctx.triggered[0]['prop_id'] == 'indiv_reset_graph.n_clicks':
-        return None, group, metric, None
-    if 'prop_id' in ctx.triggered[0] and ctx.triggered[0]['prop_id'] == 'metric_search.value':
+        return None, group, None, None
+    if 'prop_id' in ctx.triggered[0] and ctx.triggered[0]['prop_id'] == 'indiv_metric_search.value':
         print("searched")
         if metric_search is None:
             return options, group, metric, None
-        else:
-            vals = metric_search.split(" | ")
-            print("need to change options to ", vals[1] + "," + vals[0])
-            return vals[1] + "," + vals[0], vals[1], vals[0], metric_search
+        vals = metric_search.split(" | ")
+        print("need to change options to ", vals[1] + "," + vals[0])
+        return vals[1] + "," + vals[0], vals[1], vals[0], metric_search
     if metric is None or group is None:
         return options, group, metric, metric_search  # None set to options to retain settings
     return group + "," + metric, group, metric, metric + " | " + group
@@ -170,14 +169,14 @@ def update_options(metric, metric_search, btn, group, options):
 
 @app.callback(
     Output('indiv_graph_cnt', 'children'),
-    Output('select_metric_tag_col', 'style'),
+    Output('indiv_select_metric_tag_col', 'style'),
     Output('indiv_select_metric_tag', 'options'),
     Output('indiv_select_metric_tag', 'value'),
     Input('indiv-interval-component', 'n_intervals'),
     Input('indiv_legend_data', 'data'),
     Input('indiv_select_metric_tag', 'value'),
     State('indiv_graph_cnt', 'children'),
-    State('select_metric_tag_col', 'style'),
+    State('indiv_select_metric_tag_col', 'style'),
     State('indiv_select_metric_tag', 'options'),
     State('indiv_select_metric_tag', 'value')
 )
