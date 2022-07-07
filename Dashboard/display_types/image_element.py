@@ -1,6 +1,7 @@
 from display_object import DisplayElement
 
 
+# TODO: Implement once we have an image
 # For metrics which return arrays unrelated to features
 class ImageElement(DisplayElement):
     def __init__(self, data):

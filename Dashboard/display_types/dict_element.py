@@ -9,6 +9,7 @@ class DictElement(DisplayElement):
         super().__init__(name)
         self._data["features"] = None
         self._data["row"] = []
+        self._data["tag"] = []
         self.x = 0
 
     def _dfs(self, my_dict, prev, result):
@@ -28,6 +29,7 @@ class DictElement(DisplayElement):
             self._data["features"] = result
 
         print("features: ", self._data["features"])
+        self._data["tag"].append(tag)
         i = 0
         new_dict = {}
         for features in self._data["features"]:
@@ -45,11 +47,17 @@ class DictElement(DisplayElement):
     def to_display(self):
         header = [{"name": i, "id": num} for num, i in enumerate(self._data["features"])]
 
+        header.insert(0, {"name": ["RAI Tag"], "id": -1})
+        tagged_data = self._data["row"].copy()
+        for i, row in enumerate(tagged_data):
+            row[-1] = self._data["tag"][i]
+
         print("header: ", header)
-        print("\nValues: ", self._data["row"])
+        print("\nData: ", self._data["row"])
+        print("\nTagged Data: ", tagged_data)
 
         table = dash_table.DataTable(
-            data=self._data["row"],
+            data=tagged_data,
             columns=header,
             style_table={'overflowX': 'auto'},
             export_headers='display',
