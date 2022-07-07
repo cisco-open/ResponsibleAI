@@ -62,7 +62,11 @@ def get_selectors():
                                  persistence_type='session'),
                 ], style={"width": "70%"}),
                 dbc.Col([
-                    dbc.Button("Reset Graph", id="reset_graph", style={"margin-left": "20%"}, color="secondary")
+                    dbc.Button("Reset Graph", id="reset_graph", style={"margin-left": "20%"}, color="secondary"),
+                    html.Br(),
+                    html.Br(),
+                    dbc.Button("Display Group", id="display_group", color="secondary",
+                               style={"margin-left": "20%", "display": 'block' if groups else 'none'})
                 ], style={"width": "20%"})
             ])],
             style={"background-color": "rgb(240,250,255)", "width": "100%  ", "border": "solid",
@@ -98,20 +102,23 @@ def get_metric_page_graph():
 
 @app.callback(
     Output('select_metric_dd', 'options'),
+    Output('display_group', 'style'),
     Input('select_group', 'value'))
 def update_metrics(value):
     print("updating metrics")
+    display_style = {"margin-left": "20%", "display": 'none'}
     if not value:
         logger.info("no value for update")
-        return []
+        return [], display_style
         # return dcc.Dropdown([], id='select_metrics', persistence=True, persistence_type='session')
     metrics = []
     for m in redisUtil.get_metric_info()[value]:
         if m == "meta":
             continue
-        if redisUtil.get_metric_info()[value][m]["type"] in ["numeric", "boolean"]:
+        if redisUtil.get_metric_info()[value][m]["type"] in requirements:
             metrics.append(m)
-    return metrics
+    display_style['display'] = 'block'
+    return metrics, display_style
     # return dcc.Dropdown( metrics,  id='select_metrics',persistence=True, persistence_type='session')
 
 
@@ -126,22 +133,30 @@ def create_options_children(options):
     Output('legend_data', 'data'),
     Input('select_metric_dd', 'value'),
     Input('reset_graph', "n_clicks"),
+    Input('display_group', "n_clicks"),
     State('select_group', 'value'),
-    State('legend_data', 'data')
+    State('legend_data', 'data'),
+    State('select_metric_dd', 'options')
 )
-def update_options(metric, clk, group, options):
+def update_options(metric, clk_reset, clk_display_group, group, options, metric_choices):
     print("metric: ", metric, ", group: ", group, ", options: ", options)
     ctx = dash.callback_context
     if 'prop_id' in ctx.triggered[0] and ctx.triggered[0]['prop_id'] == 'reset_graph.n_clicks':
         return []
-    if metric is None or group is None:
+    elif 'prop_id' in ctx.triggered[0] and ctx.triggered[0]['prop_id'] == 'display_group.n_clicks':
+        print("Add all")
+        for metric in metric_choices:
+            item = group + "," + metric
+            if item not in options:
+                options.append(item)
+        return options
+    elif metric is None or group is None:
         return options  # [] set to options to retain settings
     item = group + "," + metric
     if item not in options:
         options.append(item)
     print("options: ", options)
     return options
-
 
 @app.callback(
     Output('graph_cnt', 'children'),

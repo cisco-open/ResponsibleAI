@@ -165,7 +165,6 @@ def update_graph(n, options, tag_selection, old_graph, old_style, old_children, 
         else:
             return old_graph, old_style, old_children, old_value
     elif 'prop_id' in ctx.triggered[0] and ctx.triggered[0]['prop_id'] == 'indiv_select_metric_tag.value':
-        print("Different value selected")
         k, v = options.split(',')
         display_obj, _ = get_display_data(k, v)
         tags = display_obj.get_tags()

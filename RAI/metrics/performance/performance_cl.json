@@ -113,14 +113,6 @@
             "has_range": true,
             "range": [0, 1],
             "explanation": "Recall Scores indicates a models ability to classify all positive image samples"
-        },
-        "tp_rate_avg": {
-            "display_name": "Average True Positive Rate",
-            "type": "numeric",
-            "tags": [],
-            "has_range": true,
-            "range": [0, 1],
-            "explanation": "True Positive Rate is the probability that a positive example will be predicted to be positive."
         }
     }
 }
