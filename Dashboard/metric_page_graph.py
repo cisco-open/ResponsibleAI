@@ -44,6 +44,16 @@ def get_nonempty_groups(requirements):
     return valid_groups
 
 
+def get_search_options():
+    metric_info = redisUtil.get_metric_info()
+    valid_searches = []
+    for group in metric_info:
+        for metric in metric_info[group]:
+            if "type" in metric_info[group][metric] and metric_info[group][metric]["type"] in requirements:
+                valid_searches.append(metric + " | " + group)
+    return valid_searches
+
+
 def get_selectors():
     groups = []
     for g in redisUtil.get_metric_info():
@@ -63,6 +73,10 @@ def get_selectors():
                 ], style={"width": "70%"}),
                 dbc.Col([
                     dbc.Button("Reset Graph", id="reset_graph", style={"margin-left": "20%"}, color="secondary"),
+                    html.Br(),
+                    html.Br(),
+                    html.Br(),
+                    dcc.Dropdown(get_search_options(), id='metric_search', value=None, placeholder="Search Metrics"),
                     html.Br(),
                     html.Br(),
                     dbc.Button("Display Group", id="display_group", color="secondary",
@@ -131,32 +145,47 @@ def create_options_children(options):
 
 @app.callback(
     Output('legend_data', 'data'),
+    Output('select_group', 'value'),
+    Output('select_metric_dd', 'value'),
+    Output('metric_search', 'value'),
     Input('select_metric_dd', 'value'),
+    Input('metric_search', 'value'),
     Input('reset_graph', "n_clicks"),
     Input('display_group', "n_clicks"),
     State('select_group', 'value'),
     State('legend_data', 'data'),
     State('select_metric_dd', 'options')
 )
-def update_options(metric, clk_reset, clk_display_group, group, options, metric_choices):
+def update_options(metric, metric_search, clk_reset, clk_display_group, group, options, metric_choices):
     print("metric: ", metric, ", group: ", group, ", options: ", options)
     ctx = dash.callback_context
     if 'prop_id' in ctx.triggered[0] and ctx.triggered[0]['prop_id'] == 'reset_graph.n_clicks':
-        return []
+        return [], None, None, None
     elif 'prop_id' in ctx.triggered[0] and ctx.triggered[0]['prop_id'] == 'display_group.n_clicks':
         print("Add all")
         for metric in metric_choices:
             item = group + "," + metric
             if item not in options:
                 options.append(item)
-        return options
+        return options, group, metric, metric + ' | ' + group
+    elif 'prop_id' in ctx.triggered[0] and ctx.triggered[0]['prop_id'] == 'metric_search.value':
+        print("searched")
+        if metric_search is None:
+            return options, group, metric, None
+        else:
+            vals = metric_search.split(" | ")
+            metric_name = vals[1] + ',' + vals[0]
+            if metric_name not in options:
+                options.append(metric_name)
+            return options, vals[1], vals[0], metric_search
+
     elif metric is None or group is None:
         return options  # [] set to options to retain settings
     item = group + "," + metric
     if item not in options:
         options.append(item)
     print("options: ", options)
-    return options
+    return options, group, metric, metric + ' | ' + group
 
 @app.callback(
     Output('graph_cnt', 'children'),

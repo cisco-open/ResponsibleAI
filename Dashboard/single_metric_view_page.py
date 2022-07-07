@@ -82,7 +82,7 @@ def get_selectors():
                     html.Br(),
                     html.Br(),
                     html.Br(),
-                    dcc.Dropdown(get_search_options(), id='metric_search', value=None, placeholder="Search Metrics"),
+                    dcc.Dropdown(get_search_options(), id='indiv_metric_search', value=None, placeholder="Search Metrics"),
                 ], style={"width": "20%"}),
             ]),
             dbc.Row([dbc.Col([
@@ -144,9 +144,9 @@ def update_metrics(value):
     Output('indiv_legend_data', 'data'),
     Output('indiv_select_group', 'value'),
     Output('indiv_select_metric_dd', 'value'),
-    Output('metric_search', 'value'),
+    Output('indiv_metric_search', 'value'),
     Input('indiv_select_metric_dd', 'value'),
-    Input('metric_search', 'value'),
+    Input('indiv_metric_search', 'value'),
     Input('indiv_reset_graph', "n_clicks"),
     State('indiv_select_group', 'value'),
     State('indiv_legend_data', 'data')
