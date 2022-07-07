@@ -1,6 +1,7 @@
 from .display_object import DisplayElement
 import plotly.graph_objs as go
 from abc import ABCMeta
+from dash import dcc
 
 
 class TraceableElement(DisplayElement, metaclass=ABCMeta):
@@ -45,7 +46,7 @@ class TraceableElement(DisplayElement, metaclass=ABCMeta):
         fig.add_trace(go.Scatter(**sc_data))
         fig.update_traces(textposition="top center")
         self._update_layout(fig, self._data["x"])
-        return fig
+        return [dcc.Graph(figure=fig)]
 
     def add_trace_to(self, fig):
         sc_data = self._get_sc_data()

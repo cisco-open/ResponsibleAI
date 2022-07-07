@@ -6,8 +6,7 @@ from dash import Input, Output, html, State
 from server import app, redisUtil
 from dash import dcc
 import plotly.express as px
-import plotly.graph_objs as go
-from display_types import NumericalElement, FeatureArrayElement, BooleanElement, MatrixElement
+from display_types import NumericalElement, FeatureArrayElement, BooleanElement, MatrixElement, DictElement
 logger = logging.getLogger(__name__)
 
 
@@ -27,8 +26,10 @@ def get_display_data(group, metric):
         display_obj = BooleanElement(metric)
     elif type == "matrix":
         display_obj = MatrixElement(metric)
+    elif type == "dict":
+        display_obj = DictElement(metric)
     else:
-        assert("Metric type " + type + " must be one of (numeric, vector-array, bool)")
+        assert("Metric type " + type + " must be one of (numeric, vector-array, bool, matrix, dict)")
     for i, data in enumerate(metric_values):
         data = data[dataset]
         print("Value: ", data[group][metric])
@@ -74,7 +75,7 @@ def get_graph():
     d = {"x": [], "value": [], "tag": [], "metric": []}
     fig = px.line(pd.DataFrame(d), x="x", y="value", color="metric", markers="True")
     return html.Div(
-        html.Div(id='indiv_graph_cnt', children=[dcc.Graph(figure=fig, id='indiv_metric_graph')], style={"margin": "1"}),
+        html.Div(id='indiv_graph_cnt', children=[], style={"margin": "1"}),
         style={
             "border-width": "thin",
             "border-color": "LightGray",
@@ -106,7 +107,7 @@ def update_metrics(value):
     for m in redisUtil.get_metric_info()[value]:
         if m == "meta":
             continue
-        if redisUtil.get_metric_info()[value][m]["type"] in ["numeric", "feature-array", "boolean", "matrix"]:
+        if redisUtil.get_metric_info()[value][m]["type"] in ["numeric", "feature-array", "boolean", "matrix", "dict"]:
             metrics.append(m)
     return metrics
     # return dcc.Dropdown( metrics,  id='select_metrics',persistence=True, persistence_type='session')
@@ -129,14 +130,14 @@ def update_options(metric, btn, group, options):
 
 
 @app.callback(
-    Output('indiv_metric_graph', 'figure'),
+    Output('indiv_graph_cnt', 'children'),
     Output('select_metric_tag_col', 'style'),
     Output('indiv_select_metric_tag', 'options'),
     Output('indiv_select_metric_tag', 'value'),
     Input('indiv-interval-component', 'n_intervals'),
     Input('indiv_legend_data', 'data'),
     Input('indiv_select_metric_tag', 'value'),
-    State('indiv_metric_graph', 'figure'),
+    State('indiv_graph_cnt', 'children'),
     State('select_metric_tag_col', 'style'),
     State('indiv_select_metric_tag', 'options'),
     State('indiv_select_metric_tag', 'value')
@@ -157,7 +158,7 @@ def update_graph(n, options, tag_selection, old_graph, old_style, old_children, 
         tags = display_obj.get_tags()
         return display_obj.display_tag_num(tags.index(tag_selection)), old_style, old_children, tag_selection
     elif options == "" or options == None:
-        return go.Figure(), style, old_children, old_value
+        return [], style, old_children, old_value
     k, v = options.split(',')
     print(k, v)
     print('---------------------------')

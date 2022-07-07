@@ -1,6 +1,7 @@
 from .single_display_object import SingleDisplayElement
 import plotly.graph_objs as go
 import numpy as np
+from dash import dcc
 
 
 # For metrics which matrix return values
@@ -35,7 +36,7 @@ class MatrixElement(SingleDisplayElement):
             header = self._data["features_x"]
         if self._data["features_y"] is not None:
             data = np.insert(data, 0, [self._data["features_y"]], axis=0)
-        return go.Figure(data=[go.Table(header=dict(values=header), cells=dict(values=data))])
+        return [dcc.Graph(figure=go.Figure(data=[go.Table(header=dict(values=header), cells=dict(values=data))]))]
 
     def to_display(self):
         return self.display_tag_num(len(self._data["tag"])-1)

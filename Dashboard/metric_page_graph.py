@@ -63,7 +63,7 @@ def get_graph():
     d = {"x": [], "value": [], "tag": [], "metric": []}
     fig = px.line(pd.DataFrame(d), x="x", y="value", color="metric", markers="True")
     return html.Div(
-        html.Div(id='graph_cnt', children=[dcc.Graph(figure=fig, id='metric_graph')], style={"margin": "1"}),
+        html.Div(id='graph_cnt', children=[], style={"margin": "1"}),
         style={
             "border-width": "thin",
             "border-color": "LightGray",
@@ -131,23 +131,22 @@ def update_options(metric, clk, group, options):
 
 
 @app.callback(
-    Output('metric_graph', 'figure'),
+    Output('graph_cnt', 'children'),
     Input('interval-component', 'n_intervals'),
     Input('legend_data', 'data'),
-    State('metric_graph', 'figure')
+    State('graph_cnt', 'children')
 )
-def update_graph(n, options, old):
+def update_graph(n, options, old_container):
     ctx = dash.callback_context
     if 'prop_id' in ctx.triggered[0] and ctx.triggered[0]['prop_id'] == 'interval-component.n_intervals':
         if redisUtil.has_update("metric_graph", reset=True):
             logger.info("new data")
             redisUtil._subscribers["metric_graph"] = False
         else:
-            return old
-
+            return old_container
     fig = go.Figure()
     if len(options) == 0:
-        return fig
+        return []
     print("options: ", options)
     for item in options:
         print("split: ", item.split(','))
@@ -155,4 +154,4 @@ def update_graph(n, options, old):
         print(k, v)
         print('---------------------------')
         add_trace_to(fig, k, v)
-    return fig
+    return [dcc.Graph(figure=fig)]

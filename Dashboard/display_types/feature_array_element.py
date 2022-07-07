@@ -1,5 +1,6 @@
 from .display_object import DisplayElement
 import plotly.graph_objs as go
+from dash import dcc
 
 
 # For metrics with data per feature
@@ -24,5 +25,5 @@ class FeatureArrayElement(DisplayElement):
         print(self._data)
 
     def to_display(self):
-        return go.Figure(data=[go.Table(header=dict(values=self._data["features"]),
-                                        cells=dict(values=self._data["row"]))])
+        return [dcc.Graph(figure=go.Figure(data=[go.Table(header=dict(values=self._data["features"]),
+                                        cells=dict(values=self._data["row"]))]))]
