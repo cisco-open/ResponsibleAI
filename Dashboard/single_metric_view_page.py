@@ -50,6 +50,16 @@ def get_nonempty_groups(requirements):
     return valid_groups
 
 
+def get_search_options():
+    metric_info = redisUtil.get_metric_info()
+    valid_searches = []
+    for group in metric_info:
+        for metric in metric_info[group]:
+            if "type" in metric_info[group][metric] and metric_info[group][metric]["type"] in requirements:
+                valid_searches.append(metric + " | " + group)
+    return valid_searches
+
+
 def get_selectors():
     groups = []
     for g in redisUtil.get_metric_info():
@@ -68,7 +78,11 @@ def get_selectors():
                                  persistence=True, persistence_type='session'),
                 ], style={"width": "70%"}),
                 dbc.Col([
-                    dbc.Button("Reset Graph", id="indiv_reset_graph", style={"margin-left": "20%"}, color="secondary")
+                    dbc.Button("Reset Graph", id="indiv_reset_graph", style={"margin-left": "20%"}, color="secondary"),
+                    html.Br(),
+                    html.Br(),
+                    html.Br(),
+                    dcc.Dropdown(get_search_options(), id='metric_search', value=None, placeholder="Search Metrics"),
                 ], style={"width": "20%"}),
             ]),
             dbc.Row([dbc.Col([
@@ -128,18 +142,30 @@ def update_metrics(value):
 
 @app.callback(
     Output('indiv_legend_data', 'data'),
+    Output('indiv_select_group', 'value'),
+    Output('indiv_select_metric_dd', 'value'),
+    Output('metric_search', 'value'),
     Input('indiv_select_metric_dd', 'value'),
+    Input('metric_search', 'value'),
     Input('indiv_reset_graph', "n_clicks"),
     State('indiv_select_group', 'value'),
     State('indiv_legend_data', 'data')
 )
-def update_options(metric, btn, group, options):
+def update_options(metric, metric_search, btn, group, options):
     ctx = dash.callback_context
     if 'prop_id' in ctx.triggered[0] and ctx.triggered[0]['prop_id'] == 'indiv_reset_graph.n_clicks':
-        return None
+        return None, group, metric, None
+    if 'prop_id' in ctx.triggered[0] and ctx.triggered[0]['prop_id'] == 'metric_search.value':
+        print("searched")
+        if metric_search is None:
+            return options, group, metric, None
+        else:
+            vals = metric_search.split(" | ")
+            print("need to change options to ", vals[1] + "," + vals[0])
+            return vals[1] + "," + vals[0], vals[1], vals[0], metric_search
     if metric is None or group is None:
-        return options  # None set to options to retain settings
-    return group + "," + metric
+        return options, group, metric, metric_search  # None set to options to retain settings
+    return group + "," + metric, group, metric, metric + " | " + group
 
 
 @app.callback(
