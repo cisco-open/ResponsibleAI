@@ -3,7 +3,7 @@ import plotly.graph_objs as go
 from abc import ABCMeta
 
 
-class TraceableElement(DisplayElement,  metaclass=ABCMeta):
+class TraceableElement(DisplayElement, metaclass=ABCMeta):
     def __init__(self, name):
         super().__init__(name)
         self._data = {"x": [], "y": [], "tag": [], "text": []}

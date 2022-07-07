@@ -7,11 +7,11 @@ from server import app, redisUtil
 from dash import dcc
 import plotly.express as px
 import plotly.graph_objs as go
-from display_types import NumericalElement, FeatureArrayElement, BooleanElement
+from display_types import NumericalElement, FeatureArrayElement, BooleanElement, MatrixElement
 logger = logging.getLogger(__name__)
 
 
-def get_trc_data(group, metric):
+def get_display_data(group, metric):
     d = {"x": [], "y": [], "tag": [], "metric": [], "text": []}
     dataset = redisUtil.get_current_dataset()
     # TODO: Make a list of which metric_values instances use the dataset
@@ -25,13 +25,15 @@ def get_trc_data(group, metric):
         display_obj = FeatureArrayElement(metric, redisUtil.get_project_info()["features"])
     elif type == "boolean":
         display_obj = BooleanElement(metric)
+    elif type == "matrix":
+        display_obj = MatrixElement(metric)
     else:
         assert("Metric type " + type + " must be one of (numeric, vector-array, bool)")
     for i, data in enumerate(metric_values):
         data = data[dataset]
         print("Value: ", data[group][metric])
         display_obj.append(data[group][metric], data["metadata"]["tag"])
-    return display_obj.to_display()
+    return display_obj, display_obj.requires_tag_chooser
 
 
 def get_selectors():
@@ -54,7 +56,13 @@ def get_selectors():
                 dbc.Col([
                     dbc.Button("Reset Graph", id="indiv_reset_graph", style={"margin-left": "20%"}, color="secondary")
                 ], style={"width": "20%"}),
-            ])],
+            ]),
+            dbc.Row([dbc.Col([
+                html.P(""),
+                dbc.Label("Select Tag", html_for="select_metric_tag"),
+                dcc.Dropdown([], id='indiv_select_metric_tag', value=None, placeholder="Select a tag",
+                     persistence=True, persistence_type='session')], id="select_metric_tag_col", style={"display": 'none'})],
+                id="indiv_tag_selector_row")],
             style={"background-color": "rgb(240,250,255)", "width": "100%  ", "border": "solid",
                   "border-color": "silver", "border-radius": "5px", "padding": "50px"}
         ),
@@ -98,7 +106,7 @@ def update_metrics(value):
     for m in redisUtil.get_metric_info()[value]:
         if m == "meta":
             continue
-        if redisUtil.get_metric_info()[value][m]["type"] in ["numeric", "feature-array", "boolean"]:
+        if redisUtil.get_metric_info()[value][m]["type"] in ["numeric", "feature-array", "boolean", "matrix"]:
             metrics.append(m)
     return metrics
     # return dcc.Dropdown( metrics,  id='select_metrics',persistence=True, persistence_type='session')
@@ -122,25 +130,42 @@ def update_options(metric, btn, group, options):
 
 @app.callback(
     Output('indiv_metric_graph', 'figure'),
+    Output('select_metric_tag_col', 'style'),
+    Output('indiv_select_metric_tag', 'options'),
+    Output('indiv_select_metric_tag', 'value'),
     Input('indiv-interval-component', 'n_intervals'),
     Input('indiv_legend_data', 'data'),
-    State('indiv_metric_graph', 'figure')
+    Input('indiv_select_metric_tag', 'value'),
+    State('indiv_metric_graph', 'figure'),
+    State('select_metric_tag_col', 'style'),
+    State('indiv_select_metric_tag', 'options'),
+    State('indiv_select_metric_tag', 'value')
 )
-def update_graph(n, options, old):
+def update_graph(n, options, tag_selection, old_graph, old_style, old_children, old_value):
     ctx = dash.callback_context
+    style = {"display": 'none'}
     if 'prop_id' in ctx.triggered[0] and ctx.triggered[0]['prop_id'] == 'indiv-interval-component.n_intervals':
         if redisUtil.has_update("metric_graph", reset=True):
             logger.info("new data")
             redisUtil._subscribers["metric_graph"] = False
         else:
-            return old
-
-    fig = go.Figure()
-    if options == "" or options == None:
-        return fig
-
+            return old_graph, old_style, old_children, old_value
+    elif 'prop_id' in ctx.triggered[0] and ctx.triggered[0]['prop_id'] == 'indiv_select_metric_tag.value':
+        print("Different value selected")
+        k, v = options.split(',')
+        display_obj, _ = get_display_data(k, v)
+        tags = display_obj.get_tags()
+        return display_obj.display_tag_num(tags.index(tag_selection)), old_style, old_children, tag_selection
+    elif options == "" or options == None:
+        return go.Figure(), style, old_children, old_value
     k, v = options.split(',')
     print(k, v)
     print('---------------------------')
-    fig = get_trc_data(k, v)
-    return fig
+    display_obj, needs_chooser = get_display_data(k, v)
+    children = []
+    selection = None
+    if needs_chooser:
+        style = {"display": 'block'}
+        children = display_obj.get_tags()
+        selection = children[-1]
+    return display_obj.to_display(), style, children, selection

@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 
 class DisplayElement(ABC):
     def __init__(self, name):
+        self.requires_tag_chooser = False
         self._name = name
         self._data = {}
         self._metric_object = {}
@@ -17,7 +18,3 @@ class DisplayElement(ABC):
 
     def to_display(self):
         pass
-
-
-
-

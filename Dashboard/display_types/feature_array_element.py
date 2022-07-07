@@ -24,11 +24,5 @@ class FeatureArrayElement(DisplayElement):
         print(self._data)
 
     def to_display(self):
-        # cells=dict(values=self._data["row"]))])
-        # print("name: ", self._name)
-        # print("rows: ", self._data["row"])
-        # print("len: ", len(self._data["features"]))
-        # print([self._data["row"][:][i] for i in range(len(self._data["features"]))])
-        # print("data test: ", dict(values=self._data["row"][:][i] for i in range(len(self._data["features"]))) )
         return go.Figure(data=[go.Table(header=dict(values=self._data["features"]),
                                         cells=dict(values=self._data["row"]))])

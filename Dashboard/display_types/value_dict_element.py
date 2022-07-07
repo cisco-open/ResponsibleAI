@@ -12,6 +12,3 @@ class ValueDictElement(DisplayElement):
 
     def to_display(self):
         pass
-
-
-
