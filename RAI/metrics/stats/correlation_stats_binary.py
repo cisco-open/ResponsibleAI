@@ -17,12 +17,15 @@ class BinaryCorrelationStats(MetricGroup, class_location=os.path.abspath(__file_
             args = self.ai_system.metric_manager.user_config["stats"]["args"]
 
         data = data_dict["data"]
-        map = self.ai_system.meta_database.categorical_map
+        map = self.ai_system.meta_database.scalar_map
         features = self.ai_system.meta_database.features
 
-        self.metrics["point_biserial_r"].value = calculate_per_mapped_features(scipy.stats.pointbiserialr, map, features, data.categorical, data.y)
+        self.metrics["point_biserial_r"].value = calculate_per_mapped_features(scipy.stats.pointbiserialr, map, features, data.scalar, data.y)
         for i, value in enumerate(self.metrics["point_biserial_r"].value):
+            result = {}
             if value is not None:
                 temp = self.metrics["point_biserial_r"].value[i]
                 result = {"correlation": temp.correlation, "pvalue": temp.pvalue}
-                self.metrics["point_biserial_r"].value[i] = result
+            self.metrics["point_biserial_r"].value[i] = result
+        print("Biserial: ", self.metrics["point_biserial_r"].value)
+        self.metrics["point_biserial_r"].value = convert_to_feature_dict(self.metrics["point_biserial_r"].value, [feature.name for feature in features])

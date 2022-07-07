@@ -52,10 +52,6 @@ class DictElement(DisplayElement):
         for i, row in enumerate(tagged_data):
             row[-1] = self._data["tag"][i]
 
-        print("header: ", header)
-        print("\nData: ", self._data["row"])
-        print("\nTagged Data: ", tagged_data)
-
         table = dash_table.DataTable(
             data=tagged_data,
             columns=header,

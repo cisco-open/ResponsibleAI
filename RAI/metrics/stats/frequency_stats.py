@@ -16,7 +16,6 @@ class FrequencyStatMetricGroup(MetricGroup, class_location=os.path.abspath(__fil
         if self.ai_system.metric_manager.user_config is not None and "stats" in self.ai_system.metric_manager.user_config and "args" in self.ai_system.metric_manager.user_config["stats"]:
             args = self.ai_system.metric_manager.user_config["stats"]["args"]
         data = data_dict["data"]
-
         self.metrics["relfreq"].value = _rel_freq(data.X, self.ai_system.meta_database.features)
         self.metrics["cumfreq"].value = _cumulative_freq(data.X, self.ai_system.meta_database.features)
 
