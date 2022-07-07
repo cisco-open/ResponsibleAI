@@ -10,6 +10,8 @@ import plotly.graph_objs as go
 from display_types import NumericalElement, BooleanElement
 logger = logging.getLogger(__name__)
 
+requirements = ["numeric", "boolean"]
+
 
 def add_trace_to(fig, group, metric):
     d = {"x": [], "y": [], "tag": [], "metric": [], "text": []}
@@ -29,6 +31,17 @@ def add_trace_to(fig, group, metric):
         display_obj.append(data[group][metric], data["metadata"]["tag"])
     display_obj.add_trace_to(fig)
     return
+
+
+def get_nonempty_groups(requirements):
+    metric_info = redisUtil.get_metric_info()
+    valid_groups = []
+    for group in metric_info:
+        for metric in metric_info[group]:
+            if "type" in metric_info[group][metric] and metric_info[group][metric]["type"] in requirements:
+                valid_groups.append(group)
+                break
+    return valid_groups
 
 
 def get_selectors():

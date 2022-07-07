@@ -9,6 +9,8 @@ import plotly.express as px
 from display_types import NumericalElement, FeatureArrayElement, BooleanElement, MatrixElement, DictElement
 logger = logging.getLogger(__name__)
 
+requirements = ["numeric", "feature-array", "boolean", "matrix", "dict"]
+
 
 def get_display_data(group, metric):
     d = {"x": [], "y": [], "tag": [], "metric": [], "text": []}
@@ -37,6 +39,17 @@ def get_display_data(group, metric):
     return display_obj, display_obj.requires_tag_chooser
 
 
+def get_nonempty_groups(requirements):
+    metric_info = redisUtil.get_metric_info()
+    valid_groups = []
+    for group in metric_info:
+        for metric in metric_info[group]:
+            if "type" in metric_info[group][metric] and metric_info[group][metric]["type"] in requirements:
+                valid_groups.append(group)
+                break
+    return valid_groups
+
+
 def get_selectors():
     groups = []
     for g in redisUtil.get_metric_info():
@@ -47,7 +60,7 @@ def get_selectors():
             dbc.Label("select metric group", html_for="select_group"),
             dbc.Row([
                 dbc.Col([
-                    dcc.Dropdown(groups, id='indiv_select_group', value=groups[0] if groups else None, persistence=True,
+                    dcc.Dropdown(get_nonempty_groups(requirements), id='indiv_select_group', value=groups[0] if groups else None, persistence=True,
                                  persistence_type='session', placeholder="Select a metric group"),
                     html.P(""),
                     dbc.Label("select metric", html_for="select_metric_cnt"),

@@ -27,5 +27,4 @@ class BinaryCorrelationStats(MetricGroup, class_location=os.path.abspath(__file_
                 temp = self.metrics["point_biserial_r"].value[i]
                 result = {"correlation": temp.correlation, "pvalue": temp.pvalue}
             self.metrics["point_biserial_r"].value[i] = result
-        print("Biserial: ", self.metrics["point_biserial_r"].value)
         self.metrics["point_biserial_r"].value = convert_to_feature_dict(self.metrics["point_biserial_r"].value, [feature.name for feature in features])
