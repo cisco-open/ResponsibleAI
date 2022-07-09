@@ -206,16 +206,11 @@ def get_group_from_ctx(ctx):
 )
 def group_click(p_selected, c_selected, reset_button, metric_search, p_options, c_options, p_val, c_val, options):
     ctx = dash.callback_context.triggered[0]["prop_id"]
-    # print("c_options: ", c_options)
-    # print("p_val: ", p_val)
-    # print("c_val: ", c_val)
     if ctx == 'reset_graph.n_clicks':
         to_p_val = [[] for _ in range(len(p_val))]
         to_c_val = [[] for _ in range(len(p_val))]
         return [], to_p_val, to_c_val, None
-
     if ctx == 'metric_search.value':
-        print("searched")
         if metric_search is None:
             return options, p_val, c_val, metric_search
         else:
@@ -230,15 +225,11 @@ def group_click(p_selected, c_selected, reset_button, metric_search, p_options, 
                     p_val[parent_index] = group
                 c_val[parent_index].append(metric)
             return options, p_val, c_val, metric_search
-
     group = get_group_from_ctx(ctx)
     parent_index = p_options.index([{'label': ' ' + group, 'value': group}])
     if "\"type\":\"group-checkbox" in ctx:
-        print("Group selected")
         child_selection = [option["value"] for option in c_options[parent_index] if p_selected[parent_index]]
-        print("options before: ", options)
         options = get_selection_update(group, child_selection, options.copy())
-        print("options after: ", options)
         c_val[parent_index] = child_selection
         return options, p_val, c_val, None
     elif "\"type\":\"child-checkbox" in ctx:
