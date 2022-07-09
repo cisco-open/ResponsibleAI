@@ -4,7 +4,7 @@ import dash_bootstrap_components as dbc
 import pandas as pd
 from dash import Input, Output, html, State
 from server import app, redisUtil
-from dash import dcc
+from dash import dcc, MATCH, ALL, ALLSMALLER
 import plotly.express as px
 import plotly.graph_objs as go
 from display_types import NumericalElement, BooleanElement
@@ -27,7 +27,7 @@ def add_trace_to(fig, group, metric):
         display_obj = BooleanElement(metric)
     for i, data in enumerate(metric_values):
         data = data[dataset]
-        print("Metric value: ", metric, " ", data[group][metric])
+        # print("Metric value: ", metric, " ", data[group][metric])
         display_obj.append(data[group][metric], data["metadata"]["tag"])
     display_obj.add_trace_to(fig)
     return
@@ -54,6 +54,42 @@ def get_search_options():
     return valid_searches
 
 
+def get_valid_metrics(group):
+    metric_info = redisUtil.get_metric_info()
+    valid_metrics = []
+    for metric in metric_info[group]:
+        if "type" in metric_info[group][metric] and metric_info[group][metric]["type"] in requirements:
+            valid_metrics.append(metric)
+    return valid_metrics
+
+
+def get_selection_update(group: str, selected: list, options: list):
+    options = [item for item in options if not item.startswith(group+",")]
+    for val in selected:
+        options.append(group + "," + val)
+    return options
+
+
+def get_checklist():
+    groups = get_nonempty_groups(requirements)
+    return html.Div([
+            html.Details([
+                html.Summary([dcc.Checklist(
+                    id={"type": "group-checkbox", "group": group},
+                    options=[{"label": " " + group, "value": group}],
+                    value=[],
+                    labelStyle={"display": "inline-block"},
+                    style={"display": "inline-block"},
+                )]),
+                dcc.Checklist(
+                    id={"type": "child-checkbox", "group": group},
+                    options=[{"label": " " + i, "value": i} for i in get_valid_metrics(group)],
+                    value=[],
+                    labelStyle={"display": "block"},
+                    style={"padding-left": "40px"}
+                )]) for group in groups])
+
+
 def get_default_metric_options(groups):
     if len(groups) == 0:
         return []
@@ -73,26 +109,14 @@ def get_selectors():
 
     return html.Div(
         dbc.Form([
-            dbc.Label("select metric group", html_for="select_group"),
             dbc.Row([
                 dbc.Col([
-                    dcc.Dropdown(groups, id='select_group', value=groups[0] if groups else None, persistence=True,
-                                 persistence_type='session', placeholder="Select a metric group", ),
-                    html.P(""),
-                    dbc.Label("select metric", html_for="select_metric_cnt"),
-                    dcc.Dropdown(get_default_metric_options(groups), id='select_metric_dd', value=None,
-                                 placeholder="Select a metric", persistence=True, persistence_type='session'),
+                    get_checklist()
                 ], style={"width": "70%"}),
                 dbc.Col([
-                    dbc.Button("Reset Graph", id="reset_graph", style={"margin-left": "20%"}, color="secondary"),
-                    html.Br(),
-                    html.Br(),
-                    html.Br(),
                     dcc.Dropdown(get_search_options(), id='metric_search', value=None, placeholder="Search Metrics"),
                     html.Br(),
-                    html.Br(),
-                    dbc.Button("Display Group", id="display_group", color="secondary",
-                               style={"margin-left": "20%", "display": 'block' if groups else 'none'})
+                    dbc.Button("Reset Graph", id="reset_graph", color="secondary"),
                 ], style={"width": "20%"})
             ])],
             style={"background-color": "rgb(240,250,255)", "width": "100%  ", "border": "solid",
@@ -118,6 +142,7 @@ def get_graph():
 def get_metric_page_graph():
     return html.Div([
         dcc.Store(id='legend_data', storage_type='local'),
+        dcc.Store(id={'type': 'legend_data', 'group': ''}, storage_type='local'),
         dcc.Interval(
             id='interval-component',
             interval=1 * 1000,  # in milliseconds
@@ -155,49 +180,79 @@ def create_options_children(options):
     return res
 
 
+def get_group_from_ctx(ctx):
+    search_string = "\"group\":\""
+    idx = ctx.index(search_string) + len(search_string)
+    idx_2 = ctx.index("\"", idx)
+    return ctx[idx:idx_2]
+
+
+# Unfortunately, we can't just use MATCH, as that also requires matching on output
 @app.callback(
     Output('legend_data', 'data'),
-    Output('select_group', 'value'),
-    Output('select_metric_dd', 'value'),
+    Output({'type': 'group-checkbox', 'group': ALL}, 'value'),
+    Output({'type': 'child-checkbox', 'group': ALL}, 'value'),
     Output('metric_search', 'value'),
-    Input('select_metric_dd', 'value'),
-    Input('metric_search', 'value'),
+    Input({'type': 'group-checkbox', 'group': ALL}, 'value'),
+    Input({'type': 'child-checkbox', 'group': ALL}, 'value'),
     Input('reset_graph', "n_clicks"),
-    Input('display_group', "n_clicks"),
-    State('select_group', 'value'),
+    Input('metric_search', 'value'),
+    State({'type': 'group-checkbox', 'group': ALL}, 'options'),
+    State({'type': 'child-checkbox', 'group': ALL}, 'options'),
+    State({'type': 'group-checkbox', 'group': ALL}, 'value'),
+    State({'type': 'child-checkbox', 'group': ALL}, 'value'),
     State('legend_data', 'data'),
-    State('select_metric_dd', 'options')
+    prevent_initial_call=True
 )
-def update_options(metric, metric_search, clk_reset, clk_display_group, group, options, metric_choices):
-    print("metric: ", metric, ", group: ", group, ", options: ", options)
-    ctx = dash.callback_context
-    if 'prop_id' in ctx.triggered[0] and ctx.triggered[0]['prop_id'] == 'reset_graph.n_clicks':
-        return [], group, None, None
-    elif 'prop_id' in ctx.triggered[0] and ctx.triggered[0]['prop_id'] == 'display_group.n_clicks':
-        print("Add all")
-        for metric in metric_choices:
-            item = group + "," + metric
-            if item not in options:
-                options.append(item)
-        return options, group, metric, metric + ' | ' + group
-    elif 'prop_id' in ctx.triggered[0] and ctx.triggered[0]['prop_id'] == 'metric_search.value':
+def group_click(p_selected, c_selected, reset_button, metric_search, p_options, c_options, p_val, c_val, options):
+    ctx = dash.callback_context.triggered[0]["prop_id"]
+    # print("c_options: ", c_options)
+    # print("p_val: ", p_val)
+    # print("c_val: ", c_val)
+    if ctx == 'reset_graph.n_clicks':
+        to_p_val = [[] for _ in range(len(p_val))]
+        to_c_val = [[] for _ in range(len(p_val))]
+        return [], to_p_val, to_c_val, None
+
+    if ctx == 'metric_search.value':
         print("searched")
         if metric_search is None:
-            return options, group, metric, None
+            return options, p_val, c_val, metric_search
         else:
             vals = metric_search.split(" | ")
             metric_name = vals[1] + ',' + vals[0]
+            metric = vals[0]
+            group = vals[1]
+            parent_index = p_options.index([{'label': ' ' + group, 'value': group}])
             if metric_name not in options:
                 options.append(metric_name)
-            return options, vals[1], vals[0], metric_search
+                if p_val[parent_index] == []:
+                    p_val[parent_index] = group
+                c_val[parent_index].append(metric)
+            return options, p_val, c_val, metric_search
 
-    elif metric is None or group is None:
-        return options  # [] set to options to retain settings
-    item = group + "," + metric
-    if item not in options:
-        options.append(item)
-    print("options: ", options)
-    return options, group, metric, metric + ' | ' + group
+    group = get_group_from_ctx(ctx)
+    parent_index = p_options.index([{'label': ' ' + group, 'value': group}])
+    if "\"type\":\"group-checkbox" in ctx:
+        print("Group selected")
+        child_selection = [option["value"] for option in c_options[parent_index] if p_selected[parent_index]]
+        print("options before: ", options)
+        options = get_selection_update(group, child_selection, options.copy())
+        print("options after: ", options)
+        c_val[parent_index] = child_selection
+        return options, p_val, c_val, None
+    elif "\"type\":\"child-checkbox" in ctx:
+        parent_return = []
+        if len(c_selected[parent_index]) == len(c_options[parent_index]):
+            parent_return = [p_options[parent_index][0]["value"]]
+        options = get_selection_update(group, c_val[parent_index], options.copy())
+        p_val[parent_index] = parent_return
+        return options, p_val, c_val, None
+    return options, p_val, c_val, None
+
+
+
+
 
 @app.callback(
     Output('graph_cnt', 'children'),
@@ -216,11 +271,9 @@ def update_graph(n, options, old_container):
     fig = go.Figure()
     if len(options) == 0:
         return []
-    print("options: ", options)
     for item in options:
-        print("split: ", item.split(','))
         k, v = item.split(',')
-        print(k, v)
-        print('---------------------------')
+        # print(k, v)
+        # print('---------------------------')
         add_trace_to(fig, k, v)
     return [dcc.Graph(figure=fig)]
