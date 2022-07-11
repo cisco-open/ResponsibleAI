@@ -4,7 +4,7 @@ import dash_bootstrap_components as dbc
 import pandas as pd
 from dash import Input, Output, html, State
 from server import app, redisUtil
-from dash import dcc
+from dash import dcc, ALL
 import plotly.express as px
 from display_types import NumericalElement, FeatureArrayElement, BooleanElement, MatrixElement, DictElement
 logger = logging.getLogger(__name__)
@@ -50,6 +50,31 @@ def get_nonempty_groups(requirements):
     return valid_groups
 
 
+def get_valid_metrics(group):
+    metric_info = redisUtil.get_metric_info()
+    valid_metrics = []
+    for metric in metric_info[group]:
+        if "type" in metric_info[group][metric] and metric_info[group][metric]["type"] in requirements:
+            valid_metrics.append(metric)
+    return valid_metrics
+
+
+def get_checklist():
+    groups = get_nonempty_groups(requirements)
+    return html.Div([
+            html.Details([
+                html.Summary([html.P([group], style={"display": "inline-block", "margin-bottom": "0px"})]),
+                dcc.RadioItems(
+                    id={"type": "indiv-child-checkbox", "group": group},
+                    options=[
+                        {"label": " " + i, "value": i} for i in get_valid_metrics(group)
+                    ],
+                    value=[],
+                    labelStyle={"display": "block"},
+                    style={"padding-left": "40px"}
+                )]) for group in groups], style={"margin-left": "35%"})
+
+
 def get_search_options():
     metric_info = redisUtil.get_metric_info()
     valid_searches = []
@@ -65,35 +90,54 @@ def get_selectors():
     for g in redisUtil.get_metric_info():
         groups.append(g)
 
+    tab_style = {
+        'borderBottom': '1px solid #d6d6d6',
+        'padding': '6px',
+        'fontWeight': 'bold'
+    }
+    tab_selected_style = {
+        'borderTop': '1px solid #d6d6d6',
+        'borderBottom': '1px solid #d6d6d6',
+        'backgroundColor': '#119DFF',
+        'color': 'white',
+        'padding': '6px'
+    }
+
     return html.Div(
         dbc.Form([
-            dbc.Label("select metric group", html_for="select_group"),
-            dbc.Row([
-                dbc.Col([
-                    dcc.Dropdown(get_nonempty_groups(requirements), id='indiv_select_group', value=groups[0] if groups else None, persistence=True,
-                                 persistence_type='session', placeholder="Select a metric group"),
-                    html.P(""),
-                    dbc.Label("select metric", html_for="select_metric_cnt"),
-                    dcc.Dropdown([], id='indiv_select_metric_dd', value=None, placeholder="Select a metric",
-                                 persistence=True, persistence_type='session'),
-                ], style={"width": "70%"}),
-                dbc.Col([
-                    dbc.Button("Reset Graph", id="indiv_reset_graph", style={"margin-left": "20%"}, color="secondary"),
-                    html.Br(),
-                    html.Br(),
-                    html.Br(),
-                    dcc.Dropdown(get_search_options(), id='indiv_metric_search', value=None, placeholder="Search Metrics"),
-                ], style={"width": "20%"}),
+            dcc.Tabs([
+                dcc.Tab(label='Metric Selector', children=[
+                    dbc.Row([
+                        dbc.Col([
+                            get_checklist(),
+                        ], style={"position": "relative"}),
+                        dbc.Col([
+                            dbc.Button("Reset Graph", id="indiv_reset_graph", color="secondary",
+                                       style={"position": "absolute", "bottom": "0"}),
+                        ], style={"position": "relative"}),
+                    ], style={"width": "100%", "margin-top": "20px"}),
+                ], selected_style=tab_selected_style, style=tab_style),
+                dcc.Tab(label='Metric Search', children=[
+                    dbc.Row([
+                        dbc.Col([
+                            dcc.Dropdown(get_search_options(), id='indiv_metric_search', value=None,
+                                         placeholder="Search Metrics"),
+                        ], style={"position": "relative"}),
+                        dbc.Col([
+                            dbc.Button("Reset Graph", id="indiv_reset_graph", color="secondary"),
+                        ], style={"position": "relative"})
+                    ], style={"width": "100%", "margin-top": "20px"}),
+                ], selected_style=tab_selected_style, style=tab_style),
             ]),
             dbc.Row([dbc.Col([
                 html.P(""),
                 dbc.Label("Select Tag", html_for="select_metric_tag"),
                 dcc.Dropdown([], id='indiv_select_metric_tag', value=None, placeholder="Select a tag",
-                     persistence=True, persistence_type='session')], id="indiv_select_metric_tag_col", style={"display": 'none'})],
-                id="indiv_tag_selector_row")],
-            style={"background-color": "rgb(240,250,255)", "width": "100%  ", "border": "solid",
-                  "border-color": "silver", "border-radius": "5px", "padding": "50px"}
-        ),
+                             persistence=True, persistence_type='session')], id="indiv_select_metric_tag_col",
+                style={"display": 'none'})],
+                id="indiv_tag_selector_row")
+        ], style={"background-color": "rgb(240,250,255)", "width": "100%", "border": "solid",
+                  "border-color": "silver", "border-radius": "5px", "padding": "10px 50px 10px 50px"}),
         style={"margin": "2px", "margin-bottom": "20px"}
     )
 
@@ -122,49 +166,58 @@ def get_single_metric_display():
         get_graph()])
 
 
-@app.callback(
-    Output('indiv_select_metric_dd', 'options'),
-    Input('indiv_select_group', 'value'))
-def update_metrics(value):
-    if not value:
-        logger.info("no value for update")
-        return []
-        # return dcc.Dropdown([], id='select_metrics', persistence=True, persistence_type='session')
-    metrics = []
-    for m in redisUtil.get_metric_info()[value]:
-        if m == "meta":
-            continue
-        if redisUtil.get_metric_info()[value][m]["type"] in ["numeric", "feature-array", "boolean", "matrix", "dict"]:
-            metrics.append(m)
-    return metrics
-    # return dcc.Dropdown( metrics,  id='select_metrics',persistence=True, persistence_type='session')
+def get_group_from_ctx(ctx):
+    search_string = "\"group\":\""
+    idx = ctx.index(search_string) + len(search_string)
+    idx_2 = ctx.index("\"", idx)
+    return ctx[idx:idx_2]
 
 
 @app.callback(
     Output('indiv_legend_data', 'data'),
-    Output('indiv_select_group', 'value'),
-    Output('indiv_select_metric_dd', 'value'),
+    Output({'type': 'indiv-child-checkbox', 'group': ALL}, 'value'),
     Output('indiv_metric_search', 'value'),
-    Input('indiv_select_metric_dd', 'value'),
-    Input('indiv_metric_search', 'value'),
+    Input({'type': 'indiv-child-checkbox', 'group': ALL}, 'value'),
     Input('indiv_reset_graph', "n_clicks"),
-    State('indiv_select_group', 'value'),
-    State('indiv_legend_data', 'data')
+    Input('indiv_metric_search', 'value'),
+    State({'type': 'indiv-child-checkbox', 'group': ALL}, 'options'),
+    State({'type': 'indiv-child-checkbox', 'group': ALL}, 'value'),
+    State({'type': 'indiv-child-checkbox', 'group': ALL}, 'id'),
+    State('indiv_legend_data', 'data'),
+    prevent_initial_call=True
 )
-def update_options(metric, metric_search, btn, group, options):
-    ctx = dash.callback_context
-    if 'prop_id' in ctx.triggered[0] and ctx.triggered[0]['prop_id'] == 'indiv_reset_graph.n_clicks':
-        return None, group, None, None
-    if 'prop_id' in ctx.triggered[0] and ctx.triggered[0]['prop_id'] == 'indiv_metric_search.value':
-        print("searched")
+def group_click(c_selected, reset_button, metric_search, c_options, c_val, c_ids, options):
+    ctx = dash.callback_context.triggered[0]["prop_id"]
+    print("CONTEXT: ", ctx)
+    ids = [c_ids[i]['group'] for i in range(len(c_ids))]
+    if ctx == 'indiv_reset_graph.n_clicks':
+        to_c_val = [[] for _ in range(len(c_val))]
+        return "", to_c_val, None
+    if ctx == 'indiv_metric_search.value':
         if metric_search is None:
-            return options, group, metric, None
-        vals = metric_search.split(" | ")
-        print("need to change options to ", vals[1] + "," + vals[0])
-        return vals[1] + "," + vals[0], vals[1], vals[0], metric_search
-    if metric is None or group is None:
-        return options, group, metric, metric_search  # None set to options to retain settings
-    return group + "," + metric, group, metric, metric + " | " + group
+            return options, c_val, metric_search
+        else:
+            vals = metric_search.split(" | ")
+            metric_name = vals[1] + ',' + vals[0]
+            metric = vals[0]
+            group = vals[1]
+            parent_index = ids.index(group)
+            print("metric_name: ", metric_name)
+            if metric_name != options:
+                options = metric_name
+                c_val = [[] for _ in range(len(c_val))]
+                c_val[parent_index] = metric
+            return options, c_val, metric_search
+    group = get_group_from_ctx(ctx)
+    parent_index = ids.index(group)
+    if "\"type\":\"indiv-child-checkbox" in ctx:
+        metric = c_val[parent_index]
+        options = group + "," + c_val[parent_index]
+        c_val = [[] for _ in range(len(c_val))]
+        c_val[parent_index] = metric
+        print("options: ", options)
+        return options, c_val, None
+    return options, c_val, None
 
 
 @app.callback(
@@ -202,6 +255,7 @@ def update_graph(n, options, tag_selection, old_graph, old_style, old_children, 
     display_obj, needs_chooser = get_display_data(k, v)
     children = []
     selection = None
+    print("this ran")
     if needs_chooser:
         style = {"display": 'block'}
         children = display_obj.get_tags()

@@ -16,7 +16,6 @@ requirements = ["numeric", "boolean"]
 def add_trace_to(fig, group, metric):
     d = {"x": [], "y": [], "tag": [], "metric": [], "text": []}
     dataset = redisUtil.get_current_dataset()
-
     metric_values = redisUtil.get_metric_values()
     metric_type = redisUtil.get_metric_info()
     type = metric_type[group][metric]["type"]
@@ -176,28 +175,6 @@ def get_metric_page_graph():
         get_graph()])
 
 
-@app.callback(
-    Output('select_metric_dd', 'options'),
-    Output('display_group', 'style'),
-    Input('select_group', 'value'))
-def update_metrics(value):
-    print("updating metrics")
-    display_style = {"margin-left": "20%", "display": 'none'}
-    if not value:
-        logger.info("no value for update")
-        return [], display_style
-        # return dcc.Dropdown([], id='select_metrics', persistence=True, persistence_type='session')
-    metrics = []
-    for m in redisUtil.get_metric_info()[value]:
-        if m == "meta":
-            continue
-        if redisUtil.get_metric_info()[value][m]["type"] in requirements:
-            metrics.append(m)
-    display_style['display'] = 'block'
-    return metrics, display_style
-    # return dcc.Dropdown( metrics,  id='select_metrics',persistence=True, persistence_type='session')
-
-
 def create_options_children(options):
     res = []
     for item in options:
@@ -265,9 +242,6 @@ def group_click(p_selected, c_selected, reset_button, metric_search, p_options, 
         p_val[parent_index] = parent_return
         return options, p_val, c_val, None
     return options, p_val, c_val, None
-
-
-
 
 
 @app.callback(
