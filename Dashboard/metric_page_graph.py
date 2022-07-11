@@ -4,7 +4,7 @@ import dash_bootstrap_components as dbc
 import pandas as pd
 from dash import Input, Output, html, State
 from server import app, redisUtil
-from dash import dcc, MATCH, ALL, ALLSMALLER
+from dash import dcc, ALL
 import plotly.express as px
 import plotly.graph_objs as go
 from display_types import NumericalElement, BooleanElement
@@ -87,7 +87,7 @@ def get_checklist():
                     value=[],
                     labelStyle={"display": "block"},
                     style={"padding-left": "40px"}
-                )]) for group in groups])
+                )]) for group in groups], style={"margin-left": "35%"})
 
 
 def get_default_metric_options(groups):
@@ -107,22 +107,47 @@ def get_selectors():
     for g in redisUtil.get_metric_info():
         groups.append(g)
 
+    tab_style = {
+        'borderBottom': '1px solid #d6d6d6',
+        'padding': '6px',
+        'fontWeight': 'bold'
+    }
+    tab_selected_style = {
+        'borderTop': '1px solid #d6d6d6',
+        'borderBottom': '1px solid #d6d6d6',
+        'backgroundColor': '#119DFF',
+        'color': 'white',
+        'padding': '6px'
+    }
+
     return html.Div(
         dbc.Form([
-            dbc.Row([
-                dbc.Col([
-                    get_checklist()
-                ], style={"width": "70%"}),
-                dbc.Col([
-                    dcc.Dropdown(get_search_options(), id='metric_search', value=None, placeholder="Search Metrics"),
-                    html.Br(),
-                    dbc.Button("Reset Graph", id="reset_graph", color="secondary"),
-                ], style={"width": "20%"})
-            ])],
-            style={"background-color": "rgb(240,250,255)", "width": "100%  ", "border": "solid",
-                  "border-color": "silver", "border-radius": "5px", "padding": "50px"}
-        ),
-        style={"margin": "2px", "margin-bottom": "20px",}
+            dcc.Tabs([
+                dcc.Tab(label='Metric Selector', children=[
+                    dbc.Row([
+                        dbc.Col([
+                            get_checklist(),
+                        ], style={"position": "relative"}),
+                        dbc.Col([
+                            dbc.Button("Reset Graph", id="reset_graph", color="secondary",
+                                       style={"position": "absolute", "bottom": "0"}),
+                        ], style={"position": "relative"}),
+                    ], style={"width": "100%", "margin-top": "20px"}),
+                ], selected_style=tab_selected_style, style=tab_style),
+                dcc.Tab(label='Metric Search', children=[
+                    dbc.Row([
+                        dbc.Col([
+                            dcc.Dropdown(get_search_options(), id='metric_search', value=None, placeholder="Search Metrics"),
+                        ], style={"position": "relative"}),
+                        dbc.Col([
+                            dbc.Button("Reset Graph", id="reset_graph", color="secondary"),
+                        ], style={"position": "relative"})
+                    ], style={"width": "100%", "margin-top": "20px"})
+                ], selected_style=tab_selected_style, style=tab_style),
+            ]),
+        ], style={"background-color": "rgb(240,250,255)", "width": "100%", "border": "solid",
+                  "border-color": "silver", "border-radius": "5px", "padding": "10px 50px 10px 50px"}),
+        style={"margin": "2px", "margin-bottom": "20px"}
     )
 
 
