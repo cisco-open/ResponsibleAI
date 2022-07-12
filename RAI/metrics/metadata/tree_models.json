@@ -11,7 +11,7 @@
     "metrics": {
         "estimator_counts": {
             "display_name": "Number of estimators",
-            "type": "numeric",
+            "type": "Numeric",
             "has_range": true,
             "range": [1, null],
             "explanation": "Number of estimators"

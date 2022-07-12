@@ -2,7 +2,7 @@ from .traceable_element import TraceableElement
 
 
 # For single valued numeric metrics, like accuracy
-class NumericalElement(TraceableElement):
+class NumericElement(TraceableElement):
     def __init__(self, name):
         super().__init__(name)
         self.x = 0

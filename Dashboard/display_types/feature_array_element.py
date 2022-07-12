@@ -5,14 +5,17 @@ from dash import dcc
 
 # For metrics with data per feature
 class FeatureArrayElement(DisplayElement):
-    def __init__(self, name, features):
+    def __init__(self, name, features=None):
         super().__init__(name)
+        self.requirements.append("features")
+
         self.x = 0
         self._data["features"] = features.copy()
         self._data["features"].insert(0, "Tag")
         self._data["row"] = []
-        for i in range(len(self._data["features"])):
-            self._data["row"].append([])
+        if features is not None:
+            for i in range(len(self._data["features"])):
+                self._data["row"].append([])
         print("starting data: ", self._data["row"])
         print("starting features: ", self._data["features"])
 

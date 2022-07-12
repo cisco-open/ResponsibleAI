@@ -2,7 +2,7 @@
     "name": "basic_explainablity",
     "display_name": "Basic Robustness Metrics",
     "compatibility": {"task_type": null,
-                      "data_type": ["numeric"],
+                      "data_type": ["Numeric"],
                       "output_requirements": [],
                       "dataset_requirements": []},
     "dependency_list": [],
@@ -11,7 +11,7 @@
     "metrics": {
         "explainable_model": {
             "display_name": "explainable model",
-            "type": "boolean",
+            "type": "Boolean",
             "has_range": false,
             "range": [null, null],
             "explanation": "Whether of not model is explainable"

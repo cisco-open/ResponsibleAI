@@ -2,7 +2,7 @@
     "name": "adversarial_validation_tree",
     "display_name": "Adversarial Validation Tree Metrics",
     "compatibility": {"task_type": "binary_classification",
-                      "data_type": ["numeric"],
+                      "data_type": ["Numeric"],
                       "output_requirements": ["predict"],
                       "dataset_requirements": ["X", "y"]},
     "src": "art",
@@ -12,7 +12,7 @@
     "metrics": {
         "adversarial_tree_verification_bound": {
             "display_name": "Adversarial Tree Avg Verification Bound",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, 1],
@@ -20,7 +20,7 @@
         },
         "adversarial_tree_verification_error": {
             "display_name": "Adversarial Tree Verified Error",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, 1],

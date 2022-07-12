@@ -2,7 +2,7 @@
     "name": "sample_distortion_fairness",
     "display_name": "Sample Distortion Fairness Metrics",
     "compatibility": {"task_type": "classification",
-                      "data_type": ["numeric"],
+                      "data_type": ["Numeric"],
                       "output_requirements": ["predict"],
                       "dataset_requirements": ["X", "y", "sensitive_features"]},
     "src": "equal_treatment",
@@ -12,7 +12,7 @@
     "metrics": {
         "average": {
             "display_name": "Average",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, 2],

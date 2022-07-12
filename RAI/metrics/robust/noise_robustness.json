@@ -11,28 +11,28 @@
     "metrics": {
         "certified_adversarial_noise": {
             "display_name": "Certified Adversarial Robustness with Additive Noise Score",
-            "type": "numeric",
+            "type": "Numeric",
             "has_range": false,
             "range": [null, null],
             "explanation": "https://github.com/Bai-Li/STN-Code"
         },
         "robust_signal_noise_ratio": {
             "display_name": "Robust SNR",
-            "type": "numeric",
+            "type": "Numeric",
             "has_range": false,
             "range": [null, null],
             "explanation": "Signal-to-Noise Ratio: A Robust Distance Metric for Deep Metric Learning . https://kevinmusgrave.github.io/pytorch-metric-learning/distances/#snrdistance"
         },
         "decision_curve_upper_bound": {
             "display_name": "Robustness of classifiers: from adversarial to random noise score",
-            "type": "numeric",
+            "type": "Numeric",
             "has_range": false,
             "range": [null, null],
             "explanation": "Robustness of classifiers: from adversarial to random noise. Requires hand coding their math."
         },
         "decision_curve_lower_bound": {
             "display_name": "Robustness of classifiers: from adversarial to random noise score",
-            "type": "numeric",
+            "type": "Numeric",
             "has_range": false,
             "range": [null, null],
             "explanation": "Robustness of classifiers: from adversarial to random noise. Requires hand coding their math"
@@ -40,7 +40,7 @@
 
         "added_noise": {
             "display_name": "Accuracy After Noise",
-            "type": "numeric",
+            "type": "Numeric",
             "has_range": false,
             "range": [null, null],
             "explanation": "Add Label Noise / Noise proportional to stdev and and compare accuracy?"

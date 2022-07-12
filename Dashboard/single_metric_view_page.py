@@ -4,11 +4,12 @@ import dash_bootstrap_components as dbc
 from dash import Input, Output, html, State
 from server import app, redisUtil
 from dash import dcc, ALL
-from display_types import NumericalElement, FeatureArrayElement, BooleanElement, MatrixElement, DictElement
+from display_types import DisplayFactory
+from display_types import NumericElement, FeatureArrayElement, BooleanElement, MatrixElement, DictElement
 import metric_view_functions as mvf
 logger = logging.getLogger(__name__)
 
-requirements = ["numeric", "feature-array", "boolean", "matrix", "dict"]
+requirements = ["Numeric", "FeatureArray", "Boolean", "Matrix", "Dict"]
 prefix = "indiv_"
 
 
@@ -20,19 +21,8 @@ def populate_display_obj(group, metric):
     metric_values = redisUtil.get_metric_values()
     metric_type = redisUtil.get_metric_info()
     type = metric_type[group][metric]["type"]
-    display_obj = None
-    if type == "numeric":
-        display_obj = NumericalElement(metric)
-    elif type == "feature-array":
-        display_obj = FeatureArrayElement(metric, redisUtil.get_project_info()["features"])
-    elif type == "boolean":
-        display_obj = BooleanElement(metric)
-    elif type == "matrix":
-        display_obj = MatrixElement(metric)
-    elif type == "dict":
-        display_obj = DictElement(metric)
-    else:
-        assert("Metric type " + type + " must be one of (numeric, vector-array, bool, matrix, dict)")
+    factory = DisplayFactory()
+    display_obj = factory.get_display(metric, type, redisUtil)
     for i, data in enumerate(metric_values):
         data = data[dataset]
         print("Value: ", data[group][metric])

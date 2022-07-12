@@ -2,7 +2,7 @@
     "name" : "performance_cl_probas",
     "display_name": "Probability Classification Performance Metrics",
     "compatibility": {"task_type": "binary_classification",
-                      "data_type": ["numeric"],
+                      "data_type": ["Numeric"],
                       "output_requirements": ["predict", "predict_proba"],
                       "dataset_requirements": ["y"]},
     "src": "stats",
@@ -12,7 +12,7 @@
     "metrics": {
         "auc": {
             "display_name": "Area Under the Curve",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, 1],

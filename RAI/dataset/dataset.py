@@ -2,8 +2,8 @@ __all__ = ['Feature', 'MetaDatabase', 'Data', 'Dataset']
 import numpy as np
 
 
-all_data_types = {"numeric", "image", "text"}
-all_data_types_lax = {"integer", "float", "numeric", "image", "text"}
+all_data_types = {"Numeric", "image", "text"}
+all_data_types_lax = {"integer", "float", "Numeric", "image", "text"}
 
 class Feature:
     def __init__(self, name: str, dtype: str, description: str, categorical=False, values=None, sensitive=False) -> None:
@@ -75,7 +75,7 @@ class MetaDatabase:
         for i, f in enumerate(features):
             self.scalar_mask[i] = not f.categorical
             # TODO: Once images are added, this will also need incorporate images
-            if f.dtype.startswith("int") or f.dtype.startswith("float") or f.dtype == "numeric":
+            if f.dtype.startswith("int") or f.dtype.startswith("float") or f.dtype == "Numeric":
                 self.numerical_mask[i] = True
                 if not f.categorical:
                     self.scalar_map.append(i)
@@ -97,6 +97,6 @@ class MetaDatabase:
 
         for feature in self.features:
             if feature.dtype.startswith("float") or feature.dtype.startswith("int"):
-                self.data_format.add("numeric")
+                self.data_format.add("Numeric")
             else:
                 self.data_format.add(feature.dtype)

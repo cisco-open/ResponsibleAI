@@ -2,7 +2,7 @@
     "name": "prediction_fairness",
     "display_name" : "Classification Fairness Metrics",
     "compatibility": {"task_type": "classification",
-                      "data_type": ["numeric"],
+                      "data_type": ["Numeric"],
                       "output_requirements": ["predict"],
                       "dataset_requirements": ["X", "y", "sensitive_features"]},
     "src": "equal_treatment",
@@ -12,7 +12,7 @@
     "metrics": {
         "average_abs_odds_difference": {
             "display_name": "Average Abs Odds Difference",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, 1],
@@ -20,7 +20,7 @@
         },
         "between_all_groups_coefficient_of_variation": {
             "display_name": "BG Coefficient of Variation",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, null],
@@ -28,7 +28,7 @@
         },
         "between_all_groups_generalized_entropy_index": {
             "display_name": "All Groups Gen Entropy Index",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, null],
@@ -36,7 +36,7 @@
         },
         "between_all_groups_theil_index": {
             "display_name": "Between all Groups Theil Index",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, null],
@@ -44,7 +44,7 @@
         },
         "between_group_coefficient_of_variation": {
             "display_name": "BG Coefficient of Var",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": false,
             "range": [null, null],
@@ -52,7 +52,7 @@
         },
         "between_group_generalized_entropy_index": {
             "display_name": "BG General Entropy Index",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, null],
@@ -60,7 +60,7 @@
         },
         "between_group_theil_index": {
             "display_name": "BG Theil Index",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, null],
@@ -68,7 +68,7 @@
         },
         "coefficient_of_variation": {
             "display_name": "Coefficient of Variation",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, null],
@@ -76,7 +76,7 @@
         },
         "consistency": {
             "display_name": "Consistency",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": false,
             "range": [null, null],
@@ -84,7 +84,7 @@
         },
         "differential_fairness_bias_amplification": {
             "display_name": "Diff Fairness Bias Amplification",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": false,
             "range": [null, null],
@@ -92,7 +92,7 @@
         },
         "error_rate": {
             "display_name": "Error Rate",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, 1],
@@ -100,7 +100,7 @@
         },
         "error_rate_difference": {
             "display_name": "Error Rate Difference",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [-1, 1],
@@ -108,7 +108,7 @@
         },
         "error_rate_ratio": {
             "display_name": "Error Rate Ratio",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, null],
@@ -116,7 +116,7 @@
         },
         "false_discovery_rate": {
             "display_name": "False Discovery Rate",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, 1],
@@ -124,7 +124,7 @@
         },
         "false_discovery_rate_difference": {
             "display_name": "False Discovery Rate Diff",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [-1, 1],
@@ -132,7 +132,7 @@
         },
         "false_discovery_rate_ratio": {
             "display_name": "False Discovery Rate Ratio",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, null],
@@ -140,7 +140,7 @@
         },
         "false_negative_rate": {
             "display_name": "False Negative Rate",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, null],
@@ -148,7 +148,7 @@
         },
         "false_negative_rate_difference": {
             "display_name": "False Negative Rate Diff",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": false,
             "range": [null, null],
@@ -156,7 +156,7 @@
         },
         "false_negative_rate_ratio": {
             "display_name": "False Negative Rate Ratio",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, null],
@@ -164,7 +164,7 @@
         },
         "generalized_entropy_index": {
             "display_name": "Generalized Entropy Index",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": false,
             "range": [null, null],
@@ -172,7 +172,7 @@
         },
         "generalized_true_negative_rate": {
             "display_name": "Gen True Negative Rate",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, null],
@@ -180,7 +180,7 @@
         },
         "generalized_true_positive_rate": {
             "display_name": "Gen True Positive Rate",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, null],
@@ -188,7 +188,7 @@
         },
         "negative_predictive_value": {
             "display_name": "Negative Predictive Value",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, 1],
@@ -196,7 +196,7 @@
         },
         "num_false_negatives": {
             "display_name": "False Negative Count",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, null],
@@ -204,7 +204,7 @@
         },
         "num_false_positives": {
             "display_name": "False Positive Count",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, null],
@@ -212,7 +212,7 @@
         },
         "num_generalized_false_negatives": {
             "display_name": "Gen False Negative Count",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, null],
@@ -220,7 +220,7 @@
         },
         "num_generalized_false_positives": {
             "display_name": "Gen False Positive Count",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, null],
@@ -228,7 +228,7 @@
         },
         "num_generalized_true_negatives": {
             "display_name": "Gen True Negative Count",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, null],
@@ -236,7 +236,7 @@
         },
         "num_generalized_true_positives": {
             "display_name": "Generalized True Positive Count",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, null],
@@ -244,7 +244,7 @@
         },
         "num_instances": {
             "display_name": "Instance Count",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, null],
@@ -252,7 +252,7 @@
         },
         "num_negatives": {
             "display_name": "Negative Count",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, null],
@@ -260,7 +260,7 @@
         },
         "num_positives": {
             "display_name": "Positive Count",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, null],
@@ -268,7 +268,7 @@
         },
         "num_pred_negatives": {
             "display_name": "Negative Prediction Count",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, null],
@@ -276,7 +276,7 @@
         },
         "num_pred_positives": {
             "display_name": "Positive Prediction Count",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, null],
@@ -284,7 +284,7 @@
         },
         "num_true_negatives": {
             "display_name": "True Negative Count",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, null],
@@ -292,7 +292,7 @@
         },
         "num_true_positives": {
             "display_name": "True Positive Count",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, null],
@@ -300,7 +300,7 @@
         },
         "positive_predictive_value": {
             "display_name": "Positive Predictive Value",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": false,
             "range": [null, null],
@@ -308,7 +308,7 @@
         },
         "smoothed_empirical_differential_fairness": {
             "display_name": "Smoothed Emp Diff Fairness",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, 1],
@@ -316,7 +316,7 @@
         },
         "true_negative_rate": {
             "display_name": "True Negative Rate",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, 1],
@@ -324,7 +324,7 @@
         },
         "true_positive_rate": {
             "display_name": "True Positive Rate",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, 1],
@@ -332,7 +332,7 @@
         },
         "true_positive_rate_difference": {
             "display_name": "True Positive Rate Difference",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [-1, 1],

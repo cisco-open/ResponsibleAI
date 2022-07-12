@@ -8,7 +8,6 @@ from RAI.AISystem import AISystem, Model
 from RAI.dataset import Data, Dataset
 from RAI.redis import RaiRedis
 from RAI.utils import df_to_RAI
-from imblearn.over_sampling import SMOTE
 
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))

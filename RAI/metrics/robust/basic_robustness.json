@@ -2,7 +2,7 @@
     "name": "basic_robustness",
     "display_name": "Basic Robustness Metrics",
     "compatibility": {"task_type": null,
-                      "data_type": ["numeric"],
+                      "data_type": ["Numeric"],
                       "output_requirements": [],
                       "dataset_requirements": ["X"]},
     "dependency_list": [],
@@ -11,14 +11,14 @@
     "metrics": {
         "normalized_feature_01": {
             "display_name": "Normalized Features 0-1",
-            "type": "boolean",
+            "type": "Boolean",
             "has_range": false,
             "range": [null, null],
             "explanation": "Whether of not each training feature is normalized to 0/1."
         },
         "normalized_feature_std": {
             "display_name": "Normalized Features Standard",
-            "type": "boolean",
+            "type": "Boolean",
             "has_range": false,
             "range": [null, null],
             "explanation": "Whether of not each training feature is normalized to standard."

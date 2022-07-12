@@ -1,9 +1,6 @@
 __all__ = ['Metric', 'metric_types']
 
-import os.path
-from RAI.metrics.registry import register_class
-
-metric_types = {"numeric", "multivalued", "other", "vector", "vector-dict", "matrix", "boolean"}
+metric_types = {"Numeric", "multivalued", "other", "vector", "vector-dict", "Matrix", "boolean"}
 
 
 class Metric:

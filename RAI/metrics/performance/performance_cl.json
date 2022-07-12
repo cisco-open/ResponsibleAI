@@ -2,7 +2,7 @@
     "name" : "performance_cl",
     "display_name": "Classification Performance Metrics",
     "compatibility": {"task_type": "classification",
-                      "data_type": ["numeric"],
+                      "data_type": ["Numeric"],
                       "output_requirements": ["predict"],
                       "dataset_requirements": ["y"]},
     "src": "stats",
@@ -12,7 +12,7 @@
     "metrics": {
         "accuracy": {
             "display_name": "Accuracy",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, 1],
@@ -20,7 +20,7 @@
         },
         "balanced_accuracy": {
             "display_name": "Balanced Accuracy",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, 1],
@@ -28,7 +28,7 @@
         },
         "confusion_matrix": {
             "display_name": "Confusion Matrix",
-            "type": "matrix",
+            "type": "Matrix",
             "tags": [],
             "has_range": false,
             "range": null,
@@ -44,7 +44,7 @@
         },
         "f1_avg": {
             "display_name": "Average F1 Score",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, 1],
@@ -52,7 +52,7 @@
         },
         "fp_rate_avg": {
             "display_name": "Average False Positive Rate",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, 1],
@@ -76,7 +76,7 @@
         },
         "jaccard_score_avg": {
             "display_name": "Average Jaccard Score",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, 1],
@@ -92,7 +92,7 @@
         },
         "precision_score_avg": {
             "display_name": "Average Precision Score",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, 1],
@@ -108,7 +108,7 @@
         },
         "recall_score_avg": {
             "display_name": "Average Recall Score",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, 1],

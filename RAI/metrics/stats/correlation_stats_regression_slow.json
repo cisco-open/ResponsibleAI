@@ -2,7 +2,7 @@
     "name": "correlation_stats_regression_slow",
     "display_name": "Regression Correlation Stats Metrics",
     "compatibility": {"task_type": "regression",
-                      "data_type": ["numeric"],
+                      "data_type": ["Numeric"],
                       "output_requirements": [],
                       "dataset_requirements": ["X", "y"]},
     "dependency_list": [],
@@ -11,14 +11,14 @@
     "metrics": {
         "siegel_slopes": {
             "display_name": "Siegel Estimator",
-            "type": "feature-array",
+            "type": "FeatureArray",
             "has_range": false,
             "range": null,
             "explanation": ""
         },
         "theil_slopes": {
             "display_name": "Theil-Sen Estimator",
-            "type": "feature-array",
+            "type": "FeatureArray",
             "has_range": false,
             "range": null,
             "explanation": ""

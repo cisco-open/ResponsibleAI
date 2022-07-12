@@ -2,7 +2,7 @@
     "name": "individual_fairness",
     "display_name" : "Individual Fairness Metrics",
     "compatibility": {"task_type": "classification",
-                      "data_type": ["numeric"],
+                      "data_type": ["Numeric"],
                       "output_requirements": ["predict"],
                       "dataset_requirements": ["X", "y", "sensitive_features"]},
     "src": "equal_treatment",
@@ -12,7 +12,7 @@
     "metrics": {
         "generalized_entropy_error": {
             "display_name": "Generalized Entropy Error",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, null],
@@ -20,7 +20,7 @@
         },
         "theil_index": {
             "display_name": "Theil Index",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, null],
@@ -28,7 +28,7 @@
         },
         "coefficient_of_variation": {
             "display_name": "Coefficient of Variance",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, null],
@@ -36,7 +36,7 @@
         },
         "consistency_score": {
             "display_name": "Consistency Score",
-            "type": "numeric",
+            "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, 1],
