@@ -28,13 +28,11 @@ class DictElement(DisplayElement):
             self._dfs(metric_data, [], result)
             self._data["features"] = result
 
-        print("features: ", self._data["features"])
         self._data["tag"].append(tag)
         i = 0
         new_dict = {}
         for features in self._data["features"]:
             res = metric_data
-            print("feature: ", features)
             for val in features:
                 res = res[val]
             new_dict[i] = res

@@ -4,11 +4,9 @@ from dash import dcc
 
 
 # For metrics with data per feature
-class FeatureArrayElement(DisplayElement):
+class FeatureArrayElement(DisplayElement, requirements=['features']):
     def __init__(self, name, features=None):
         super().__init__(name)
-        self.requirements.append("features")
-
         self.x = 0
         self._data["features"] = features.copy()
         self._data["features"].insert(0, "Tag")

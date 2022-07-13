@@ -9,6 +9,10 @@ class SingleDisplayElement(DisplayElement, metaclass=ABCMeta):
         super().__init__(name)
         self.requires_tag_chooser = True
 
+    def __init_subclass__(cls, class_location=None, reqs=[], **kwargs):
+        super().__init_subclass__(**kwargs)
+        cls.requirements = reqs
+
     def get_tags(self):
         return self._data["tag"]
 

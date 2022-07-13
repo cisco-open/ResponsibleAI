@@ -11,7 +11,7 @@
     "metrics": {
         "mean": {
             "display_name": "Mean",
-            "type": "FeatureArray",
+            "type": "Dict",
             "has_range": false,
             "range": null,
             "explanation": "Mean is the expected value of data."
@@ -39,189 +39,189 @@
         },
         "geometric_mean": {
             "display_name": "Geometric Mean",
-            "type": "FeatureArray",
+            "type": "Dict",
             "has_range": false,
             "range": [null, null],
             "explanation": "The Geometric Mean shows the central tendency of a set of numbers. It is calculated by taking the n-th root of the product of n numbers."
         },
         "kurtosis": {
             "display_name": "Kurtosis",
-            "type": "FeatureArray",
+            "type": "Dict",
             "has_range": false,
             "range": [null, null],
             "explanation": "Kurtosis is the tailedness of skewdness of data. "
         },
         "mode": {
             "display_name": "Mode",
-            "type": "FeatureArray",
+            "type": "Dict",
             "has_range": false,
             "range": [null, null],
             "explanation": "Mode is the most often appearing value in a set of data values."
         },
         "skew": {
             "display_name": "Skew",
-            "type": "FeatureArray",
+            "type": "Dict",
             "has_range": false,
             "range": [null, null],
             "explanation": "Skew measures the symmetry of a data set."
         },
         "kstat_1": {
             "display_name": "K_Statistic 1",
-            "type": "FeatureArray",
+            "type": "Dict",
             "has_range": false,
             "range": [null, null],
             "explanation": "A unique, symmetric and unbiased estimator of the first cumulant kappa-n"
         },
         "kstat_2": {
             "display_name": "K-Statistic 2",
-            "type": "FeatureArray",
+            "type": "Dict",
             "has_range": false,
             "range": [null, null],
             "explanation": "A unique, symmetric and unbiased estimator of the second cumulant kappa-n"
         },
         "kstat_3": {
             "display_name": "K-Statistic 3",
-            "type": "FeatureArray",
+            "type": "Dict",
             "has_range": false,
             "range": [null, null],
             "explanation": "A unique, symmetric and unbiased estimator of the third cumulant kappa-n"
         },
         "kstat_4": {
             "display_name": "K-Statistic 4",
-            "type": "FeatureArray",
+            "type": "Dict",
             "has_range": false,
             "range": [null, null],
             "explanation": "A unique, symmetric and unbiased estimator of the fourth cumulant kappa-n"
         },
         "kstatvar": {
             "display_name": "K-Statistic Variance",
-            "type": "FeatureArray",
+            "type": "Dict",
             "has_range": true,
             "range": [0, null],
             "explanation": ""
         },
         "variation": {
             "display_name": "Coefficient of Variation",
-            "type": "FeatureArray",
+            "type": "Dict",
             "has_range": true,
             "range": [0, null],
             "explanation": "Indicates the ratio of the standard deviation to the mean. Higher values indicate higher spread."
         },
         "iqr": {
             "display_name": "Interquartile Range",
-            "type": "FeatureArray",
+            "type": "Dict",
             "has_range": false,
             "range": [null, null],
             "explanation": "IQR is the difference between the 75th and 25th percentile of data. A robust measure of dispersion."
         },
         "sem": {
             "display_name": "Standard Error of the Mean",
-            "type": "FeatureArray",
+            "type": "Dict",
             "has_range": true,
             "range": [0, null],
             "explanation": "Standard Error of the mean is the standard deviation of the sampling distribution of the mean. Calculated by dividing the standard deviation by the root of the sample size."
         },
         "bayes_mean": {
             "display_name": "Mean Confidence Interval",
-            "type": "FeatureArray",
+            "type": "Dict",
             "has_range": false,
             "range": [null, null],
             "explanation": "Bayesian estimate of upper and lower bounds of the population mean"
         },
         "bayes_mean_avg": {
             "display_name": "Mean Confidence Interval Average",
-            "type": "FeatureArray",
+            "type": "Dict",
             "has_range": false,
             "range": [null, null],
             "explanation": "Bayesian estimate of the population mean"
         },
         "bayes_variance": {
             "display_name": "Variance Confidence Interval",
-            "type": "FeatureArray",
+            "type": "Dict",
             "has_range": true,
             "range": [0, null],
             "explanation": "Bayesian estimate of upper and lower bounds of the population mean"
         },
         "bayes_variance_avg": {
             "display_name": "Variance Confidence Interval Avg",
-            "type": "FeatureArray",
+            "type": "Dict",
             "has_range": true,
             "range": [0, null],
             "explanation": "Bayesian estimate of the population mean"
         },
         "bayes_std": {
             "display_name": "Stdev Confidence Interval",
-            "type": "FeatureArray",
+            "type": "Dict",
             "has_range": true,
             "range": [0, null],
             "explanation": "Bayesian estimate of upper and lower bounds of the population standard deviation"
         },
         "bayes_std_avg": {
             "display_name": "Stdev Confidence Interval Avg",
-            "type": "FeatureArray",
+            "type": "Dict",
             "has_range": true,
             "range": [0, null],
             "explanation": "Bayesian estimate of the population standard deviation."
         },
         "frozen_mean_mean": {
             "display_name": "Frozen Mean Mean",
-            "type": "FeatureArray",
+            "type": "Dict",
             "has_range": false,
             "range": [null, null],
             "explanation": "Population mean estimator. https://scholarsarchive.byu.edu/facpub/278/"
         },
         "frozen_mean_variance": {
             "display_name": "Frozen Mean Variance",
-            "type": "FeatureArray",
+            "type": "Dict",
             "has_range": true,
             "range": [0, null],
             "explanation": "Population variance of the mean estimator. https://scholarsarchive.byu.edu/facpub/278/"
         },
         "frozen_mean_std": {
             "display_name": "Frozen Mean Standard Deviation",
-            "type": "FeatureArray",
+            "type": "Dict",
             "has_range": true,
             "range": [0, null],
             "explanation": "Population standard deviation of the mean estimator. https://scholarsarchive.byu.edu/facpub/278/"
         },
         "frozen_variance_mean": {
             "display_name": "Frozen Variance Mean",
-            "type": "FeatureArray",
+            "type": "Dict",
             "has_range": true,
             "range": [0, null],
             "explanation": "Population variance of the mean estimator. https://scholarsarchive.byu.edu/facpub/278/"
         },
         "frozen_variance_variance": {
             "display_name": "Frozen Variance Variance",
-            "type": "FeatureArray",
+            "type": "Dict",
             "has_range": true,
             "range": [0, null],
             "explanation": "Population variance of the variance estimator. https://scholarsarchive.byu.edu/facpub/278/"
         },
         "frozen_variance_std": {
             "display_name": "Frozen Variance Standard Deviation",
-            "type": "FeatureArray",
+            "type": "Dict",
             "has_range": true,
             "range": [0, null],
             "explanation": "Population variance of the standard deviation estimator. https://scholarsarchive.byu.edu/facpub/278/"
         },
         "frozen_std_mean": {
             "display_name": "Frozen Standard Deviation Mean",
-            "type": "FeatureArray",
+            "type": "Dict",
             "has_range": true,
             "range": [0, null],
             "explanation": "Population mean of the standard deviation estimator. https://scholarsarchive.byu.edu/facpub/278/"
         },
         "frozen_std_variance": {
             "display_name": "Frozen Stdev Variance",
-            "type": "FeatureArray",
+            "type": "Dict",
             "has_range": true,
             "range": [0, null],
             "explanation": "Population variance of the standard deviation estimator. https://scholarsarchive.byu.edu/facpub/278/"
         },
         "frozen_std_std": {
             "display_name": "Frozen Stdev Standard Deviation",
-            "type": "FeatureArray",
+            "type": "Dict",
             "has_range": true,
             "range": [0, null],
             "explanation": "Population Standard deviation of the standard deviation estimator. https://scholarsarchive.byu.edu/facpub/278/"

@@ -11,21 +11,21 @@
     "metrics": {
         "moment_1": {
             "display_name": "First Moment",
-            "type": "FeatureArray",
+            "type": "Dict",
             "has_range": false,
             "range": null,
             "explanation": "Mean is the expected value of data."
         },
         "moment_2": {
             "display_name": "Second Moment",
-            "type": "FeatureArray",
+            "type": "Dict",
             "has_range": false,
             "range": null,
             "explanation": "Mean is the expected value of data."
         },
         "moment_3": {
             "display_name": "Third Moment",
-            "type": "FeatureArray",
+            "type": "Dict",
             "has_range": false,
             "range": null,
             "explanation": "Mean is the expected value of data."

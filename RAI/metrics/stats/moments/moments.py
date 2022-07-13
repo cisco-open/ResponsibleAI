@@ -1,7 +1,5 @@
-import json
-
 from RAI.metrics.metric_group import MetricGroup
-from RAI.utils import map_to_feature_array
+from RAI.utils import map_to_feature_array, map_to_feature_dict, convert_float32_to_float64
 import scipy.stats
 import os
 import numpy as np
@@ -23,13 +21,9 @@ class StatMomentGroup(MetricGroup, class_location=os.path.abspath(__file__)):
         scalar_map = self.ai_system.meta_database.scalar_map
         features = self.ai_system.meta_database.features
 
-        self.metrics["moment_1"].value = map_to_feature_array(scipy.stats.moment(scalar_data, 1), features, scalar_map)
-        self.metrics["moment_2"].value = map_to_feature_array(scipy.stats.moment(scalar_data, 2), features, scalar_map)
-        self.metrics["moment_3"].value = map_to_feature_array(scipy.stats.moment(scalar_data, 3), features, scalar_map)
-
-        for i in range(len(self.metrics["moment_1"].value)):
-            if isinstance(self.metrics["moment_1"].value[i], np.float32):
-                self.metrics["moment_1"].value[i] = np.float64(self.metrics["moment_1"].value[i])
-                self.metrics["moment_2"].value[i] = np.float64(self.metrics["moment_2"].value[i])
-                self.metrics["moment_3"].value[i] = np.float64(self.metrics["moment_3"].value[i])
-
+        self.metrics["moment_1"].value = map_to_feature_dict(scipy.stats.moment(scalar_data, 1), features, scalar_map)
+        self.metrics["moment_2"].value = map_to_feature_dict(scipy.stats.moment(scalar_data, 2), features, scalar_map)
+        self.metrics["moment_3"].value = map_to_feature_dict(scipy.stats.moment(scalar_data, 3), features, scalar_map)
+        self.metrics["moment_1"].value = convert_float32_to_float64(self.metrics["moment_1"].value)
+        self.metrics["moment_2"].value = convert_float32_to_float64(self.metrics["moment_2"].value)
+        self.metrics["moment_3"].value = convert_float32_to_float64(self.metrics["moment_3"].value)

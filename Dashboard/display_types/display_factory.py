@@ -7,7 +7,7 @@ def get_display(metric_name: str, metric_type: str, redisUtil):
     metric_type = metric_type + "Element"
     additional_features = {}
     if metric_type in registry:
-        requirements = (registry[metric_type](metric_name)).requirements
+        requirements = registry[metric_type].get_requirements()
         if 'features' in requirements:
             additional_features['features'] = redisUtil.get_project_info()["features"]
         return registry[metric_type](metric_name, **additional_features)

@@ -53,7 +53,8 @@ class RaiRedis:
             for group in metrics[dataset]:
                 for m in metrics[dataset][group]:
                     print(m, "\n")
-
+                    
+        print("testing json dumps: \n")
         for dataset in metrics:
             for group in metrics[dataset]:
                 for m in metrics[dataset][group]:
@@ -62,9 +63,9 @@ class RaiRedis:
                     print(m, "\n")
                     print(metrics[dataset][group][m])
                     print(json.dumps(metrics[dataset][group][m]))
-
-        # print("JSON metric dump: ", json.dumps(metrics))
         '''
+        # print("JSON metric dump: ", json.dumps(metrics))
+        
         # TODO: Add a function which makes all data compatible with json (no float32)
         self.redis_connection.rpush(self.ai_system.name + '|metric_values', json.dumps(metrics))  # True
         self.redis_connection.publish('update', "New measurement: %s" % metrics[list(metrics.keys())[0]]["metadata"]["date"])

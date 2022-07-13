@@ -3,8 +3,9 @@ import numpy as np
 import scipy.stats
 import warnings
 import os
-from RAI.utils.utils import calculate_per_mapped_features, map_to_feature_array, convert_float32_to_float64
+from RAI.utils.utils import calculate_per_mapped_features, map_to_feature_dict, map_to_feature_array, convert_float32_to_float64
 import json
+
 
 class StatMetricGroup(MetricGroup, class_location=os.path.abspath(__file__)):
     def __init__(self, ai_system) -> None:
@@ -22,7 +23,7 @@ class StatMetricGroup(MetricGroup, class_location=os.path.abspath(__file__)):
         scalar_map = self.ai_system.meta_database.scalar_map
         features = self.ai_system.meta_database.features
 
-        self.metrics["mean"].value = map_to_feature_array(np.mean(scalar_data, **args.get("mean", {}), axis=0), features, scalar_map)
+        self.metrics["mean"].value = map_to_feature_dict(np.mean(scalar_data, **args.get("mean", {}), axis=0), features, scalar_map)
         self.metrics["mean"].value = convert_float32_to_float64(self.metrics["mean"].value)
         self.metrics["covariance"].value = map_to_feature_array(np.cov(scalar_data.T, **args.get("covariance", {})), features, scalar_map)
         self.metrics["num_nan_rows"].value = np.count_nonzero(np.isnan(data.X).any(axis=1))
@@ -30,65 +31,65 @@ class StatMetricGroup(MetricGroup, class_location=os.path.abspath(__file__)):
 
         with warnings.catch_warnings():
             warnings.filterwarnings('ignore')
-            self.metrics["geometric_mean"].value = map_to_feature_array(scipy.stats.mstats.gmean(scalar_data), features, scalar_map)
+            self.metrics["geometric_mean"].value = map_to_feature_dict(scipy.stats.mstats.gmean(scalar_data), features, scalar_map)
             self.metrics['geometric_mean'].value = convert_float32_to_float64(self.metrics['geometric_mean'].value)
 
-        self.metrics["mode"].value = map_to_feature_array(scipy.stats.mstats.mode(scalar_data)[0][0], features, scalar_map)
-        self.metrics["skew"].value = map_to_feature_array(scipy.stats.mstats.skew(scalar_data), features, scalar_map)
+        self.metrics["mode"].value = map_to_feature_dict(scipy.stats.mstats.mode(scalar_data)[0][0], features, scalar_map)
+        self.metrics["skew"].value = map_to_feature_dict(scipy.stats.mstats.skew(scalar_data), features, scalar_map)
         self.metrics['skew'].value = convert_float32_to_float64(self.metrics['skew'].value)
-        self.metrics["variation"].value = map_to_feature_array(scipy.stats.mstats.variation(scalar_data), features, scalar_map)
+        self.metrics["variation"].value = map_to_feature_dict(scipy.stats.mstats.variation(scalar_data), features, scalar_map)
         self.metrics['variation'].value = convert_float32_to_float64(self.metrics['variation'].value)
-        self.metrics["sem"].value = map_to_feature_array(scipy.stats.mstats.sem(scalar_data), features, scalar_map)
-        self.metrics['kurtosis'].value = map_to_feature_array(scipy.stats.mstats.kurtosis(scalar_data), features, scalar_map)
+        self.metrics["sem"].value = map_to_feature_dict(scipy.stats.mstats.sem(scalar_data), features, scalar_map)
+        self.metrics['kurtosis'].value = map_to_feature_dict(scipy.stats.mstats.kurtosis(scalar_data), features, scalar_map)
         self.metrics['kurtosis'].value = convert_float32_to_float64(self.metrics['kurtosis'].value)
 
         features = self.ai_system.meta_database.features
         map = self.ai_system.meta_database.scalar_map
 
-        self.metrics["frozen_mean_mean"].value = [None]*len(features)
-        self.metrics["frozen_mean_variance"].value = [None]*len(features)
-        self.metrics["frozen_mean_std"].value = [None]*len(features)
-        self.metrics["frozen_variance_mean"].value = [None]*len(features)
-        self.metrics["frozen_variance_variance"].value = [None]*len(features)
-        self.metrics["frozen_variance_std"].value = [None]*len(features)
-        self.metrics["frozen_std_mean"].value = [None]*len(features)
-        self.metrics["frozen_std_variance"].value = [None]*len(features)
-        self.metrics["frozen_std_std"].value = [None]*len(features)
+        self.metrics["frozen_mean_mean"].value = {}
+        self.metrics["frozen_mean_variance"].value = {}
+        self.metrics["frozen_mean_std"].value = {}
+        self.metrics["frozen_variance_mean"].value = {}
+        self.metrics["frozen_variance_variance"].value = {}
+        self.metrics["frozen_variance_std"].value = {}
+        self.metrics["frozen_std_mean"].value = {}
+        self.metrics["frozen_std_variance"].value = {}
+        self.metrics["frozen_std_std"].value = {}
 
-        values = calculate_per_mapped_features(scipy.stats.mvsdist, map, features, data.scalar)
+        values = calculate_per_mapped_features(scipy.stats.mvsdist, map, features, data.scalar, to_array=False)
 
-        for i, value in enumerate(values):
-            if value is not None:
-                self.metrics["frozen_mean_mean"].value[i] = value[0].mean()
-                self.metrics["frozen_mean_variance"].value[i] = value[0].var()
-                self.metrics["frozen_mean_std"].value[i] = value[0].std()
-                self.metrics["frozen_variance_mean"].value[i] = value[1].mean()
-                self.metrics["frozen_variance_variance"].value[i] = value[1].var()
-                self.metrics["frozen_variance_std"].value[i] = value[1].std()
-                self.metrics["frozen_std_mean"].value[i] = value[2].mean()
-                self.metrics["frozen_std_variance"].value[i] = value[2].var()
-                self.metrics["frozen_std_std"].value[i] = value[2].std()
+        for key in values:
+            if values[key] is not None:
+                self.metrics["frozen_mean_mean"].value[key] = values[key][0].mean()
+                self.metrics["frozen_mean_variance"].value[key] = values[key][0].var()
+                self.metrics["frozen_mean_std"].value[key] = values[key][0].std()
+                self.metrics["frozen_variance_mean"].value[key] = values[key][1].mean()
+                self.metrics["frozen_variance_variance"].value[key] = values[key][1].var()
+                self.metrics["frozen_variance_std"].value[key] = values[key][1].std()
+                self.metrics["frozen_std_mean"].value[key] = values[key][2].mean()
+                self.metrics["frozen_std_variance"].value[key] = values[key][2].var()
+                self.metrics["frozen_std_std"].value[key] = values[key][2].std()
 
-        self.metrics["kstat_1"].value = calculate_per_mapped_features(scipy.stats.kstat, map, features, data.scalar, 1)
-        self.metrics["kstat_2"].value = calculate_per_mapped_features(scipy.stats.kstat, map, features, data.scalar, 2)
-        self.metrics["kstat_3"].value = calculate_per_mapped_features(scipy.stats.kstat, map, features, data.scalar, 3)
-        self.metrics["kstat_4"].value = calculate_per_mapped_features(scipy.stats.kstat, map, features, data.scalar, 4)
-        self.metrics["kstatvar"].value = calculate_per_mapped_features(scipy.stats.kstatvar, map, features, data.scalar)
-        self.metrics["iqr"].value = calculate_per_mapped_features(scipy.stats.iqr, map, features, data.scalar)
+        self.metrics["kstat_1"].value = calculate_per_mapped_features(scipy.stats.kstat, map, features, data.scalar, 1, to_array=False)
+        self.metrics["kstat_2"].value = calculate_per_mapped_features(scipy.stats.kstat, map, features, data.scalar, 2, to_array=False)
+        self.metrics["kstat_3"].value = calculate_per_mapped_features(scipy.stats.kstat, map, features, data.scalar, 3, to_array=False)
+        self.metrics["kstat_4"].value = calculate_per_mapped_features(scipy.stats.kstat, map, features, data.scalar, 4, to_array=False)
+        self.metrics["kstatvar"].value = calculate_per_mapped_features(scipy.stats.kstatvar, map, features, data.scalar, to_array=False)
+        self.metrics["iqr"].value = calculate_per_mapped_features(scipy.stats.iqr, map, features, data.scalar, to_array=False)
 
-        self.metrics["bayes_mean"].value = [None] * len(features)
-        self.metrics["bayes_mean_avg"].value = [None] * len(features)
-        self.metrics["bayes_variance"].value = [None] * len(features)
-        self.metrics["bayes_variance_avg"].value = [None] * len(features)
-        self.metrics["bayes_std"].value = [None] * len(features)
-        self.metrics["bayes_std_avg"].value = [None] * len(features)
-        values = calculate_per_mapped_features(scipy.stats.bayes_mvs, map, features, data.scalar)
+        self.metrics["bayes_mean"].value = {}
+        self.metrics["bayes_mean_avg"].value = {}
+        self.metrics["bayes_variance"].value = {}
+        self.metrics["bayes_variance_avg"].value = {}
+        self.metrics["bayes_std"].value = {}
+        self.metrics["bayes_std_avg"].value = {}
+        values = calculate_per_mapped_features(scipy.stats.bayes_mvs, map, features, data.scalar, to_array=False)
 
-        for i, value in enumerate(values):
-            if value is not None:
-                self.metrics["bayes_mean"].value[i] = value[0][1]
-                self.metrics["bayes_mean_avg"].value[i] = value[0][0]
-                self.metrics["bayes_variance"].value[i] = value[1][1]
-                self.metrics["bayes_variance_avg"].value[i] = value[1][0]
-                self.metrics["bayes_std"].value[i] = value[2][1]
-                self.metrics["bayes_std_avg"].value[i] = value[2][0]
+        for key in values:
+            if values[key] is not None:
+                self.metrics["bayes_mean"].value[key] = values[key][0][1]
+                self.metrics["bayes_mean_avg"].value[key] = values[key][0][0]
+                self.metrics["bayes_variance"].value[key] = values[key][1][1]
+                self.metrics["bayes_variance_avg"].value[key] = values[key][1][0]
+                self.metrics["bayes_std"].value[key] = values[key][2][1]
+                self.metrics["bayes_std_avg"].value[key] = values[key][2][0]
