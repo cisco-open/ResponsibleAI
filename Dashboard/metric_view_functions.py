@@ -5,6 +5,9 @@ from server import redisUtil
 from dash import dcc
 import plotly.express as px
 import dash_bootstrap_components as dbc
+from display_types.display_factory import is_compatible
+
+
 logger = logging.getLogger(__name__)
 
 __all__ = ['get_nonempty_groups', 'get_valid_metrics', 'get_search_options', 'get_graph', 'get_display',
@@ -16,7 +19,7 @@ def get_nonempty_groups(requirements):
     valid_groups = []
     for group in metric_info:
         for metric in metric_info[group]:
-            if "type" in metric_info[group][metric] and metric_info[group][metric]["type"] in requirements:
+            if "type" in metric_info[group][metric] and is_compatible(metric_info[group][metric]["type"], requirements):
                 valid_groups.append(group)
                 break
     return valid_groups
@@ -26,7 +29,7 @@ def get_valid_metrics(group, requirements):
     metric_info = redisUtil.get_metric_info()
     valid_metrics = []
     for metric in metric_info[group]:
-        if "type" in metric_info[group][metric] and metric_info[group][metric]["type"] in requirements:
+        if "type" in metric_info[group][metric] and is_compatible(metric_info[group][metric]["type"], requirements):
             valid_metrics.append(metric)
     return valid_metrics
 
@@ -36,7 +39,7 @@ def get_search_options(requirements):
     valid_searches = []
     for group in metric_info:
         for metric in metric_info[group]:
-            if "type" in metric_info[group][metric] and metric_info[group][metric]["type"] in requirements:
+            if "type" in metric_info[group][metric] and is_compatible(metric_info[group][metric]["type"], requirements):
                 valid_searches.append(metric + " | " + group)
     return valid_searches
 

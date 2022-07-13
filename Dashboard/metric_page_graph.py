@@ -5,11 +5,11 @@ from dash import Input, Output, html, State
 from server import app, redisUtil
 from dash import dcc, ALL
 import plotly.graph_objs as go
-from display_types import DisplayFactory
+from display_types import get_display
 import metric_view_functions as mvf
 logger = logging.getLogger(__name__)
 
-requirements = ["Numeric", "boolean"]
+requirements = ["Traceable"]
 prefix = "grouped_"
 
 def add_trace_to_fig(fig, group, metric):
@@ -18,8 +18,7 @@ def add_trace_to_fig(fig, group, metric):
     metric_values = redisUtil.get_metric_values()
     metric_type = redisUtil.get_metric_info()
     type = metric_type[group][metric]["type"]
-    factory = DisplayFactory()
-    display_obj = factory.get_display(metric, type, redisUtil)
+    display_obj = get_display(metric, type, redisUtil)
     if display_obj is not None:
         for i, data in enumerate(metric_values):
             data = data[dataset]

@@ -4,28 +4,23 @@ import dash_bootstrap_components as dbc
 from dash import Input, Output, html, State
 from server import app, redisUtil
 from dash import dcc, ALL
-from display_types import DisplayFactory
-from display_types import NumericElement, FeatureArrayElement, BooleanElement, MatrixElement, DictElement
+from display_types import get_display
 import metric_view_functions as mvf
 logger = logging.getLogger(__name__)
 
-requirements = ["Numeric", "FeatureArray", "Boolean", "Matrix", "Dict"]
+requirements = []
 prefix = "indiv_"
 
 
-# TODO: Generalize this with the add traces, combine registry
 def populate_display_obj(group, metric):
     d = {"x": [], "y": [], "tag": [], "metric": [], "text": []}
     dataset = redisUtil.get_current_dataset()
-    # TODO: Make a list of which metric_values instances use the dataset
     metric_values = redisUtil.get_metric_values()
     metric_type = redisUtil.get_metric_info()
     type = metric_type[group][metric]["type"]
-    factory = DisplayFactory()
-    display_obj = factory.get_display(metric, type, redisUtil)
+    display_obj = get_display(metric, type, redisUtil)
     for i, data in enumerate(metric_values):
         data = data[dataset]
-        print("Value: ", data[group][metric])
         display_obj.append(data[group][metric], data["metadata"]["tag"])
     return display_obj, display_obj.requires_tag_chooser
 

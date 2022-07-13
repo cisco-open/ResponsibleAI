@@ -1,6 +1,5 @@
 registry = {}
 
-
 def register_class(class_name, class_object):
     print("registering: ", class_name)
     if class_name != "":
