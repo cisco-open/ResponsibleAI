@@ -37,20 +37,23 @@ def update_metric_selections(group: str, selected: list, options: list):
 
 def get_grouped_checklist():
     groups = mvf.get_nonempty_groups(requirements)
+    metric_info = redisUtil.get_metric_info()
     return html.Div([
             html.Details([
                 html.Summary([dcc.Checklist(
                     id={"type": prefix+"group-checkbox", "group": group},
-                    options=[{"label": " " + group, "value": group}],
+                    options=[{"label": metric_info[group]['meta']['display_name'], "value": group}],
                     value=[],
                     labelStyle={"display": "inline-block"},
                     style={"display": "inline-block"},
+                    inputStyle={"margin-right": "5px"}
                 )]),
                 dcc.Checklist(
                     id={"type": prefix+"child-checkbox", "group": group},
-                    options=[{"label": " " + i, "value": i} for i in mvf.get_valid_metrics(group, requirements)],
+                    options=[{"label": metric_info[group][i]['display_name'], "value": i} for i in mvf.get_valid_metrics(group, requirements)],
                     value=[],
                     labelStyle={"display": "block"},
+                    inputStyle={"margin-right": "5px"},
                     style={"padding-left": "40px"}
                 )]) for group in groups], style={"margin-left": "35%"})
 
@@ -113,6 +116,7 @@ def get_metric_page_graph():
 )
 def update_metric_choices(p_selected, c_selected, reset_button, metric_search, p_options, c_options, p_val, c_val, options):
     ctx = dash.callback_context.triggered[0]["prop_id"]
+    metric_info = redisUtil.get_metric_info()
     if ctx == prefix+'reset_graph.n_clicks':
         to_p_val = [[] for _ in range(len(p_val))]
         to_c_val = [[] for _ in range(len(p_val))]
@@ -133,7 +137,7 @@ def update_metric_choices(p_selected, c_selected, reset_button, metric_search, p
                 c_val[parent_index].append(metric)
             return options, p_val, c_val, metric_search
     group = mvf.get_group_from_ctx(ctx)
-    parent_index = p_options.index([{'label': ' ' + group, 'value': group}])
+    parent_index = p_options.index([{'label': metric_info[group]['meta']['display_name'], 'value': group}])
     if "\"type\":\""+prefix+"group-checkbox" in ctx:
         child_selection = [option["value"] for option in c_options[parent_index] if p_selected[parent_index]]
         options = update_metric_selections(group, child_selection, options.copy())

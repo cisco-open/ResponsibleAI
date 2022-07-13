@@ -27,16 +27,20 @@ def populate_display_obj(group, metric):
 
 def get_grouped_radio_buttons():
     groups = mvf.get_nonempty_groups(requirements)
+    metric_info = redisUtil.get_metric_info()
+
     return html.Div([
             html.Details([
-                html.Summary([html.P([group], style={"display": "inline-block", "margin-bottom": "0px"})]),
+                html.Summary([html.P([metric_info[group]['meta']['display_name']],
+                                     style={"display": "inline-block", "margin-bottom": "0px"})]),
                 dcc.RadioItems(
                     id={"type": prefix+"child-checkbox", "group": group},
                     options=[
-                        {"label": " " + i, "value": i} for i in mvf.get_valid_metrics(group, requirements)
+                        {"label": metric_info[group][i]['display_name'], "value": i} for i in mvf.get_valid_metrics(group, requirements)
                     ],
                     value=[],
                     labelStyle={"display": "block"},
+                    inputStyle={"margin-right": "5px"},
                     style={"padding-left": "40px"}
                 )]) for group in groups], style={"margin-left": "35%"})
 
