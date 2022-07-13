@@ -4,7 +4,6 @@ from server import app
 from dash import dcc
 from metric_page_details import get_metric_page_details
 from metric_page_graph import get_metric_page_graph
-# from single_metric_view_page import get_single_metric_display
 logger = logging.getLogger(__name__)
 
 
