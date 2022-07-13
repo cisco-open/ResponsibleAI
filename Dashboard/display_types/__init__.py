@@ -5,3 +5,4 @@ from .matrix_element import MatrixElement
 from .dict_element import DictElement
 from .display_factory import (is_compatible, get_display)
 from .traceable_element import TraceableElement
+from .vector_element import VectorElement

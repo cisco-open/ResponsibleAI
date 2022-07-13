@@ -36,7 +36,7 @@
         },
         "f1": {
             "display_name": "F1 Score",
-            "type": "vector",
+            "type": "Vector_no_display",
             "tags": [],
             "has_range": true,
             "range": [0, 1],
@@ -60,7 +60,7 @@
         },
         "fp_rate": {
             "display_name": "False Positive Rate",
-            "type": "vector",
+            "type": "Vector_no_display",
             "tags": [],
             "has_range": true,
             "range": [0, 1],
@@ -68,7 +68,7 @@
         },
         "jaccard_score": {
             "display_name": "Jaccard Score",
-            "type": "vector",
+            "type": "Vector_no_display",
             "tags": [],
             "has_range": true,
             "range": [0, 1],
@@ -84,7 +84,7 @@
         },
         "precision_score": {
             "display_name": "Precision Score",
-            "type": "vector",
+            "type": "Vector_no_display",
             "tags": [],
             "has_range": true,
             "range": [0, 1],
@@ -100,7 +100,7 @@
         },
         "recall_score": {
             "display_name": "Recall Score",
-            "type": "vector",
+            "type": "Vector_no_display",
             "tags": [],
             "has_range": true,
             "range": [0, 1],

@@ -2,21 +2,24 @@ from .display_object import DisplayElement
 from dash import dash_table
 
 
-# For metrics with data per feature
-class FeatureArrayElement(DisplayElement, requirements=['features']):
-    def __init__(self, name, features=None):
+# For metrics which return arrays unrelated to features
+class VectorElement(DisplayElement):
+    def __init__(self, name):
         super().__init__(name)
         self.x = 0
-        self._data["features"] = [{"name": "Measurement tag", "id": 0}]
         self._data["row"] = []
-        for i, feature in enumerate(features):
-            self._data["features"].append({"name": feature, "id": i+1})
+        self._data["header"] = []
 
-    def append(self, metric_data: list, tag: str):
-        new_dict = {0: tag}
+    def append(self, metric_data, tag):
+        if len(self._data["header"]) == 0:
+            print("Setting header")
+            self._data["header"] = [{"name": ["Measurement Tag"], "id": 0}]
+            for i in range(len(metric_data)):
+                self._data["header"].append({"name": [''], "id": i+1})
+        dict_result = {0: tag}
         for i in range(len(metric_data)):
-            new_dict[i+1] = metric_data[i]
-        self._data["row"].append(new_dict)
+            dict_result[i + 1] = metric_data[i]
+        self._data["row"].append(dict_result)
 
     def to_string(self):
         print(self._data)
@@ -26,7 +29,7 @@ class FeatureArrayElement(DisplayElement, requirements=['features']):
         print("data: ", self._data["row"])
         table = dash_table.DataTable(
             data=self._data["row"],
-            columns=self._data["features"],
+            columns=self._data["header"],
             style_table={'overflowX': 'auto'},
             export_headers='display',
             style_cell={'textAlign': 'center', 'padding-right': '10px', 'padding-left': '10px'},

@@ -1,6 +1,5 @@
 from .display_object import DisplayElement
-import plotly.graph_objs as go
-from dash import Dash, dash_table
+from dash import dash_table
 
 
 # For metrics which consist of one or more layers of dictionaries
@@ -49,6 +48,9 @@ class DictElement(DisplayElement):
         tagged_data = self._data["row"].copy()
         for i, row in enumerate(tagged_data):
             row[-1] = self._data["tag"][i]
+
+        print("Columns: ", header)
+        print("data: ", tagged_data)
 
         table = dash_table.DataTable(
             data=tagged_data,

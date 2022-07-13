@@ -18,14 +18,14 @@
         },
         "estimator_params": {
             "display_name": "estimators data",
-            "type": "vector",
+            "type": "Vector",
             "has_range": false,
             "range": [null, null],
             "explanation": "estimators data"
         }, 
         "feature_names": {
             "display_name": "feature names",
-            "type": "vector",
+            "type": "Vector",
             "has_range": false,
             "range": [null, null],
             "explanation": "feature names"
