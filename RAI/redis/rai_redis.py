@@ -1,14 +1,20 @@
-__all__ = ['RaiRedis']
-
 import json
 import subprocess
 import threading
 import redis
 import RAI
 
+__all__ = ['RaiRedis']
+
 
 class RaiRedis:
+    """
+    RaiRedis is used to provide Redis functionality. Allows for adding measurements, deleting measurements,
+    exporting metadata. Standard port: 6379, db=0.
+    """
+
     def __init__(self, ai_system: RAI.AISystem = None) -> None:
+        self.redis_connection = None
         self.ai_system = ai_system
 
     def connect(self, host: str = "localhost", port: int = 6379) -> bool:
@@ -47,6 +53,8 @@ class RaiRedis:
         metrics = self.ai_system.get_metric_values()
 
         self.redis_connection.rpush(self.ai_system.name + '|certificate_values', json.dumps(certificates))  # True
+        # Leaving this for now.
+        # TODO: Set up standardized to json for all metrics.
         '''
         # print("METRICS: ", metrics)
         for dataset in metrics:
@@ -64,11 +72,11 @@ class RaiRedis:
                     print(metrics[dataset][group][m])
                     print(json.dumps(metrics[dataset][group][m]))
         '''
-        # print("JSON metric dump: ", json.dumps(metrics))
-        
+
         # TODO: Add a function which makes all data compatible with json (no float32)
         self.redis_connection.rpush(self.ai_system.name + '|metric_values', json.dumps(metrics))  # True
-        self.redis_connection.publish('update', "New measurement: %s" % metrics[list(metrics.keys())[0]]["metadata"]["date"])
+        self.redis_connection.publish('update',
+                                      "New measurement: %s" % metrics[list(metrics.keys())[0]]["metadata"]["date"])
 
     def viewGUI(self):
         gui_launcher = threading.Thread(target=self._view_gui_thread, args=[])

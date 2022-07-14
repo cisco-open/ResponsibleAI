@@ -1,9 +1,16 @@
 __all__ = ['Model']
-from RAI.metrics.metric_group import all_task_types
 
 
 class Model:
-    def __init__(self, predict_fun=None, predict_prob_fun=None, generate_text_fun=None, name=None, display_name=None, agent=None, loss_function=None, optimizer=None, model_class=None, description=None) -> None:
+    """
+    Model is RAIs abstraction for the ML Model performing inferences.
+    When constructed, models are optionally passed the name, the models functions for inferences,
+    its name, the model, its optimizer, its loss function, its class and a description.
+    Attributes of the model are used to determine which metrics are relevant.
+    """
+
+    def __init__(self, predict_fun=None, predict_prob_fun=None, generate_text_fun=None, name=None, display_name=None,
+                 agent=None, loss_function=None, optimizer=None, model_class=None, description=None) -> None:
         assert name is not None, "Please provide a model name"
         self.output_types = {}
         self.predict_fun = predict_fun

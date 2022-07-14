@@ -1,11 +1,12 @@
-from RAI.metrics.registry import registry
-from RAI import utils
 import os.path
 import site
-from RAI.metrics.metric_group import all_output_requirements, all_complexity_classes, all_dataset_requirements, all_data_types, all_task_types
+
+from RAI import utils
+from RAI.metrics.metric_group import all_output_requirements, all_complexity_classes, all_dataset_requirements, \
+    all_data_types, all_task_types
+from RAI.metrics.registry import registry
 
 __all__ = ['MetricManager']
-
 
 # choose the first site packages folder
 site_pkgs_path = site.getsitepackages()[0]
@@ -15,16 +16,25 @@ if not os.path.isdir(rai_pkg_path):
 
 
 class MetricManager(object):
+    """
+    MetricManager is used to create and Manage various MetricGroups which are compatible with the
+    AISystem. MetricManager is created by the AISystem, and will load in all available MetricGroups compatible
+    with the AISystem. MetricManager also provides functions to run computes for all metric groups,
+    get metadata about metric groups, and get metric values.
+    """
 
     def __init__(self, ai_system) -> None:
         super().__init__()
+        self._time_stamp = None
+        self._sample_count = 0
+        self._last_metric_values = None
+        self._last_certificate_values = None
         self.ai_system = ai_system
         self.metric_groups = {}
-        self.user_config = {"fairness": {   "priv_group": {},
-                                            "protected_attributes": [], "positive_label": 1},
-                                            "time_complexity": "exponential"}
+        self.user_config = {"fairness": {"priv_group": {}, "protected_attributes": [], "positive_label": 1},
+                            "time_complexity": "exponential"}
 
-    def standardizeUserConfig(self, user_config: dict):
+    def standardize_user_config(self, user_config: dict):
         if "fairness" in user_config:
             protected_classes = []
             if "priv_group" in user_config["fairness"]:
@@ -35,10 +45,9 @@ class MetricManager(object):
                 assert "positive_label" in user_config["fairness"]
                 user_config["fairness"]["protected_attributes"] = protected_classes
 
-
     def initialize(self, user_config: dict = None, metric_groups: list[str] = None, max_complexity: str = "linear"):
         if user_config:
-            self.standardizeUserConfig(user_config)
+            self.standardize_user_config(user_config)
             for key in user_config:
                 self.user_config[key] = user_config[key]
 
@@ -56,7 +65,8 @@ class MetricManager(object):
                 continue
             metric_class = registry[metric_group_name]
             self._validate_config(metric_class.config)
-            if metric_class.is_compatible(self.ai_system) and metric_group_name in whitelist and metric_group_name not in blacklist:
+            if metric_class.is_compatible(
+                    self.ai_system) and metric_group_name in whitelist and metric_group_name not in blacklist:
                 compatible_metrics.append(metric_class)
                 dependencies[metric_class.config["name"]] = metric_class.config["dependency_list"]
                 for dependency in metric_class.config["dependency_list"]:
@@ -94,20 +104,20 @@ class MetricManager(object):
 
     def reset_measurements(self) -> None:
         for metric_group_name in self.metric_groups:
-           self.metric_groups[metric_group_name].reset()
+            self.metric_groups[metric_group_name].reset()
 
         self._last_certificate_values = None
         self._last_metric_values = None
         self._sample_count = 0
-        self._time_stamp = None  # Replace by registering a time metric in metric_groups?       
+        self._time_stamp = None
 
-    def get_metadata(self) -> dict :
+    def get_metadata(self) -> dict:
         result = {}
         for group in self.metric_groups:
             result[group] = {}
             result[group]["meta"] = {
                 "tags": self.metric_groups[group].tags,
-                "complexity_class":self.metric_groups[group].complexity_class,
+                "complexity_class": self.metric_groups[group].complexity_class,
                 "dependency_list": self.metric_groups[group].dependency_list,
                 "compatiblity": self.metric_groups[group].compatiblity,
                 "display_name": self.metric_groups[group].display_name
@@ -116,16 +126,16 @@ class MetricManager(object):
                 result[group][metric] = self.metric_groups[group].metrics[metric].config
         return result
 
-    def get_metric_info_flat(self) -> dict :
+    def get_metric_info_flat(self) -> dict:
         result = {}
         for group in self.metric_groups:
-             
+
             for metric in self.metric_groups[group].metrics:
                 metric_obj = self.metric_groups[group].metrics[metric]
                 result[metric_obj.unique_name] = metric_obj.config
                 metric_obj.config["tags"] = self.metric_groups[group].tags  # Change this up after
         return result
-    
+
     def compute(self, data_dict) -> dict:
         for metric_group_name in self.metric_groups:
             self.metric_groups[metric_group_name].compute(data_dict)
@@ -135,7 +145,7 @@ class MetricManager(object):
             result[group] = {}
             for metric in self.metric_groups[group].metrics:
                 metric_obj = self.metric_groups[group].metrics[metric]
-                result[group][metric] =  utils.jsonify(metric_obj.value)
+                result[group][metric] = utils.jsonify(metric_obj.value)
         return result
 
     # Searches all metrics. Queries based on Metric Name, Metric Group Name, Category, and Tags.
@@ -143,7 +153,7 @@ class MetricManager(object):
         query = query.lower()
         results = {}
         for group in self.metric_groups:
-            add_group = group.lower() == query 
+            add_group = group.lower() == query
             for metric in self.metric_groups[group].metrics:
                 metric_obj = self.metric_groups[group].metrics[metric]
                 if add_group or metric.lower().find(query) > -1 or metric_obj.display_name.lower().find(query) > -1:
@@ -158,40 +168,60 @@ class MetricManager(object):
     def _validate_config(self, config):
         assert "name" in config and isinstance(config["name"], str), \
             "All configs must contain names"
+
         assert "display_name" in config and isinstance(config["display_name"], str), \
             config["name"] + " must contain a valid display name"
+
         assert "compatibility" in config, \
             config["name"] + " must contain compatibility details"
-        assert "task_type" in config["compatibility"] and "task_type" in config["compatibility"] \
-            and (config["compatibility"]["task_type"] is None or config["compatibility"]["task_type"] in all_task_types), \
+
+        assert "task_type" in config["compatibility"] and "task_type" in config["compatibility"] and \
+               (config["compatibility"]["task_type"] is None or config["compatibility"]["task_type"] in all_task_types), \
             config["name"] + "['compatibility']['task_type'] must be one of " + str(all_task_types)
-        assert "data_type" in config["compatibility"] \
-            and all(x in all_data_types for x in config["compatibility"]["data_type"]), \
+
+        assert "data_type" in config["compatibility"] and all(x in all_data_types for x in config["compatibility"]["data_type"]), \
             config["name"] + "['compatibility']['data_type'] must be one of " + str(all_data_types)
-        assert "output_requirements" in config["compatibility"] \
-            and all(x in all_output_requirements for x in config["compatibility"]["output_requirements"]), \
+
+        assert "output_requirements" in config["compatibility"] and \
+               all(x in all_output_requirements for x in config["compatibility"]["output_requirements"]), \
             config["name"] + "['compatibility']['output_requirements'] must be one of " + str(all_output_requirements)
-        assert "dataset_requirements" in config["compatibility"] \
-            and all(x in all_dataset_requirements for x in config["compatibility"]["dataset_requirements"]), \
+
+        assert "dataset_requirements" in config["compatibility"] and \
+               all(x in all_dataset_requirements for x in config["compatibility"]["dataset_requirements"]), \
             config["name"] + "['compatibility']['dataset_requirements'] must be one of " + str(all_dataset_requirements)
-        assert "dependency_list" in config and isinstance(config["dependency_list"], list) \
-            and all(isinstance(x, str) for x in config["dependency_list"]),\
+
+        assert "dependency_list" in config and isinstance(config["dependency_list"], list) and \
+               all(isinstance(x, str) for x in config["dependency_list"]), \
             config["name"] + " must contain a dependency list"
-        assert "tags" in config and isinstance(config["tags"], list) \
-            and all(isinstance(x, str) for x in config["tags"]), \
+
+        assert "tags" in config and isinstance(config["tags"], list) and \
+               all(isinstance(x, str) for x in config["tags"]), \
             config["name"] + " must contain a list of 0 or more string tags"
+
         assert "complexity_class" in config and config["complexity_class"] in all_complexity_classes, \
             config["name"] + " must have a complexity class belong to " + str(all_complexity_classes)
-        assert "metrics" in config, config["name"] + " must contain metrics."
+
+        assert "metrics" in config, \
+            config["name"] + " must contain metrics."
+
         for metric in config["metrics"]:
-            assert "display_name" in config["metrics"][metric] and isinstance(config["metrics"][metric]["display_name"], str), \
+            assert "display_name" in config["metrics"][metric] and \
+                   isinstance(config["metrics"][metric]["display_name"], str), \
                 metric + " must have a valid display name."
+
             assert "type" in config["metrics"][metric] and isinstance(config["metrics"][metric]["type"], str), \
                 metric + " must contain a valid type."
-            assert "has_range" in config["metrics"][metric] and isinstance(config["metrics"][metric]["has_range"], bool), \
+
+            assert "has_range" in config["metrics"][metric] and \
+                   isinstance(config["metrics"][metric]["has_range"], bool), \
                 metric + " must contain a boolean for has_range."
-            assert "range" in config["metrics"][metric] and (config["metrics"][metric]["range"] is None or (isinstance(config["metrics"][metric]["range"], list) \
-                and len(config["metrics"][metric]["range"]) == 2 and (x in {None, False, True} for x in config["metrics"][metric]["range"]))), \
+
+            assert "range" in config["metrics"][metric] and (config["metrics"][metric]["range"] is None or
+                   (isinstance(config["metrics"][metric]["range"], list) and
+                   len(config["metrics"][metric]["range"]) == 2 and (x in {None, False, True} for x in
+                   config["metrics"][metric]["range"]))), \
                 metric + " must contain a valid list of length 2 consisting of null, false or true."
-            assert "explanation" in config["metrics"][metric] and isinstance(config["metrics"][metric]["explanation"], str), \
+
+            assert "explanation" in config["metrics"][metric] and \
+                   isinstance(config["metrics"][metric]["explanation"], str), \
                 metric + " must contain a valid explanation."

@@ -1,9 +1,13 @@
 __all__ = ['Metric', 'metric_types']
-
 metric_types = {"Numeric", "multivalued", "other", "vector", "vector-dict", "Matrix", "boolean"}
 
 
 class Metric:
+    """
+    Metric class loads in information about a Metric as part of a Metric Group.
+    Metrics are automatically created by Metric Groups.
+    """
+
     def __init__(self, name, config) -> None:
         self.config = config
         self.name = name

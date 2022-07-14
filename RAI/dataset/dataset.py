@@ -1,12 +1,19 @@
-__all__ = ['Feature', 'MetaDatabase', 'Data', 'Dataset']
 import numpy as np
 
+__all__ = ['Feature', 'MetaDatabase', 'Data', 'Dataset']
+# TODO, get these all_data_types moved to a single file
 
 all_data_types = {"Numeric", "image", "text"}
 all_data_types_lax = {"integer", "float", "Numeric", "image", "text"}
 
+
 class Feature:
-    def __init__(self, name: str, dtype: str, description: str, categorical=False, values=None, sensitive=False) -> None:
+    """
+    The RAI Feature Class represents a particular feature in the Dataset.
+    It accepts a name, a data type, a description, whether the feature is categorical and its possible values.
+    """
+
+    def __init__(self, name: str, dtype: str, description: str, categorical=False, values=None) -> None:
         self.name = name
         self.dtype = dtype
         if dtype not in all_data_types_lax and not dtype.startswith("float") and not dtype.startswith("integer"):
@@ -23,6 +30,10 @@ class Feature:
 
 
 class Data:
+    """
+    The RAI Data class contains X and y data for a single Data split (train, test, val).
+    """
+
     def __init__(self, X, y) -> None:
         self.X = X
         self.y = y
@@ -41,18 +52,24 @@ class Data:
             if key != 0:
                 raise IndexError()
             return self.X, self.Y
-
         if self.y is None:
             return self.X[key], None
         else:
             return self.X[key], self.y[key]
 
+    # Splits up a dataset into its different data types, currently scalar and categorical
     def separate(self, scalar_mask):
         self.scalar = self.X[:, scalar_mask]
         self.categorical = self.X[:, np.invert(scalar_mask)]
 
 
 class Dataset:
+    """
+    The RAI Dataset class holds a dictionary of RAI Data classes,
+    for example {'train': trainData, 'test': testData}, where trainData and testData
+    are RAI Data objects.
+    """
+
     def __init__(self, data_dict) -> None:
         self.data_dict = data_dict
 
@@ -62,6 +79,12 @@ class Dataset:
 
 
 class MetaDatabase:
+    """
+    The RAI MetaDatabase class holds Meta information about the Dataset.
+    It includes information about the features, and contains maps and masks to quick get access
+    to the different feature data of different information.
+    """
+
     def __init__(self, features) -> None:
         self.features = features
         self.scalar_mask = np.ones(len(features), dtype=bool)
@@ -72,6 +95,7 @@ class MetaDatabase:
         self.stored_data = set()
         self.sensitive_features = []
 
+        # Initialize maps and masks
         for i, f in enumerate(features):
             self.scalar_mask[i] = not f.categorical
             # TODO: Once images are added, this will also need incorporate images
@@ -94,7 +118,6 @@ class MetaDatabase:
             self.stored_data.add("y")
         if sensitive:
             self.stored_data.add("sensitive_features")
-
         for feature in self.features:
             if feature.dtype.startswith("float") or feature.dtype.startswith("int"):
                 self.data_format.add("Numeric")

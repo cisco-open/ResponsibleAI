@@ -1,3 +1,7 @@
+"""
+Registers Metric Classes on creation. All valid metric groups can then be found in the registry dictionary.
+"""
+
 registry = {}
 
 

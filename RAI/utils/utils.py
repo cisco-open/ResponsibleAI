@@ -6,16 +6,17 @@ from sklearn.preprocessing import StandardScaler
 from RAI.dataset import Feature, MetaDatabase
 
 
-__all__ = ['jsonify', 'compare_runtimes', 'df_to_meta_database', 'df_to_RAI', 'Reweighing',
+__all__ = ['jsonify', 'compare_runtimes', 'df_to_meta_database', 'df_to_RAI', 'reweighing',
            'calculate_per_mapped_features', 'convert_float32_to_float64',
            'convert_to_feature_value_dict', 'convert_to_feature_dict', 'map_to_feature_array', 'map_to_feature_dict']
 
 
-def Reweighing():
+# TODO: Remove?
+def reweighing():
     pass
 
 
-def isPrimitive(obj):
+def is_primitive(obj):
     return not hasattr(obj, '__dict__')
 
 
@@ -31,19 +32,19 @@ def jsonify(v):
     if (isinstance(v, int) or isinstance(v, float)) and (
             math.isinf(v) or math.isnan(v)):  # CURRENTLY REPLACING INF VALUES WITH NULL
         return None
-    if isPrimitive(v):
+    if is_primitive(v):
         return v
-    # if isPrimitive(v):
     return pickle.dumps(v).decode('ISO-8859-1')
-    return v
 
 
+# jsonifies each element of a list v
 def clean_list(v):
     for i in range(len(v)):
         v[i] = jsonify(v[i])
     return v
 
 
+# Returns True if the seen runtime is less than or equal to the required
 def compare_runtimes(required, seen):
     required = complexity_to_integer(required)
     seen = complexity_to_integer(seen)
@@ -63,6 +64,7 @@ def complexity_to_integer(complexity):
     return result
 
 
+# Creates a RAI Metadatabase using meta information from a pandas dataframe
 def df_to_meta_database(df, categorical_values=None, protected_attribute_names=None, privileged_info=None,
                         positive_label=None):
     features = []
@@ -88,6 +90,7 @@ def df_remove_nans(df, extra_symbols):
     df.dropna(inplace=True)
 
 
+# Converts a pandas dataframe to a Rai Metadatabase and X and y data.
 def df_to_RAI(df, test_tf=None, target_column=None, clear_nans=True, extra_symbols="?", normalize="Scalar",
               max_categorical_threshold=None):
     if clear_nans:
@@ -123,6 +126,9 @@ def df_to_RAI(df, test_tf=None, target_column=None, clear_nans=True, extra_symbo
     return MetaDatabase(features), df.to_numpy().astype('float32'), y
 
 
+# ===== METRIC RELATED UTIL FUNCTIONS =====
+
+# Creates a dictionary where values are mapped using the mapping to specific features
 def map_to_feature_dict(values, features, mapping):
     result = {}
     for feature in features:
@@ -132,6 +138,8 @@ def map_to_feature_dict(values, features, mapping):
     return result
 
 
+# Creates an array of length features, where features are mapped to specific positions using a map.
+# Assumes that values are mapped and are of the same length of mapping.
 def map_to_feature_array(values, features, mapping):
     result = [None] * len(features)
     for i in range(len(values)):
@@ -139,6 +147,7 @@ def map_to_feature_array(values, features, mapping):
     return result
 
 
+# Runs a function on each column of data, and returns an array with the value per each column.
 def calculate_per_feature(function, X, *args, **kwargs):
     result = []
     for i in range(np.shape(X)[1]):
@@ -146,6 +155,8 @@ def calculate_per_feature(function, X, *args, **kwargs):
     return result
 
 
+# Accepts a function, a mapping to features, all features, masked data and arguments.
+# If to_array is true, a feature array will be returned, otherwise a feature dict will be returned.
 def calculate_per_mapped_features(function, mapping, features, X, *args, to_array=True, **kwargs):
     result = []
     for i in range(np.shape(X)[1]):
@@ -156,6 +167,7 @@ def calculate_per_mapped_features(function, mapping, features, X, *args, to_arra
         return map_to_feature_dict(result, features, mapping)
 
 
+# Converts a feature array to a feature dictionary, with one value per feature.
 def convert_to_feature_dict(values, features):
     result = {}
     for i, feature in enumerate(features):
@@ -165,6 +177,7 @@ def convert_to_feature_dict(values, features):
     return result
 
 
+# Converts values to a dictionary with one value per each value of a feature.
 def convert_to_feature_value_dict(values, feature):
     result = {}
     for i in range(len(values)):
@@ -172,6 +185,7 @@ def convert_to_feature_value_dict(values, feature):
     return result
 
 
+# Converts float32 values to float64 values for single values, lists/np.arrays and dictionaries.
 def convert_float32_to_float64(values):
     if isinstance(values, np.float32):
         return np.float64(values)

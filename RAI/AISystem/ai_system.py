@@ -1,12 +1,18 @@
 from RAI.AISystem.model import Model
-from RAI.dataset.dataset import Data, Dataset, MetaDatabase
 from RAI.certificates import CertificateManager
+from RAI.dataset.dataset import Data, Dataset, MetaDatabase
 from RAI.metrics import MetricManager
 from RAI.metrics.metric_group import all_output_requirements
+
 task_types = ["binary_classification", "multiclass_classification", "regression"]
 
 
 class AISystem:
+    """
+    AI Systems are the main class users interact with in RAI.
+    When constructed, AISystems are passed a name, a task type, a MetaDatabase, a Dataset and a Model.
+    """
+
     def __init__(self,
                  name: str,
                  task: str,
@@ -45,19 +51,21 @@ class AISystem:
     def get_certificate_values(self) -> dict:
         return self._last_certificate_values
 
-    def get_data(self, data_type:str) -> Data:
+    def get_data(self, data_type: str) -> Data:
         if data_type not in self.dataset.data_dict:
             raise Exception(f"data_type must be found in Dataset. Got : {data_type}")
         return self.dataset.data_dict[data_type]
 
-    def get_project_info(self) -> dict :
-        result = {"id": self.name,  
-                  "task_type": self.task, "configuration": self.metric_manager.user_config, "features": [], "description": self.model.description,
+    def get_project_info(self) -> dict:
+        result = {"id": self.name,
+                  "task_type": self.task, "configuration": self.metric_manager.user_config, "features": [],
+                  "description": self.model.description,
                   }
         for i in range(len(self.meta_database.features)):
             result['features'].append(self.meta_database.features[i].name)
         return result
-    
+
+    # Single compute accepts predictions and the name of a dataset, and then calculates metrics for that dataset.
     def _single_compute(self, predictions: dict, data_type: str = "test", tag=None) -> None:
         self.auto_id += 1
         if tag is None:
@@ -75,6 +83,7 @@ class AISystem:
         if self.enable_certificates:
             self._last_certificate_values = self.certificate_manager.compute(self._last_metric_values)
 
+    # Compute will tell RAI to compute metric values across each dataset which predictions were made on.
     def compute(self, predictions: dict, tag=None) -> None:
         self._last_metric_values = {}
         if not (isinstance(predictions, dict) and all(isinstance(v, dict) for v in predictions.values()) \
@@ -84,6 +93,7 @@ class AISystem:
             if key in self.dataset.data_dict.keys():
                 self._single_compute(predictions[key], key, tag=tag)
 
+    # Run Compute automatically generates outputs from the model, and compute metrics based on those outputs
     def run_compute(self, tag=None) -> None:
         self._last_metric_values = {}
         preds = {}
