@@ -15,7 +15,7 @@
             "type": "Numeric",
             "has_range": true,
             "range": [0, 1],
-            "explanation": "Measures discrepancy between a model and actual data, higher values are better",
+            "explanation": "Measures the proportion to which a mathematical model accounts for the variation of a given data set.\nIdeal value is 1.0.",
             "citation": "@article{scikit-learn,\n    title={Scikit-learn: Machine Learning in {P}ython},\n    author={Pedregosa, F. and Varoquaux, G. and Gramfort, A. and Michel, V.\n    and Thirion, B. and Grisel, O. and Blondel, M. and Prettenhofer, P.\n    and Weiss, R. and Dubourg, V. and Vanderplas, J. and Passos, A. and\n    Cournapeau, D. and Brucher, M. and Perrot, M. and Duchesnay, E.},\n    journal={Journal of Machine Learning Research},\n    volume={12},\n    pages={2825--2830},\n    year={2011}\n}"
         },
         "mean_absolute_error": {
@@ -23,7 +23,7 @@
             "type": "Numeric",
             "has_range": true,
             "range": [0, null],
-            "explanation": "Indicates the average residual error, lower is better.",
+            "explanation": "Indicates the average residual error.\nIt is calculated as the sum of absolute errors divided by the sample size.\nIdeal value is 0.0.",
             "citation": "@article{scikit-learn,\n    title={Scikit-learn: Machine Learning in {P}ython},\n    author={Pedregosa, F. and Varoquaux, G. and Gramfort, A. and Michel, V.\n    and Thirion, B. and Grisel, O. and Blondel, M. and Prettenhofer, P.\n    and Weiss, R. and Dubourg, V. and Vanderplas, J. and Passos, A. and\n    Cournapeau, D. and Brucher, M. and Perrot, M. and Duchesnay, E.},\n    journal={Journal of Machine Learning Research},\n    volume={12},\n    pages={2825--2830},\n    year={2011}\n}"
         },
         "mean_absolute_percentage_error": {
@@ -31,7 +31,7 @@
             "type": "Numeric",
             "has_range": true,
             "range": [0, null],
-            "explanation": "Indicates the how inaccurate predictions were from actual values, lower is better.",
+            "explanation": "Measures regression accuracy.\nDetermined by the average residual error divided by the actual value.\nIdeal value is 0.0.",
             "citation": "@article{scikit-learn,\n    title={Scikit-learn: Machine Learning in {P}ython},\n    author={Pedregosa, F. and Varoquaux, G. and Gramfort, A. and Michel, V.\n    and Thirion, B. and Grisel, O. and Blondel, M. and Prettenhofer, P.\n    and Weiss, R. and Dubourg, V. and Vanderplas, J. and Passos, A. and\n    Cournapeau, D. and Brucher, M. and Perrot, M. and Duchesnay, E.},\n    journal={Journal of Machine Learning Research},\n    volume={12},\n    pages={2825--2830},\n    year={2011}\n}"
         },
         "mean_gamma_deviance": {
@@ -55,7 +55,7 @@
             "type": "Numeric",
             "has_range": true,
             "range": [0, null],
-            "explanation": "Mean Squared Error indicates the the performance of a model, lower is better.",
+            "explanation": "Mean Squared Error indicates the the performance of a model.\nIt is calculated by taking the mean of the square of the residual error.\nIdeal value is 0.0.",
             "citation": "@article{scikit-learn,\n    title={Scikit-learn: Machine Learning in {P}ython},\n    author={Pedregosa, F. and Varoquaux, G. and Gramfort, A. and Michel, V.\n    and Thirion, B. and Grisel, O. and Blondel, M. and Prettenhofer, P.\n    and Weiss, R. and Dubourg, V. and Vanderplas, J. and Passos, A. and\n    Cournapeau, D. and Brucher, M. and Perrot, M. and Duchesnay, E.},\n    journal={Journal of Machine Learning Research},\n    volume={12},\n    pages={2825--2830},\n    year={2011}\n}"
         },
         "mean_squared_log_error": {
@@ -63,7 +63,7 @@
             "type": "Numeric",
             "has_range": true,
             "range": [0, null],
-            "explanation": "Mean Squared Log Error indicates the average squared logarithmic residual error, lower is better.",
+            "explanation": "Mean Squared Log Error indicates the performance of a model.\nIt is calculated by taking the log of the square of the residual error.\nIdeal value is 0.0.",
             "citation": "@article{scikit-learn,\n    title={Scikit-learn: Machine Learning in {P}ython},\n    author={Pedregosa, F. and Varoquaux, G. and Gramfort, A. and Michel, V.\n    and Thirion, B. and Grisel, O. and Blondel, M. and Prettenhofer, P.\n    and Weiss, R. and Dubourg, V. and Vanderplas, J. and Passos, A. and\n    Cournapeau, D. and Brucher, M. and Perrot, M. and Duchesnay, E.},\n    journal={Journal of Machine Learning Research},\n    volume={12},\n    pages={2825--2830},\n    year={2011}\n}"
         },
         "median_absolute_error": {
@@ -71,7 +71,7 @@
             "type": "Numeric",
             "has_range": true,
             "range": [0, null],
-            "explanation": "Median Absolute Error indicates the median value for absolute residual error, lower is better.",
+            "explanation": "Median Absolute Error indicates the median value for absolute residual error.\nIdeal value is 0.0.",
             "citation": "@article{scikit-learn,\n    title={Scikit-learn: Machine Learning in {P}ython},\n    author={Pedregosa, F. and Varoquaux, G. and Gramfort, A. and Michel, V.\n    and Thirion, B. and Grisel, O. and Blondel, M. and Prettenhofer, P.\n    and Weiss, R. and Dubourg, V. and Vanderplas, J. and Passos, A. and\n    Cournapeau, D. and Brucher, M. and Perrot, M. and Duchesnay, E.},\n    journal={Journal of Machine Learning Research},\n    volume={12},\n    pages={2825--2830},\n    year={2011}\n}"
         },
         "r2": {
@@ -79,7 +79,7 @@
             "type": "Numeric",
             "has_range": true,
             "range": [0, 1],
-            "explanation": "Indicates how well a model fits the data, higher is better.",
+            "explanation": "Indicates the proportion of the variance in the dependent variable that is predictable from the independent variable.\nIdeal value is 1.0.",
             "citation": "@article{scikit-learn,\n    title={Scikit-learn: Machine Learning in {P}ython},\n    author={Pedregosa, F. and Varoquaux, G. and Gramfort, A. and Michel, V.\n    and Thirion, B. and Grisel, O. and Blondel, M. and Prettenhofer, P.\n    and Weiss, R. and Dubourg, V. and Vanderplas, J. and Passos, A. and\n    Cournapeau, D. and Brucher, M. and Perrot, M. and Duchesnay, E.},\n    journal={Journal of Machine Learning Research},\n    volume={12},\n    pages={2825--2830},\n    year={2011}\n}"
         }
     }
