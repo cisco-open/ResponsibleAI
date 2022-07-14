@@ -1,6 +1,8 @@
-import numpy as np
-from RAI.metrics.metric_group import MetricGroup
 import os
+
+import numpy as np
+
+from RAI.metrics.metric_group import MetricGroup
 
 
 class BasicExplainablityGroup(MetricGroup, class_location=os.path.abspath(__file__)):
@@ -25,4 +27,4 @@ class BasicExplainablityGroup(MetricGroup, class_location=os.path.abspath(__file
 
             self.metrics["explainable_model"].value = True
 
-# TODO: clarify basic explainability
+# TODO: This class is a placeholder for Explainability functions. Clarify/remove this class

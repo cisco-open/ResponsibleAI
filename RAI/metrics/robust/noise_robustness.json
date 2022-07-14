@@ -37,7 +37,6 @@
             "range": [null, null],
             "explanation": "Robustness of classifiers: from adversarial to random noise. Requires hand coding their math"
         },
-
         "added_noise": {
             "display_name": "Accuracy After Noise",
             "type": "Numeric",

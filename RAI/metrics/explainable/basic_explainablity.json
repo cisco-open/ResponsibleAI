@@ -1,6 +1,6 @@
 {
     "name": "basic_explainablity",
-    "display_name": "Basic Robustness Metrics",
+    "display_name": "Basic Robustness",
     "compatibility": {"task_type": null,
                       "data_type": ["Numeric"],
                       "output_requirements": [],
@@ -14,7 +14,8 @@
             "type": "Boolean",
             "has_range": false,
             "range": [null, null],
-            "explanation": "Whether of not model is explainable"
+            "explanation": "Placeholder method for if a method is explainable.",
+            "citation": "None",
         }
     }
 }

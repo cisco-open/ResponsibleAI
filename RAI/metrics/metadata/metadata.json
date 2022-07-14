@@ -1,6 +1,6 @@
 {
     "name": "metadata",
-    "display_name": "Metadata for the measurement",
+    "display_name": "Measurement Metadata",
     "compatibility": {"task_type": null,
                       "data_type": [],
                       "output_requirements": [],
@@ -14,43 +14,49 @@
             "type": "text",
             "has_range": false,
             "range": [null, null],
-            "explanation": "The Date in which a measurement was taken."
+            "explanation": "The Date in which a measurement was taken.",
+            "citation": ""
         },
         "description": {
             "display_name": "Measurement Description",
             "type": "text",
             "has_range": false,
             "range": [null, null],
-            "explanation": "The user description of collected metric data."
+            "explanation": "The user description of collected metric data.",
+            "citation": ""
         }, 
          "sample_count": {
-            "display_name": "Number of samples",
+            "display_name": "Number of Samples",
             "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, null],
-            "explanation": "Number of samples"
+            "explanation": "Number of samples",
+            "citation": ""
         }, 
         "task_type": {
             "display_name": "Task Type",
             "type": "text",
             "has_range": false,
             "range": [null, null],
-            "explanation": "Task Type"
+            "explanation": "Task Type",
+            "citation": ""
         },
         "model": {
-            "display_name": "model",
+            "display_name": "Model Description",
             "type": "text",
             "has_range": false,
             "range": [null, null],
-            "explanation": "model description"
+            "explanation": "The user description of the model.",
+            "citation": ""
         },
          "tag": {
-            "display_name": "tag",
+            "display_name": "Tag",
             "type": "text",
             "has_range": false,
             "range": [null, null],
-            "explanation": "measurement tag"
+            "explanation": "The user provided tag for a measurement.",
+            "citation": ""
         }
     }
 }

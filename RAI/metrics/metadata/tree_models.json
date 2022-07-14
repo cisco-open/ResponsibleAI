@@ -1,6 +1,6 @@
 {
     "name": "tree_model_metadata",
-    "display_name" : "SKlearn Tree Based Models",
+    "display_name" : "Tree Metadata",
     "compatibility": {"task_type": null,
                       "data_type": [],
                       "output_requirements": [],
@@ -10,25 +10,28 @@
     "complexity_class": "linear",
     "metrics": {
         "estimator_counts": {
-            "display_name": "Number of estimators",
+            "display_name": "Estimator Count",
             "type": "Numeric",
             "has_range": true,
             "range": [1, null],
-            "explanation": "Number of estimators"
+            "explanation": "The number of estimators in the tree.",
+            "citation": "@article{scikit-learn,\n    title={Scikit-learn: Machine Learning in {P}ython},\n    author={Pedregosa, F. and Varoquaux, G. and Gramfort, A. and Michel, V.\n    and Thirion, B. and Grisel, O. and Blondel, M. and Prettenhofer, P.\n    and Weiss, R. and Dubourg, V. and Vanderplas, J. and Passos, A. and\n    Cournapeau, D. and Brucher, M. and Perrot, M. and Duchesnay, E.},\n    journal={Journal of Machine Learning Research},\n    volume={12},\n    pages={2825--2830},\n    year={2011}\n}"
         },
         "estimator_params": {
-            "display_name": "estimators data",
+            "display_name": "Estimator Parameters",
             "type": "Vector",
             "has_range": false,
             "range": [null, null],
-            "explanation": "estimators data"
+            "explanation": "The parameters of the estimators.",
+            "citation": "@article{scikit-learn,\n    title={Scikit-learn: Machine Learning in {P}ython},\n    author={Pedregosa, F. and Varoquaux, G. and Gramfort, A. and Michel, V.\n    and Thirion, B. and Grisel, O. and Blondel, M. and Prettenhofer, P.\n    and Weiss, R. and Dubourg, V. and Vanderplas, J. and Passos, A. and\n    Cournapeau, D. and Brucher, M. and Perrot, M. and Duchesnay, E.},\n    journal={Journal of Machine Learning Research},\n    volume={12},\n    pages={2825--2830},\n    year={2011}\n}"
         }, 
         "feature_names": {
-            "display_name": "feature names",
+            "display_name": "Feature Names",
             "type": "Vector",
             "has_range": false,
             "range": [null, null],
-            "explanation": "feature names"
+            "explanation": "The names of the features in data.",
+            "citation": "@article{scikit-learn,\n    title={Scikit-learn: Machine Learning in {P}ython},\n    author={Pedregosa, F. and Varoquaux, G. and Gramfort, A. and Michel, V.\n    and Thirion, B. and Grisel, O. and Blondel, M. and Prettenhofer, P.\n    and Weiss, R. and Dubourg, V. and Vanderplas, J. and Passos, A. and\n    Cournapeau, D. and Brucher, M. and Perrot, M. and Duchesnay, E.},\n    journal={Journal of Machine Learning Research},\n    volume={12},\n    pages={2825--2830},\n    year={2011}\n}"
         }
     }
 }

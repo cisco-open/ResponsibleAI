@@ -39,7 +39,7 @@ class GeneralPredictionFairnessGroup(MetricGroup, class_location=os.path.abspath
                 unpriv_group_list.append({group: self.ai_system.metric_manager.user_config["fairness"]["priv_group"][group]["unprivileged"]})
 
         cd = get_class_dataset(self, data, preds, prot_attr, priv_group_list, unpriv_group_list)
-        self.metrics['average_abs_odds_difference'].value = cd.average_odds_difference()
+        self.metrics['average_odds_difference'].value = cd.average_odds_difference()
         self.metrics['between_all_groups_coefficient_of_variation'].value = cd.between_all_groups_coefficient_of_variation()
         self.metrics['between_all_groups_generalized_entropy_index'].value = cd.between_all_groups_generalized_entropy_index()
         self.metrics['between_all_groups_theil_index'].value = cd.between_all_groups_theil_index()

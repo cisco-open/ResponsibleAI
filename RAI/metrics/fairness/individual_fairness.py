@@ -41,7 +41,6 @@ class IndividualFairnessMetricGroup(MetricGroup, class_location=os.path.abspath(
         self.metrics['generalized_entropy_error'].value = _generalized_entropy_error(y, preds, pos_label=pos_label)
         self.metrics['theil_index'].value = _theil_index(_get_b(y, preds, 1))
         self.metrics['coefficient_of_variation'].value = _coefficient_of_variation(_get_b(y, preds, 1))
-        self.metrics['consistency_score'].value = _consistency_score(data.X, data.y)
 
 
 def _convert_to_ai360(metric_group, data, prot_attr):

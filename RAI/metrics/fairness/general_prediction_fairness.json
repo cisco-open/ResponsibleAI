@@ -1,6 +1,6 @@
 {
     "name": "prediction_fairness",
-    "display_name" : "Classification Fairness Metrics",
+    "display_name" : "Prediction Fairness",
     "compatibility": {"task_type": "classification",
                       "data_type": ["Numeric"],
                       "output_requirements": ["predict"],
@@ -10,29 +10,32 @@
     "tags": ["fairness", "General Fairness"],
     "complexity_class": "linear",
     "metrics": {
-        "average_abs_odds_difference": {
-            "display_name": "Average Abs Odds Difference",
+        "average_odds_difference": {
+            "display_name": "Average Odds Difference",
             "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, 1],
-            "explanation": "Average of absolute difference in FPR and TPR for unprivileged and privileged groups:"
+            "explanation": "The average difference of false positive rate (false positives / negatives) and true positive rate (true positives / positives) between unprivileged and privileged groups.\nThe ideal value is 0.  A value of < 0 implies higher benefit for the privileged group and a value > 0 implies higher benefit for the unprivileged group.",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1810.01943,\n  doi = {10.48550/ARXIV.1810.01943},\n  \n  url = {https://arxiv.org/abs/1810.01943},\n  \n  author = {Bellamy, Rachel K. E. and Dey, Kuntal and Hind, Michael and Hoffman, Samuel C. and Houde, Stephanie and Kannan, Kalapriya and Lohia, Pranay and Martino, Jacquelyn and Mehta, Sameep and Mojsilovic, Aleksandra and Nagar, Seema and Ramamurthy, Karthikeyan Natesan and Richards, John and Saha, Diptikalyan and Sattigeri, Prasanna and Singh, Moninder and Varshney, Kush R. and Zhang, Yunfeng},\n  \n  keywords = {Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {AI Fairness 360: An Extensible Toolkit for Detecting, Understanding, and Mitigating Unwanted Algorithmic Bias},\n  \n  publisher = {arXiv},\n  \n  year = {2018},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
         },
         "between_all_groups_coefficient_of_variation": {
-            "display_name": "BG Coefficient of Variation",
+            "display_name": "Between all Groups Coefficient of Variation",
             "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, null],
-            "explanation": "The between-group coefficient of variation is two times the square root of the entropy index between all groups."
+            "explanation": "The square root of twice the pairwise entropy between every pair of privileged and underprivileged groups with alpha = 2.\nThe ideal value is 0.",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1810.01943,\n  doi = {10.48550/ARXIV.1810.01943},\n  \n  url = {https://arxiv.org/abs/1810.01943},\n  \n  author = {Bellamy, Rachel K. E. and Dey, Kuntal and Hind, Michael and Hoffman, Samuel C. and Houde, Stephanie and Kannan, Kalapriya and Lohia, Pranay and Martino, Jacquelyn and Mehta, Sameep and Mojsilovic, Aleksandra and Nagar, Seema and Ramamurthy, Karthikeyan Natesan and Richards, John and Saha, Diptikalyan and Sattigeri, Prasanna and Singh, Moninder and Varshney, Kush R. and Zhang, Yunfeng},\n  \n  keywords = {Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {AI Fairness 360: An Extensible Toolkit for Detecting, Understanding, and Mitigating Unwanted Algorithmic Bias},\n  \n  publisher = {arXiv},\n  \n  year = {2018},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
         },
         "between_all_groups_generalized_entropy_index": {
-            "display_name": "All Groups Gen Entropy Index",
+            "display_name": "Between all Groups Generalized Entropy Index",
             "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, null],
-            "explanation": "Entropy index for all groups with protected attributes."
+            "explanation": "The pairwise entropy between every pair of privileged and underprivileged groups.\n The ideal value is 0.0.",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1810.01943,\n  doi = {10.48550/ARXIV.1810.01943},\n  \n  url = {https://arxiv.org/abs/1810.01943},\n  \n  author = {Bellamy, Rachel K. E. and Dey, Kuntal and Hind, Michael and Hoffman, Samuel C. and Houde, Stephanie and Kannan, Kalapriya and Lohia, Pranay and Martino, Jacquelyn and Mehta, Sameep and Mojsilovic, Aleksandra and Nagar, Seema and Ramamurthy, Karthikeyan Natesan and Richards, John and Saha, Diptikalyan and Sattigeri, Prasanna and Singh, Moninder and Varshney, Kush R. and Zhang, Yunfeng},\n  \n  keywords = {Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {AI Fairness 360: An Extensible Toolkit for Detecting, Understanding, and Mitigating Unwanted Algorithmic Bias},\n  \n  publisher = {arXiv},\n  \n  year = {2018},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
         },
         "between_all_groups_theil_index": {
             "display_name": "Between all Groups Theil Index",
@@ -40,31 +43,35 @@
             "tags": [],
             "has_range": true,
             "range": [0, null],
-            "explanation": "Equivalent to the between group generalized entropy index with a=1"
+            "explanation": "The pairwise entropy between every pair of privileged and underprivileged groups with alpha = 1.\nThe ideal value is 0.0.",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1810.01943,\n  doi = {10.48550/ARXIV.1810.01943},\n  \n  url = {https://arxiv.org/abs/1810.01943},\n  \n  author = {Bellamy, Rachel K. E. and Dey, Kuntal and Hind, Michael and Hoffman, Samuel C. and Houde, Stephanie and Kannan, Kalapriya and Lohia, Pranay and Martino, Jacquelyn and Mehta, Sameep and Mojsilovic, Aleksandra and Nagar, Seema and Ramamurthy, Karthikeyan Natesan and Richards, John and Saha, Diptikalyan and Sattigeri, Prasanna and Singh, Moninder and Varshney, Kush R. and Zhang, Yunfeng},\n  \n  keywords = {Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {AI Fairness 360: An Extensible Toolkit for Detecting, Understanding, and Mitigating Unwanted Algorithmic Bias},\n  \n  publisher = {arXiv},\n  \n  year = {2018},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
         },
         "between_group_coefficient_of_variation": {
-            "display_name": "BG Coefficient of Var",
+            "display_name": "Between Group Coefficient of Variation",
             "type": "Numeric",
             "tags": [],
             "has_range": false,
             "range": [null, null],
-            "explanation": "Two times the square root of the between group generalized entropy index with α=2."
+            "explanation": "The square root of twice the pairwise entropy between a given pair of privileged and underprivileged groups with alpha = 2.\nThe ideal value is 0.0.",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1810.01943,\n  doi = {10.48550/ARXIV.1810.01943},\n  \n  url = {https://arxiv.org/abs/1810.01943},\n  \n  author = {Bellamy, Rachel K. E. and Dey, Kuntal and Hind, Michael and Hoffman, Samuel C. and Houde, Stephanie and Kannan, Kalapriya and Lohia, Pranay and Martino, Jacquelyn and Mehta, Sameep and Mojsilovic, Aleksandra and Nagar, Seema and Ramamurthy, Karthikeyan Natesan and Richards, John and Saha, Diptikalyan and Sattigeri, Prasanna and Singh, Moninder and Varshney, Kush R. and Zhang, Yunfeng},\n  \n  keywords = {Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {AI Fairness 360: An Extensible Toolkit for Detecting, Understanding, and Mitigating Unwanted Algorithmic Bias},\n  \n  publisher = {arXiv},\n  \n  year = {2018},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
         },
         "between_group_generalized_entropy_index": {
-            "display_name": "BG General Entropy Index",
+            "display_name": "Between Group Generalized Entropy Index",
             "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, null],
-            "explanation": "Entropy index between the privileged and unprivileged groups."
+            "explanation": "The pairwise entropy between a given pair of privileged and underprivileged groups.\nThe ideal value is 0.0.",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1810.01943,\n  doi = {10.48550/ARXIV.1810.01943},\n  \n  url = {https://arxiv.org/abs/1810.01943},\n  \n  author = {Bellamy, Rachel K. E. and Dey, Kuntal and Hind, Michael and Hoffman, Samuel C. and Houde, Stephanie and Kannan, Kalapriya and Lohia, Pranay and Martino, Jacquelyn and Mehta, Sameep and Mojsilovic, Aleksandra and Nagar, Seema and Ramamurthy, Karthikeyan Natesan and Richards, John and Saha, Diptikalyan and Sattigeri, Prasanna and Singh, Moninder and Varshney, Kush R. and Zhang, Yunfeng},\n  \n  keywords = {Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {AI Fairness 360: An Extensible Toolkit for Detecting, Understanding, and Mitigating Unwanted Algorithmic Bias},\n  \n  publisher = {arXiv},\n  \n  year = {2018},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
         },
         "between_group_theil_index": {
-            "display_name": "BG Theil Index",
+            "display_name": "Between Group Theil Index",
             "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, null],
-            "explanation": "Equals tthe between group generalized entropy index with α=1"
+            "explanation": "The pairwise entropy between a given pair of privileged and underprivileged groups with alpha = 1.\nThe ideal value is 0.0.",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1810.01943,\n  doi = {10.48550/ARXIV.1810.01943},\n  \n  url = {https://arxiv.org/abs/1810.01943},\n  \n  author = {Bellamy, Rachel K. E. and Dey, Kuntal and Hind, Michael and Hoffman, Samuel C. and Houde, Stephanie and Kannan, Kalapriya and Lohia, Pranay and Martino, Jacquelyn and Mehta, Sameep and Mojsilovic, Aleksandra and Nagar, Seema and Ramamurthy, Karthikeyan Natesan and Richards, John and Saha, Diptikalyan and Sattigeri, Prasanna and Singh, Moninder and Varshney, Kush R. and Zhang, Yunfeng},\n  \n  keywords = {Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {AI Fairness 360: An Extensible Toolkit for Detecting, Understanding, and Mitigating Unwanted Algorithmic Bias},\n  \n  publisher = {arXiv},\n  \n  year = {2018},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
         },
         "coefficient_of_variation": {
             "display_name": "Coefficient of Variation",
@@ -72,7 +79,8 @@
             "tags": [],
             "has_range": true,
             "range": [0, null],
-            "explanation": "Equals two times the square root of the generalized entropy index with α=2."
+            "explanation": "The square root of twice the generalized entropy index with alpha = 2.\nThe ideal value is 0.0.",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1810.01943,\n  doi = {10.48550/ARXIV.1810.01943},\n  \n  url = {https://arxiv.org/abs/1810.01943},\n  \n  author = {Bellamy, Rachel K. E. and Dey, Kuntal and Hind, Michael and Hoffman, Samuel C. and Houde, Stephanie and Kannan, Kalapriya and Lohia, Pranay and Martino, Jacquelyn and Mehta, Sameep and Mojsilovic, Aleksandra and Nagar, Seema and Ramamurthy, Karthikeyan Natesan and Richards, John and Saha, Diptikalyan and Sattigeri, Prasanna and Singh, Moninder and Varshney, Kush R. and Zhang, Yunfeng},\n  \n  keywords = {Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {AI Fairness 360: An Extensible Toolkit for Detecting, Understanding, and Mitigating Unwanted Algorithmic Bias},\n  \n  publisher = {arXiv},\n  \n  year = {2018},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
         },
         "consistency": {
             "display_name": "Consistency",
@@ -80,15 +88,17 @@
             "tags": [],
             "has_range": false,
             "range": [null, null],
-            "explanation": "Indicates the similarity of labels for similiar instances."
+            "explanation": "A measure how similar the labels are for similar instances.\nThe ideal value is 1.0",
+            "citation": "\n@InProceedings{pmlr-v28-zemel13,\n  title = \t {Learning Fair Representations},\n  author = \t {Zemel, Rich and Wu, Yu and Swersky, Kevin and Pitassi, Toni and Dwork, Cynthia},\n  booktitle = \t {Proceedings of the 30th International Conference on Machine Learning},\n  pages = \t {325--333},\n  year = \t {2013},\n  editor = \t {Dasgupta, Sanjoy and McAllester, David},\n  volume = \t {28},\n  number =       {3},\n  series = \t {Proceedings of Machine Learning Research},\n  address = \t {Atlanta, Georgia, USA},\n  month = \t {17--19 Jun},\n  publisher =    {PMLR},\n  pdf = \t {http://proceedings.mlr.press/v28/zemel13.pdf},\n  url = \t {https://proceedings.mlr.press/v28/zemel13.html},\n  abstract = \t {We propose a learning algorithm for fair classification that achieves both group fairness (the proportion of members in a protected group receiving positive classification is identical to the proportion in the population as a  whole), and individual fairness (similar individuals should be treated similarly).  We formulate fairness as an optimization problem of finding a  good representation of the data with two competing goals: to encode the data as well as possible, while simultaneously obfuscating any information about membership in the protected group.  We show positive results of our algorithm relative to other known techniques, on three datasets.  Moreover, we demonstrate several advantages to our approach.  First, our intermediate representation can be used for other classification tasks (i.e., transfer  learning is possible); secondly, we take a step toward learning a distance metric which can find important dimensions of the data for classification.}\n}\n"
         },
         "differential_fairness_bias_amplification": {
-            "display_name": "Diff Fairness Bias Amplification",
+            "display_name": "Differential Fairness Bias Amplification",
             "type": "Numeric",
             "tags": [],
             "has_range": false,
             "range": [null, null],
-            "explanation": "Bias amplification is the difference in smoothed EDF between the classifier and the original dataset. Positive values mean the bias increased due to the classifier."
+            "explanation": "The difference in smoothed EDF between the classifier and the original dataset. \nPositive values mean the bias increased due to the classifier.",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1810.01943,\n  doi = {10.48550/ARXIV.1810.01943},\n  \n  url = {https://arxiv.org/abs/1810.01943},\n  \n  author = {Bellamy, Rachel K. E. and Dey, Kuntal and Hind, Michael and Hoffman, Samuel C. and Houde, Stephanie and Kannan, Kalapriya and Lohia, Pranay and Martino, Jacquelyn and Mehta, Sameep and Mojsilovic, Aleksandra and Nagar, Seema and Ramamurthy, Karthikeyan Natesan and Richards, John and Saha, Diptikalyan and Sattigeri, Prasanna and Singh, Moninder and Varshney, Kush R. and Zhang, Yunfeng},\n  \n  keywords = {Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {AI Fairness 360: An Extensible Toolkit for Detecting, Understanding, and Mitigating Unwanted Algorithmic Bias},\n  \n  publisher = {arXiv},\n  \n  year = {2018},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
         },
         "error_rate": {
             "display_name": "Error Rate",
@@ -96,7 +106,8 @@
             "tags": [],
             "has_range": true,
             "range": [0, 1],
-            "explanation": "The percentage of predictions that were incorrect."
+            "explanation": "The percentage of predictions that were incorrect. Computed as (1 -(true positive count + true negative count)/(positive_count + negative_count)).\nThe ideal value is 0.0",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1810.01943,\n  doi = {10.48550/ARXIV.1810.01943},\n  \n  url = {https://arxiv.org/abs/1810.01943},\n  \n  author = {Bellamy, Rachel K. E. and Dey, Kuntal and Hind, Michael and Hoffman, Samuel C. and Houde, Stephanie and Kannan, Kalapriya and Lohia, Pranay and Martino, Jacquelyn and Mehta, Sameep and Mojsilovic, Aleksandra and Nagar, Seema and Ramamurthy, Karthikeyan Natesan and Richards, John and Saha, Diptikalyan and Sattigeri, Prasanna and Singh, Moninder and Varshney, Kush R. and Zhang, Yunfeng},\n  \n  keywords = {Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {AI Fairness 360: An Extensible Toolkit for Detecting, Understanding, and Mitigating Unwanted Algorithmic Bias},\n  \n  publisher = {arXiv},\n  \n  year = {2018},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
         },
         "error_rate_difference": {
             "display_name": "Error Rate Difference",
@@ -104,7 +115,8 @@
             "tags": [],
             "has_range": true,
             "range": [-1, 1],
-            "explanation": "Compares error rate between an unprivileged group and a privileged group."
+            "explanation": "The difference of error rates between unprivileged and privileged groups.\nWhere Error Rate is the percentage of predictions that were incorrect.\nThe ideal value is 0.0.",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1810.01943,\n  doi = {10.48550/ARXIV.1810.01943},\n  \n  url = {https://arxiv.org/abs/1810.01943},\n  \n  author = {Bellamy, Rachel K. E. and Dey, Kuntal and Hind, Michael and Hoffman, Samuel C. and Houde, Stephanie and Kannan, Kalapriya and Lohia, Pranay and Martino, Jacquelyn and Mehta, Sameep and Mojsilovic, Aleksandra and Nagar, Seema and Ramamurthy, Karthikeyan Natesan and Richards, John and Saha, Diptikalyan and Sattigeri, Prasanna and Singh, Moninder and Varshney, Kush R. and Zhang, Yunfeng},\n  \n  keywords = {Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {AI Fairness 360: An Extensible Toolkit for Detecting, Understanding, and Mitigating Unwanted Algorithmic Bias},\n  \n  publisher = {arXiv},\n  \n  year = {2018},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
         },
         "error_rate_ratio": {
             "display_name": "Error Rate Ratio",
@@ -112,7 +124,8 @@
             "tags": [],
             "has_range": true,
             "range": [0, null],
-            "explanation": "The ratio of error rate between privileged and unprivileged groups."
+            "explanation": "The ratio of error rates between unprivileged and privileged groups.\nWhere Error Rate is percentage of predictions that were incorrect.\nThe ideal value is 1.0.",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1810.01943,\n  doi = {10.48550/ARXIV.1810.01943},\n  \n  url = {https://arxiv.org/abs/1810.01943},\n  \n  author = {Bellamy, Rachel K. E. and Dey, Kuntal and Hind, Michael and Hoffman, Samuel C. and Houde, Stephanie and Kannan, Kalapriya and Lohia, Pranay and Martino, Jacquelyn and Mehta, Sameep and Mojsilovic, Aleksandra and Nagar, Seema and Ramamurthy, Karthikeyan Natesan and Richards, John and Saha, Diptikalyan and Sattigeri, Prasanna and Singh, Moninder and Varshney, Kush R. and Zhang, Yunfeng},\n  \n  keywords = {Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {AI Fairness 360: An Extensible Toolkit for Detecting, Understanding, and Mitigating Unwanted Algorithmic Bias},\n  \n  publisher = {arXiv},\n  \n  year = {2018},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
         },
         "false_discovery_rate": {
             "display_name": "False Discovery Rate",
@@ -120,15 +133,17 @@
             "tags": [],
             "has_range": true,
             "range": [0, 1],
-            "explanation": "The percentage of positive predictions that were false positives."
+            "explanation": "The percentage of positive predictions that were false positives.\nCalculated as (false positive count / (true positive count + false positive count)).\nThe ideal value is 0.0",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1810.01943,\n  doi = {10.48550/ARXIV.1810.01943},\n  \n  url = {https://arxiv.org/abs/1810.01943},\n  \n  author = {Bellamy, Rachel K. E. and Dey, Kuntal and Hind, Michael and Hoffman, Samuel C. and Houde, Stephanie and Kannan, Kalapriya and Lohia, Pranay and Martino, Jacquelyn and Mehta, Sameep and Mojsilovic, Aleksandra and Nagar, Seema and Ramamurthy, Karthikeyan Natesan and Richards, John and Saha, Diptikalyan and Sattigeri, Prasanna and Singh, Moninder and Varshney, Kush R. and Zhang, Yunfeng},\n  \n  keywords = {Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {AI Fairness 360: An Extensible Toolkit for Detecting, Understanding, and Mitigating Unwanted Algorithmic Bias},\n  \n  publisher = {arXiv},\n  \n  year = {2018},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
         },
         "false_discovery_rate_difference": {
-            "display_name": "False Discovery Rate Diff",
+            "display_name": "False Discovery Rate Difference",
             "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [-1, 1],
-            "explanation": "The difference in false discovery rate between unprivileged and privileged groups."
+            "explanation": "The difference of false discovery rate between unprivileged and privileged instances.\nWhere False Discovery Rate is the percentage of positive predictions that were false positives.\nThe ideal value is 0.0.",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1810.01943,\n  doi = {10.48550/ARXIV.1810.01943},\n  \n  url = {https://arxiv.org/abs/1810.01943},\n  \n  author = {Bellamy, Rachel K. E. and Dey, Kuntal and Hind, Michael and Hoffman, Samuel C. and Houde, Stephanie and Kannan, Kalapriya and Lohia, Pranay and Martino, Jacquelyn and Mehta, Sameep and Mojsilovic, Aleksandra and Nagar, Seema and Ramamurthy, Karthikeyan Natesan and Richards, John and Saha, Diptikalyan and Sattigeri, Prasanna and Singh, Moninder and Varshney, Kush R. and Zhang, Yunfeng},\n  \n  keywords = {Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {AI Fairness 360: An Extensible Toolkit for Detecting, Understanding, and Mitigating Unwanted Algorithmic Bias},\n  \n  publisher = {arXiv},\n  \n  year = {2018},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
         },
         "false_discovery_rate_ratio": {
             "display_name": "False Discovery Rate Ratio",
@@ -136,7 +151,8 @@
             "tags": [],
             "has_range": true,
             "range": [0, null],
-            "explanation": "The ratio of false discovery rates between unprivileged and privileged groups."
+            "explanation": "The ratio of false discovery rate of unprivileged and privileged instances.\nWhere False Discovery Rate is the percentage of positive predictions that were false positives.\nThe ideal value is 1.0.",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1810.01943,\n  doi = {10.48550/ARXIV.1810.01943},\n  \n  url = {https://arxiv.org/abs/1810.01943},\n  \n  author = {Bellamy, Rachel K. E. and Dey, Kuntal and Hind, Michael and Hoffman, Samuel C. and Houde, Stephanie and Kannan, Kalapriya and Lohia, Pranay and Martino, Jacquelyn and Mehta, Sameep and Mojsilovic, Aleksandra and Nagar, Seema and Ramamurthy, Karthikeyan Natesan and Richards, John and Saha, Diptikalyan and Sattigeri, Prasanna and Singh, Moninder and Varshney, Kush R. and Zhang, Yunfeng},\n  \n  keywords = {Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {AI Fairness 360: An Extensible Toolkit for Detecting, Understanding, and Mitigating Unwanted Algorithmic Bias},\n  \n  publisher = {arXiv},\n  \n  year = {2018},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
         },
         "false_negative_rate": {
             "display_name": "False Negative Rate",
@@ -144,15 +160,17 @@
             "tags": [],
             "has_range": true,
             "range": [0, null],
-            "explanation": "The probability of falsely predicting a false outcome."
+            "explanation": "The percentage of predictions that positive labels that were incorrectly predicted to be negative.\nIn formula it is (false negative count / total positive count).\nThe ideal value is 0.0.",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1810.01943,\n  doi = {10.48550/ARXIV.1810.01943},\n  \n  url = {https://arxiv.org/abs/1810.01943},\n  \n  author = {Bellamy, Rachel K. E. and Dey, Kuntal and Hind, Michael and Hoffman, Samuel C. and Houde, Stephanie and Kannan, Kalapriya and Lohia, Pranay and Martino, Jacquelyn and Mehta, Sameep and Mojsilovic, Aleksandra and Nagar, Seema and Ramamurthy, Karthikeyan Natesan and Richards, John and Saha, Diptikalyan and Sattigeri, Prasanna and Singh, Moninder and Varshney, Kush R. and Zhang, Yunfeng},\n  \n  keywords = {Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {AI Fairness 360: An Extensible Toolkit for Detecting, Understanding, and Mitigating Unwanted Algorithmic Bias},\n  \n  publisher = {arXiv},\n  \n  year = {2018},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
         },
         "false_negative_rate_difference": {
-            "display_name": "False Negative Rate Diff",
+            "display_name": "False Negative Rate Difference",
             "type": "Numeric",
             "tags": [],
             "has_range": false,
             "range": [null, null],
-            "explanation": "The difference in false negative rate between unprivileged and privileged groups."
+            "explanation": "The difference of false negative rate between unprivileged and privileged instances.\nWhere False Negative Rate is the percentage of predictions that positive labels that were incorrectly predicted to be negative.\nThe ideal value is 0.0.",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1810.01943,\n  doi = {10.48550/ARXIV.1810.01943},\n  \n  url = {https://arxiv.org/abs/1810.01943},\n  \n  author = {Bellamy, Rachel K. E. and Dey, Kuntal and Hind, Michael and Hoffman, Samuel C. and Houde, Stephanie and Kannan, Kalapriya and Lohia, Pranay and Martino, Jacquelyn and Mehta, Sameep and Mojsilovic, Aleksandra and Nagar, Seema and Ramamurthy, Karthikeyan Natesan and Richards, John and Saha, Diptikalyan and Sattigeri, Prasanna and Singh, Moninder and Varshney, Kush R. and Zhang, Yunfeng},\n  \n  keywords = {Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {AI Fairness 360: An Extensible Toolkit for Detecting, Understanding, and Mitigating Unwanted Algorithmic Bias},\n  \n  publisher = {arXiv},\n  \n  year = {2018},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
         },
         "false_negative_rate_ratio": {
             "display_name": "False Negative Rate Ratio",
@@ -160,7 +178,8 @@
             "tags": [],
             "has_range": true,
             "range": [0, null],
-            "explanation": "The ratio of false negative rate between unprivileged and privileged groups."
+            "explanation": "The ratio of false negative rate between unprivileged and privileged instances.\nWhere False Negative Rate is the percentage of predictions that positive labels that were incorrectly predicted to be negative.\nThe ideal value is 1.0.",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1810.01943,\n  doi = {10.48550/ARXIV.1810.01943},\n  \n  url = {https://arxiv.org/abs/1810.01943},\n  \n  author = {Bellamy, Rachel K. E. and Dey, Kuntal and Hind, Michael and Hoffman, Samuel C. and Houde, Stephanie and Kannan, Kalapriya and Lohia, Pranay and Martino, Jacquelyn and Mehta, Sameep and Mojsilovic, Aleksandra and Nagar, Seema and Ramamurthy, Karthikeyan Natesan and Richards, John and Saha, Diptikalyan and Sattigeri, Prasanna and Singh, Moninder and Varshney, Kush R. and Zhang, Yunfeng},\n  \n  keywords = {Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {AI Fairness 360: An Extensible Toolkit for Detecting, Understanding, and Mitigating Unwanted Algorithmic Bias},\n  \n  publisher = {arXiv},\n  \n  year = {2018},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
         },
         "generalized_entropy_index": {
             "display_name": "Generalized Entropy Index",
@@ -168,23 +187,26 @@
             "tags": [],
             "has_range": false,
             "range": [null, null],
-            "explanation": "Unified individual and group fairness metric. From T. Speicher, H. Heidari, N. Grgic-Hlaca, K. P. Gummadi, A. Singla, A. Weller, and M. B. Zafar, 'A Unified Approach to Quantifying Algorithmic Unfairness: Measuring Individual and Group Unfairness via Inequality Indices,' ACM SIGKDD International Conference on Knowledge Discovery and Data Mining, 2018"
+            "explanation": "Measures inequality over a population measured between the predicted and actual favorable outcomes.\nThe ideal value is 0.0.",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1810.01943,\n  doi = {10.48550/ARXIV.1810.01943},\n  \n  url = {https://arxiv.org/abs/1810.01943},\n  \n  author = {Bellamy, Rachel K. E. and Dey, Kuntal and Hind, Michael and Hoffman, Samuel C. and Houde, Stephanie and Kannan, Kalapriya and Lohia, Pranay and Martino, Jacquelyn and Mehta, Sameep and Mojsilovic, Aleksandra and Nagar, Seema and Ramamurthy, Karthikeyan Natesan and Richards, John and Saha, Diptikalyan and Sattigeri, Prasanna and Singh, Moninder and Varshney, Kush R. and Zhang, Yunfeng},\n  \n  keywords = {Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {AI Fairness 360: An Extensible Toolkit for Detecting, Understanding, and Mitigating Unwanted Algorithmic Bias},\n  \n  publisher = {arXiv},\n  \n  year = {2018},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
         },
         "generalized_true_negative_rate": {
-            "display_name": "Gen True Negative Rate",
+            "display_name": "Generalized True Negative Rate",
             "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, null],
-            "explanation": "The number of generalized true negatives divided by the number of negatives."
+            "explanation": "The ratio of generalized false positives to negative examples in the dataset.\nThe formula is GFPR=GFPN.\nGeneralized confusion matrix measures such as this are calculated by summing the probabilities of the positive class instead of the hard predictions.\nThe idea value is 1.0.",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1810.01943,\n  doi = {10.48550/ARXIV.1810.01943},\n  \n  url = {https://arxiv.org/abs/1810.01943},\n  \n  author = {Bellamy, Rachel K. E. and Dey, Kuntal and Hind, Michael and Hoffman, Samuel C. and Houde, Stephanie and Kannan, Kalapriya and Lohia, Pranay and Martino, Jacquelyn and Mehta, Sameep and Mojsilovic, Aleksandra and Nagar, Seema and Ramamurthy, Karthikeyan Natesan and Richards, John and Saha, Diptikalyan and Sattigeri, Prasanna and Singh, Moninder and Varshney, Kush R. and Zhang, Yunfeng},\n  \n  keywords = {Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {AI Fairness 360: An Extensible Toolkit for Detecting, Understanding, and Mitigating Unwanted Algorithmic Bias},\n  \n  publisher = {arXiv},\n  \n  year = {2018},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
         },
         "generalized_true_positive_rate": {
-            "display_name": "Gen True Positive Rate",
+            "display_name": "Generalized True Positive Rate",
             "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, null],
-            "explanation": "The number of generalized true positives divided by the number of positives."
+            "explanation": "The ratio of generalized true positives to positive examples in the dataset.\nThe formula is GTPR=GTP/P. \nGeneralized confusion matrix measures such as this are calculated by summing the probabilities of the positive class instead of the hard predictions.\nThe ideal value is 1.0.",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1810.01943,\n  doi = {10.48550/ARXIV.1810.01943},\n  \n  url = {https://arxiv.org/abs/1810.01943},\n  \n  author = {Bellamy, Rachel K. E. and Dey, Kuntal and Hind, Michael and Hoffman, Samuel C. and Houde, Stephanie and Kannan, Kalapriya and Lohia, Pranay and Martino, Jacquelyn and Mehta, Sameep and Mojsilovic, Aleksandra and Nagar, Seema and Ramamurthy, Karthikeyan Natesan and Richards, John and Saha, Diptikalyan and Sattigeri, Prasanna and Singh, Moninder and Varshney, Kush R. and Zhang, Yunfeng},\n  \n  keywords = {Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {AI Fairness 360: An Extensible Toolkit for Detecting, Understanding, and Mitigating Unwanted Algorithmic Bias},\n  \n  publisher = {arXiv},\n  \n  year = {2018},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
         },
         "negative_predictive_value": {
             "display_name": "Negative Predictive Value",
@@ -192,55 +214,62 @@
             "tags": [],
             "has_range": true,
             "range": [0, 1],
-            "explanation": "The chance that negative prediction is correct."
+            "explanation": "The percentage of negative predictions that were correct.\nCalculated as (number of true negatives / (number of true negatives + number of false negatives)).\nThe ideal value is 1.0.",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1810.01943,\n  doi = {10.48550/ARXIV.1810.01943},\n  \n  url = {https://arxiv.org/abs/1810.01943},\n  \n  author = {Bellamy, Rachel K. E. and Dey, Kuntal and Hind, Michael and Hoffman, Samuel C. and Houde, Stephanie and Kannan, Kalapriya and Lohia, Pranay and Martino, Jacquelyn and Mehta, Sameep and Mojsilovic, Aleksandra and Nagar, Seema and Ramamurthy, Karthikeyan Natesan and Richards, John and Saha, Diptikalyan and Sattigeri, Prasanna and Singh, Moninder and Varshney, Kush R. and Zhang, Yunfeng},\n  \n  keywords = {Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {AI Fairness 360: An Extensible Toolkit for Detecting, Understanding, and Mitigating Unwanted Algorithmic Bias},\n  \n  publisher = {arXiv},\n  \n  year = {2018},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
         },
         "num_false_negatives": {
-            "display_name": "False Negative Count",
+            "display_name": "Number of False Negatives",
             "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, null],
-            "explanation": "The number of false negatives."
+            "explanation": "The number of false negative instances for the given (privileged or unprivileged) group.\nThe ideal value is 0.",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1810.01943,\n  doi = {10.48550/ARXIV.1810.01943},\n  \n  url = {https://arxiv.org/abs/1810.01943},\n  \n  author = {Bellamy, Rachel K. E. and Dey, Kuntal and Hind, Michael and Hoffman, Samuel C. and Houde, Stephanie and Kannan, Kalapriya and Lohia, Pranay and Martino, Jacquelyn and Mehta, Sameep and Mojsilovic, Aleksandra and Nagar, Seema and Ramamurthy, Karthikeyan Natesan and Richards, John and Saha, Diptikalyan and Sattigeri, Prasanna and Singh, Moninder and Varshney, Kush R. and Zhang, Yunfeng},\n  \n  keywords = {Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {AI Fairness 360: An Extensible Toolkit for Detecting, Understanding, and Mitigating Unwanted Algorithmic Bias},\n  \n  publisher = {arXiv},\n  \n  year = {2018},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
         },
         "num_false_positives": {
-            "display_name": "False Positive Count",
+            "display_name": "Number of False Positives",
             "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, null],
-            "explanation": "The number of false positives"
+            "explanation": "The number of false positive instances for the given (privileged or unprivileged) group.\nThe ideal value is 0.",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1810.01943,\n  doi = {10.48550/ARXIV.1810.01943},\n  \n  url = {https://arxiv.org/abs/1810.01943},\n  \n  author = {Bellamy, Rachel K. E. and Dey, Kuntal and Hind, Michael and Hoffman, Samuel C. and Houde, Stephanie and Kannan, Kalapriya and Lohia, Pranay and Martino, Jacquelyn and Mehta, Sameep and Mojsilovic, Aleksandra and Nagar, Seema and Ramamurthy, Karthikeyan Natesan and Richards, John and Saha, Diptikalyan and Sattigeri, Prasanna and Singh, Moninder and Varshney, Kush R. and Zhang, Yunfeng},\n  \n  keywords = {Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {AI Fairness 360: An Extensible Toolkit for Detecting, Understanding, and Mitigating Unwanted Algorithmic Bias},\n  \n  publisher = {arXiv},\n  \n  year = {2018},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
         },
         "num_generalized_false_negatives": {
-            "display_name": "Gen False Negative Count",
+            "display_name": "Number of Generalized False Negatives",
             "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, null],
-            "explanation": "Weighted sum of 1-predicted scores where true labels are favorable."
+            "explanation": "The generalized number of false negatives.\nIt is the weighted sum of 1 - predicted scores where true labels are ‘favorable’, optionally conditioned on protected attributes.\nThe ideal value is 0.",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1810.01943,\n  doi = {10.48550/ARXIV.1810.01943},\n  \n  url = {https://arxiv.org/abs/1810.01943},\n  \n  author = {Bellamy, Rachel K. E. and Dey, Kuntal and Hind, Michael and Hoffman, Samuel C. and Houde, Stephanie and Kannan, Kalapriya and Lohia, Pranay and Martino, Jacquelyn and Mehta, Sameep and Mojsilovic, Aleksandra and Nagar, Seema and Ramamurthy, Karthikeyan Natesan and Richards, John and Saha, Diptikalyan and Sattigeri, Prasanna and Singh, Moninder and Varshney, Kush R. and Zhang, Yunfeng},\n  \n  keywords = {Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {AI Fairness 360: An Extensible Toolkit for Detecting, Understanding, and Mitigating Unwanted Algorithmic Bias},\n  \n  publisher = {arXiv},\n  \n  year = {2018},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
         },
         "num_generalized_false_positives": {
-            "display_name": "Gen False Positive Count",
+            "display_name": "Number of Generalized False Positives",
             "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, null],
-            "explanation": "Weighted sum of predicted scores where true labels are unfavorable."
+            "explanation": "The generalized number of false positives.\nIt is the weighted sum of predicted scores where true labels are ‘unfavorable’, optionally conditioned on protected attribute.\nThe ideal value is 0.",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1810.01943,\n  doi = {10.48550/ARXIV.1810.01943},\n  \n  url = {https://arxiv.org/abs/1810.01943},\n  \n  author = {Bellamy, Rachel K. E. and Dey, Kuntal and Hind, Michael and Hoffman, Samuel C. and Houde, Stephanie and Kannan, Kalapriya and Lohia, Pranay and Martino, Jacquelyn and Mehta, Sameep and Mojsilovic, Aleksandra and Nagar, Seema and Ramamurthy, Karthikeyan Natesan and Richards, John and Saha, Diptikalyan and Sattigeri, Prasanna and Singh, Moninder and Varshney, Kush R. and Zhang, Yunfeng},\n  \n  keywords = {Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {AI Fairness 360: An Extensible Toolkit for Detecting, Understanding, and Mitigating Unwanted Algorithmic Bias},\n  \n  publisher = {arXiv},\n  \n  year = {2018},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
         },
         "num_generalized_true_negatives": {
-            "display_name": "Gen True Negative Count",
+            "display_name": "Number of Generalized True Negatives",
             "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, null],
-            "explanation": "Weighted sum of 1 - predicted scores where true labels are unfavorable."
+            "explanation": "The generalized number of true negatives.\nIt is the weighted sum of 1 - predicted scores where true labels are ‘unfavorable’, optionally conditioned on protected attributes.",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1810.01943,\n  doi = {10.48550/ARXIV.1810.01943},\n  \n  url = {https://arxiv.org/abs/1810.01943},\n  \n  author = {Bellamy, Rachel K. E. and Dey, Kuntal and Hind, Michael and Hoffman, Samuel C. and Houde, Stephanie and Kannan, Kalapriya and Lohia, Pranay and Martino, Jacquelyn and Mehta, Sameep and Mojsilovic, Aleksandra and Nagar, Seema and Ramamurthy, Karthikeyan Natesan and Richards, John and Saha, Diptikalyan and Sattigeri, Prasanna and Singh, Moninder and Varshney, Kush R. and Zhang, Yunfeng},\n  \n  keywords = {Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {AI Fairness 360: An Extensible Toolkit for Detecting, Understanding, and Mitigating Unwanted Algorithmic Bias},\n  \n  publisher = {arXiv},\n  \n  year = {2018},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
         },
         "num_generalized_true_positives": {
-            "display_name": "Generalized True Positive Count",
+            "display_name": "Number of Generalized True Positives",
             "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, null],
-            "explanation": "Weighted sum of predicted scores where true labels are favorable."
+            "explanation": "The generalized number of true positives.\n It is the weighted sum of predicted scores where true labels are ‘favorable’, optionally conditioned on protected attributes.",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1810.01943,\n  doi = {10.48550/ARXIV.1810.01943},\n  \n  url = {https://arxiv.org/abs/1810.01943},\n  \n  author = {Bellamy, Rachel K. E. and Dey, Kuntal and Hind, Michael and Hoffman, Samuel C. and Houde, Stephanie and Kannan, Kalapriya and Lohia, Pranay and Martino, Jacquelyn and Mehta, Sameep and Mojsilovic, Aleksandra and Nagar, Seema and Ramamurthy, Karthikeyan Natesan and Richards, John and Saha, Diptikalyan and Sattigeri, Prasanna and Singh, Moninder and Varshney, Kush R. and Zhang, Yunfeng},\n  \n  keywords = {Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {AI Fairness 360: An Extensible Toolkit for Detecting, Understanding, and Mitigating Unwanted Algorithmic Bias},\n  \n  publisher = {arXiv},\n  \n  year = {2018},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
         },
         "num_instances": {
             "display_name": "Instance Count",
@@ -248,23 +277,26 @@
             "tags": [],
             "has_range": true,
             "range": [0, null],
-            "explanation": "The number of examples seen."
+            "explanation": "The number of instances for the given (privileged or unprivileged) group.",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1810.01943,\n  doi = {10.48550/ARXIV.1810.01943},\n  \n  url = {https://arxiv.org/abs/1810.01943},\n  \n  author = {Bellamy, Rachel K. E. and Dey, Kuntal and Hind, Michael and Hoffman, Samuel C. and Houde, Stephanie and Kannan, Kalapriya and Lohia, Pranay and Martino, Jacquelyn and Mehta, Sameep and Mojsilovic, Aleksandra and Nagar, Seema and Ramamurthy, Karthikeyan Natesan and Richards, John and Saha, Diptikalyan and Sattigeri, Prasanna and Singh, Moninder and Varshney, Kush R. and Zhang, Yunfeng},\n  \n  keywords = {Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {AI Fairness 360: An Extensible Toolkit for Detecting, Understanding, and Mitigating Unwanted Algorithmic Bias},\n  \n  publisher = {arXiv},\n  \n  year = {2018},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
         },
         "num_negatives": {
-            "display_name": "Negative Count",
+            "display_name": "Number of Negatives",
             "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, null],
-            "explanation": "The number of negative examples seen."
+            "explanation": "The number of negative instances for the given (privileged or unprivileged) group.",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1810.01943,\n  doi = {10.48550/ARXIV.1810.01943},\n  \n  url = {https://arxiv.org/abs/1810.01943},\n  \n  author = {Bellamy, Rachel K. E. and Dey, Kuntal and Hind, Michael and Hoffman, Samuel C. and Houde, Stephanie and Kannan, Kalapriya and Lohia, Pranay and Martino, Jacquelyn and Mehta, Sameep and Mojsilovic, Aleksandra and Nagar, Seema and Ramamurthy, Karthikeyan Natesan and Richards, John and Saha, Diptikalyan and Sattigeri, Prasanna and Singh, Moninder and Varshney, Kush R. and Zhang, Yunfeng},\n  \n  keywords = {Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {AI Fairness 360: An Extensible Toolkit for Detecting, Understanding, and Mitigating Unwanted Algorithmic Bias},\n  \n  publisher = {arXiv},\n  \n  year = {2018},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
         },
         "num_positives": {
-            "display_name": "Positive Count",
+            "display_name": "Number of Positives",
             "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, null],
-            "explanation": "The number of positive examples seen."
+            "explanation": "The number of positive instances for the given (privileged or unprivileged) group.",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1810.01943,\n  doi = {10.48550/ARXIV.1810.01943},\n  \n  url = {https://arxiv.org/abs/1810.01943},\n  \n  author = {Bellamy, Rachel K. E. and Dey, Kuntal and Hind, Michael and Hoffman, Samuel C. and Houde, Stephanie and Kannan, Kalapriya and Lohia, Pranay and Martino, Jacquelyn and Mehta, Sameep and Mojsilovic, Aleksandra and Nagar, Seema and Ramamurthy, Karthikeyan Natesan and Richards, John and Saha, Diptikalyan and Sattigeri, Prasanna and Singh, Moninder and Varshney, Kush R. and Zhang, Yunfeng},\n  \n  keywords = {Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {AI Fairness 360: An Extensible Toolkit for Detecting, Understanding, and Mitigating Unwanted Algorithmic Bias},\n  \n  publisher = {arXiv},\n  \n  year = {2018},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
         },
         "num_pred_negatives": {
             "display_name": "Negative Prediction Count",
@@ -272,7 +304,8 @@
             "tags": [],
             "has_range": true,
             "range": [0, null],
-            "explanation": "The number of negative predictions seen."
+            "explanation": "The number of predicted negative instances for the given (privileged or unprivileged) group.\nThe ideal value is the total number of negative instances made available.",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1810.01943,\n  doi = {10.48550/ARXIV.1810.01943},\n  \n  url = {https://arxiv.org/abs/1810.01943},\n  \n  author = {Bellamy, Rachel K. E. and Dey, Kuntal and Hind, Michael and Hoffman, Samuel C. and Houde, Stephanie and Kannan, Kalapriya and Lohia, Pranay and Martino, Jacquelyn and Mehta, Sameep and Mojsilovic, Aleksandra and Nagar, Seema and Ramamurthy, Karthikeyan Natesan and Richards, John and Saha, Diptikalyan and Sattigeri, Prasanna and Singh, Moninder and Varshney, Kush R. and Zhang, Yunfeng},\n  \n  keywords = {Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {AI Fairness 360: An Extensible Toolkit for Detecting, Understanding, and Mitigating Unwanted Algorithmic Bias},\n  \n  publisher = {arXiv},\n  \n  year = {2018},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
         },
         "num_pred_positives": {
             "display_name": "Positive Prediction Count",
@@ -280,7 +313,8 @@
             "tags": [],
             "has_range": true,
             "range": [0, null],
-            "explanation": "The number of positive predictions seen."
+            "explanation": "The number of predicted positive instances for the given (privileged or unprivileged) group.\nThe ideal value is the total number of positive instances made available.",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1810.01943,\n  doi = {10.48550/ARXIV.1810.01943},\n  \n  url = {https://arxiv.org/abs/1810.01943},\n  \n  author = {Bellamy, Rachel K. E. and Dey, Kuntal and Hind, Michael and Hoffman, Samuel C. and Houde, Stephanie and Kannan, Kalapriya and Lohia, Pranay and Martino, Jacquelyn and Mehta, Sameep and Mojsilovic, Aleksandra and Nagar, Seema and Ramamurthy, Karthikeyan Natesan and Richards, John and Saha, Diptikalyan and Sattigeri, Prasanna and Singh, Moninder and Varshney, Kush R. and Zhang, Yunfeng},\n  \n  keywords = {Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {AI Fairness 360: An Extensible Toolkit for Detecting, Understanding, and Mitigating Unwanted Algorithmic Bias},\n  \n  publisher = {arXiv},\n  \n  year = {2018},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
         },
         "num_true_negatives": {
             "display_name": "True Negative Count",
@@ -288,7 +322,8 @@
             "tags": [],
             "has_range": true,
             "range": [0, null],
-            "explanation": "The number of times the classifier correctly predicted an example to be negative."
+            "explanation": "The number of true negative instances for the given (privileged or unprivileged) group.\nThe idea value is the number of negative instances made available.",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1810.01943,\n  doi = {10.48550/ARXIV.1810.01943},\n  \n  url = {https://arxiv.org/abs/1810.01943},\n  \n  author = {Bellamy, Rachel K. E. and Dey, Kuntal and Hind, Michael and Hoffman, Samuel C. and Houde, Stephanie and Kannan, Kalapriya and Lohia, Pranay and Martino, Jacquelyn and Mehta, Sameep and Mojsilovic, Aleksandra and Nagar, Seema and Ramamurthy, Karthikeyan Natesan and Richards, John and Saha, Diptikalyan and Sattigeri, Prasanna and Singh, Moninder and Varshney, Kush R. and Zhang, Yunfeng},\n  \n  keywords = {Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {AI Fairness 360: An Extensible Toolkit for Detecting, Understanding, and Mitigating Unwanted Algorithmic Bias},\n  \n  publisher = {arXiv},\n  \n  year = {2018},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
         },
         "num_true_positives": {
             "display_name": "True Positive Count",
@@ -296,7 +331,8 @@
             "tags": [],
             "has_range": true,
             "range": [0, null],
-            "explanation": "The number of times the classifier correctly predicted an example to be positive."
+            "explanation": "The number of true positive instances for the given (privileged or unprivileged) group.\n The idea value is the number of of positive instances made available.",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1810.01943,\n  doi = {10.48550/ARXIV.1810.01943},\n  \n  url = {https://arxiv.org/abs/1810.01943},\n  \n  author = {Bellamy, Rachel K. E. and Dey, Kuntal and Hind, Michael and Hoffman, Samuel C. and Houde, Stephanie and Kannan, Kalapriya and Lohia, Pranay and Martino, Jacquelyn and Mehta, Sameep and Mojsilovic, Aleksandra and Nagar, Seema and Ramamurthy, Karthikeyan Natesan and Richards, John and Saha, Diptikalyan and Sattigeri, Prasanna and Singh, Moninder and Varshney, Kush R. and Zhang, Yunfeng},\n  \n  keywords = {Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {AI Fairness 360: An Extensible Toolkit for Detecting, Understanding, and Mitigating Unwanted Algorithmic Bias},\n  \n  publisher = {arXiv},\n  \n  year = {2018},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
         },
         "positive_predictive_value": {
             "display_name": "Positive Predictive Value",
@@ -304,15 +340,17 @@
             "tags": [],
             "has_range": false,
             "range": [null, null],
-            "explanation": ""
+            "explanation": "The percentage of positive predictions that were correct. Computed as (true positives / (true positives + false positives)) for the given (privileged or unprivileged) group. The ideal value is 1.0.",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1810.01943,\n  doi = {10.48550/ARXIV.1810.01943},\n  \n  url = {https://arxiv.org/abs/1810.01943},\n  \n  author = {Bellamy, Rachel K. E. and Dey, Kuntal and Hind, Michael and Hoffman, Samuel C. and Houde, Stephanie and Kannan, Kalapriya and Lohia, Pranay and Martino, Jacquelyn and Mehta, Sameep and Mojsilovic, Aleksandra and Nagar, Seema and Ramamurthy, Karthikeyan Natesan and Richards, John and Saha, Diptikalyan and Sattigeri, Prasanna and Singh, Moninder and Varshney, Kush R. and Zhang, Yunfeng},\n  \n  keywords = {Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {AI Fairness 360: An Extensible Toolkit for Detecting, Understanding, and Mitigating Unwanted Algorithmic Bias},\n  \n  publisher = {arXiv},\n  \n  year = {2018},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
         },
         "smoothed_empirical_differential_fairness": {
-            "display_name": "Smoothed Emp Diff Fairness",
+            "display_name": "Smoothed Empirical Differential Fairness",
             "type": "Numeric",
             "tags": [],
             "has_range": true,
             "range": [0, 1],
-            "explanation": "Fairness metric from: Foulds, James R., et al. 'An intersectional definition of fairness.' 2020 IEEE 36th International Conference on Data Engineering (ICDE). IEEE, 2020."
+            "explanation": "The differential in probability of favorable and unfavorable outcomes between groups that intersect divided by features. Does not account for unprivileged or privileged groups.",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1810.01943,\n  doi = {10.48550/ARXIV.1810.01943},\n  \n  url = {https://arxiv.org/abs/1810.01943},\n  \n  author = {Bellamy, Rachel K. E. and Dey, Kuntal and Hind, Michael and Hoffman, Samuel C. and Houde, Stephanie and Kannan, Kalapriya and Lohia, Pranay and Martino, Jacquelyn and Mehta, Sameep and Mojsilovic, Aleksandra and Nagar, Seema and Ramamurthy, Karthikeyan Natesan and Richards, John and Saha, Diptikalyan and Sattigeri, Prasanna and Singh, Moninder and Varshney, Kush R. and Zhang, Yunfeng},\n  \n  keywords = {Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {AI Fairness 360: An Extensible Toolkit for Detecting, Understanding, and Mitigating Unwanted Algorithmic Bias},\n  \n  publisher = {arXiv},\n  \n  year = {2018},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n\n @misc{https://doi.org/10.48550/arxiv.1807.08362,\n  doi = {10.48550/ARXIV.1807.08362},\n  \n  url = {https://arxiv.org/abs/1807.08362},\n  \n  author = {Foulds, James and Islam, Rashidul and Keya, Kamrun Naher and Pan, Shimei},\n  \n  keywords = {Machine Learning (cs.LG), Computers and Society (cs.CY), Machine Learning (stat.ML), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {An Intersectional Definition of Fairness},\n  \n  publisher = {arXiv},\n  \n  year = {2018},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
         },
         "true_negative_rate": {
             "display_name": "True Negative Rate",
@@ -320,7 +358,8 @@
             "tags": [],
             "has_range": true,
             "range": [0, 1],
-            "explanation": "The number of true negatives divided by the total number of negatives."
+            "explanation": "The ratio of true negatives to the total number of negatives for the given (privileged or unprivileged) group.\nThe ideal value is 1.0.",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1810.01943,\n  doi = {10.48550/ARXIV.1810.01943},\n  \n  url = {https://arxiv.org/abs/1810.01943},\n  \n  author = {Bellamy, Rachel K. E. and Dey, Kuntal and Hind, Michael and Hoffman, Samuel C. and Houde, Stephanie and Kannan, Kalapriya and Lohia, Pranay and Martino, Jacquelyn and Mehta, Sameep and Mojsilovic, Aleksandra and Nagar, Seema and Ramamurthy, Karthikeyan Natesan and Richards, John and Saha, Diptikalyan and Sattigeri, Prasanna and Singh, Moninder and Varshney, Kush R. and Zhang, Yunfeng},\n  \n  keywords = {Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {AI Fairness 360: An Extensible Toolkit for Detecting, Understanding, and Mitigating Unwanted Algorithmic Bias},\n  \n  publisher = {arXiv},\n  \n  year = {2018},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
         },
         "true_positive_rate": {
             "display_name": "True Positive Rate",
@@ -328,7 +367,8 @@
             "tags": [],
             "has_range": true,
             "range": [0, 1],
-            "explanation": "The number of true positives divided by the total number of positives."
+            "explanation": "The ratio of true positives to the total number of positives for the given (privileged or unprivileged) group.\nThe idea value is 1.0.",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1810.01943,\n  doi = {10.48550/ARXIV.1810.01943},\n  \n  url = {https://arxiv.org/abs/1810.01943},\n  \n  author = {Bellamy, Rachel K. E. and Dey, Kuntal and Hind, Michael and Hoffman, Samuel C. and Houde, Stephanie and Kannan, Kalapriya and Lohia, Pranay and Martino, Jacquelyn and Mehta, Sameep and Mojsilovic, Aleksandra and Nagar, Seema and Ramamurthy, Karthikeyan Natesan and Richards, John and Saha, Diptikalyan and Sattigeri, Prasanna and Singh, Moninder and Varshney, Kush R. and Zhang, Yunfeng},\n  \n  keywords = {Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {AI Fairness 360: An Extensible Toolkit for Detecting, Understanding, and Mitigating Unwanted Algorithmic Bias},\n  \n  publisher = {arXiv},\n  \n  year = {2018},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
         },
         "true_positive_rate_difference": {
             "display_name": "True Positive Rate Difference",
@@ -336,7 +376,8 @@
             "tags": [],
             "has_range": true,
             "range": [-1, 1],
-            "explanation": "The difference in true positive rate between unprivileged and privileged groups."
+            "explanation": "The difference of true positive rates between the unprivileged and the privileged groups.\nWhere True Positive Rate is the ratio of true positives to the total number of positives.\nThe ideal value is 0. A value of < 0 implies higher benefit for the privileged group and a value > 0 implies higher benefit for the unprivileged group.",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1810.01943,\n  doi = {10.48550/ARXIV.1810.01943},\n  \n  url = {https://arxiv.org/abs/1810.01943},\n  \n  author = {Bellamy, Rachel K. E. and Dey, Kuntal and Hind, Michael and Hoffman, Samuel C. and Houde, Stephanie and Kannan, Kalapriya and Lohia, Pranay and Martino, Jacquelyn and Mehta, Sameep and Mojsilovic, Aleksandra and Nagar, Seema and Ramamurthy, Karthikeyan Natesan and Richards, John and Saha, Diptikalyan and Sattigeri, Prasanna and Singh, Moninder and Varshney, Kush R. and Zhang, Yunfeng},\n  \n  keywords = {Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {AI Fairness 360: An Extensible Toolkit for Detecting, Understanding, and Mitigating Unwanted Algorithmic Bias},\n  \n  publisher = {arXiv},\n  \n  year = {2018},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
         }
     }
 }

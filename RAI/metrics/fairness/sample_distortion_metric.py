@@ -4,6 +4,8 @@ from RAI.metrics.AIF360.datasets import BinaryLabelDataset
 from RAI.metrics.AIF360.metrics import BinaryLabelDatasetMetric
 import os
 
+# TODO: Remove or clarify this class ?
+
 
 class SampleDistortionFairnessGroup(MetricGroup, class_location=os.path.abspath(__file__)):
     def __init__(self, ai_system) -> None:
@@ -37,7 +39,6 @@ class SampleDistortionFairnessGroup(MetricGroup, class_location=os.path.abspath(
 
         self.metrics['average'].value = 0
 
-# TODO: Remove this?
 
 def get_bin_dataset(metric_group, data, priv_group):
     names = [feature.name for feature in metric_group.ai_system.meta_database.features]
