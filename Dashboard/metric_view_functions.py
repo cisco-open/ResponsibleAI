@@ -66,7 +66,8 @@ def get_display(prefix, selectors):
             interval=1 * 1000,  # in milliseconds
             n_intervals=0),
         html.Div(html.Div([selectors])),
-        get_graph(prefix)])
+        get_graph(prefix),
+        html.Div(id=prefix+"metric_info", children=[])])
 
 
 def get_group_from_ctx(ctx):

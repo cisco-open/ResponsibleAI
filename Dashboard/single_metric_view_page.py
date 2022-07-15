@@ -85,6 +85,18 @@ def get_single_metric_display():
     return mvf.get_display(prefix, get_search_and_selection_interface())
 
 
+def get_metric_info_display(group, metric, metric_info):
+    return [html.Div([
+        html.H3(metric_info[group][metric]['display_name'], style={"text-align": "center"}),
+        html.Br(),
+        html.P(metric_info[group][metric]['explanation'], style={'whiteSpace': 'pre-wrap', "text-align": "center"}),
+        html.P("Citation: \n" + metric_info[group][metric]['citation'], style={'whiteSpace': 'pre-wrap'})],
+        style={"background-color": "rgb(240,250,255)", "width": "70%", "border": "solid",
+               "border-color": "silver", "border-radius": "5px", "padding": "10px 50px 10px 50px",
+               "display": "block", "margin-left": "auto", "margin-right": "auto", "margin-top": "50px"}
+    )]
+
+
 @app.callback(
     Output(prefix+'legend_data', 'data'),
     Output({'type': prefix+'child-checkbox', 'group': ALL}, 'value'),
@@ -137,18 +149,21 @@ def update_metric_choice(c_selected, reset_button, metric_search, c_options, c_v
     Output(prefix+'select_metric_tag_col', 'style'),
     Output(prefix+'select_metric_tag', 'options'),
     Output(prefix+'select_metric_tag', 'value'),
+    Output(prefix+'metric_info', 'children'),
     Input(prefix+'interval-component', 'n_intervals'),
     Input(prefix+'legend_data', 'data'),
     Input(prefix+'select_metric_tag', 'value'),
     State(prefix+'graph_cnt', 'children'),
     State(prefix+'select_metric_tag_col', 'style'),
     State(prefix+'select_metric_tag', 'options'),
-    State(prefix+'select_metric_tag', 'value')
+    State(prefix+'select_metric_tag', 'value'),
+    State(prefix+'metric_info', 'children')
 )
-def update_display(n, options, tag_selection, old_graph, old_style, old_children, old_tag_selection):
+def update_display(n, options, tag_selection, old_graph, old_style, old_children, old_tag_selection, old_info):
     ctx = dash.callback_context
     is_new_data, is_time_update, is_new_tag = mvf.get_graph_update_purpose(ctx, prefix)
     style = {"display": 'none'}
+    metric_info = redisUtil.get_metric_info()
 
     if is_time_update:
         if redisUtil.has_update("metric_graph", reset=True):
@@ -159,7 +174,7 @@ def update_display(n, options, tag_selection, old_graph, old_style, old_children
     if is_new_data:
         print("New data")
         if options == "" or options is None:
-            return [], style, old_children, old_tag_selection
+            return [], style, old_children, old_tag_selection, []
         k, v = options.split(',')
         print(k, v)
         print('---------------------------')
@@ -170,13 +185,13 @@ def update_display(n, options, tag_selection, old_graph, old_style, old_children
             style = {"display": 'block'}
             children = display_obj.get_tags()
             selection = children[-1]
-        return display_obj.to_display(), style, children, selection
+        return display_obj.to_display(), style, children, selection, get_metric_info_display(k, v, metric_info)
 
     elif is_new_tag:
         print("New tag selected")
         k, v = options.split(',')
         display_obj, _ = populate_display_obj(k, v)
         tags = display_obj.get_tags()
-        return display_obj.display_tag_num(tags.index(tag_selection)), old_style, old_children, tag_selection
+        return display_obj.display_tag_num(tags.index(tag_selection)), old_style, old_children, tag_selection, old_info
 
-    return old_graph, old_style, old_children, old_tag_selection
+    return old_graph, old_style, old_children, old_tag_selection, old_info
