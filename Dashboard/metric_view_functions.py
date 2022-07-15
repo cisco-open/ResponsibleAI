@@ -70,13 +70,6 @@ def get_display(prefix, selectors):
         html.Div(id=prefix+"metric_info", children=[])])
 
 
-def get_group_from_ctx(ctx):
-    search_string = "\"group\":\""
-    idx = ctx.index(search_string) + len(search_string)
-    idx_2 = ctx.index("\"", idx)
-    return ctx[idx:idx_2]
-
-
 def get_reset_button(prefix):
     return dbc.Button("Reset Graph", id=prefix + "reset_graph", color="secondary",
                       style={"position": "absolute", "bottom": "0"})

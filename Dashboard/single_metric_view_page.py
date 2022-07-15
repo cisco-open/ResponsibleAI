@@ -134,14 +134,13 @@ def update_metric_choice(c_selected, reset_button, metric_search, c_options, c_v
                 c_val = [[] for _ in range(len(c_val))]
                 c_val[parent_index] = metric
             return options, c_val, metric_search
-    group = mvf.get_group_from_ctx(ctx)
+    group = dash.callback_context.triggered_id["group"]
     parent_index = ids.index(group)
     if "\"type\":\"" + prefix +"child-checkbox" in ctx:
         metric = c_val[parent_index]
         options = group + "," + c_val[parent_index]
         c_val = [[] for _ in range(len(c_val))]
         c_val[parent_index] = metric
-        print("options: ", options)
         return options, c_val, None
     return options, c_val, None
 

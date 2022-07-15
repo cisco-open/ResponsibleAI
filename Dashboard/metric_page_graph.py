@@ -117,16 +117,13 @@ def get_metric_page_graph():
     prevent_initial_call=True
 )
 def update_metric_choices(p_selected, c_selected, reset_button, metric_search, p_options, c_options, p_val, c_val, options):
-    print("Change detected")
     ctx = dash.callback_context.triggered[0]["prop_id"]
-    print("CTX: ", ctx)
     metric_info = redisUtil.get_metric_info()
     if ctx == prefix+'reset_graph.n_clicks':
         to_p_val = [[] for _ in range(len(p_val))]
         to_c_val = [[] for _ in range(len(p_val))]
         return [], to_p_val, to_c_val, None
     if ctx == prefix+'metric_search.value':
-        print("Search value: ", metric_search)
         if metric_search is None:
             return options, p_val, c_val, metric_search
         else:
@@ -140,9 +137,8 @@ def update_metric_choices(p_selected, c_selected, reset_button, metric_search, p
                 if len(c_val[parent_index]) == len(c_options[parent_index]) - 1:
                     p_val[parent_index] = group
                 c_val[parent_index].append(metric)
-            print("options: ", options)
             return options, p_val, c_val, metric_search
-    group = mvf.get_group_from_ctx(ctx)
+    group = dash.callback_context.triggered_id["group"]
     parent_index = p_options.index([{'label': metric_info[group]['meta']['display_name'], 'value': group}])
     if "\"type\":\""+prefix+"group-checkbox" in ctx:
         child_selection = [option["value"] for option in c_options[parent_index] if p_selected[parent_index]]
