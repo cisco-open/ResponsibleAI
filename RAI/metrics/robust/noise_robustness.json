@@ -1,6 +1,6 @@
 {
     "name": "noise_robustness",
-    "display_name": "Robustness to Noise Metrics",
+    "display_name": "Robustness to Noise",
     "compatibility": {"task_type": null,
                       "data_type": [],
                       "output_requirements": [],

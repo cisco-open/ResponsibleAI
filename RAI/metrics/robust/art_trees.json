@@ -1,6 +1,6 @@
 {
     "name": "adversarial_validation_tree",
-    "display_name": "Adversarial Validation Tree Metrics",
+    "display_name": "Adversarial Validation Tree",
     "compatibility": {"task_type": "binary_classification",
                       "data_type": ["Numeric"],
                       "output_requirements": ["predict"],

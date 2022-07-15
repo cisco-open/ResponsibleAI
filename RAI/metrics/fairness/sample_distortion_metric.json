@@ -1,6 +1,6 @@
 {
     "name": "sample_distortion_fairness",
-    "display_name": "Sample Distortion Fairness Metrics",
+    "display_name": "Sample Distortion Fairness",
     "compatibility": {"task_type": "classification",
                       "data_type": ["Numeric"],
                       "output_requirements": ["predict"],

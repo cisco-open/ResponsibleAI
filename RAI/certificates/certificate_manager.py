@@ -28,7 +28,6 @@ class CertificateManager(object):
         self.results = {}
 
     # Loads all certificates found in the stock certificate file
-    # TODO: Refactor to be the same? as load_custom_certificates with default value
     def load_stock_certificates(self):
         f = open(cert_list_file_name, "r")
         data = json.load(f)

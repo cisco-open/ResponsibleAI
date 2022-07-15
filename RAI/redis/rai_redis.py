@@ -73,7 +73,6 @@ class RaiRedis:
                     print(json.dumps(metrics[dataset][group][m]))
         '''
 
-        # TODO: Add a function which makes all data compatible with json (no float32)
         self.redis_connection.rpush(self.ai_system.name + '|metric_values', json.dumps(metrics))  # True
         self.redis_connection.publish('update',
                                       "New measurement: %s" % metrics[list(metrics.keys())[0]]["metadata"]["date"])

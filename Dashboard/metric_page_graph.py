@@ -90,7 +90,7 @@ def get_search_and_selection_interface():
             ]),
         ], style=mvf.get_selection_form_style()),
         style=mvf.get_selection_div_style()
-    )  # TODO: Generalize repeated elements to functions
+    )
 
 
 def get_metric_page_graph():

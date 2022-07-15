@@ -1,6 +1,6 @@
 {
     "name": "individual_fairness",
-    "display_name" : "Individual Fairness Metrics",
+    "display_name" : "Individual Fairness",
     "compatibility": {"task_type": "classification",
                       "data_type": ["Numeric"],
                       "output_requirements": ["predict"],

@@ -352,7 +352,6 @@ class StructuredDataset(Dataset):
 
         return new
 
-    # TODO: Should we store the protected attributes as a separate dataframe
     def convert_to_dataframe(self, de_dummy_code=False, sep='=',
                              set_category=True):
         """Convert the StructuredDataset to a :obj:`pandas.DataFrame`.

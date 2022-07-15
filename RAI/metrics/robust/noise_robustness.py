@@ -17,4 +17,4 @@ class NoiseRobustnessMetricGroup(MetricGroup, class_location=os.path.abspath(__f
         data = data_dict["data"]
         preds = data_dict["predict"]
 
-# TODO: Clarify or remove?
+# TODO: Move to analysis class. 

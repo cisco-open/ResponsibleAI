@@ -1,6 +1,6 @@
 {
     "name": "correlation_stats_binary",
-    "display_name": "Binary Classification Metrics",
+    "display_name": "Correlation for Binary Classification",
     "compatibility": {"task_type": "binary_classification",
                       "data_type": ["Numeric"],
                       "output_requirements": [],
@@ -14,7 +14,8 @@
             "type": "Dict",
             "has_range": true,
             "range": [-1, 1],
-            "explanation": "Indicates the relationship between a binary variable and a continuous variable."
+            "explanation": "The point biserial correlation is used to measure the relationship between a binary variable, x, and a continuous variable, y. \nLike other correlation coefficients, this one varies between -1 and +1 with 0 implying no correlation. Correlations of -1 or +1 imply a determinative relationship.",
+            "citation": "@article{2020SciPy-NMeth,\n  author  = {Virtanen, Pauli and Gommers, Ralf and Oliphant, Travis E. and\n            Haberland, Matt and Reddy, Tyler and Cournapeau, David and\n            Burovski, Evgeni and Peterson, Pearu and Weckesser, Warren and\n            Bright, Jonathan and {van der Walt}, St{\\'e}fan J. and\n            Brett, Matthew and Wilson, Joshua and Millman, K. Jarrod and\n            Mayorov, Nikolay and Nelson, Andrew R. J. and Jones, Eric and\n            Kern, Robert and Larson, Eric and Carey, C J and\n            Polat, {\\.I}lhan and Feng, Yu and Moore, Eric W. and\n            {VanderPlas}, Jake and Laxalde, Denis and Perktold, Josef and\n            Cimrman, Robert and Henriksen, Ian and Quintero, E. A. and\n            Harris, Charles R. and Archibald, Anne M. and\n            Ribeiro, Ant{\\^o}nio H. and Pedregosa, Fabian and\n            {van Mulbregt}, Paul and {SciPy 1.0 Contributors}},\n  title   = {{{SciPy} 1.0: Fundamental Algorithms for Scientific\n            Computing in Python}},\n  journal = {Nature Methods},\n  year    = {2020},\n  volume  = {17},\n  pages   = {261--272},\n  adsurl  = {https://rdcu.be/b08Wh},\n  doi     = {10.1038/s41592-019-0686-2},\n}\n"
         }
     }
 }
