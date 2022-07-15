@@ -29,7 +29,7 @@ from metric_page_graph import get_metric_page_graph
 from single_metric_view_page import get_single_metric_display
 from setting_page import get_setting_page
 from model_view_page import get_model_view_page
-from utils import Iconify
+from utils import iconify
 import urllib
 import sys
 
@@ -90,36 +90,36 @@ def get_sidebar():
                         persistence=True),
                     html.Hr(),
                     dbc.NavLink(  
-                        Iconify("Home", "fa-solid fa-home", "25px"),
+                        iconify("Home", "fa-solid fa-home", "25px"),
                         href="/", active="exact"),
                     dbc.NavLink(  
-                        Iconify("Settings", "fa-solid fa-gear", "25px"),
+                        iconify("Settings", "fa-solid fa-gear", "25px"),
                         href="/settings", active="exact"),
                     html.Hr(),
                     dbc.NavLink( 
-                        Iconify("Metrics Details", "fas fa-table fas-10x", "18px"),
+                        iconify("Metrics Details", "fas fa-table fas-10x", "18px"),
                         href="/metrics_details", active="exact"),
                     dbc.NavLink(
-                        Iconify("Metrics Graphs", "fa-solid fa-chart-gantt", "18px"),
+                        iconify("Metrics Graphs", "fa-solid fa-chart-gantt", "18px"),
                         href="/metrics_graphs", active="exact"),
                     dbc.NavLink(
-                        Iconify("Individual Metric View", "fa-solid fa-chart-gantt", "18px"),
+                        iconify("Individual Metric View", "fa-solid fa-chart-gantt", "18px"),
                         href="/individual_metric_view", active="exact"),
                     dbc.NavLink(
-                        Iconify("Certificates", "fa-solid fa-list-check", "45px"),
+                        iconify("Certificates", "fa-solid fa-list-check", "45px"),
                         href="/certificates", active="exact"),
                     html.Hr(),
                     dbc.NavLink(
-                        Iconify("Project Info", "fa-solid fa-circle-info", "55px"),
+                        iconify("Project Info", "fa-solid fa-circle-info", "55px"),
                         href="/modelInfo", active="exact"),
                     dbc.NavLink(
-                        Iconify("Metrics Info", "fa-solid fa-file-lines", "50px"),
+                        iconify("Metrics Info", "fa-solid fa-file-lines", "50px"),
                         href="/metricsInfo", active="exact"),
                     dbc.NavLink(
-                        Iconify("Model View", "fa-solid fa-eye", "50px"),
+                        iconify("Model View", "fa-solid fa-eye", "50px"),
                         href="/modelView", active="exact"),
                     dbc.NavLink( 
-                        Iconify("Certificates Info", "fa-solid fa-check-double", "20px"),
+                        iconify("Certificates Info", "fa-solid fa-check-double", "20px"),
                         href="/certificateInfo", active="exact"),
                 ],
                 vertical=True,
