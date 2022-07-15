@@ -11,6 +11,7 @@ logger = logging.getLogger(__name__)
 requirements = []
 prefix = "indiv_"
 
+selector_height = "350px"
 
 def populate_display_obj(group, metric):
     d = {"x": [], "y": [], "tag": [], "metric": [], "text": []}
@@ -42,7 +43,7 @@ def get_grouped_radio_buttons():
                     labelStyle={"display": "block"},
                     inputStyle={"margin-right": "5px"},
                     style={"padding-left": "40px"}
-                )]) for group in groups], style={"margin-left": "35%"})
+                )]) for group in groups], style={"margin-left": "35%", "height": "100%", "overflow-y": "scroll"})
 
 
 def get_search_and_selection_interface():
@@ -55,7 +56,8 @@ def get_search_and_selection_interface():
             dcc.Tabs([
                 dcc.Tab(label='Metric Selector', children=[
                     dbc.Row([
-                        dbc.Col([get_grouped_radio_buttons()], style={"position": "relative"}),
+                        dbc.Col([get_grouped_radio_buttons()], style={"position": "relative",
+                                                                      "height": selector_height}),
                         dbc.Col([mvf.get_reset_button(prefix)], style={"position": "relative"}),
                     ], style={"width": "100%", "margin-top": "20px"}),
                 ], selected_style=mvf.get_selection_tab_selected_style(), style=mvf.get_selection_tab_style()),

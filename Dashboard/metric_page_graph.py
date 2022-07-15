@@ -11,6 +11,8 @@ logger = logging.getLogger(__name__)
 
 requirements = ["Traceable"]
 prefix = "grouped_"
+selector_height = "350px"
+
 
 def add_trace_to_fig(fig, group, metric):
     d = {"x": [], "y": [], "tag": [], "metric": [], "text": []}
@@ -55,7 +57,7 @@ def get_grouped_checklist():
                     labelStyle={"display": "block"},
                     inputStyle={"margin-right": "5px"},
                     style={"padding-left": "40px"}
-                )]) for group in groups], style={"margin-left": "35%"})
+                )]) for group in groups], style={"margin-left": "35%", "height": "100%", "overflow-y": "scroll"})
 
 
 def get_search_and_selection_interface():
@@ -70,7 +72,7 @@ def get_search_and_selection_interface():
                     dbc.Row([
                         dbc.Col([
                             get_grouped_checklist(),
-                        ], style={"position": "relative"}),
+                        ], style={"position": "relative", "height": selector_height}),
                         dbc.Col([
                             dbc.Button("Reset Graph", id=prefix+"reset_graph", color="secondary",
                                        style={"position": "absolute", "bottom": "0"}),
