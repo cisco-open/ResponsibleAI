@@ -14,35 +14,32 @@
             "type": "Numeric",
             "has_range": false,
             "range": [null, null],
-            "explanation": "https://github.com/Bai-Li/STN-Code"
+            "explanation": "Provides certified bounds on the norm of input perturbation.\nLarger is better. \nhttps://github.com/Bai-Li/STN-Code",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1809.03113,\n  doi = {10.48550/ARXIV.1809.03113},\n  \n  url = {https://arxiv.org/abs/1809.03113},\n  \n  author = {Li, Bai and Chen, Changyou and Wang, Wenlin and Carin, Lawrence},\n  \n  keywords = {Machine Learning (cs.LG), Cryptography and Security (cs.CR), Machine Learning (stat.ML), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {Certified Adversarial Robustness with Additive Noise},\n  \n  publisher = {arXiv},\n  \n  year = {2018},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
         },
         "robust_signal_noise_ratio": {
-            "display_name": "Robust SNR",
+            "display_name": "Robust Signal Noise Ratio",
             "type": "Numeric",
             "has_range": false,
             "range": [null, null],
-            "explanation": "Signal-to-Noise Ratio: A Robust Distance Metric for Deep Metric Learning . https://kevinmusgrave.github.io/pytorch-metric-learning/distances/#snrdistance"
+            "explanation": "Measures the similarity of image pairs.\nhttps://kevinmusgrave.github.io/pytorch-metric-learning/distances/#snrdistance",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1904.02616,\n  doi = {10.48550/ARXIV.1904.02616},\n  \n  url = {https://arxiv.org/abs/1904.02616},\n  \n  author = {Yuan, Tongtong and Deng, Weihong and Tang, Jian and Tang, Yinan and Chen, Binghui},\n  \n  keywords = {Computer Vision and Pattern Recognition (cs.CV), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {Signal-to-Noise Ratio: A Robust Distance Metric for Deep Metric Learning},\n  \n  publisher = {arXiv},\n  \n  year = {2019},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
         },
         "decision_curve_upper_bound": {
             "display_name": "Robustness of classifiers: from adversarial to random noise score",
             "type": "Numeric",
             "has_range": false,
             "range": [null, null],
-            "explanation": "Robustness of classifiers: from adversarial to random noise. Requires hand coding their math."
+            "explanation": "Upper bound of noise robustness.\nUses curvature of classifiers decision boundary.",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1608.08967,\n  doi = {10.48550/ARXIV.1608.08967},\n  \n  url = {https://arxiv.org/abs/1608.08967},\n  \n  author = {Fawzi, Alhussein and Moosavi-Dezfooli, Seyed-Mohsen and Frossard, Pascal},\n  \n  keywords = {Machine Learning (cs.LG), Computer Vision and Pattern Recognition (cs.CV), Machine Learning (stat.ML), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {Robustness of classifiers: from adversarial to random noise},\n  \n  publisher = {arXiv},\n  \n  year = {2016},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
         },
         "decision_curve_lower_bound": {
             "display_name": "Robustness of classifiers: from adversarial to random noise score",
             "type": "Numeric",
             "has_range": false,
             "range": [null, null],
-            "explanation": "Robustness of classifiers: from adversarial to random noise. Requires hand coding their math"
-        },
-        "added_noise": {
-            "display_name": "Accuracy After Noise",
-            "type": "Numeric",
-            "has_range": false,
-            "range": [null, null],
-            "explanation": "Add Label Noise / Noise proportional to stdev and and compare accuracy?"
+            "explanation": "Lower bound of noise robustness.\nUses curvature of classifiers decision boundary. ",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1608.08967,\n  doi = {10.48550/ARXIV.1608.08967},\n  \n  url = {https://arxiv.org/abs/1608.08967},\n  \n  author = {Fawzi, Alhussein and Moosavi-Dezfooli, Seyed-Mohsen and Frossard, Pascal},\n  \n  keywords = {Machine Learning (cs.LG), Computer Vision and Pattern Recognition (cs.CV), Machine Learning (stat.ML), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {Robustness of classifiers: from adversarial to random noise},\n  \n  publisher = {arXiv},\n  \n  year = {2016},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
         }
     }
 }

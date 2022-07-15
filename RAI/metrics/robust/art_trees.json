@@ -16,7 +16,8 @@
             "tags": [],
             "has_range": true,
             "range": [0, 1],
-            "explanation": "Lower bound on minimum adversarial distortion averaged over all test samples. Larger is better. Chen, Hongge, et al. 'Robustness verification of tree-based models.' arXiv preprint arXiv:1906.03849 (2019)."
+            "explanation": "Lower bound on minimum adversarial distortion averaged over all test samples. \nLarger values are better.",
+            "citation": "@inproceedings{NEURIPS2019_cd9508fd,\n author = {Chen, Hongge and Zhang, Huan and Si, Si and Li, Yang and Boning, Duane and Hsieh, Cho-Jui},\n booktitle = {Advances in Neural Information Processing Systems},\n editor = {H. Wallach and H. Larochelle and A. Beygelzimer and F. d\\textquotesingle Alch\\'{e}-Buc and E. Fox and R. Garnett},\n pages = {},\n publisher = {Curran Associates, Inc.},\n title = {Robustness Verification of Tree-based Models},\n url = {https://proceedings.neurips.cc/paper/2019/file/cd9508fdaa5c1390e9cc329001cf1459-Paper.pdf},\n volume = {32},\n year = {2019}\n}\n\n"
         },
         "adversarial_tree_verification_error": {
             "display_name": "Adversarial Tree Verified Error",
@@ -24,7 +25,8 @@
             "tags": [],
             "has_range": true,
             "range": [0, 1],
-            "explanation": "Upper bound of error for adversarial examples with L_infinity perturbation of specified size. From Chen, Hongge, et al. 'Robustness verification of tree-based models.' arXiv preprint arXiv:1906.03849 (2019)."
+            "explanation": "Upper bound of error for adversarial examples with L_infinity perturbation of specified size.\nLarger values are better.",
+            "citation": "@inproceedings{NEURIPS2019_cd9508fd,\n author = {Chen, Hongge and Zhang, Huan and Si, Si and Li, Yang and Boning, Duane and Hsieh, Cho-Jui},\n booktitle = {Advances in Neural Information Processing Systems},\n editor = {H. Wallach and H. Larochelle and A. Beygelzimer and F. d\\textquotesingle Alch\\'{e}-Buc and E. Fox and R. Garnett},\n pages = {},\n publisher = {Curran Associates, Inc.},\n title = {Robustness Verification of Tree-based Models},\n url = {https://proceedings.neurips.cc/paper/2019/file/cd9508fdaa5c1390e9cc329001cf1459-Paper.pdf},\n volume = {32},\n year = {2019}\n}\n\n"
         }
     }
 }

@@ -14,14 +14,16 @@
             "type": "Boolean",
             "has_range": false,
             "range": [null, null],
-            "explanation": "Whether of not each training feature is normalized to 0/1."
+            "explanation": "Whether of not each training feature is normalized to 0/1.",
+            "citation": ""
         },
         "normalized_feature_std": {
             "display_name": "Normalized Features Standard",
             "type": "Boolean",
             "has_range": false,
             "range": [null, null],
-            "explanation": "Whether of not each training feature is normalized to standard."
+            "explanation": "Whether of not each training feature is normalized to standard.",
+            "citation": ""
         }
     }
 }
