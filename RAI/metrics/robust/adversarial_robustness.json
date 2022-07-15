@@ -16,6 +16,6 @@
             "range": [0, 1],
             "explanation": "Distortion metrics scale linearly with the log of inaccuracy.\nInaccuracy is calculated by taking sqrt(1 - accuracy).",
             "citation": "@misc{https://doi.org/10.48550/arxiv.1808.01688,\n  doi = {10.48550/ARXIV.1808.01688},\n  \n  url = {https://arxiv.org/abs/1808.01688},\n  \n  author = {Su, Dong and Zhang, Huan and Chen, Hongge and Yi, Jinfeng and Chen, Pin-Yu and Gao, Yupeng},\n  \n  keywords = {Computer Vision and Pattern Recognition (cs.CV), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {Is Robustness the Cost of Accuracy? -- A Comprehensive Study on the Robustness of 18 Deep Image Classification Models},\n  \n  publisher = {arXiv},\n  \n  year = {2018},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
-        },
+        }
     }
 }

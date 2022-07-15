@@ -15,15 +15,15 @@
             "has_range": false,
             "range": null,
             "explanation": "Mean is the expected value for each feature in data.",
-            "citation": ""
+            "citation": "@Article{         harris2020array,\n title         = {Array programming with {NumPy}},\n author        = {Charles R. Harris and K. Jarrod Millman and St{\\'{e}}fan J.\n                 van der Walt and Ralf Gommers and Pauli Virtanen and David\n                 Cournapeau and Eric Wieser and Julian Taylor and Sebastian\n                 Berg and Nathaniel J. Smith and Robert Kern and Matti Picus\n                 and Stephan Hoyer and Marten H. van Kerkwijk and Matthew\n                 Brett and Allan Haldane and Jaime Fern{\\'{a}}ndez del\n                 R{\\'{i}}o and Mark Wiebe and Pearu Peterson and Pierre\n                 G{\\'{e}}rard-Marchant and Kevin Sheppard and Tyler Reddy and\n                 Warren Weckesser and Hameer Abbasi and Christoph Gohlke and\n                 Travis E. Oliphant},\n year          = {2020},\n month         = sep,\n journal       = {Nature},\n volume        = {585},\n number        = {7825},\n pages         = {357--362},\n doi           = {10.1038/s41586-020-2649-2},\n publisher     = {Springer Science and Business Media {LLC}},\n url           = {https://doi.org/10.1038/s41586-020-2649-2}\n}"
         },
         "covariance": {
             "display_name": "Covariance Matrix",
             "type": "Matrix",
             "has_range": false,
             "range": null,
-            "explanation": "Indicates the level to which two variables vary together. \nThe covariance matrix element C(i,j) is the covariance of X(i) and X(j). The element C(i,i)  is the variance of X(i)."
-            "citation": ""
+            "explanation": "Indicates the level to which two variables vary together. \nThe covariance matrix element C(i,j) is the covariance of X(i) and X(j). The element C(i,i)  is the variance of X(i).",
+            "citation": "@Article{         harris2020array,\n title         = {Array programming with {NumPy}},\n author        = {Charles R. Harris and K. Jarrod Millman and St{\\'{e}}fan J.\n                 van der Walt and Ralf Gommers and Pauli Virtanen and David\n                 Cournapeau and Eric Wieser and Julian Taylor and Sebastian\n                 Berg and Nathaniel J. Smith and Robert Kern and Matti Picus\n                 and Stephan Hoyer and Marten H. van Kerkwijk and Matthew\n                 Brett and Allan Haldane and Jaime Fern{\\'{a}}ndez del\n                 R{\\'{i}}o and Mark Wiebe and Pearu Peterson and Pierre\n                 G{\\'{e}}rard-Marchant and Kevin Sheppard and Tyler Reddy and\n                 Warren Weckesser and Hameer Abbasi and Christoph Gohlke and\n                 Travis E. Oliphant},\n year          = {2020},\n month         = sep,\n journal       = {Nature},\n volume        = {585},\n number        = {7825},\n pages         = {357--362},\n doi           = {10.1038/s41586-020-2649-2},\n publisher     = {Springer Science and Business Media {LLC}},\n url           = {https://doi.org/10.1038/s41586-020-2649-2}\n}"
         },
         "num_nan_rows": {
             "display_name": "Number of NaN Rows",
@@ -31,7 +31,7 @@
             "has_range": true,
             "range": [0, null],
             "explanation": "Indicates the number of NaN rows found in the data.",
-            "citation": ""
+            "citation": "@Article{         harris2020array,\n title         = {Array programming with {NumPy}},\n author        = {Charles R. Harris and K. Jarrod Millman and St{\\'{e}}fan J.\n                 van der Walt and Ralf Gommers and Pauli Virtanen and David\n                 Cournapeau and Eric Wieser and Julian Taylor and Sebastian\n                 Berg and Nathaniel J. Smith and Robert Kern and Matti Picus\n                 and Stephan Hoyer and Marten H. van Kerkwijk and Matthew\n                 Brett and Allan Haldane and Jaime Fern{\\'{a}}ndez del\n                 R{\\'{i}}o and Mark Wiebe and Pearu Peterson and Pierre\n                 G{\\'{e}}rard-Marchant and Kevin Sheppard and Tyler Reddy and\n                 Warren Weckesser and Hameer Abbasi and Christoph Gohlke and\n                 Travis E. Oliphant},\n year          = {2020},\n month         = sep,\n journal       = {Nature},\n volume        = {585},\n number        = {7825},\n pages         = {357--362},\n doi           = {10.1038/s41586-020-2649-2},\n publisher     = {Springer Science and Business Media {LLC}},\n url           = {https://doi.org/10.1038/s41586-020-2649-2}\n}"
         },
         "percent_nan_rows": {
             "display_name": "Percentage of NaN Rows",
@@ -39,7 +39,7 @@
             "has_range": true,
             "range": [0, 1],
             "explanation": "Indicates the percentage of rows that are NaN in the data.",
-            "citation": ""
+            "citation": "@Article{         harris2020array,\n title         = {Array programming with {NumPy}},\n author        = {Charles R. Harris and K. Jarrod Millman and St{\\'{e}}fan J.\n                 van der Walt and Ralf Gommers and Pauli Virtanen and David\n                 Cournapeau and Eric Wieser and Julian Taylor and Sebastian\n                 Berg and Nathaniel J. Smith and Robert Kern and Matti Picus\n                 and Stephan Hoyer and Marten H. van Kerkwijk and Matthew\n                 Brett and Allan Haldane and Jaime Fern{\\'{a}}ndez del\n                 R{\\'{i}}o and Mark Wiebe and Pearu Peterson and Pierre\n                 G{\\'{e}}rard-Marchant and Kevin Sheppard and Tyler Reddy and\n                 Warren Weckesser and Hameer Abbasi and Christoph Gohlke and\n                 Travis E. Oliphant},\n year          = {2020},\n month         = sep,\n journal       = {Nature},\n volume        = {585},\n number        = {7825},\n pages         = {357--362},\n doi           = {10.1038/s41586-020-2649-2},\n publisher     = {Springer Science and Business Media {LLC}},\n url           = {https://doi.org/10.1038/s41586-020-2649-2}\n}"
         },
         "geometric_mean": {
             "display_name": "Geometric Mean",
