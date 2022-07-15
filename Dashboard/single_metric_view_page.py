@@ -147,28 +147,36 @@ def update_metric_choice(c_selected, reset_button, metric_search, c_options, c_v
 )
 def update_display(n, options, tag_selection, old_graph, old_style, old_children, old_tag_selection):
     ctx = dash.callback_context
+    is_new_data, is_time_update, is_new_tag = mvf.get_graph_update_purpose(ctx, prefix)
     style = {"display": 'none'}
-    if 'prop_id' in ctx.triggered[0] and ctx.triggered[0]['prop_id'] == prefix + 'interval-component.n_intervals':
+
+    if is_time_update:
         if redisUtil.has_update("metric_graph", reset=True):
             logger.info("new data")
             redisUtil._subscribers["metric_graph"] = False
-        else:
-            return old_graph, old_style, old_children, old_tag_selection
-    elif 'prop_id' in ctx.triggered[0] and ctx.triggered[0]['prop_id'] == prefix + 'select_metric_tag.value':
+            is_new_data = True
+
+    if is_new_data:
+        print("New data")
+        if options == "" or options is None:
+            return [], style, old_children, old_tag_selection
+        k, v = options.split(',')
+        print(k, v)
+        print('---------------------------')
+        display_obj, needs_chooser = populate_display_obj(k, v)
+        children = []
+        selection = None
+        if needs_chooser:
+            style = {"display": 'block'}
+            children = display_obj.get_tags()
+            selection = children[-1]
+        return display_obj.to_display(), style, children, selection
+
+    elif is_new_tag:
+        print("New tag selected")
         k, v = options.split(',')
         display_obj, _ = populate_display_obj(k, v)
         tags = display_obj.get_tags()
         return display_obj.display_tag_num(tags.index(tag_selection)), old_style, old_children, tag_selection
-    elif options == "" or options == None:
-        return [], style, old_children, old_tag_selection
-    k, v = options.split(',')
-    print(k, v)
-    print('---------------------------')
-    display_obj, needs_chooser = populate_display_obj(k, v)
-    children = []
-    selection = None
-    if needs_chooser:
-        style = {"display": 'block'}
-        children = display_obj.get_tags()
-        selection = children[-1]
-    return display_obj.to_display(), style, children, selection
+
+    return old_graph, old_style, old_children, old_tag_selection

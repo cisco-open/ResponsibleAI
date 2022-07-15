@@ -115,13 +115,16 @@ def get_metric_page_graph():
     prevent_initial_call=True
 )
 def update_metric_choices(p_selected, c_selected, reset_button, metric_search, p_options, c_options, p_val, c_val, options):
+    print("Change detected")
     ctx = dash.callback_context.triggered[0]["prop_id"]
+    print("CTX: ", ctx)
     metric_info = redisUtil.get_metric_info()
     if ctx == prefix+'reset_graph.n_clicks':
         to_p_val = [[] for _ in range(len(p_val))]
         to_c_val = [[] for _ in range(len(p_val))]
         return [], to_p_val, to_c_val, None
     if ctx == prefix+'metric_search.value':
+        print("Search value: ", metric_search)
         if metric_search is None:
             return options, p_val, c_val, metric_search
         else:
@@ -129,12 +132,13 @@ def update_metric_choices(p_selected, c_selected, reset_button, metric_search, p
             metric_name = vals[1] + ',' + vals[0]
             metric = vals[0]
             group = vals[1]
-            parent_index = p_options.index([{'label': ' ' + group, 'value': group}])
+            parent_index = p_options.index([{'label': metric_info[group]['meta']['display_name'], 'value': group}])
             if metric_name not in options:
                 options.append(metric_name)
                 if len(c_val[parent_index]) == len(c_options[parent_index]) - 1:
                     p_val[parent_index] = group
                 c_val[parent_index].append(metric)
+            print("options: ", options)
             return options, p_val, c_val, metric_search
     group = mvf.get_group_from_ctx(ctx)
     parent_index = p_options.index([{'label': metric_info[group]['meta']['display_name'], 'value': group}])
@@ -161,16 +165,21 @@ def update_metric_choices(p_selected, c_selected, reset_button, metric_search, p
 )
 def update_graph(n, options, old_container):
     ctx = dash.callback_context
-    if 'prop_id' in ctx.triggered[0] and ctx.triggered[0]['prop_id'] == prefix+'interval-component.n_intervals':
+    is_new_data, is_time_update, _ = mvf.get_graph_update_purpose(ctx, prefix)
+
+    if is_time_update:
         if redisUtil.has_update("metric_graph", reset=True):
             logger.info("new data")
             redisUtil._subscribers["metric_graph"] = False
-        else:
-            return old_container
-    fig = go.Figure()
-    if len(options) == 0:
-        return []
-    for item in options:
-        k, v = item.split(',')
-        add_trace_to_fig(fig, k, v)
-    return [dcc.Graph(figure=fig)]
+            is_new_data = True
+
+    if is_new_data:
+        fig = go.Figure()
+        if len(options) == 0:
+            return []
+        for item in options:
+            k, v = item.split(',')
+            add_trace_to_fig(fig, k, v)
+        return [dcc.Graph(figure=fig)]
+
+    return old_container
