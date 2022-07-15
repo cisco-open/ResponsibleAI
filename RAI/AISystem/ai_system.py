@@ -2,9 +2,7 @@ from RAI.AISystem.model import Model
 from RAI.certificates import CertificateManager
 from RAI.dataset.dataset import Data, Dataset, MetaDatabase
 from RAI.metrics import MetricManager
-from RAI.metrics.metric_group import all_output_requirements
-
-task_types = ["binary_classification", "multiclass_classification", "regression"]
+from RAI.utils.all_types import all_output_requirements, all_task_types
 
 
 class AISystem:
@@ -20,7 +18,7 @@ class AISystem:
                  dataset: Dataset,
                  model: Model,
                  enable_certificates: bool = True) -> None:
-        assert task in task_types, "Task must be in " + str(task_types)
+        assert task in all_task_types, "Task must be in " + str(all_task_types)
         self.name = name
         self.task = task
         self.meta_database = meta_database

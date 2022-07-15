@@ -1,24 +1,14 @@
+from abc import ABC, abstractmethod
 import json
-
 import numpy as np
-
 from RAI.metrics.registry import register_class
 from RAI.utils import compare_runtimes
 from .metric import Metric
 
-__all__ = ['MetricGroup', 'all_complexity_classes', 'all_task_types', 'all_data_types', 'all_output_requirements']
-all_complexity_classes = {"constant", "linear", "multi_linear", "polynomial", "exponential"}
-all_task_types = {"binary_classification", "classification", "clustering", "regression"}
-all_data_types = {"Numeric", "image", "text"}
-all_output_requirements = {"predict", "predict_proba", "generate_text"}
-all_dataset_requirements = {"X", "y", "sensitive_features"}
+__all__ = ['MetricGroup']
 
 
-# TODO: move these to their own file, maybe in utils
-
-
-# TODO, make abstract, provide abstract methods
-class MetricGroup(object):
+class MetricGroup(ABC):
     """
     MetricGroups are a group of related metrics. This class loads in information about a
     metric group from its .json file. This class then creates associated metrics for the group,
@@ -136,7 +126,7 @@ class MetricGroup(object):
                 results[metric_name] = self.metrics[metric_name].value
         return results
 
-    # Make method abstract
+    @abstractmethod
     def compute(self, data):
         pass
 

@@ -1,8 +1,7 @@
 """config parse module."""
 
 import yaml
-
-from ..AISystem.model import task_types
+from RAI.utils.all_types import all_task_types
 from ..dataset import Feature
 
 KEY_TASK_TYPE = 'taskType'
@@ -72,7 +71,7 @@ class Config(object):
 
         self.task_type = yaml_data[KEY_TASK_TYPE]
 
-        if self.task_type not in task_types:
+        if self.task_type not in all_task_types:
             raise ValueError(f"unkown task type: {self.task_type}")
 
     def _parse_features(self, yaml_data) -> None:

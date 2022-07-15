@@ -1,10 +1,7 @@
 import numpy as np
+from RAI.utils.all_types import all_data_types, all_data_types_lax
 
 __all__ = ['Feature', 'MetaDatabase', 'Data', 'Dataset']
-# TODO, get these all_data_types moved to a single file
-
-all_data_types = {"Numeric", "image", "text"}
-all_data_types_lax = {"integer", "float", "Numeric", "image", "text"}
 
 
 class Feature:

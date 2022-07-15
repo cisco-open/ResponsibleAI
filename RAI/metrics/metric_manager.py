@@ -1,8 +1,7 @@
 import os.path
 import site
-
 from RAI import utils
-from RAI.metrics.metric_group import all_output_requirements, all_complexity_classes, all_dataset_requirements, \
+from RAI.utils.all_types import all_output_requirements, all_complexity_classes, all_dataset_requirements, \
     all_data_types, all_task_types
 from RAI.metrics.registry import registry
 

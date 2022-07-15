@@ -5,7 +5,6 @@ import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from RAI.dataset import Feature, MetaDatabase
 
-
 __all__ = ['jsonify', 'compare_runtimes', 'df_to_meta_database', 'df_to_RAI', 'reweighing',
            'calculate_per_mapped_features', 'convert_float32_to_float64',
            'convert_to_feature_value_dict', 'convert_to_feature_dict', 'map_to_feature_array', 'map_to_feature_dict']

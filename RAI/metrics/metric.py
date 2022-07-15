@@ -1,5 +1,5 @@
-__all__ = ['Metric', 'metric_types']
-metric_types = {"Numeric", "multivalued", "other", "vector", "vector-dict", "Matrix", "boolean"}
+from RAI.utils.all_types import all_metric_types
+__all__ = ['Metric']
 
 
 class Metric:
@@ -35,7 +35,7 @@ class Metric:
             self.explanation = config["explanation"]
         self.type = config["type"]
         if "type" in config:
-            if config["type"] in metric_types:
+            if config["type"] in all_metric_types:
                 self.type = config["type"]
             else:
                 self.type = "numeric"
