@@ -67,4 +67,4 @@ if use_dashboard:
     r.add_measurement()
     r.export_metadata()
 
-ai.display_metric_values()
+ai.display_metric_values(display_detailed=True)
