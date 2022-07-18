@@ -46,6 +46,17 @@ class AISystem:
     def get_metric_values(self) -> dict:
         return self._last_metric_values
 
+    def display_metric_values(self):
+        vals = self._last_metric_values
+        info = self.get_metric_info()
+        # print(info)
+        for dataset in vals:
+            print("\n\n===== " + dataset + " Dataset =====")
+            for group in vals[dataset]:
+                print("\n----- " + info[group]['meta']["display_name"] + " Metrics -----")
+                for metric in vals[dataset][group]:
+                    print(info[group][metric]["display_name"] + ": ", vals[dataset][group][metric])
+
     def get_certificate_values(self) -> dict:
         return self._last_certificate_values
 

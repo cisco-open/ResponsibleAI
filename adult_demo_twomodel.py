@@ -45,14 +45,11 @@ if use_dashboard:
     r.connect()
     r.reset_redis()
 
-
 clf.fit(xTrain, yTrain)
 predictions = clf.predict(xTest)
 predictions_train = clf.predict(xTrain)
 ai.compute({"test": {"predict": predictions}, "train": {"predict": predictions_train}}, tag="Random Forest 5 Estimator")
 
-metrics = ai.get_metric_values()
-info = ai.get_metric_info()
 
 if use_dashboard:
     r.add_measurement()
@@ -70,14 +67,4 @@ if use_dashboard:
     r.add_measurement()
     r.export_metadata()
 
-
-metrics = ai.get_metric_values()
-info = ai.get_metric_info()
-
-# print("info: ", info)
-
-
-for d in metrics:
-    for g in metrics[d]:
-        for m in metrics[d][g]:
-            print(m, ": ", metrics[d][g][m])
+ai.display_metric_values()
