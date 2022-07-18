@@ -100,6 +100,9 @@ class RedisUtils(object):
     def get_current_dataset(self):
         return self._current_project["current_dataset"]
 
+    def get_data_summary(self):
+        return self._current_project["data_summary"]
+
     def set_current_project(self, project_name):
         logger.info(f"changing current project from {self._current_project_name} to {project_name}")
         if self._current_project_name == project_name:
@@ -108,10 +111,16 @@ class RedisUtils(object):
         self._current_project = {}
         self._update_info()
         self._update_values()
+        self.set_data_summary()
         self._current_project = self._reformat_data(self._current_project)
 
     def set_current_dataset(self, dataset):
         self._current_project["current_dataset"] = dataset
+
+    def set_data_summary(self):
+        print("Current proj name: ", self._current_project_name)
+        self._current_project["data_summary"] = \
+            json.loads(self._redis.get(self._current_project_name + "|data_summary"))
 
     def _update_projects(self):
         self._projects = self._redis.smembers("projects")
@@ -148,7 +157,6 @@ class RedisUtils(object):
             for val in item:
                 if val not in self._current_project["dataset_values"]:
                     self._current_project["dataset_values"].append(val)
-
 
     def _reformat_data(self, x):
         if type(x) is float:
