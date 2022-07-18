@@ -43,7 +43,6 @@ if use_dashboard:
     r.connect()
     r.reset_redis()
     r.add_measurement()
-    # r.viewGUI()
 
 reg2 = AdaBoostClassifier()
 reg2.fit(xTrain, yTrain)
@@ -57,8 +56,13 @@ info = ai.get_metric_info()
 if use_dashboard:
     r.add_measurement()
 
-for g in v:
-    for m in v[g]:
-        if "type" in info[g][m]:
-            if info[g][m]["type"] in ("numeric", "vector-dict", "text"):
-                print(g, m, v[g][m])
+from RAI.Analysis import AnalysisManager
+
+analysis = AnalysisManager()
+print("available analysis: ", analysis.get_available_analysis(ai, "test"))
+# result = analysis.run_analysis(ai, ["test"], ["FairnessAnalysis"])
+result = analysis.run_all(ai, "test", "Test run!")
+for analysis in result:
+    print("Analysis: " + analysis)
+    print(result[analysis].to_string())
+

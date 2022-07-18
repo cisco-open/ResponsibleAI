@@ -3,7 +3,7 @@ import site
 from RAI import utils
 from RAI.utils.all_types import all_output_requirements, all_complexity_classes, all_dataset_requirements, \
     all_data_types, all_task_types
-from RAI.metrics.registry import registry
+from RAI.metrics.metric_registry import registry
 
 __all__ = ['MetricManager']
 
@@ -95,7 +95,7 @@ class MetricManager(object):
                     for dependent_metric in dependent.get(metric_name, []):
                         dependencies[dependent_metric].remove(metric_name)
                     self.metric_groups[metric_name] = metric(self.ai_system)
-                    print(f"metric group : {metric_name} was loaded")
+                    print(f"metric group: {metric_name} was loaded")
                     compatible_metrics.remove(metric)
                     removed = True
             if not removed:

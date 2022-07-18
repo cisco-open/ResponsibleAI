@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 import json
 import numpy as np
-from RAI.metrics.registry import register_class
+from RAI.metrics.metric_registry import register_class
 from RAI.utils import compare_runtimes
 from .metric import Metric
 

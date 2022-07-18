@@ -1,0 +1,13 @@
+{
+    "name": "fairness_analysis",
+    "display_name": "Fairness Analysis",
+    "compatibility": {"task_type": "classification",
+                      "data_type": ["Numeric"],
+                      "output_requirements": ["predict"],
+                      "dataset_requirements": ["X", "y", "sensitive_features"],
+                      "required_groups":  ["group_fairness"]},
+    "src": "equal_treatment",
+    "dependency_list": [],
+    "tags": ["fairness", "General Fairness"],
+    "complexity_class": "linear"
+}
