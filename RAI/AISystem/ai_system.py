@@ -79,9 +79,6 @@ class AISystem:
             result['features'].append(self.meta_database.features[i].name)
         return result
 
-<<<<<<< HEAD
-    # Single compute accepts predictions and the name of a dataset, and then calculates metrics for that dataset.
-=======
     def get_data_summary(self) -> dict:
         labels = self.data_summarizer.labels 
         label_dist_dict = self.data_summarizer.getLabelDistribution()
@@ -92,8 +89,8 @@ class AISystem:
         }
         return summary 
     
->>>>>>> vis_branch
     def _single_compute(self, predictions: dict, data_type: str = "test", tag=None) -> None:
+    # Single compute accepts predictions and the name of a dataset, and then calculates metrics for that dataset.
         self.auto_id += 1
         if tag is None:
             tag = f"{self.auto_id}"
