@@ -30,7 +30,7 @@ from single_metric_view_page import get_single_metric_display
 from setting_page import get_setting_page
 from model_view_page import get_model_view_page
 from data_summary_page import get_data_summary_page
-from utils import Iconify
+from utils import iconify
 import urllib
 import sys
 
@@ -123,7 +123,7 @@ def get_sidebar():
                         iconify("Certificates Info", "fa-solid fa-check-double", "20px"),
                         href="/certificateInfo", active="exact"),
                     dbc.NavLink( 
-                        Iconify("Data Summary", "fa-solid fa-check-double", "20px"),
+                        iconify("Data Summary", "fa-solid fa-check-double", "20px"),
                         href="/dataSummary", active="exact"),
                 ],
                 vertical=True,
