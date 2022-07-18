@@ -79,7 +79,7 @@
             "tags": [],
             "has_range": true,
             "range": [0, 1],
-            "explanation": "Measures the similarity of two two sets of data, and returns a result from 0 to 100%.\nIt is the size of the intersection divided by the size of the union of two label sets.\n It is used to compare set of predicted labels for a sample to the corresponding set of labels in y_true.\nThe ideal score is 1.0.",
+            "explanation": "Measures the similarity of two two sets of data, and returns a result from 0 to 100%.\nIt is the size of the intersection divided by the size of the union of two label sets.\nIt is used to compare set of predicted labels for a sample to the corresponding set of labels in y_true.\nThe ideal score is 1.0.",
             "citation": "@article{scikit-learn,\n    title={Scikit-learn: Machine Learning in {P}ython},\n    author={Pedregosa, F. and Varoquaux, G. and Gramfort, A. and Michel, V.\n    and Thirion, B. and Grisel, O. and Blondel, M. and Prettenhofer, P.\n    and Weiss, R. and Dubourg, V. and Vanderplas, J. and Passos, A. and\n    Cournapeau, D. and Brucher, M. and Perrot, M. and Duchesnay, E.},\n    journal={Journal of Machine Learning Research},\n    volume={12},\n    pages={2825--2830},\n    year={2011}\n}"
         },
         "jaccard_score_avg": {
@@ -115,7 +115,7 @@
             "tags": [],
             "has_range": true,
             "range": [0, 1],
-            "explanation": "The percentage of positive examples that were correctly labeled as positive.\n Indicates a models ability to classify all positive image samples\nIdeal value is 1.0.",
+            "explanation": "The percentage of positive examples that were correctly labeled as positive.\nIndicates a models ability to classify all positive image samples\nIdeal value is 1.0.",
             "citation": "@article{scikit-learn,\n    title={Scikit-learn: Machine Learning in {P}ython},\n    author={Pedregosa, F. and Varoquaux, G. and Gramfort, A. and Michel, V.\n    and Thirion, B. and Grisel, O. and Blondel, M. and Prettenhofer, P.\n    and Weiss, R. and Dubourg, V. and Vanderplas, J. and Passos, A. and\n    Cournapeau, D. and Brucher, M. and Perrot, M. and Duchesnay, E.},\n    journal={Journal of Machine Learning Research},\n    volume={12},\n    pages={2825--2830},\n    year={2011}\n}"
         },
         "recall_score_avg": {
@@ -124,7 +124,7 @@
             "tags": [],
             "has_range": true,
             "range": [0, 1],
-            "explanation": "The percentage of positive examples that were correctly labeled as positive.\n Indicates a models ability to classify all positive image samples\nIdeal value is 1.0.",
+            "explanation": "The percentage of positive examples that were correctly labeled as positive.\nIndicates a models ability to classify all positive image samples\nIdeal value is 1.0.",
             "citation": "@article{scikit-learn,\n    title={Scikit-learn: Machine Learning in {P}ython},\n    author={Pedregosa, F. and Varoquaux, G. and Gramfort, A. and Michel, V.\n    and Thirion, B. and Grisel, O. and Blondel, M. and Prettenhofer, P.\n    and Weiss, R. and Dubourg, V. and Vanderplas, J. and Passos, A. and\n    Cournapeau, D. and Brucher, M. and Perrot, M. and Duchesnay, E.},\n    journal={Journal of Machine Learning Research},\n    volume={12},\n    pages={2825--2830},\n    year={2011}\n}"
         }
     }

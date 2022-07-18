@@ -34,7 +34,7 @@
             "tags": [],
             "has_range": true,
             "range": [0, null],
-            "explanation": "The pairwise entropy between every pair of privileged and underprivileged groups.\n The ideal value is 0.0.",
+            "explanation": "The pairwise entropy between every pair of privileged and underprivileged groups.\nThe ideal value is 0.0.",
             "citation": "@misc{https://doi.org/10.48550/arxiv.1810.01943,\n  doi = {10.48550/ARXIV.1810.01943},\n  \n  url = {https://arxiv.org/abs/1810.01943},\n  \n  author = {Bellamy, Rachel K. E. and Dey, Kuntal and Hind, Michael and Hoffman, Samuel C. and Houde, Stephanie and Kannan, Kalapriya and Lohia, Pranay and Martino, Jacquelyn and Mehta, Sameep and Mojsilovic, Aleksandra and Nagar, Seema and Ramamurthy, Karthikeyan Natesan and Richards, John and Saha, Diptikalyan and Sattigeri, Prasanna and Singh, Moninder and Varshney, Kush R. and Zhang, Yunfeng},\n  \n  keywords = {Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {AI Fairness 360: An Extensible Toolkit for Detecting, Understanding, and Mitigating Unwanted Algorithmic Bias},\n  \n  publisher = {arXiv},\n  \n  year = {2018},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
         },
         "between_all_groups_theil_index": {
