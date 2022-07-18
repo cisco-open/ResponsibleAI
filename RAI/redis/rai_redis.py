@@ -15,13 +15,15 @@ class RaiRedis:
         self.redis_connection = redis.Redis(host=host, port=port, db=0)
         return self.redis_connection.ping()
 
-    def reset_redis(self, export_metadata: bool = True) -> None:
+    def reset_redis(self, export_metadata: bool = True, summarize_data: bool = True) -> None:
         to_delete = ["metric_values", "model_info", "metric_info", "metric", "certificate_metadata",
                      "certificate_values", "certificate"]
         for key in to_delete:
             self.redis_connection.delete(self.ai_system.name + "|" + key)
         if export_metadata:
             self.export_metadata()
+        if summarize_data:
+            self.summarize_data()
         self.redis_connection.publish('update', "cleared")
 
     def delete_data(self, system_name) -> None:
@@ -41,6 +43,12 @@ class RaiRedis:
         self.redis_connection.set(self.ai_system.name + '|certificate_info', json.dumps(certificate_info))
         self.redis_connection.set(self.ai_system.name + '|project_info', json.dumps(project_info))
         self.redis_connection.sadd("projects", self.ai_system.name)
+
+    def summarize_data(self) -> None:
+        print("AI System Name: ", self.ai_system.name)
+        data_summary = self.ai_system.get_data_summary()
+        print("Data Summary: ", data_summary)
+        self.redis_connection.set(self.ai_system.name + '|data_summary', json.dumps(data_summary))
 
     def add_measurement(self) -> None:
         certificates = self.ai_system.get_certificate_values()

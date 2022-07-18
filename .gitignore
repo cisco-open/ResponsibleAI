@@ -136,3 +136,6 @@ dmypy.json
 *~
 Dashboard/metric_info_page-copy.py
 Dashboard/certificate_info_page-copy.py
+
+# redis
+dump.rdb
