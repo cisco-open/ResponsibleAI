@@ -3,6 +3,7 @@ from RAI.certificates import CertificateManager
 from RAI.dataset.dataset import Data, Dataset, MetaDatabase
 from RAI.metrics import MetricManager
 from RAI.utils.all_types import all_output_requirements, all_task_types
+from RAI.dataset.vis import DataSummarizer
 
 
 class AISystem:
@@ -30,6 +31,7 @@ class AISystem:
         self._last_certificate_values = None
         self.metric_manager = None
         self.certificate_manager = None
+        self.data_summarizer = None
         self.user_config = None
         self.data_dict = {}
 
@@ -42,6 +44,7 @@ class AISystem:
         self.certificate_manager.load_stock_certificates()
         if custom_certificate_location is not None:
             self.certificate_manager.load_custom_certificates(custom_certificate_location)
+        self.data_summarizer = DataSummarizer(self.dataset)
 
     def get_metric_values(self) -> dict:
         return self._last_metric_values
@@ -76,7 +79,20 @@ class AISystem:
             result['features'].append(self.meta_database.features[i].name)
         return result
 
+<<<<<<< HEAD
     # Single compute accepts predictions and the name of a dataset, and then calculates metrics for that dataset.
+=======
+    def get_data_summary(self) -> dict:
+        labels = self.data_summarizer.labels 
+        label_dist_dict = self.data_summarizer.getLabelDistribution()
+        # TODO: Add data sampler
+        summary = {
+            "labels": labels,
+            "label_dist": label_dist_dict,
+        }
+        return summary 
+    
+>>>>>>> vis_branch
     def _single_compute(self, predictions: dict, data_type: str = "test", tag=None) -> None:
         self.auto_id += 1
         if tag is None:
