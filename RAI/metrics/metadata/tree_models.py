@@ -1,6 +1,7 @@
 from RAI.metrics.metric_group import MetricGroup
 import datetime
 import os
+import copy
 
 
 class TreeModels(MetricGroup, class_location=os.path.abspath(__file__)):
@@ -21,9 +22,9 @@ class TreeModels(MetricGroup, class_location=os.path.abspath(__file__)):
         self.metrics["estimator_params"].value = None
         self.metrics["feature_names"].value = None
         if hasattr(model, 'n_estimators'):
-            self.metrics["estimator_counts"].value = model.n_estimators
+            self.metrics["estimator_counts"].value = 0
         if hasattr(model, 'estimators_'):
-            self.metrics["estimator_params"].value = model.estimators_
+            self.metrics["estimator_params"].value = copy.copy(model.estimators_)
         self.metrics["feature_names"].value = [f.name for f in self.ai_system.meta_database.features]
 
     # TODO: Does not work with Decision Trees
