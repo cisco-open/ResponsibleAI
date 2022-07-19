@@ -107,9 +107,11 @@ def df_to_RAI(df, test_tf=None, target_column=None, clear_nans=True, extra_symbo
     if target_column:
         y = df.pop(target_column)
         if y.dtype in ("object", "category"):
-            y = y.factorize(sort=True)[0]
+            y, y_name = y.factorize(sort=True)
+        else:
+            y_name = target_column
     else:
-        y = None
+        y, y_name = None, None
 
     features = []
 
@@ -122,7 +124,7 @@ def df_to_RAI(df, test_tf=None, target_column=None, clear_nans=True, extra_symbo
         else:
             f = Feature(c, "float", c)
         features.append(f)
-    return MetaDatabase(features), df.to_numpy().astype('float32'), y
+    return MetaDatabase(features), df.to_numpy().astype('float32'), y, y_name
 
 
 # ===== METRIC RELATED UTIL FUNCTIONS =====

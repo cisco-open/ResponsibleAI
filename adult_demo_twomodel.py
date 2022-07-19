@@ -24,9 +24,11 @@ test_data = pd.read_csv(data_path + "test.csv", header=0,
 all_data = pd.concat([train_data, test_data], ignore_index=True)
 idx = all_data['race'] != 'White'
 all_data['race'][idx] = 'Black'
+target_column="income-per-year"
 
 # convert aggregated data into RAI format
-meta, X, y = df_to_RAI(all_data, target_column="income-per-year", normalize=None, max_categorical_threshold=5)
+# print(all_data.pop("income-per-year"))
+meta, X, y, y_name = df_to_RAI(all_data, target_column=target_column, normalize=None, max_categorical_threshold=5)
 xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=1, stratify=y)
 
 # Create a model to make predictions
@@ -36,7 +38,7 @@ configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivil
                               "protected_attributes": ["race"], "positive_label": 1},
                  "time_complexity": "polynomial"}
 
-dataset = Dataset({"train": Data(xTrain, yTrain), "test": Data(xTest, yTest)})
+dataset = Dataset({"train": Data(xTrain, yTrain), "test": Data(xTest, yTest)}, target_column, y_name)
 ai = AISystem("AdultDB_3", task='binary_classification', meta_database=meta, dataset=dataset, model=model)
 ai.initialize(user_config=configuration)
 
