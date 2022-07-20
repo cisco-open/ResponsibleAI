@@ -2,12 +2,15 @@ import math
 import pickle
 import numpy as np
 import pandas as pd
+import torch
+import torch.utils.data
 from sklearn.preprocessing import StandardScaler
 from RAI.dataset import Feature, MetaDatabase
 
 __all__ = ['jsonify', 'compare_runtimes', 'df_to_meta_database', 'df_to_RAI', 'reweighing',
            'calculate_per_mapped_features', 'convert_float32_to_float64',
-           'convert_to_feature_value_dict', 'convert_to_feature_dict', 'map_to_feature_array', 'map_to_feature_dict']
+           'convert_to_feature_value_dict', 'convert_to_feature_dict', 'map_to_feature_array', 'map_to_feature_dict',
+           'torch_to_RAI']
 
 
 # TODO: Remove?
@@ -87,6 +90,36 @@ def df_remove_nans(df, extra_symbols):
         for s in extra_symbols:
             df[i].replace(s, np.nan, inplace=True)
     df.dropna(inplace=True)
+
+
+def torch_to_RAI(torch_item):
+    result_x = []
+    result_y = []
+    if isinstance(torch_item, torch.utils.data.DataLoader):
+        for i, val in enumerate(torch_item, 0):
+            x, y = val
+            x = x.detach().numpy()
+            y = y.detach().numpy()
+            result_x.append(x)
+            result_y.append(y)
+        result_x = np.array(result_x)
+        result_y = np.array(result_y)
+        x_shape = list(result_x.shape)
+        x_shape[0] = -1
+        x_shape[1] = 1
+        result_x = result_x.reshape(tuple(x_shape))
+        result_y = result_y.reshape(-1)
+        '''
+        print("result_x: ", result_x.shape)
+        print("result_x[0]: ", result_x[0])
+        print("result_y:", result_y.shape)
+        print("result_y[0]: ", result_y[0])
+        '''
+    elif isinstance(torch_item, torch.Tensor):
+        result_x = np.array([[x] for x in torch_item])
+    else:
+        assert "torch_item must be of type DataLoader or Tensor"
+    return result_x, result_y
 
 
 # Converts a pandas dataframe to a Rai Metadatabase and X and y data.

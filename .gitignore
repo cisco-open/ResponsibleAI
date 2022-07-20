@@ -1,5 +1,9 @@
 # data files
 DashboardJS/
+data/cifar-10-batches-py
+data/cifar-10-python.tar.gz
+cifar_net.pth
+datasets/
 cProfileExport
 # Byte-compiled / optimized / DLL files
 __pycache__/

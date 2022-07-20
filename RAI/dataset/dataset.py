@@ -36,6 +36,7 @@ class Data:
         self.y = y
         self.categorical = None
         self.scalar = None
+        self.image = None
 
     def __len__(self):
         shape = np.shape(self.X)
@@ -55,9 +56,10 @@ class Data:
             return self.X[key], self.y[key]
 
     # Splits up a dataset into its different data types, currently scalar and categorical
-    def separate(self, scalar_mask):
+    def separate(self, scalar_mask, categorical_mask, image_mask):
         self.scalar = self.X[:, scalar_mask]
-        self.categorical = self.X[:, np.invert(scalar_mask)]
+        self.categorical = self.X[:, categorical_mask]
+        self.image = self.X[:, image_mask]
 
 
 class Dataset:
@@ -70,9 +72,9 @@ class Dataset:
     def __init__(self, data_dict) -> None:
         self.data_dict = data_dict
 
-    def separate_data(self, scalar_mask):
+    def separate_data(self, scalar_mask, categorical_mask, image_mask):
         for data in self.data_dict:
-            self.data_dict[data].separate(scalar_mask)
+            self.data_dict[data].separate(scalar_mask, categorical_mask, image_mask)
 
 
 class MetaDatabase:
@@ -84,24 +86,30 @@ class MetaDatabase:
 
     def __init__(self, features) -> None:
         self.features = features
-        self.scalar_mask = np.ones(len(features), dtype=bool)
+        self.scalar_mask = np.zeros(len(features), dtype=bool)
+        self.categorical_mask = np.zeros(len(features), dtype=bool)
         self.numerical_mask = np.zeros(len(features), dtype=bool)
+        self.image_mask = np.zeros(len(features), dtype=bool)
         self.scalar_map = []
         self.categorical_map = []
+        self.image_map = []
         self.data_format = set()
         self.stored_data = set()
         self.sensitive_features = []
 
         # Initialize maps and masks
         for i, f in enumerate(features):
-            self.scalar_mask[i] = not f.categorical
-            # TODO: Once images are added, this will also need incorporate images
             if f.dtype.startswith("int") or f.dtype.startswith("float") or f.dtype == "Numeric":
                 self.numerical_mask[i] = True
                 if not f.categorical:
+                    self.scalar_mask[i] = True
                     self.scalar_map.append(i)
                 else:
                     self.categorical_map.append(i)
+                    self.categorical_mask[i] = True
+            elif f.dtype == "Image":
+                self.image_mask[i] = True
+                self.image_map.append(i)
             elif f.dtype not in all_data_types:
                 assert "Feature datatype must be one of: ", all_data_types
 

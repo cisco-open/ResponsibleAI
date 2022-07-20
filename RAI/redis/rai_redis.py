@@ -3,6 +3,8 @@ import subprocess
 import threading
 import redis
 import RAI
+import pickle
+import os
 
 __all__ = ['RaiRedis']
 
@@ -55,6 +57,14 @@ class RaiRedis:
         data_summary = self.ai_system.get_data_summary()
         print("Data Summary: ", data_summary)
         self.redis_connection.set(self.ai_system.name + '|data_summary', json.dumps(data_summary))
+
+    def add_dataset(self, loc=None):
+        dataset = self.ai_system.dataset.data_dict
+        if loc is None:
+            loc = './datasets/'
+        loc = os.path.abspath(loc)
+        pickle.dump(dataset, open(loc + '/' + self.ai_system.name + "_dataset", "wb"))
+        self.redis_connection.set(self.ai_system.name + '_dataset_loc', json.dumps(loc))
 
     def add_measurement(self) -> None:
         certificates = self.ai_system.get_certificate_values()
