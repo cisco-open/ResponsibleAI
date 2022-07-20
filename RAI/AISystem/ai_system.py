@@ -2,7 +2,7 @@ from RAI.AISystem.model import Model
 from RAI.certificates import CertificateManager
 from RAI.dataset.dataset import Data, Dataset, MetaDatabase
 from RAI.metrics import MetricManager
-from RAI.utils.all_types import all_output_requirements, all_task_types
+from RAI.all_types import all_output_requirements, all_task_types
 from RAI.dataset.vis import DataSummarizer
 
 
@@ -75,10 +75,11 @@ class AISystem:
     def get_project_info(self) -> dict:
         result = {"id": self.name,
                   "task_type": self.task, "configuration": self.metric_manager.user_config, "features": [],
-                  "description": self.model.description,
-                  }
+                  "description": self.model.description, "output_features": []}
         for i in range(len(self.meta_database.features)):
             result['features'].append(self.meta_database.features[i].name)
+        for i in range(len(self.model.output_features)):
+            result['output_features'].append(self.model.output_features[i].name)
         return result
 
     def get_data_summary(self) -> dict:

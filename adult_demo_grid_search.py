@@ -3,7 +3,7 @@ import sys
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from RAI.AISystem import AISystem, Model
-from RAI.dataset import Data, Dataset
+from RAI.dataset import Data, Dataset, Feature
 from RAI.redis import RaiRedis
 from RAI.utils import df_to_RAI
 from sklearn.ensemble import RandomForestClassifier
@@ -23,7 +23,9 @@ meta, X, y = df_to_RAI(all_data, target_column="income-per-year", normalize="Sca
 xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=1, stratify=y)
 
 clf = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=0, min_samples_leaf=5, max_depth=2)
-model = Model(agent=clf, name="cisco_income_ai", predict_fun=clf.predict, predict_prob_fun=clf.predict_proba,
+output = Feature("Income", "numerical", "High or low income categories", categorical=True,
+                 values={0: "Low Income", 1: "High Income"})
+model = Model(agent=clf, output_features=output, name="cisco_income_ai", predict_fun=clf.predict, predict_prob_fun=clf.predict_proba,
               description="Income Prediction AI", model_class="Random Forest Classifier")
 configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}},
                               "protected_attributes": ["race"], "positive_label": 1},

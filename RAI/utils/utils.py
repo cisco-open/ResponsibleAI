@@ -5,7 +5,7 @@ import pandas as pd
 import torch
 import torch.utils.data
 from sklearn.preprocessing import StandardScaler
-from RAI.dataset import Feature, MetaDatabase
+from RAI.dataset.dataset import Feature, MetaDatabase
 
 __all__ = ['jsonify', 'compare_runtimes', 'df_to_meta_database', 'df_to_RAI', 'reweighing',
            'calculate_per_mapped_features', 'convert_float32_to_float64',

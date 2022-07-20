@@ -92,8 +92,10 @@ def main():
         train()
 
     image = Feature('Image', 'Image', 'The 32x32 input image')
+    outputs = Feature('image_type', 'numerical', 'The type of image', categorical=True,
+                      values={i: v for i, v in enumerate(classes)})
     meta = MetaDatabase([image])
-    model = Model(agent=net,  name="conv_net", predict_fun=net, description="ConvNet", model_class="ConvNet")
+    model = Model(agent=net, output_features=outputs, name="conv_net", predict_fun=net, description="ConvNet", model_class="ConvNet")
     configuration = {"time_complexity": "polynomial"}
     dataset = Dataset({"train": Data(xTrainData, yTrainData), "test": Data(xTestData, yTestData)})
     ai = AISystem(name="CIFAR_Conv_1",  task='classification', meta_database=meta, dataset=dataset, model=model)

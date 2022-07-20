@@ -1,4 +1,4 @@
-from RAI.utils.all_types import all_metric_types
+from RAI.all_types import all_metric_types
 __all__ = ['Metric']
 
 

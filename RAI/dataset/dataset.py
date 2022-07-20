@@ -1,5 +1,5 @@
 import numpy as np
-from RAI.utils.all_types import all_data_types, all_data_types_lax
+from RAI.all_types import all_data_types, all_data_types_lax
 
 __all__ = ['Feature', 'MetaDatabase', 'Data', 'Dataset']
 

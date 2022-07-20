@@ -20,9 +20,6 @@ class PerformanceClassificationMetricGroup(MetricGroup, class_location=os.path.a
         args = {}
         if self.ai_system.metric_manager.user_config is not None and "bias" in self.ai_system.metric_manager.user_config and "args" in self.ai_system.metric_manager.user_config["bias"]:
             args = self.ai_system.metric_manager.user_config["bias"]["args"]
-
-        print("type data.y: ", type(data.y))
-        print("type preds: ", type(preds))
         self.metrics["accuracy"].value = sklearn.metrics.accuracy_score(data.y, preds, **args.get("accuracy", {}))
         self.metrics["balanced_accuracy"].value = sklearn.metrics.balanced_accuracy_score(data.y, preds, **args.get("balanced_accuracy", {}))
         self.metrics["confusion_matrix"].value = sklearn.metrics.confusion_matrix(data.y, preds, **args.get("confusion_matrix", {}))

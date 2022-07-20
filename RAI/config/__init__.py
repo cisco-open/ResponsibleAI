@@ -1,7 +1,7 @@
 """config parse module."""
 
 import yaml
-from RAI.utils.all_types import all_task_types
+from RAI.all_types import all_task_types
 from ..dataset import Feature
 
 KEY_TASK_TYPE = 'taskType'
