@@ -17,13 +17,11 @@ test_data = pd.read_csv(data_path + "test.csv", header=0,
 all_data = pd.concat([train_data, test_data], ignore_index=True)
 
 # convert aggregated data into RAI format
-meta, X, y = df_to_RAI(all_data, target_column="income-per-year", normalize="Scalar", max_categorical_threshold=5)
+meta, X, y, output = df_to_RAI(all_data, target_column="income-per-year", normalize="Scalar", max_categorical_threshold=5)
 xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=1, stratify=y)
 
 # Create a model to make predictions
 reg = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=0)
-output = Feature("Income", "numerical", "High or low income categories", categorical=True,
-                 values={0: "Low Income", 1: "High Income"})
 model = Model(agent=reg, output_features=output, name="cisco_income_ai", predict_fun=reg.predict, predict_prob_fun=reg.predict_proba,
               description="Income Prediction AI", model_class="Random Forest Classifier", )
 configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}},

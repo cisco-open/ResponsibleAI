@@ -137,8 +137,18 @@ def df_to_RAI(df, test_tf=None, target_column=None, clear_nans=True, extra_symbo
             df[num_d.columns] = StandardScaler().fit_transform(num_d)
     features = []
     cat_columns = []
+    output_feature = []
     if target_column:
         y = df.pop(target_column)
+        fact = y.factorize(sort=True)
+        categorical = str(y.dtypes) in ["object", "category"]
+        f = None
+        if categorical:
+            f = Feature(y.name, "integer", y.name, categorical=True,
+                    values={i: v for i, v in enumerate(fact[1])})
+        else:
+            f = Feature(y.name, "float", y.name)
+        output_feature.append(f)
         if y.dtype in ("object", "category"):
             y, y_name = y.factorize(sort=True)
         else:
@@ -157,7 +167,7 @@ def df_to_RAI(df, test_tf=None, target_column=None, clear_nans=True, extra_symbo
         else:
             f = Feature(c, "float", c)
         features.append(f)
-    return MetaDatabase(features), df.to_numpy().astype('float32'), y, y_name
+    return MetaDatabase(features), df.to_numpy().astype('float32'), y, output_feature
 
 
 # ===== METRIC RELATED UTIL FUNCTIONS =====

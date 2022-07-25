@@ -1,11 +1,13 @@
 import numpy as np
 
+
 class DataSummarizer:
-    def __init__(self, dataset, task):
+    def __init__(self, dataset, task, output_features):
         self.dataset = dataset 
         self.task = task
         self.train_data = self.dataset.data_dict["train"]
         self.test_data = self.dataset.data_dict["test"]
+        self.output_features = output_features
         self.initialize()
         self.setLabelDistribution()
 
@@ -14,8 +16,8 @@ class DataSummarizer:
         self.train_y = self.train_data.y
         self.test_X = self.test_data.X
         self.test_y = self.test_data.y
-        self.target = self.dataset.target
-        self.y_name = self.dataset.y_name
+        self.target = self.output_features[0].name
+        self.y_name = self.output_features[0].values
         self.n_label = len(self.y_name)
         self.labels = [str(l) for l in range(self.n_label)]
         self.label_name_dict = None

@@ -99,7 +99,7 @@ def main():
                   loss_function=criterion, optimizer=optimizer)
     configuration = {"time_complexity": "polynomial"}
     dataset = Dataset({"train": Data(xTrainData, yTrainData), "test": Data(xTestData, yTestData)})
-    ai = AISystem(name="CIFAR_Conv_1",  task='classification', meta_database=meta, dataset=dataset, model=model)
+    ai = AISystem(name="CIFAR_Conv_1", task='classification', meta_database=meta, dataset=dataset, model=model)
     ai.initialize(user_config=configuration)
 
     preds = []

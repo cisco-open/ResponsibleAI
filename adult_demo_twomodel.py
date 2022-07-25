@@ -28,19 +28,17 @@ target_column="income-per-year"
 
 # convert aggregated data into RAI format
 # print(all_data.pop("income-per-year"))
-meta, X, y, y_name = df_to_RAI(all_data, target_column=target_column, normalize=None, max_categorical_threshold=5)
+meta, X, y, output = df_to_RAI(all_data, target_column=target_column, normalize=None, max_categorical_threshold=5)
 xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=1, stratify=y)
 
 # Create a model to make predictions
-output = Feature("Income", "numerical", "High or low income categories", categorical=True,
-                 values={0: "Low Income", 1: "High Income"})
 model = Model(agent=clf, output_features=output, name="cisco_income_ai", predict_fun=clf.predict, predict_prob_fun=clf.predict_proba,
               description="Income Prediction", model_class="Random Forest Classifier")
 configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}},
                               "protected_attributes": ["race"], "positive_label": 1},
                  "time_complexity": "polynomial"}
 
-dataset = Dataset({"train": Data(xTrain, yTrain), "test": Data(xTest, yTest)}, target_column, y_name)
+dataset = Dataset({"train": Data(xTrain, yTrain), "test": Data(xTest, yTest)})
 ai = AISystem("AdultDB_3", task='binary_classification', meta_database=meta, dataset=dataset, model=model)
 ai.initialize(user_config=configuration)
 

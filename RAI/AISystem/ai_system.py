@@ -38,8 +38,6 @@ class AISystem:
 
     def initialize(self, user_config: dict, custom_certificate_location: str = None, **kw_args):
         self.user_config = user_config
-        # print("Scalar mask: ", self.meta_database.scalar_mask)
-        # print("Image mask: ", self.meta_database.image_mask)
         self.dataset.separate_data(self.meta_database.scalar_mask, self.meta_database.categorical_mask, self.meta_database.image_mask)
         self.meta_database.initialize_requirements(list(self.dataset.data_dict.values())[0], "fairness" in user_config)
         self.metric_manager = MetricManager(self)
@@ -47,7 +45,7 @@ class AISystem:
         self.certificate_manager.load_stock_certificates()
         if custom_certificate_location is not None:
             self.certificate_manager.load_custom_certificates(custom_certificate_location)
-        self.data_summarizer = DataSummarizer(self.dataset, self.task)
+        self.data_summarizer = DataSummarizer(self.dataset, self.task, self.model.output_features)
 
     def get_metric_values(self) -> dict:
         return self._last_metric_values

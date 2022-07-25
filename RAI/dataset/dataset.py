@@ -69,10 +69,8 @@ class Dataset:
     are RAI Data objects.
     """
 
-    def __init__(self, data_dict, target=None, y_name=None) -> None:
+    def __init__(self, data_dict) -> None:
         self.data_dict = data_dict
-        self.target = target
-        self.y_name = y_name
 
     def separate_data(self, scalar_mask, categorical_mask, image_mask):
         for data in self.data_dict:
