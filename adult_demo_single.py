@@ -16,11 +16,14 @@ test_data = pd.read_csv(data_path + "test.csv", header=0,
                         skipinitialspace=True, na_values="?")
 all_data = pd.concat([train_data, test_data], ignore_index=True)
 
+# print("all_data: ", all_data)
+
 # convert aggregated data into RAI format
 meta, X, y, output = df_to_RAI(all_data, target_column="income-per-year", normalize="Scalar", max_categorical_threshold=5)
-
 xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=1, stratify=y)
 
+# print("X: ", X)
+# print("y: ", y)
 # Create a model to make predictions
 clf = RandomForestClassifier(n_estimators=4, max_depth=6)
 model = Model(agent=clf, output_features=output, name="cisco_income_ai", predict_fun=clf.predict, predict_prob_fun=clf.predict_proba,
@@ -45,6 +48,8 @@ if use_dashboard:
     r.connect()
     r.reset_redis()
     r.add_measurement()
+
+ai.display_metric_values("test")
 
 
 from RAI.Analysis import AnalysisManager

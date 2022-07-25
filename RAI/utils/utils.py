@@ -123,8 +123,8 @@ def torch_to_RAI(torch_item):
 
 
 # Converts a pandas dataframe to a Rai Metadatabase and X and y data.
-def df_to_RAI(df, test_tf=None, target_column=None, clear_nans=True, extra_symbols="?", normalize="Scalar",
-              max_categorical_threshold=None):
+def df_to_RAI(df, test_tf=None, target_column=None, clear_nans=True, extra_symbols="?", normalize=None,
+              max_categorical_threshold=None, text_columns=[]):
     if clear_nans:
         df_remove_nans(df, extra_symbols)
     if max_categorical_threshold:
@@ -140,34 +140,39 @@ def df_to_RAI(df, test_tf=None, target_column=None, clear_nans=True, extra_symbo
     output_feature = []
     if target_column:
         y = df.pop(target_column)
-        fact = y.factorize(sort=True)
         categorical = str(y.dtypes) in ["object", "category"]
         f = None
-        if categorical:
+        if y.name in text_columns:
+            f = Feature(y.name, "Text", y.name)
+        elif categorical:
+            fact = y.factorize(sort=True)
             f = Feature(y.name, "integer", y.name, categorical=True,
                     values={i: v for i, v in enumerate(fact[1])})
         else:
             f = Feature(y.name, "float", y.name)
         output_feature.append(f)
-        if y.dtype in ("object", "category"):
+        if categorical:
             y, y_name = y.factorize(sort=True)
         else:
             y_name = target_column
+            y = y.tolist()
     else:
         y, y_name = None, None
 
     features = []
 
     for c in df:
-        if str(df.dtypes[c]) in ["object", "category"]:
+        if c in text_columns:
+            f = Feature(c, "Text", c)
+        elif str(df.dtypes[c]) in ["object", "category"]:
             fact = df[c].factorize(sort=True)
             df[c] = fact[0]
             f = Feature(c, "integer", c, categorical=True,
                         values={i: v for i, v in enumerate(fact[1])})
-        else:
+        elif "float" in str(df.dtypes[c]):
             f = Feature(c, "float", c)
         features.append(f)
-    return MetaDatabase(features), df.to_numpy().astype('float32'), y, output_feature
+    return MetaDatabase(features), df.to_numpy(), y, output_feature
 
 
 # ===== METRIC RELATED UTIL FUNCTIONS =====
