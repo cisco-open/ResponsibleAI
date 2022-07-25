@@ -42,15 +42,26 @@ dataset = Dataset({"train": Data(xTrain, yTrain), "test": Data(xTest, yTest)})
 ai = AISystem("AdultDB_3", task='binary_classification', meta_database=meta, dataset=dataset, model=model)
 ai.initialize(user_config=configuration)
 
-if use_dashboard:
-    r = RaiRedis(ai)
-    r.connect()
-    r.reset_redis()
 
 clf.fit(xTrain, yTrain)
 predictions = clf.predict(xTest)
 predictions_train = clf.predict(xTrain)
+
+import pickle
+test_file = open('test_file', 'wb')
+pickle.dump(ai, test_file)
+test_file.close()
+
+test_file = open("test_file", "rb")
+ai = pickle.load(test_file)
+test_file.close()
+
 ai.compute({"test": {"predict": predictions}, "train": {"predict": predictions_train}}, tag="Random Forest 5 Estimator")
+
+if use_dashboard:
+    r = RaiRedis(ai)
+    r.connect()
+    r.reset_redis()
 
 
 if use_dashboard:
@@ -66,7 +77,11 @@ predictions = mdl.predict(xTest)
 predictions_train = mdl.predict(xTrain)
 ai.compute({"test": {"predict": predictions}, "train": {"predict": predictions_train}}, tag="Random Forest 10 Estimator")
 if use_dashboard:
+    r = RaiRedis(ai)
+    r.connect()
     r.add_measurement()
     r.export_metadata()
 
 ai.display_metric_values(display_detailed=True)
+
+

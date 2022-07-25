@@ -95,7 +95,8 @@ def main():
     outputs = Feature('image_type', 'numerical', 'The type of image', categorical=True,
                       values={i: v for i, v in enumerate(classes)})
     meta = MetaDatabase([image])
-    model = Model(agent=net, output_features=outputs, name="conv_net", predict_fun=net, description="ConvNet", model_class="ConvNet")
+    model = Model(agent=net, output_features=outputs, name="conv_net", predict_fun=net, description="ConvNet", model_class="ConvNet",
+                  loss_function=criterion, optimizer=optimizer)
     configuration = {"time_complexity": "polynomial"}
     dataset = Dataset({"train": Data(xTrainData, yTrainData), "test": Data(xTestData, yTestData)})
     ai = AISystem(name="CIFAR_Conv_1",  task='classification', meta_database=meta, dataset=dataset, model=model)
@@ -122,9 +123,11 @@ def main():
     analysis = AnalysisManager()
     print("available analysis: ", analysis.get_available_analysis(ai, "test"))
     result = analysis.run_all(ai, "test", "Test run!")
+    # result = analysis.run_analysis(ai, "test", "CleverUntargetedScore", "Testing")
     for analysis in result:
         print("Analysis: " + analysis)
         print(result[analysis].to_string())
+
 
 if __name__ == '__main__':
     main()
