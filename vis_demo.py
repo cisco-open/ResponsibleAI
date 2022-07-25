@@ -6,7 +6,6 @@ from RAI.redis import RaiRedis
 from RAI.utils import df_to_RAI
 
 from tensorflow.keras.datasets import cifar10
-import numpy as np
 
 use_dashboard = True 
 
