@@ -4,6 +4,7 @@ from RAI.dataset.dataset import Data, Dataset, MetaDatabase
 from RAI.metrics import MetricManager
 from RAI.all_types import all_output_requirements, all_task_types
 from RAI.dataset.vis import DataSummarizer
+import numpy as np
 
 
 class AISystem:

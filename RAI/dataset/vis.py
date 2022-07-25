@@ -21,18 +21,19 @@ class DataSummarizer:
         self.label_name_dict = None
 
         if self.task in ("binary_classification", "classification") and self.y_name is not None:
-            self.label_name_dict = {str(l): self.y_name[l] for l in self.labels}
+            self.label_name_dict = {l: self.y_name[int(l)] for l in self.labels}
 
 
     def setLabelDistribution(self):
         # dict with "train": distribution, "test": distribution
         train_y_dict, test_y_dict = dict(), dict()
+        print(self.train_y[:10], self.labels)
         for label in self.labels:
             l_name = label
             if self.label_name_dict is not None:
                 l_name = self.label_name_dict[label]
-            train_y_dict[l_name] = int((self.train_y==label).sum())
-            test_y_dict[l_name] = int((self.test_y==label).sum())
+            train_y_dict[l_name] = int((self.train_y==int(label)).sum())
+            test_y_dict[l_name] = int((self.test_y==int(label)).sum())
         self.label_dist_dict = {"train": train_y_dict, "test": test_y_dict}
 
     def getLabels(self):
