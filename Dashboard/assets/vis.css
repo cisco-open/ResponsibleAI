@@ -1,0 +1,30 @@
+tr.data-summary-main-row {
+    border-bottom: 1px solid #a0a0a0;
+}
+
+.data-summary-title {
+    font-weight: bold;
+    padding: 5px 15px;
+    width: 8vw;
+    text-align: center;
+}
+
+.data-summary-content {
+    padding: 5px 15px;
+}
+
+.data-summary-content-hist-title {
+    text-align: center;
+    padding: 2px 0;
+}
+
+td div.data-summary-content-hist {
+    width: 30vw;
+    height: 20vw;
+    padding: 0 3px;
+}
+
+.data-summary-content-half {
+    width: 30vw;
+    height: 20vw;
+}

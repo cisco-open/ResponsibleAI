@@ -4,6 +4,7 @@ from RAI.dataset.dataset import Data, Dataset, MetaDatabase
 from RAI.metrics import MetricManager
 from RAI.all_types import all_output_requirements, all_task_types
 from RAI.dataset.vis import DataSummarizer
+import numpy as np
 
 
 class AISystem:
@@ -46,7 +47,7 @@ class AISystem:
         self.certificate_manager.load_stock_certificates()
         if custom_certificate_location is not None:
             self.certificate_manager.load_custom_certificates(custom_certificate_location)
-        self.data_summarizer = DataSummarizer(self.dataset)
+        self.data_summarizer = DataSummarizer(self.dataset, self.task)
 
     def get_metric_values(self) -> dict:
         return self._last_metric_values
@@ -83,10 +84,16 @@ class AISystem:
         return result
 
     def get_data_summary(self) -> dict:
+        pred_target = self.data_summarizer.target 
+        label_name = self.data_summarizer.label_name_dict
         labels = self.data_summarizer.labels 
         label_dist_dict = self.data_summarizer.getLabelDistribution()
+        if label_name is None:
+            label_name = ""
         # TODO: Add data sampler
         summary = {
+            "pred_target": pred_target,
+            "label_name": label_name,
             "labels": labels,
             "label_dist": label_dist_dict,
         }

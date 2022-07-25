@@ -55,6 +55,7 @@ class RaiRedis:
     def summarize_data(self) -> None:
         print("AI System Name: ", self.ai_system.name)
         data_summary = self.ai_system.get_data_summary()
+        print(data_summary)
         print("Data Summary: ", data_summary)
         self.redis_connection.set(self.ai_system.name + '|data_summary', json.dumps(data_summary))
 
