@@ -1,7 +1,7 @@
 {
     "name": "tree_model_metadata",
     "display_name" : "Tree Metadata",
-    "compatibility": {"task_type": null,
+    "compatibility": {"task_type": [],
                       "data_type": [],
                       "output_requirements": [],
                       "dataset_requirements": []},

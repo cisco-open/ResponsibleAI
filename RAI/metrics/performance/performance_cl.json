@@ -1,7 +1,7 @@
 {
     "name" : "performance_cl",
     "display_name": "Classification Performance Metrics",
-    "compatibility": {"task_type": "classification",
+    "compatibility": {"task_type": ["classification"],
                       "data_type": [],
                       "output_requirements": ["predict"],
                       "dataset_requirements": ["y"]},

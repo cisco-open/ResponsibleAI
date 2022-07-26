@@ -1,7 +1,7 @@
 {
     "name": "summary_stats",
     "display_name": "Summary Statistics",
-    "compatibility": {"task_type": null,
+    "compatibility": {"task_type": [],
                       "data_type": ["Numeric"],
                       "output_requirements": [],
                       "dataset_requirements": ["X"]},

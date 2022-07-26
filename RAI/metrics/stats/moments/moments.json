@@ -1,7 +1,7 @@
 {
     "name": "stat_moment_group",
     "display_name" : "Moments",
-    "compatibility": {"task_type": null,
+    "compatibility": {"task_type": [],
                       "data_type": ["Numeric"],
                       "output_requirements": ["predict"],
                       "dataset_requirements": ["X"]},

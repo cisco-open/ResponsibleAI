@@ -1,7 +1,7 @@
 {
     "name": "metadata",
     "display_name": "Measurement Metadata",
-    "compatibility": {"task_type": null,
+    "compatibility": {"task_type": [],
                       "data_type": [],
                       "output_requirements": [],
                       "dataset_requirements": []},

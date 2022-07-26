@@ -4,12 +4,8 @@ import torch
 from RAI.AISystem import AISystem
 from RAI.Analysis import Analysis
 from art.estimators.classification import PyTorchClassifier
-from art.metrics import clever_t, clever_u
+from art.metrics import clever_u
 import os
-
-R_L1 = 40
-R_L2 = 2
-R_LI = 0.1
 
 
 class CleverUntargetedScore(Analysis, class_location=os.path.abspath(__file__)):
@@ -20,6 +16,9 @@ class CleverUntargetedScore(Analysis, class_location=os.path.abspath(__file__)):
         self.dataset = dataset
         self.tag = tag
         self.EXAMPLES_PER_CLASS = 2
+        self.R_L1 = 40
+        self.R_L2 = 2
+        self.R_LI = 0.1
 
     def initialize(self):
         if self.result is None:
@@ -47,9 +46,9 @@ class CleverUntargetedScore(Analysis, class_location=os.path.abspath(__file__)):
         for target_class in balanced_classifications:
             for example_num in balanced_classifications[target_class]:
                 example = data.X[example_num][0]
-                result['clever_u_l1'][target_class].append(clever_u(classifier, example, 10, 5, R_L1, norm=1, pool_factor=3, verbose=False))
-                result['clever_u_l2'][target_class].append(clever_u(classifier, example, 10, 5, R_L2, norm=2, pool_factor=3, verbose=False))
-                result['clever_u_li'][target_class].append(clever_u(classifier, example, 10, 5, R_LI, norm=np.inf, pool_factor=3, verbose=False))
+                result['clever_u_l1'][target_class].append(clever_u(classifier, example, 10, 5, self.R_L1, norm=1, pool_factor=3, verbose=False))
+                result['clever_u_l2'][target_class].append(clever_u(classifier, example, 10, 5, self.R_L2, norm=2, pool_factor=3, verbose=False))
+                result['clever_u_li'][target_class].append(clever_u(classifier, example, 10, 5, self.R_LI, norm=np.inf, pool_factor=3, verbose=False))
         result['total_images'] = 0
         result['total_classes'] = len(result['clever_u_l1'])
         for val in balanced_classifications:

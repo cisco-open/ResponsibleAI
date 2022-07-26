@@ -21,10 +21,10 @@ class MetricGroup(ABC):
     # Checks if the group is compatible with the provided AiSystem
     @classmethod
     def is_compatible(cls, ai_system):
-        compatible = cls.config["compatibility"]["task_type"] is None or cls.config["compatibility"]["task_type"] == "" \
-                     or cls.config["compatibility"]["task_type"] == ai_system.task \
-                     or (cls.config["compatibility"][
-                             "task_type"] == "classification" and ai_system.task == "binary_classification")
+        compatible = cls.config["compatibility"]["task_type"] == [] \
+                     or any(i == ai_system.task for i in cls.config["compatibility"]["task_type"]) \
+                     or (any(i == "classification" for i in cls.config["compatibility"]["task_type"])
+                          and ai_system.task == "binary_classification")
         compatible = compatible and (cls.config["compatibility"]["data_type"] is None or cls.config["compatibility"][
             "data_type"] == [] or all(item in ai_system.meta_database.data_format
                                       for item in cls.config["compatibility"]["data_type"]))

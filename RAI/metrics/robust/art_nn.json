@@ -1,7 +1,7 @@
 {
     "name": "adversarial_classification_art",
     "display_name" : "Adversarial Classification (ART) Metrics",
-    "compatibility": {"task_type": "classification",
+    "compatibility": {"task_type": ["classification"],
                       "data_type": ["Numeric"],
                       "output_requirements": ["predict"],
                       "dataset_requirements": ["X", "y"]},
