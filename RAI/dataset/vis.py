@@ -5,17 +5,18 @@ class DataSummarizer:
     def __init__(self, dataset, task, output_features):
         self.dataset = dataset 
         self.task = task
-        self.train_data = self.dataset.data_dict["train"]
-        self.test_data = self.dataset.data_dict["test"]
+        self.train_data = self.dataset.data_dict.get("train", None)
+        self.test_data = self.dataset.data_dict.get("train", None)
         self.output_features = output_features
         self.initialize()
-        self.setLabelDistribution()
+        if self.test_data is not None and self.train_data is not None:
+            self.setLabelDistribution()
 
     def initialize(self):
-        self.train_X = self.train_data.X
-        self.train_y = self.train_data.y
-        self.test_X = self.test_data.X
-        self.test_y = self.test_data.y
+        self.train_X = self.train_data.X if self.train_data is not None else None
+        self.train_y = self.train_data.y if self.train_data is not None else None
+        self.test_X = self.test_data.X if self.train_data is not None else None
+        self.test_y = self.test_data.y if self.train_data is not None else None
         self.target = self.output_features[0].name
         self.y_name = None
         self.n_label = None

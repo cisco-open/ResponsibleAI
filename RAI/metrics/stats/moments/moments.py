@@ -21,8 +21,6 @@ class StatMomentGroup(MetricGroup, class_location=os.path.abspath(__file__)):
         scalar_map = self.ai_system.meta_database.scalar_map
         features = self.ai_system.meta_database.features
 
-        print("Data: ", scalar_data)
-
         self.metrics["moment_1"].value = map_to_feature_dict(scipy.stats.moment(scalar_data, 1), features, scalar_map)
         self.metrics["moment_2"].value = map_to_feature_dict(scipy.stats.moment(scalar_data, 2), features, scalar_map)
         self.metrics["moment_3"].value = map_to_feature_dict(scipy.stats.moment(scalar_data, 3), features, scalar_map)

@@ -143,26 +143,26 @@ def df_to_RAI(df, test_tf=None, target_column=None, clear_nans=True, extra_symbo
         categorical = str(y.dtypes) in ["object", "category"]
         f = None
         if y.name in text_columns:
+            print("y is text")
             f = Feature(y.name, "Text", y.name)
+            y = y.tolist()
         elif categorical:
             fact = y.factorize(sort=True)
             f = Feature(y.name, "integer", y.name, categorical=True,
                     values={i: v for i, v in enumerate(fact[1])})
+            y, _ = y.factorize(sort=True)
         else:
             f = Feature(y.name, "float", y.name)
-        output_feature.append(f)
-        if categorical:
-            y, y_name = y.factorize(sort=True)
-        else:
-            y_name = target_column
             y = y.tolist()
+        output_feature.append(f)
     else:
-        y, y_name = None, None
+        y = None
 
     features = []
 
     for c in df:
         if c in text_columns:
+            print(c, ", in text columns")
             f = Feature(c, "Text", c)
         elif str(df.dtypes[c]) in ["object", "category"]:
             fact = df[c].factorize(sort=True)

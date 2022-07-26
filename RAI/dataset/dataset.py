@@ -116,11 +116,14 @@ class MetaDatabase:
     def __repr__(self) -> str:
         return f" features: {self.features}"
 
-    def initialize_requirements(self, data: Data, sensitive: bool) -> None:
-        if data.X is not None and len(data.X) != 0:
-            self.stored_data.add("X")
-        if data.y is not None and len(data.y) != 0:
-            self.stored_data.add("y")
+    def initialize_requirements(self, dataset: Dataset, sensitive: bool) -> None:
+        data_dict = dataset.data_dict
+        if len(data_dict) > 0:
+            data = list(dataset.data_dict.values())[0]
+            if data.X is not None and len(data.X) != 0:
+                self.stored_data.add("X")
+            if data.y is not None and len(data.y) != 0:
+                self.stored_data.add("y")
         if sensitive:
             self.stored_data.add("sensitive_features")
         for feature in self.features:

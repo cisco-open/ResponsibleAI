@@ -39,7 +39,7 @@ class AISystem:
     def initialize(self, user_config: dict, custom_certificate_location: str = None, **kw_args):
         self.user_config = user_config
         self.dataset.separate_data(self.meta_database.scalar_mask, self.meta_database.categorical_mask, self.meta_database.image_mask)
-        self.meta_database.initialize_requirements(list(self.dataset.data_dict.values())[0], "fairness" in user_config)
+        self.meta_database.initialize_requirements(self.dataset, "fairness" in user_config)
         self.metric_manager = MetricManager(self)
         self.certificate_manager = CertificateManager()
         self.certificate_manager.load_stock_certificates()
@@ -53,7 +53,6 @@ class AISystem:
     def display_metric_values(self, display_detailed=False):
         vals = self._last_metric_values
         info = self.get_metric_info()
-        # print(info)
         for dataset in vals:
             print("\n\n===== " + dataset + " Dataset =====")
             for group in vals[dataset]:
@@ -68,9 +67,7 @@ class AISystem:
         return self._last_certificate_values
 
     def get_data(self, data_type: str) -> Data:
-        if data_type not in self.dataset.data_dict:
-            raise Exception(f"data_type must be found in Dataset. Got : {data_type}")
-        return self.dataset.data_dict[data_type]
+        return self.dataset.data_dict.get(data_type, None)
 
     def get_project_info(self) -> dict:
         result = {"id": self.name,
@@ -112,14 +109,18 @@ class AISystem:
         data_dict["tag"] = tag
         self.data_dict = data_dict
         self.metric_manager.initialize(self.user_config)
-        self._last_metric_values[data_type] = self.metric_manager.compute(data_dict)
+        self._last_metric_values[data_type if data_type is not None else "No Dataset"] = self.metric_manager.compute(data_dict)
         if self.enable_certificates:
             self._last_certificate_values = self.certificate_manager.compute(self._last_metric_values)
 
     # Compute will tell RAI to compute metric values across each dataset which predictions were made on.
     def compute(self, predictions: dict, tag=None) -> None:
         self._last_metric_values = {}
-        if not (isinstance(predictions, dict) and all(isinstance(v, dict) for v in predictions.values()) \
+        if len(self.dataset.data_dict) == 0:  # Model with no X, y data.
+            for key in predictions.keys():
+                self._single_compute(predictions, None, tag=tag)
+                return
+        elif not (isinstance(predictions, dict) and all(isinstance(v, dict) for v in predictions.values()) \
                 and all(isinstance(k, str) for k in predictions.keys())):
             raise Exception("Prediction dictionary should be in the form [dataset][output_type] -> nd.array")
         for key in predictions.keys():
