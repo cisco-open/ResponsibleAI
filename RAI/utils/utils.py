@@ -247,3 +247,4 @@ def convert_float32_to_float64(values):
         for key in values:
             values[key] = convert_float32_to_float64(values[key])
         return values
+    return values

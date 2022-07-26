@@ -7,4 +7,4 @@ all_data_types = {"Numeric", "image", "text"}
 all_data_types_lax = {"integer", "float", "Numeric", "image", "text"}
 all_output_requirements = {"predict", "predict_proba", "generate_text"}
 all_dataset_requirements = {"X", "y", "sensitive_features"}
-all_metric_types = {"Numeric", "multivalued", "other", "vector", "vector-dict", "Matrix", "boolean"}
+all_metric_types = {"Numeric", "Dict", "multivalued", "other", "vector", "vector-dict", "Matrix", "boolean", "Boolean"}

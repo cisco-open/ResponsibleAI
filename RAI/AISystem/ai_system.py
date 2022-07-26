@@ -2,7 +2,7 @@ from RAI.AISystem.model import Model
 from RAI.certificates import CertificateManager
 from RAI.dataset.dataset import Data, Dataset, MetaDatabase
 from RAI.metrics import MetricManager
-from RAI.all_types import all_output_requirements, all_task_types
+from RAI.all_types import all_output_requirements, all_task_types, all_metric_types
 from RAI.dataset.vis import DataSummarizer
 import numpy as np
 
@@ -59,9 +59,10 @@ class AISystem:
             for group in vals[dataset]:
                 print("\n----- " + info[group]['meta']["display_name"] + " Metrics -----")
                 for metric in vals[dataset][group]:
-                    print(info[group][metric]["display_name"] + ": ", vals[dataset][group][metric])
-                    if display_detailed:
-                        print(info[group][metric]["display_name"] + " is " + info[group][metric]["explanation"], "\n")
+                    if(info[group][metric]["type"] in all_metric_types):
+                        print(info[group][metric]["display_name"] + ": ", vals[dataset][group][metric])
+                        if display_detailed:
+                            print(info[group][metric]["display_name"] + " is " + info[group][metric]["explanation"], "\n")
 
     def get_certificate_values(self) -> dict:
         return self._last_certificate_values

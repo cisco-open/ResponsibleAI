@@ -19,7 +19,7 @@ use_dashboard  = False
 df = load_breast_cancer(return_X_y = False, as_frame=True)
 df = df.data.join( df.target )
 
-meta, X,y  = df_to_RAI(df, target_column = "target", normalize="Scalar", max_categorical_threshold = 5)
+meta, X,y  = df_to_RAI(df, target_column="target", normalize="Scalar", max_categorical_threshold = 5)
 xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=1, stratify=y)
  
   
