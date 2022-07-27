@@ -10,13 +10,12 @@ from RAI.redis import RaiRedis
 from RAI.utils import df_to_RAI
 
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 use_dashboard = True
 np.random.seed(21)
 
 clf = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=0, min_samples_leaf=5, max_depth=2)
 
-data_path = "../data/adult/"
+data_path = "data/adult/"
 train_data = pd.read_csv(data_path + "train.csv", header=0,
                          skipinitialspace=True, na_values="?")
 test_data = pd.read_csv(data_path + "test.csv", header=0,
@@ -24,11 +23,11 @@ test_data = pd.read_csv(data_path + "test.csv", header=0,
 all_data = pd.concat([train_data, test_data], ignore_index=True)
 idx = all_data['race'] != 'White'
 all_data['race'][idx] = 'Black'
-target_column="income-per-year"
+target_column = "income-per-year"
 
 # convert aggregated data into RAI format
 # print(all_data.pop("income-per-year"))
-meta, X, y, output = df_to_RAI(all_data, target_column=target_column, normalize=None, max_categorical_threshold=5)
+meta, X, y, output = df_to_RAI(all_data, target_column=target_column, normalize="Scalar", max_categorical_threshold=5)
 xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=1, stratify=y)
 
 # Create a model to make predictions
@@ -66,9 +65,6 @@ if use_dashboard:
 
 if use_dashboard:
     r.add_measurement()
-    r.delete_data("AdultDB_2")
-    r.delete_data("AdultDB_Test1")
-    r.delete_data("AdultDB")
 
 
 mdl = RandomForestClassifier(n_estimators=10, min_samples_leaf=20, max_depth=2)
