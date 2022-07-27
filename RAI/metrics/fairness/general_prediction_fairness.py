@@ -14,7 +14,6 @@ class GeneralPredictionFairnessGroup(MetricGroup, class_location=os.path.abspath
 
     @classmethod
     def is_compatible(cls, ai_system):
-        print("GEN PREDICTION FAIRNESS STARTS")
         compatible = super().is_compatible(ai_system)
         return compatible \
             and "fairness" in ai_system.metric_manager.user_config \

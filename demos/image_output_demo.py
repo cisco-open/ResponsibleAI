@@ -1,3 +1,4 @@
+from matplotlib import pyplot as plt
 from RAI.AISystem import AISystem, Model
 from RAI.redis import RaiRedis
 from RAI.dataset import Dataset, Feature, MetaDatabase, Data
@@ -203,6 +204,9 @@ def main():
     generated = []
     for i in range(50):
         generated.append(generate_fake_image())
+
+    # plt.imshow(torch.Tensor(generated[0][0]).permute(1, 2, 0))
+    # plt.show()
 
     output = Feature("Cifar Image", "Image", "CIFAR Image produced by GAN")
     model = Model(agent=gan, output_features=output, name="gan", generate_image_fun=generate_fake_image,

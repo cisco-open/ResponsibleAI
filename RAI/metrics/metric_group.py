@@ -28,7 +28,7 @@ class MetricGroup(ABC):
         compatible = compatible and (cls.config["compatibility"]["data_type"] is None or cls.config["compatibility"][
             "data_type"] == [] or all(item in ai_system.meta_database.data_format
                                       for item in cls.config["compatibility"]["data_type"]))
-        compatible = compatible and (cls.config["compatibility"]["output_requirements"] is None or
+        compatible = compatible and (cls.config["compatibility"]["output_requirements"] == [] or
                                      all(item in ai_system.data_dict for item in
                                          cls.config["compatibility"]["output_requirements"]))
         compatible = compatible and (cls.config["compatibility"]["dataset_requirements"] is None or
