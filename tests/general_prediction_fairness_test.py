@@ -25,12 +25,12 @@ all_data = pd.concat([train_data, test_data], ignore_index=True)
 idx = all_data['race'] != 'White'
 all_data['race'][idx] = 'Black'
 
-meta, X, y = df_to_RAI(all_data, target_column="income-per-year", normalize=None, max_categorical_threshold=5)
+meta, X, y, output = df_to_RAI(all_data, target_column="income-per-year", normalize="Scalar", max_categorical_threshold=5)
 xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=1, stratify=y)
 
 clf = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=0, min_samples_leaf=5, max_depth=2)
 
-model = Model(agent=clf, name="Cancer detection AI", predict_fun=clf.predict, predict_prob_fun=clf.predict_proba,
+model = Model(agent=clf, output_features=output, name="Cancer detection AI", predict_fun=clf.predict, predict_prob_fun=clf.predict_proba,
               description="Detect Cancer in patients using skin measurements", model_class="Random Forest Classifier")
 configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}}, "positive_label": 1},
                  "time_complexity": "polynomial"}
@@ -63,7 +63,7 @@ info = ai.get_metric_info()
 
 def test_average_abs_odds_difference():
     """Tests that the RAI average abs odds difference calculation is correct."""
-    assert metrics['prediction_fairness']['average_abs_odds_difference'] == benchmark.average_odds_difference()
+    assert metrics['prediction_fairness']['average_odds_difference'] == benchmark.average_odds_difference()
 
 
 def test_between_all_groups_coefficient_of_variation():

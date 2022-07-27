@@ -22,9 +22,6 @@ all_data = pd.concat([train_data, test_data], ignore_index=True)
 meta, X, y, output = df_to_RAI(all_data, target_column="income-per-year", normalize="Scalar", max_categorical_threshold=5)
 xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=1, stratify=y)
 
-# print("X: ", X)
-# print("y: ", y)
-# Create a model to make predictions
 clf = RandomForestClassifier(n_estimators=4, max_depth=6)
 model = Model(agent=clf, output_features=output, name="cisco_income_ai", predict_fun=clf.predict, predict_prob_fun=clf.predict_proba,
               description="Income Prediction AI", model_class="Random Forest Classifier", )

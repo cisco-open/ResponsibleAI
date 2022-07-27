@@ -20,10 +20,7 @@ nums[:val_0_count] = 0
 xTest = np.hstack((xTest, nums))
 xTest = np.hstack((xTest, nums))
 
-features_raw = ["id", "radius_mean", "texture_mean", "perimeter_mean", "area_mean", "smoothness_mean", "compactness_mean", "concavity_mean", "concave points_mean", "symmetry_mean",
-                "fractal_dimension_mean", "radius_se", "texture_se", "compactness_se", "concavity_se",
-                "concave points_se", "symmetry_se", "fractal_dimension_se", "radius_worst", "texture_worst", "texture_worst", "perimeter_worst", "area_worst",
-                "smoothness_worst", "compactness_worst", "concavity_worst", "concave points_worst", "symmetry_worst", "fractal_dimension_worst", "diagnosis"]
+features_raw = load_breast_cancer().feature_names
 features = []
 
 for feature in features_raw:
@@ -37,7 +34,9 @@ dataset = Dataset({"train": training_data, "test": test_data})
 meta = MetaDatabase(features)
 
 rfc = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=0)
-model = Model(agent=rfc, name="cisco_cancer_ai", predict_fun=rfc.predict,
+output = Feature("Cancer Prediction", "integer", "Cancer Prediction", categorical=True,
+                 values={0: "No Cancer", 1: "Cancer"})
+model = Model(agent=rfc, output_features=output, name="cisco_cancer_ai", predict_fun=rfc.predict,
               predict_prob_fun=rfc.predict_proba, model_class="Random Forest Classifier")
 
 configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}},
@@ -52,21 +51,13 @@ ai.compute({"test": {"predict": predictions}}, tag="binary classification")
 
 metrics = ai.get_metric_values()
 metrics = metrics["test"]
-info = ai.get_metric_info()
-
-
-for g in metrics:
-    for m in metrics[g]:
-        if "type" in info[g][m]:
-            if info[g][m]["type"] in ("numeric", "vector-dict", "text"):
-                print(g, m, metrics[g][m])
 
 
 def test_point_biserial_r():
     """Tests that the RAI relfreq calculation is correct."""
     for i, feature in enumerate(features):
-        if feature.categorical:
-            assert metrics['correlation_stats_binary']['point_biserial_r'][i] == \
-                   scipy.stats.pointbiserialr(xTest[:, i], yTest)
-        else:
-            assert metrics['correlation_stats_binary']['point_biserial_r'][i] is None
+        res = {}
+        if not feature.categorical:
+            res = scipy.stats.pointbiserialr(xTest[:, i], yTest)
+            res = {"correlation": res.correlation, "pvalue": res.pvalue}
+        assert metrics['correlation_stats_binary']['point_biserial_r'][feature.name] == res

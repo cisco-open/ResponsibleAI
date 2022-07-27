@@ -31,8 +31,11 @@ class StatMetricGroup(MetricGroup, class_location=os.path.abspath(__file__)):
 
         with warnings.catch_warnings():
             warnings.filterwarnings('ignore')
-            self.metrics["geometric_mean"].value = map_to_feature_dict(scipy.stats.mstats.gmean(scalar_data), features, scalar_map)
-            self.metrics['geometric_mean'].value = convert_float32_to_float64(self.metrics['geometric_mean'].value)
+            try:
+                self.metrics["geometric_mean"].value = map_to_feature_dict(scipy.stats.mstats.gmean(scalar_data), features, scalar_map)
+                self.metrics['geometric_mean'].value = convert_float32_to_float64(self.metrics['geometric_mean'].value)
+            except:
+                self.metrics["geometric_mean"].value = None
 
         self.metrics["mode"].value = map_to_feature_dict(scipy.stats.mstats.mode(scalar_data)[0][0], features, scalar_map)
         self.metrics["skew"].value = map_to_feature_dict(scipy.stats.mstats.skew(scalar_data), features, scalar_map)

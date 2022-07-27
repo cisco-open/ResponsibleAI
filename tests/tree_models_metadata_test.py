@@ -27,10 +27,10 @@ all_data = pd.concat([train_data, test_data], ignore_index=True)
 idx = all_data['race'] != 'White'
 all_data['race'][idx] = 'Black'
 
-meta, X, y = df_to_RAI(all_data, target_column="income-per-year", normalize=None, max_categorical_threshold=5)
+meta, X, y, output = df_to_RAI(all_data, target_column="income-per-year", normalize="Scalar", max_categorical_threshold=5)
 xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=1, stratify=y)
 
-model = Model(agent=clf, name="test_tree", predict_fun=clf.predict, predict_prob_fun=clf.predict_proba,
+model = Model(agent=clf, output_features=output, name="test_tree", predict_fun=clf.predict, predict_prob_fun=clf.predict_proba,
               description=description, model_class="Random Forest Classifier")
 configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}},
                               "protected_attributes": ["race"], "positive_label": 1},
@@ -57,8 +57,3 @@ def test_feature_names():
 def test_estimator_counts():
     """Tests that the feature names are correct."""
     assert metrics['tree_model_metadata']['estimator_counts'] == clf.n_estimators
-
-
-def test_estimators():
-    """Tests that the feature names are correct."""
-    assert metrics['tree_model_metadata']['estimator_params'] == clf.estimators_

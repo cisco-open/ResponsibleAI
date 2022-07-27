@@ -27,8 +27,10 @@ features = [
 ]
 meta = MetaDatabase(features)
 
+output = Feature("Predicted value", "float", "Predicted value")
+
 reg = RandomForestRegressor(n_estimators=15, max_depth=20)
-model = Model(agent=reg, predict_fun=reg.predict, name="Cisco_RealEstate_AI", model_class="Random Forest Regressor")
+model = Model(agent=reg, output_features=output, predict_fun=reg.predict, name="Cisco_RealEstate_AI", model_class="Random Forest Regressor")
 
 configuration = {"equal_treatment": {"priv_groups": [("Gender", 1)]}}
 ai = AISystem("Regression example", task='regression', meta_database=meta, dataset=dataset, model=model, enable_certificates=False)
@@ -46,14 +48,20 @@ info = ai.get_metric_info()
 
 def test_moment_1():
     """Tests that the RAI moment 1 calculation is correct."""
-    assert_almost_equal(scipy.stats.moment(xTest, 1), metrics['stat_moment_group']['moment_1'], 6)
+    for i, feature in enumerate(features):
+        if not feature.categorical:
+            assert_almost_equal(scipy.stats.moment(xTest[:, i], 1), metrics['stat_moment_group']['moment_1'][features[i].name], 4)
 
 
 def test_moment_2():
     """Tests that the RAI moment 2 calculation is correct."""
-    assert_almost_equal(scipy.stats.moment(xTest, 2), metrics['stat_moment_group']['moment_2'], 6)
+    for i, feature in enumerate(features):
+        if not feature.categorical:
+            assert_almost_equal(scipy.stats.moment(xTest[:, i], 2), metrics['stat_moment_group']['moment_2'][features[i].name], 4)
 
 
 def test_moment_3():
     """Tests that the RAI moment 3 calculation is correct."""
-    assert_almost_equal(scipy.stats.moment(xTest, 3), metrics['stat_moment_group']['moment_3'], 6)
+    for i, feature in enumerate(features):
+        if not feature.categorical:
+            assert_almost_equal(scipy.stats.moment(xTest[:, i], 3), metrics['stat_moment_group']['moment_3'][features[i].name], 4)

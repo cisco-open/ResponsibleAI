@@ -25,7 +25,8 @@ features = [
 meta = MetaDatabase(features)
 
 reg = RandomForestRegressor(n_estimators=15, max_depth=20)
-model = Model(agent=reg, name="Cisco_RealEstate_AI", model_class="Random Forest Regressor")
+output = Feature("Predicted Value", "float", "Predicted Value")
+model = Model(agent=reg, output_features=output, name="Cisco_RealEstate_AI", model_class="Random Forest Regressor")
 
 configuration = {"equal_treatment": {"priv_groups": [("Gender", 1)]}}
 ai = AISystem("Regression example", task='regression', meta_database=meta, dataset=dataset, model=model, enable_certificates=False)
@@ -44,12 +45,12 @@ info = ai.get_metric_info()
 def test_pearson_correlation():
     """Tests that the RAI pearson correlation calculation is correct."""
     for i in range(len(features)):
-        assert metrics['correlation_stats_regression']['pearson_correlation'][i] == \
+        assert metrics['correlation_stats_regression']['pearson_correlation'][features[i].name] == \
                scipy.stats.pearsonr(xTest[:, i], yTest)
 
 
 def test_spearman_correlation():
     """Tests that the RAI spearman correlation calculation is correct."""
     for i in range(len(features)):
-        assert metrics['correlation_stats_regression']['spearman_correlation'][i] == \
+        assert metrics['correlation_stats_regression']['spearman_correlation'][features[i].name] == \
                scipy.stats.spearmanr(xTest[:, i], yTest)
