@@ -100,21 +100,16 @@ def torch_to_RAI(torch_item):
             x, y = val
             x = x.detach().numpy()
             y = y.detach().numpy()
-            result_x.append(x)
-            result_y.append(y)
+            for item in x:
+                result_x.append(item)
+            for item in y:
+                result_y.append(item)
         result_x = np.array(result_x)
         result_y = np.array(result_y)
         x_shape = list(result_x.shape)
-        x_shape[0] = -1
-        x_shape[1] = 1
+        x_shape.insert(1, 1)
         result_x = result_x.reshape(tuple(x_shape))
         result_y = result_y.reshape(-1)
-        '''
-        print("result_x: ", result_x.shape)
-        print("result_x[0]: ", result_x[0])
-        print("result_y:", result_y.shape)
-        print("result_y[0]: ", result_y[0])
-        '''
     elif isinstance(torch_item, torch.Tensor):
         result_x = np.array([[x] for x in torch_item])
     else:

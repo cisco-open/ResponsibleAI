@@ -1,26 +1,17 @@
 {
-    "name" : "image_generation",
-    "display_name": "Image Generation Performance",
+    "name" : "image_generation_inception",
+    "display_name": "Image Generation Inception",
     "compatibility": {"task_type": ["generate"],
                       "data_type": [],
                       "output_requirements": ["generate_image"],
-                      "dataset_requirements": ["y"]},
+                      "dataset_requirements": []},
     "src": "stats",
     "dependency_list": [],
     "tags": ["performance", "Classification"],
     "complexity_class": "linear",
     "metrics": {
-        "fid": {
-            "display_name": "Frechet Inception Distance",
-            "type": "Numeric",
-            "tags": [],
-            "has_range": false,
-            "range": [null, null],
-            "explanation": "",
-            "citation": ""
-        },
-        "kid": {
-            "display_name": "Kernel Inception Distance",
+        "inception": {
+            "display_name": "Inception Score",
             "type": "Dict",
             "tags": [],
             "has_range": false,

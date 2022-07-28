@@ -31,7 +31,7 @@ class Data:
     The RAI Data class contains X and y data for a single Data split (train, test, val).
     """
 
-    def __init__(self, X, y) -> None:
+    def __init__(self, X=None, y=None) -> None:
         self.X = X
         self.y = y
         self.categorical = None
@@ -57,9 +57,9 @@ class Data:
 
     # Splits up a dataset into its different data types, currently scalar and categorical
     def separate(self, scalar_mask, categorical_mask, image_mask):
-        self.scalar = self.X[:, scalar_mask]
-        self.categorical = self.X[:, categorical_mask]
-        self.image = self.X[:, image_mask]
+        self.scalar = self.X[:, scalar_mask] if self.X is not None else None
+        self.categorical = self.X[:, categorical_mask] if self.X is not None else None
+        self.image = self.X[:, image_mask] if self.X is not None else None
 
 
 class Dataset:

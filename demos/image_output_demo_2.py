@@ -13,6 +13,8 @@ import torch.optim as optim
 from torchvision import datasets, transforms
 
 # https://colab.research.google.com/drive/1Ozin9zX89xfoyn63o5B7l5bR5W_E1oy0#scrollTo=7hAFf5Ue4VP_
+from RAI.utils import torch_to_RAI
+
 manualSeed = 42
 random.seed(manualSeed)
 torch.manual_seed(manualSeed)
@@ -209,10 +211,19 @@ def main():
                   description="Text Summarizer", model_class="gan")
     configuration = {"time_complexity": "polynomial"}
 
-    ai = AISystem(name="Text_Summarizer_t5", task='generate', meta_database=MetaDatabase([]), dataset=Dataset({}), model=model)
+    transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+    testset = datasets.CIFAR10(root='./data', train=False, download=True, transform=transform)
+    testloader = torch.utils.data.DataLoader(testset, batch_size=config.batch_size, shuffle=True, num_workers=config.workers)
+    xTestData, yTestData = torch_to_RAI(testloader)
+
+    dataset = Dataset({"cifar": Data(None, xTestData)})
+    image = Feature('Cifar Images', 'Image', 'The 32x32 input image')
+    meta = MetaDatabase([image])
+
+    ai = AISystem(name="Text_Summarizer_t5", task='generate', meta_database=meta, dataset=dataset, model=model)
     ai.initialize(user_config=configuration)
 
-    ai.compute({"generate_image": generated}, tag='epoch_1_generations')
+    ai.compute({"cifar": {"generate_image": generated}}, tag='epoch_1_generations')
 
     if use_dashboard:
         r = RaiRedis(ai)
