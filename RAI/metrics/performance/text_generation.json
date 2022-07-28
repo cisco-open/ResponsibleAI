@@ -1,0 +1,59 @@
+{
+    "name" : "text_generation",
+    "display_name": "Text Generation Performance",
+    "compatibility": {"task_type": ["generate"],
+                      "data_type": [],
+                      "output_requirements": ["generate_text"],
+                      "dataset_requirements": ["y"]},
+    "src": "stats",
+    "dependency_list": [],
+    "tags": ["generation", "text"],
+    "complexity_class": "linear",
+    "metrics": {
+        "rouge_1": {
+            "display_name": "Rouge 1 Score",
+            "type": "Dict",
+            "tags": [],
+            "has_range": false,
+            "range": [null, null],
+            "explanation": "",
+            "citation": ""
+        },
+        "rouge_2": {
+            "display_name": "Rouge 2 Score",
+            "type": "Dict",
+            "tags": [],
+            "has_range": false,
+            "range": [null, null],
+            "explanation": "",
+            "citation": ""
+        },
+        "rouge_l": {
+            "display_name": "Rouge L Score",
+            "type": "Dict",
+            "tags": [],
+            "has_range": false,
+            "range": [null, null],
+            "explanation": "",
+            "citation": ""
+        },
+        "rouge_l_sum": {
+            "display_name": "Rouge L sum Score",
+            "type": "Dict",
+            "tags": [],
+            "has_range": false,
+            "range": [null, null],
+            "explanation": "",
+            "citation": ""
+        },
+        "bleu": {
+            "display_name": "Bleu Score",
+            "type": "Numeric",
+            "tags": [],
+            "has_range": false,
+            "range": [null, null],
+            "explanation": "",
+            "citation": ""
+        }
+    }
+}

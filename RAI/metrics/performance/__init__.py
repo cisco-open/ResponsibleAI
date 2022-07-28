@@ -3,3 +3,4 @@ from .performance_reg import PerformanceRegMetricGroup
 from .performance_cl_probas import PerformanceClassificationProbasMetricGroup
 from .image_generation_inception import ImageGenerationInception
 from .image_generation import ImageGeneration
+from .text_generation import TextGeneration

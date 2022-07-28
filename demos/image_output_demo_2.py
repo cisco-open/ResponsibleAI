@@ -238,7 +238,6 @@ def main():
     analysis = AnalysisManager()
     print("available analysis: ", analysis.get_available_analysis(ai, "test"))
     result = analysis.run_all(ai, "test", "Test run!")
-    # result = analysis.run_analysis(ai, "test", "CleverUntargetedScore", "Testing")
     for analysis in result:
         print("Analysis: " + analysis)
         print(result[analysis].to_string())

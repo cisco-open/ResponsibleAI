@@ -48,7 +48,7 @@ def main():
     ai = AISystem(name="Text_Summarizer_t5", task='generate', meta_database=meta, dataset=dataset, model=model)
     ai.initialize(user_config=configuration)
 
-    ai.compute({"test": {"": preds}}, tag='initial_preds')
+    ai.compute({"test": {"generate_text": preds}}, tag='initial_preds')
 
     if use_dashboard:
         r = RaiRedis(ai)
