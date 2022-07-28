@@ -7,53 +7,53 @@
                       "dataset_requirements": ["y"]},
     "src": "stats",
     "dependency_list": [],
-    "tags": ["generation", "text"],
+    "tags": ["performance", "text"],
     "complexity_class": "linear",
     "metrics": {
         "rouge_1": {
             "display_name": "Rouge 1 Score",
             "type": "Dict",
             "tags": [],
-            "has_range": false,
-            "range": [null, null],
-            "explanation": "",
-            "citation": ""
+            "has_range": true,
+            "range": [0, 1],
+            "explanation": "ROUGE stands for Recall-Oriented Understudy for Gisting Evaluation. \nROUGE 1 describes the precision and recall for unigrams between the generated and ground truth text.\nAn optimal score is 1.0.",
+            "citation": "@inproceedings{lin-2004-rouge,\n    title = \"{ROUGE}: A Package for Automatic Evaluation of Summaries\",\n    author = \"Lin, Chin-Yew\",\n    booktitle = \"Text Summarization Branches Out\",\n    month = jul,\n    year = \"2004\",\n    address = \"Barcelona, Spain\",\n    publisher = \"Association for Computational Linguistics\",\n    url = \"https://aclanthology.org/W04-1013\",\n    pages = \"74--81\",\n}"
         },
         "rouge_2": {
             "display_name": "Rouge 2 Score",
             "type": "Dict",
             "tags": [],
-            "has_range": false,
-            "range": [null, null],
-            "explanation": "",
-            "citation": ""
+            "has_range": true,
+            "range": [0, 1],
+            "explanation": "ROUGE stands for Recall-Oriented Understudy for Gisting Evaluation. \nROUGE 2 describes the precision and recall for bigrams between the generated and ground truth text.\nAn optimal score is 1.0.",
+            "citation": "@inproceedings{lin-2004-rouge,\n    title = \"{ROUGE}: A Package for Automatic Evaluation of Summaries\",\n    author = \"Lin, Chin-Yew\",\n    booktitle = \"Text Summarization Branches Out\",\n    month = jul,\n    year = \"2004\",\n    address = \"Barcelona, Spain\",\n    publisher = \"Association for Computational Linguistics\",\n    url = \"https://aclanthology.org/W04-1013\",\n    pages = \"74--81\",\n}"
         },
         "rouge_l": {
             "display_name": "Rouge L Score",
             "type": "Dict",
             "tags": [],
-            "has_range": false,
-            "range": [null, null],
-            "explanation": "",
-            "citation": ""
+            "has_range": true,
+            "range": [0, 1],
+            "explanation": "ROUGE stands for Recall-Oriented Understudy for Gisting Evaluation. \nROUGE L describes the precision and recall for the longest common subsequences.\nAn optimal score is 1.0.",
+            "citation": "@inproceedings{lin-2004-rouge,\n    title = \"{ROUGE}: A Package for Automatic Evaluation of Summaries\",\n    author = \"Lin, Chin-Yew\",\n    booktitle = \"Text Summarization Branches Out\",\n    month = jul,\n    year = \"2004\",\n    address = \"Barcelona, Spain\",\n    publisher = \"Association for Computational Linguistics\",\n    url = \"https://aclanthology.org/W04-1013\",\n    pages = \"74--81\",\n}"
         },
         "rouge_l_sum": {
             "display_name": "Rouge L sum Score",
             "type": "Dict",
             "tags": [],
-            "has_range": false,
-            "range": [null, null],
-            "explanation": "",
-            "citation": ""
+            "has_range": true,
+            "range": [0, 1],
+            "explanation": "ROUGE stands for Recall-Oriented Understudy for Gisting Evaluation. \nROUGE LSum looks at precision and recall among generated and reference sentences.\nAn optimal score is 1.0.",
+            "citation": "@inproceedings{lin-2004-rouge,\n    title = \"{ROUGE}: A Package for Automatic Evaluation of Summaries\",\n    author = \"Lin, Chin-Yew\",\n    booktitle = \"Text Summarization Branches Out\",\n    month = jul,\n    year = \"2004\",\n    address = \"Barcelona, Spain\",\n    publisher = \"Association for Computational Linguistics\",\n    url = \"https://aclanthology.org/W04-1013\",\n    pages = \"74--81\",\n}"
         },
         "bleu": {
             "display_name": "Bleu Score",
             "type": "Numeric",
             "tags": [],
-            "has_range": false,
-            "range": [null, null],
-            "explanation": "",
-            "citation": ""
+            "has_range": true,
+            "range": [0, 1],
+            "explanation": "BLEU calculates the precision for n-gram overlaps between the generated and ground truth text. \nBLEU further penalizes generated text which is too short.\nThe best value is 1.0.",
+            "citation": "ACM Digital Library home \nACM home\nBrowseAbout\nSign in Register\nJournals\nMagazines\nProceedings\nBooks\nSIGs\nConferences\nPeople\nSearch ACM Digital Library\nSearch ACM Digital Library\n\n Advanced Search\nConference\nProceedings\nUpcoming Events\nAuthors\nAffiliations\nAward Winners\nHomeConferencesACLProceedingsACL '02BLEU: a method for automatic evaluation of machine translation\nARTICLE FREE ACCESS\nSHARE ON\nBLEU: a method for automatic evaluation of machine translation\nAuthors: \nKishore Papineni\n\n, \nSalim Roukos\n\n, \nTodd Ward\n\n, \nWei-Jing Zhu\n\n Authors Info & Claims\nACL '02: Proceedings of the 40th Annual Meeting on Association for Computational LinguisticsJuly 2002 Pages 311–318https://doi.org/10.3115/1073083.1073135\nOnline:06 July 2002Publication History\n1,552citation18,576Downloads\n \neReaderPDF\nACL '02: Proceedings of the 40th Annual Meeting on Association for Computational Linguistics\nBLEU: a method for automatic evaluation of machine translation\nPages 311–318\nPreviousNext\nABSTRACT\nReferences\nIndex Terms\nComments\nACM Digital Library\nABSTRACT\nHuman evaluations of machine translation are extensive but expensive. Human evaluations can take months to finish and involve human labor that can not be reused. We propose a method of automatic machine translation evaluation that is quick, inexpensive, and language-independent, that correlates highly with human evaluation, and that has little marginal cost per run. We present this method as an automated understudy to skilled human judges which substitutes for them when there is need for quick or frequent evaluations.\n\nReferences\nE. H. Hovy. 1999. Toward finely differentiated evaluation metrics for machine translation. In Proceedings of the Eagles Workshop on Standards and Evaluation, Pisa, Italy.Google Scholar\nKishore Papineni, Salim Roukos, Todd Ward, John Henderson, and Florence Reeder. 2002. Corpus-based comprehensive and diagnostic MT evaluation: Initial Arabic, Chinese, French, and Spanish results. In Proceedings of Human Language Technology 2002, San Diego, CA. To appear. Google ScholarDigital Library\nFlorence Reeder. 2001. Additional mt-eval references. Technical report, International Standards for Language Engineering, Evaluation Working Group. http://issco-www.unige.ch/projects/isle/taxonomy2/Google Scholar\nShow All References\nIndex Terms (auto-classified)\nBLEU: a method for automatic evaluation of machine translation\nApplied computing\n\nArts and humanities\n\nLanguage translation\n\nComputing methodologies\n\nArtificial intelligence\n\nNatural language processing\n\nHardware\n\nPower and energy\n\nPower estimation and optimization\n\nPlatform power issues\n\nComments\n\n4References\nView Table Of Contents\nBack\nClose modal\nExport Citations\n\nBibTeX\n@inproceedings{10.3115/1073083.1073135,\nauthor = {Papineni, Kishore and Roukos, Salim and Ward, Todd and Zhu, Wei-Jing},\ntitle = {BLEU: A Method for Automatic Evaluation of Machine Translation},\nyear = {2002},\npublisher = {Association for Computational Linguistics},\naddress = {USA},\nurl = {https://doi.org/10.3115/1073083.1073135},\ndoi = {10.3115/1073083.1073135},\nabstract = {Human evaluations of machine translation are extensive but expensive. Human evaluations can take months to finish and involve human labor that can not be reused. We propose a method of automatic machine translation evaluation that is quick, inexpensive, and language-independent, that correlates highly with human evaluation, and that has little marginal cost per run. We present this method as an automated understudy to skilled human judges which substitutes for them when there is need for quick or frequent evaluations.},\nbooktitle = {Proceedings of the 40th Annual Meeting on Association for Computational Linguistics},\npages = {311–318},\nnumpages = {8},\nlocation = {Philadelphia, Pennsylvania},\nseries = {ACL '02}\n}\n\n\nCategories\nJournals\nMagazines\nBooks\nProceedings\nSIGs\nConferences\nCollections\nPeople\nAbout\nAbout ACM Digital Library\nACM Digital Library Board\nSubscription Information\nAuthor Guidelines\nUsing ACM Digital Library\nAll Holdings within the ACM Digital Library\nACM Computing Classification System\nDigital Library Accessibility\nJoin\nJoin ACM\nJoin SIGs\nSubscribe to Publications\nInstitutions and Libraries\nConnect\nContact\nFacebook\nTwitter\nLinkedin\nThe ACM Digital Library is published by the Association for Computing Machinery. Copyright © 2022 ACM, Inc.\nTerms of Usage Privacy Policy Code of Ethics\nACM Digital Library home ACM home\nPowered by"
         }
     }
 }

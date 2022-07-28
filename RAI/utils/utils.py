@@ -138,7 +138,6 @@ def df_to_RAI(df, test_tf=None, target_column=None, clear_nans=True, extra_symbo
         categorical = str(y.dtypes) in ["object", "category"]
         f = None
         if y.name in text_columns:
-            print("y is text")
             f = Feature(y.name, "Text", y.name)
             y = y.tolist()
         elif categorical:
@@ -157,7 +156,6 @@ def df_to_RAI(df, test_tf=None, target_column=None, clear_nans=True, extra_symbo
 
     for c in df:
         if c in text_columns:
-            print(c, ", in text columns")
             f = Feature(c, "Text", c)
         elif str(df.dtypes[c]) in ["object", "category"]:
             fact = df[c].factorize(sort=True)

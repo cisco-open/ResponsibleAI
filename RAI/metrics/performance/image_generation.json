@@ -7,26 +7,26 @@
                       "dataset_requirements": ["y"]},
     "src": "stats",
     "dependency_list": [],
-    "tags": ["performance", "Classification"],
+    "tags": ["performance", "image"],
     "complexity_class": "linear",
     "metrics": {
         "fid": {
             "display_name": "Frechet Inception Distance",
             "type": "Numeric",
             "tags": [],
-            "has_range": false,
-            "range": [null, null],
-            "explanation": "",
-            "citation": ""
+            "has_range": true,
+            "range": [1, 1000],
+            "explanation": "Evaluates generated images on their quality. Estimates image quality by the ability of the Inception model to classify it as one of 1000 known categories.\nThe worst value is 1, and the best value is 1000.",
+            "citation": "@inproceedings{NIPS2017_8a1d6947,\n author = {Heusel, Martin and Ramsauer, Hubert and Unterthiner, Thomas and Nessler, Bernhard and Hochreiter, Sepp},\n booktitle = {Advances in Neural Information Processing Systems},\n editor = {I. Guyon and U. Von Luxburg and S. Bengio and H. Wallach and R. Fergus and S. Vishwanathan and R. Garnett},\n pages = {},\n publisher = {Curran Associates, Inc.},\n title = {GANs Trained by a Two Time-Scale Update Rule Converge to a Local Nash Equilibrium},\n url = {https://proceedings.neurips.cc/paper/2017/file/8a1d694707eb0fefe65871369074926d-Paper.pdf},\n volume = {30},\n year = {2017}\n}\n\n"
         },
         "kid": {
             "display_name": "Kernel Inception Distance",
             "type": "Dict",
             "tags": [],
-            "has_range": false,
+            "has_range": true,
             "range": [null, null],
-            "explanation": "",
-            "citation": ""
+            "explanation": "Measures how different the distributions of generated and ground truth images are.\nLower values are better.",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1801.01401,\n  doi = {10.48550/ARXIV.1801.01401},\n  \n  url = {https://arxiv.org/abs/1801.01401},\n  \n  author = {Bińkowski, Mikołaj and Sutherland, Danica J. and Arbel, Michael and Gretton, Arthur},\n  \n  keywords = {Machine Learning (stat.ML), Machine Learning (cs.LG), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {Demystifying MMD GANs},\n  \n  publisher = {arXiv},\n  \n  year = {2018},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
         }
     }
 }

@@ -1,5 +1,3 @@
-from matplotlib import pyplot as plt
-
 from RAI.metrics.metric_group import MetricGroup
 import os
 from torchmetrics.image.inception import InceptionScore

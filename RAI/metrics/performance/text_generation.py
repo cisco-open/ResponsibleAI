@@ -1,10 +1,6 @@
-from nltk.translate.bleu_score import SmoothingFunction, corpus_bleu
-
+from nltk.translate.bleu_score import corpus_bleu
 from RAI.metrics.metric_group import MetricGroup
 import os
-from torchmetrics.image.fid import FrechetInceptionDistance
-from torchmetrics.image.kid import KernelInceptionDistance
-import torch
 from torchmetrics.text.rouge import ROUGEScore
 import numpy as np
 
