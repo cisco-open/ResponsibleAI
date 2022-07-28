@@ -1,8 +1,9 @@
 import numpy as np
 
 class DataSummarizer:
-    def __init__(self, dataset, task):
+    def __init__(self, dataset, possibleYs, task):
         self.dataset = dataset 
+        self.label_name_dict = {str(l): possibleYs[l] for l in possibleYs}
         self.task = task
         self.train_data = self.dataset.data_dict["train"]
         self.test_data = self.dataset.data_dict["test"]
@@ -15,19 +16,13 @@ class DataSummarizer:
         self.test_X = self.test_data.X
         self.test_y = self.test_data.y
         self.target = self.dataset.target
-        self.y_name = self.dataset.y_name
-        self.n_label = len(self.y_name)
+        self.n_label = len(self.label_name_dict)
         self.labels = [str(l) for l in range(self.n_label)]
-        self.label_name_dict = None
-
-        if self.task in ("binary_classification", "classification") and self.y_name is not None:
-            self.label_name_dict = {l: self.y_name[int(l)] for l in self.labels}
 
 
     def setLabelDistribution(self):
         # dict with "train": distribution, "test": distribution
         train_y_dict, test_y_dict = dict(), dict()
-        print(self.train_y[:10], self.labels)
         for label in self.labels:
             l_name = label
             if self.label_name_dict is not None:

@@ -36,9 +36,9 @@ def main():
                                              shuffle=False, num_workers=2)
 
     print("Converting test data")
-    xTestData, yTestData = torch_to_RAI(testloader)
+    xTestData, yTestData, rawXTestData = torch_to_RAI(testloader)
     print("Converting train data")
-    xTrainData, yTrainData = torch_to_RAI(trainloader)
+    xTrainData, yTrainData, rawXTrainData = torch_to_RAI(trainloader)
     print("Done data conversion")
 
     classes = ('plane', 'car', 'bird', 'cat',
@@ -47,20 +47,30 @@ def main():
     class Net(nn.Module):
         def __init__(self):
             super().__init__()
-            self.conv1 = nn.Conv2d(3, 6, 5)
-            self.pool = nn.MaxPool2d(2, 2)
-            self.conv2 = nn.Conv2d(6, 16, 5)
-            self.fc1 = nn.Linear(16 * 5 * 5, 120)
-            self.fc2 = nn.Linear(120, 84)
-            self.fc3 = nn.Linear(84, 10)
+            self.features_conv = nn.Sequential(
+                nn.Conv2d(3, 6, 5),
+                nn.ReLU(),
+                nn.MaxPool2d(2, 2),
+                nn.Conv2d(6, 16, 5),
+                nn.ReLU(),
+            )
+            self.f1 = nn.Sequential(
+                nn.MaxPool2d(2, 2),
+            )
+            self.flatten = True  # True if flatten is needed for fc
+            self.classifier = nn.Sequential(
+                nn.Linear(16 * 5 * 5, 120),
+                nn.ReLU(),
+                nn.Linear(120, 84),
+                nn.ReLU(),
+                nn.Linear(84, 10)
+            )
 
         def forward(self, x):
-            x = self.pool(F.relu(self.conv1(x)))
-            x = self.pool(F.relu(self.conv2(x)))
-            x = torch.flatten(x, 1)  # flatten all dimensions except batch
-            x = F.relu(self.fc1(x))
-            x = F.relu(self.fc2(x))
-            x = self.fc3(x)
+            x = self.features_conv(x)
+            x = self.f1(x)
+            x = torch.flatten(x,1)
+            x = self.classifier(x)
             return x
 
     net = Net()
@@ -91,15 +101,28 @@ def main():
     else:
         train()
 
+
+
+
     image = Feature('Image', 'Image', 'The 32x32 input image')
     outputs = Feature('image_type', 'numerical', 'The type of image', categorical=True,
                       values={i: v for i, v in enumerate(classes)})
     meta = MetaDatabase([image])
     model = Model(agent=net, output_features=outputs, name="conv_net", predict_fun=net, description="ConvNet", model_class="ConvNet")
     configuration = {"time_complexity": "polynomial"}
-    dataset = Dataset({"train": Data(xTrainData, yTrainData), "test": Data(xTestData, yTestData)})
-    ai = AISystem(name="CIFAR_Conv_1",  task='classification', meta_database=meta, dataset=dataset, model=model)
+    dataset = Dataset({"train": Data(xTrainData, yTrainData, rawXTrainData), "test": Data(xTestData, yTestData, rawXTestData)})
+
+    # Select the images to visually interpret (Grad-CAM)
+    interpretMethods = ["gradcam"]
+
+
+    ai = AISystem(name="CIFAR_Conv_1", task='classification', meta_database=meta, dataset=dataset, model=model, interpret_methods=interpretMethods)
     ai.initialize(user_config=configuration)
+
+
+
+
+
 
     preds = []
     for i, vals in enumerate(testloader, 0):

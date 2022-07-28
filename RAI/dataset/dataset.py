@@ -31,12 +31,14 @@ class Data:
     The RAI Data class contains X and y data for a single Data split (train, test, val).
     """
 
-    def __init__(self, X, y) -> None:
+    def __init__(self, X, y, rawX=None) -> None:
         self.X = X
         self.y = y
+        self.rawX = rawX 
         self.categorical = None
         self.scalar = None
         self.image = None
+        self.get_index = False
 
     def __len__(self):
         shape = np.shape(self.X)
@@ -49,11 +51,22 @@ class Data:
         if len(shape) == 1:
             if key != 0:
                 raise IndexError()
+            if self.get_index:
+                return self.X, self.Y, key 
             return self.X, self.Y
+        if self.get_index:
+            if self.y is None:
+                return self.X[key], None, key
+            else:
+                return self.X[key], self.y[key], key
+
         if self.y is None:
-            return self.X[key], None
+            return self.X[key], None,
         else:
             return self.X[key], self.y[key]
+
+    def getRawItem(self, key):
+        return self.rawX[key]
 
     # Splits up a dataset into its different data types, currently scalar and categorical
     def separate(self, scalar_mask, categorical_mask, image_mask):

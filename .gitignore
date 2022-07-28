@@ -2,6 +2,7 @@
 DashboardJS/
 data/cifar-10-batches-py
 data/cifar-10-python.tar.gz
+data/CIFAR_Conv_1_dataset
 cifar_net.pth
 datasets/
 cProfileExport

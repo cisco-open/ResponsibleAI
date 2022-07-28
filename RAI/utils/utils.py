@@ -6,6 +6,7 @@ import torch
 import torch.utils.data
 from sklearn.preprocessing import StandardScaler
 from RAI.dataset.dataset import Feature, MetaDatabase
+import torchvision.transforms as transforms
 
 __all__ = ['jsonify', 'compare_runtimes', 'df_to_meta_database', 'df_to_RAI', 'reweighing',
            'calculate_per_mapped_features', 'convert_float32_to_float64',
@@ -95,7 +96,23 @@ def df_remove_nans(df, extra_symbols):
 def torch_to_RAI(torch_item):
     result_x = []
     result_y = []
+    raw_result_x = []
     if isinstance(torch_item, torch.utils.data.DataLoader):
+        transform = torch_item.dataset.transform
+        torch_item.dataset.transform = transforms.ToTensor() 
+
+        for i, val in enumerate(torch_item, 0):
+            x, _ = val
+            x = x.detach().numpy()
+            raw_result_x.append(x)
+        raw_result_x = np.array(raw_result_x)
+        x_shape = list(raw_result_x.shape)
+        x_shape[0] = -1
+        x_shape[1] = 1
+        raw_result_x = raw_result_x.reshape(tuple(x_shape)).squeeze()
+
+        torch_item.transform = transform 
+
         for i, val in enumerate(torch_item, 0):
             x, y = val
             x = x.detach().numpy()
@@ -116,10 +133,10 @@ def torch_to_RAI(torch_item):
         print("result_y[0]: ", result_y[0])
         '''
     elif isinstance(torch_item, torch.Tensor):
-        result_x = np.array([[x] for x in torch_item])
+        result_x = raw_result_x = np.array([[x] for x in torch_item])
     else:
         assert "torch_item must be of type DataLoader or Tensor"
-    return result_x, result_y
+    return result_x, result_y, raw_result_x 
 
 
 # Converts a pandas dataframe to a Rai Metadatabase and X and y data.
