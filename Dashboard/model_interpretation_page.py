@@ -77,6 +77,7 @@ def display_gradcam_imgs(c_name):
             print("Correct img", i, ", ", correct_img)
             print("Correct img ", i, ", ", correct_img.shape)
             fig = go.Figure(go.Image(z=correct_img.tolist()))
+            fig.update_xaxes(showticklabels=False).update_yaxes(showticklabels=False)
             return [html.Div(id="test_image_container", children=[dcc.Graph(figure=fig)])]
             # return dbc.Table([go.Figure(go.Image(z=correct_img))])
             print("Correct heatmap ", i, ", ", correct_heatmap.shape)
