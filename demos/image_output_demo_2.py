@@ -220,7 +220,7 @@ def main():
     image = Feature('Cifar Images', 'Image', 'The 32x32 input image')
     meta = MetaDatabase([image])
 
-    ai = AISystem(name="Text_Summarizer_t5", task='generate', meta_database=meta, dataset=dataset, model=model)
+    ai = AISystem(name="gan_cifar_x_y", task='generate', meta_database=meta, dataset=dataset, model=model)
     ai.initialize(user_config=configuration)
 
     ai.compute({"cifar": {"generate_image": generated}}, tag='epoch_1_generations')

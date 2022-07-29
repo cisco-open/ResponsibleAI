@@ -209,7 +209,7 @@ def main():
                   description="Text Summarizer", model_class="gan")
     configuration = {"time_complexity": "polynomial"}
 
-    ai = AISystem(name="Text_Summarizer_t5", task='generate', meta_database=MetaDatabase([]), dataset=Dataset({}), model=model)
+    ai = AISystem(name="gan_cifar_x", task='generate', meta_database=MetaDatabase([]), dataset=Dataset({}), model=model)
     ai.initialize(user_config=configuration)
 
     ai.compute({"generate_image": generated}, tag='epoch_1_generations')
