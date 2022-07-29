@@ -1,0 +1,131 @@
+{
+    "name" : "performance_cl",
+    "display_name": "Classification Performance Metrics",
+    "compatibility": {"task_type": ["classification"],
+                      "data_type": [],
+                      "output_requirements": ["predict"],
+                      "dataset_requirements": ["y"]},
+    "src": "stats",
+    "dependency_list": [],
+    "tags": ["performance", "Classification"],
+    "complexity_class": "linear",
+    "metrics": {
+        "accuracy": {
+            "display_name": "Accuracy",
+            "type": "Numeric",
+            "tags": [],
+            "has_range": true,
+            "range": [0, 1],
+            "explanation": "The proportion of correct predictions among the total number of cases processed.\nThe ideal value is 1.0.",
+            "citation": "@article{scikit-learn,\n    title={Scikit-learn: Machine Learning in {P}ython},\n    author={Pedregosa, F. and Varoquaux, G. and Gramfort, A. and Michel, V.\n    and Thirion, B. and Grisel, O. and Blondel, M. and Prettenhofer, P.\n    and Weiss, R. and Dubourg, V. and Vanderplas, J. and Passos, A. and\n    Cournapeau, D. and Brucher, M. and Perrot, M. and Duchesnay, E.},\n    journal={Journal of Machine Learning Research},\n    volume={12},\n    pages={2825--2830},\n    year={2011}\n}"
+        },
+        "balanced_accuracy": {
+            "display_name": "Balanced Accuracy",
+            "type": "Numeric",
+            "tags": [],
+            "has_range": true,
+            "range": [0, 1],
+            "explanation": "Describes the proportion of correct predictions averaged across each label.\nThe ideal value is 1.0.",
+            "citation": "@article{scikit-learn,\n    title={Scikit-learn: Machine Learning in {P}ython},\n    author={Pedregosa, F. and Varoquaux, G. and Gramfort, A. and Michel, V.\n    and Thirion, B. and Grisel, O. and Blondel, M. and Prettenhofer, P.\n    and Weiss, R. and Dubourg, V. and Vanderplas, J. and Passos, A. and\n    Cournapeau, D. and Brucher, M. and Perrot, M. and Duchesnay, E.},\n    journal={Journal of Machine Learning Research},\n    volume={12},\n    pages={2825--2830},\n    year={2011}\n}"
+        },
+        "confusion_matrix": {
+            "display_name": "Confusion Matrix",
+            "type": "Matrix",
+            "tags": [],
+            "has_range": false,
+            "range": null,
+            "explanation": "A Confusion Matrix C is a matrix C such that C(i,j) is equal to the number of observations known to be in group i and predicted to be in group j.",
+            "citation": "@article{scikit-learn,\n    title={Scikit-learn: Machine Learning in {P}ython},\n    author={Pedregosa, F. and Varoquaux, G. and Gramfort, A. and Michel, V.\n    and Thirion, B. and Grisel, O. and Blondel, M. and Prettenhofer, P.\n    and Weiss, R. and Dubourg, V. and Vanderplas, J. and Passos, A. and\n    Cournapeau, D. and Brucher, M. and Perrot, M. and Duchesnay, E.},\n    journal={Journal of Machine Learning Research},\n    volume={12},\n    pages={2825--2830},\n    year={2011}\n}"
+        },
+        "f1": {
+            "display_name": "F1 Score",
+            "type": "Vector_no_display",
+            "tags": [],
+            "has_range": true,
+            "range": [0, 1],
+            "explanation": "Can be interpreted as a harmonic mean of the precision and recall.\nThe formula for the F1 score is: F1 = 2 * (precision * recall) / (precision + recall)\nThe idea value is 1.0 and the worst value is 0.0.",
+            "citation": "@article{scikit-learn,\n    title={Scikit-learn: Machine Learning in {P}ython},\n    author={Pedregosa, F. and Varoquaux, G. and Gramfort, A. and Michel, V.\n    and Thirion, B. and Grisel, O. and Blondel, M. and Prettenhofer, P.\n    and Weiss, R. and Dubourg, V. and Vanderplas, J. and Passos, A. and\n    Cournapeau, D. and Brucher, M. and Perrot, M. and Duchesnay, E.},\n    journal={Journal of Machine Learning Research},\n    volume={12},\n    pages={2825--2830},\n    year={2011}\n}"
+        },
+        "f1_avg": {
+            "display_name": "Average F1 Score",
+            "type": "Numeric",
+            "tags": [],
+            "has_range": true,
+            "range": [0, 1],
+            "explanation": "Can be interpreted as a harmonic mean of the precision and recall.\nThe formula for the F1 score is: F1 = 2 * (precision * recall) / (precision + recall)\nThe idea value is 1.0 and the worst value is 0.0.",
+            "citation": "@article{scikit-learn,\n    title={Scikit-learn: Machine Learning in {P}ython},\n    author={Pedregosa, F. and Varoquaux, G. and Gramfort, A. and Michel, V.\n    and Thirion, B. and Grisel, O. and Blondel, M. and Prettenhofer, P.\n    and Weiss, R. and Dubourg, V. and Vanderplas, J. and Passos, A. and\n    Cournapeau, D. and Brucher, M. and Perrot, M. and Duchesnay, E.},\n    journal={Journal of Machine Learning Research},\n    volume={12},\n    pages={2825--2830},\n    year={2011}\n}"
+        },
+        "fp_rate_avg": {
+            "display_name": "Average False Positive Rate",
+            "type": "Numeric",
+            "tags": [],
+            "has_range": true,
+            "range": [0, 1],
+            "explanation": "Describes the percentage of negative examples incorrectly predicted to be positive.\nThe ideal value is 0.0.",
+            "citation": "@article{scikit-learn,\n    title={Scikit-learn: Machine Learning in {P}ython},\n    author={Pedregosa, F. and Varoquaux, G. and Gramfort, A. and Michel, V.\n    and Thirion, B. and Grisel, O. and Blondel, M. and Prettenhofer, P.\n    and Weiss, R. and Dubourg, V. and Vanderplas, J. and Passos, A. and\n    Cournapeau, D. and Brucher, M. and Perrot, M. and Duchesnay, E.},\n    journal={Journal of Machine Learning Research},\n    volume={12},\n    pages={2825--2830},\n    year={2011}\n}"
+        },
+        "fp_rate": {
+            "display_name": "False Positive Rate",
+            "type": "Vector_no_display",
+            "tags": [],
+            "has_range": true,
+            "range": [0, 1],
+            "explanation": "Describes the percentage of negative examples incorrectly predicted to be positive.\nThe ideal value is 0.0.",
+            "citation": "@article{scikit-learn,\n    title={Scikit-learn: Machine Learning in {P}ython},\n    author={Pedregosa, F. and Varoquaux, G. and Gramfort, A. and Michel, V.\n    and Thirion, B. and Grisel, O. and Blondel, M. and Prettenhofer, P.\n    and Weiss, R. and Dubourg, V. and Vanderplas, J. and Passos, A. and\n    Cournapeau, D. and Brucher, M. and Perrot, M. and Duchesnay, E.},\n    journal={Journal of Machine Learning Research},\n    volume={12},\n    pages={2825--2830},\n    year={2011}\n}"
+        },
+        "jaccard_score": {
+            "display_name": "Jaccard Score",
+            "type": "Vector_no_display",
+            "tags": [],
+            "has_range": true,
+            "range": [0, 1],
+            "explanation": "Measures the similarity of two two sets of data, and returns a result from 0 to 100%.\nIt is the size of the intersection divided by the size of the union of two label sets.\nIt is used to compare set of predicted labels for a sample to the corresponding set of labels in y_true.\nThe ideal score is 1.0.",
+            "citation": "@article{scikit-learn,\n    title={Scikit-learn: Machine Learning in {P}ython},\n    author={Pedregosa, F. and Varoquaux, G. and Gramfort, A. and Michel, V.\n    and Thirion, B. and Grisel, O. and Blondel, M. and Prettenhofer, P.\n    and Weiss, R. and Dubourg, V. and Vanderplas, J. and Passos, A. and\n    Cournapeau, D. and Brucher, M. and Perrot, M. and Duchesnay, E.},\n    journal={Journal of Machine Learning Research},\n    volume={12},\n    pages={2825--2830},\n    year={2011}\n}"
+        },
+        "jaccard_score_avg": {
+            "display_name": "Average Jaccard Score",
+            "type": "Numeric",
+            "tags": [],
+            "has_range": true,
+            "range": [0, 1],
+            "explanation": "Measures the similarity of two two sets of data, and returns a result from 0 to 100%.\nIt is the size of the intersection divided by the size of the union of two label sets.\n It is used to compare set of predicted labels for a sample to the corresponding set of labels in y_true.\nThe ideal score is 1.0.",
+            "citation": "@article{scikit-learn,\n    title={Scikit-learn: Machine Learning in {P}ython},\n    author={Pedregosa, F. and Varoquaux, G. and Gramfort, A. and Michel, V.\n    and Thirion, B. and Grisel, O. and Blondel, M. and Prettenhofer, P.\n    and Weiss, R. and Dubourg, V. and Vanderplas, J. and Passos, A. and\n    Cournapeau, D. and Brucher, M. and Perrot, M. and Duchesnay, E.},\n    journal={Journal of Machine Learning Research},\n    volume={12},\n    pages={2825--2830},\n    year={2011}\n}"
+        },
+        "precision_score": {
+            "display_name": "Precision Score",
+            "type": "Vector_no_display",
+            "tags": [],
+            "has_range": true,
+            "range": [0, 1],
+            "explanation": "The percentage of positive predictions that were correct.\nIndicates a models ability to not label a positive sample as negative.\nIdeal value is 1.0.",
+            "citation": "@article{scikit-learn,\n    title={Scikit-learn: Machine Learning in {P}ython},\n    author={Pedregosa, F. and Varoquaux, G. and Gramfort, A. and Michel, V.\n    and Thirion, B. and Grisel, O. and Blondel, M. and Prettenhofer, P.\n    and Weiss, R. and Dubourg, V. and Vanderplas, J. and Passos, A. and\n    Cournapeau, D. and Brucher, M. and Perrot, M. and Duchesnay, E.},\n    journal={Journal of Machine Learning Research},\n    volume={12},\n    pages={2825--2830},\n    year={2011}\n}"
+        },
+        "precision_score_avg": {
+            "display_name": "Average Precision Score",
+            "type": "Numeric",
+            "tags": [],
+            "has_range": true,
+            "range": [0, 1],
+            "explanation": "The percentage of positive predictions that were correct.\nIndicates a models ability to not label a positive sample as negative.\nIdeal value is 1.0.",
+            "citation": "@article{scikit-learn,\n    title={Scikit-learn: Machine Learning in {P}ython},\n    author={Pedregosa, F. and Varoquaux, G. and Gramfort, A. and Michel, V.\n    and Thirion, B. and Grisel, O. and Blondel, M. and Prettenhofer, P.\n    and Weiss, R. and Dubourg, V. and Vanderplas, J. and Passos, A. and\n    Cournapeau, D. and Brucher, M. and Perrot, M. and Duchesnay, E.},\n    journal={Journal of Machine Learning Research},\n    volume={12},\n    pages={2825--2830},\n    year={2011}\n}"
+        },
+        "recall_score": {
+            "display_name": "Recall Score",
+            "type": "Vector_no_display",
+            "tags": [],
+            "has_range": true,
+            "range": [0, 1],
+            "explanation": "The percentage of positive examples that were correctly labeled as positive.\nIndicates a models ability to classify all positive image samples\nIdeal value is 1.0.",
+            "citation": "@article{scikit-learn,\n    title={Scikit-learn: Machine Learning in {P}ython},\n    author={Pedregosa, F. and Varoquaux, G. and Gramfort, A. and Michel, V.\n    and Thirion, B. and Grisel, O. and Blondel, M. and Prettenhofer, P.\n    and Weiss, R. and Dubourg, V. and Vanderplas, J. and Passos, A. and\n    Cournapeau, D. and Brucher, M. and Perrot, M. and Duchesnay, E.},\n    journal={Journal of Machine Learning Research},\n    volume={12},\n    pages={2825--2830},\n    year={2011}\n}"
+        },
+        "recall_score_avg": {
+            "display_name": "Average Recall Score",
+            "type": "Numeric",
+            "tags": [],
+            "has_range": true,
+            "range": [0, 1],
+            "explanation": "The percentage of positive examples that were correctly labeled as positive.\nIndicates a models ability to classify all positive image samples\nIdeal value is 1.0.",
+            "citation": "@article{scikit-learn,\n    title={Scikit-learn: Machine Learning in {P}ython},\n    author={Pedregosa, F. and Varoquaux, G. and Gramfort, A. and Michel, V.\n    and Thirion, B. and Grisel, O. and Blondel, M. and Prettenhofer, P.\n    and Weiss, R. and Dubourg, V. and Vanderplas, J. and Passos, A. and\n    Cournapeau, D. and Brucher, M. and Perrot, M. and Duchesnay, E.},\n    journal={Journal of Machine Learning Research},\n    volume={12},\n    pages={2825--2830},\n    year={2011}\n}"
+        }
+    }
+}

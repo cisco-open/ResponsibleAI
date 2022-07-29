@@ -1,0 +1,68 @@
+{
+    "name" : "group_fairness",
+    "display_name": "Group Fairness",
+    "compatibility": {"task_type": ["classification"],
+                      "data_type": ["Numeric"],
+                      "output_requirements": ["predict"],
+                      "dataset_requirements": ["X", "y", "sensitive_features"]},
+    "src": "equal_treatment",
+    "dependency_list": [],
+    "tags": ["fairness", "Group Fairness"],
+    "complexity_class": "linear",
+    "metrics": {
+        "disparate_impact_ratio": {
+            "display_name": "Disparate Impact Ratio",
+            "type": "Numeric",
+            "tags": [],
+            "has_range": true,
+            "range": [0, null],
+            "explanation": "The ratio of rate of favorable outcome for the unprivileged group to that of the privileged group.\nThe ideal value of this metric is 1.0 A value < 1 implies higher benefit for the privileged group and a value > 1 implies a higher benefit for the unprivileged group.",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1810.01943,\n  doi = {10.48550/ARXIV.1810.01943},\n  \n  url = {https://arxiv.org/abs/1810.01943},\n  \n  author = {Bellamy, Rachel K. E. and Dey, Kuntal and Hind, Michael and Hoffman, Samuel C. and Houde, Stephanie and Kannan, Kalapriya and Lohia, Pranay and Martino, Jacquelyn and Mehta, Sameep and Mojsilovic, Aleksandra and Nagar, Seema and Ramamurthy, Karthikeyan Natesan and Richards, John and Saha, Diptikalyan and Sattigeri, Prasanna and Singh, Moninder and Varshney, Kush R. and Zhang, Yunfeng},\n  \n  keywords = {Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {AI Fairness 360: An Extensible Toolkit for Detecting, Understanding, and Mitigating Unwanted Algorithmic Bias},\n  \n  publisher = {arXiv},\n  \n  year = {2018},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
+        },
+        "statistical_parity_difference": {
+            "display_name": "Statistical Parity Difference",
+            "type": "Numeric",
+            "tags": [],
+            "has_range": true,
+            "range": [-1, 1],
+            "explanation": "The difference of the rate of favorable outcomes received by the unprivileged group to the privileged group.\nThe idea value is 0.0.",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1810.01943,\n  doi = {10.48550/ARXIV.1810.01943},\n  \n  url = {https://arxiv.org/abs/1810.01943},\n  \n  author = {Bellamy, Rachel K. E. and Dey, Kuntal and Hind, Michael and Hoffman, Samuel C. and Houde, Stephanie and Kannan, Kalapriya and Lohia, Pranay and Martino, Jacquelyn and Mehta, Sameep and Mojsilovic, Aleksandra and Nagar, Seema and Ramamurthy, Karthikeyan Natesan and Richards, John and Saha, Diptikalyan and Sattigeri, Prasanna and Singh, Moninder and Varshney, Kush R. and Zhang, Yunfeng},\n  \n  keywords = {Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {AI Fairness 360: An Extensible Toolkit for Detecting, Understanding, and Mitigating Unwanted Algorithmic Bias},\n  \n  publisher = {arXiv},\n  \n  year = {2018},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
+        },
+        "between_group_generalized_entropy_error": {
+            "display_name": "Between Group Generalized Entropy Error",
+            "type": "Numeric",
+            "tags": [],
+            "has_range": false,
+            "range": [null, null],
+            "explanation": "The between group decomposition for generalized entropy error.",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1810.01943,\n  doi = {10.48550/ARXIV.1810.01943},\n  \n  url = {https://arxiv.org/abs/1810.01943},\n  \n  author = {Bellamy, Rachel K. E. and Dey, Kuntal and Hind, Michael and Hoffman, Samuel C. and Houde, Stephanie and Kannan, Kalapriya and Lohia, Pranay and Martino, Jacquelyn and Mehta, Sameep and Mojsilovic, Aleksandra and Nagar, Seema and Ramamurthy, Karthikeyan Natesan and Richards, John and Saha, Diptikalyan and Sattigeri, Prasanna and Singh, Moninder and Varshney, Kush R. and Zhang, Yunfeng},\n  \n  keywords = {Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {AI Fairness 360: An Extensible Toolkit for Detecting, Understanding, and Mitigating Unwanted Algorithmic Bias},\n  \n  publisher = {arXiv},\n  \n  year = {2018},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n\n@inproceedings{10.1145/3219819.3220046,\nauthor = {Speicher, Till and Heidari, Hoda and Grgic-Hlaca, Nina and Gummadi, Krishna P. and Singla, Adish and Weller, Adrian and Zafar, Muhammad Bilal},\ntitle = {A Unified Approach to Quantifying Algorithmic Unfairness: Measuring Individual &amp;Group Unfairness via Inequality Indices},\nyear = {2018},\nisbn = {9781450355520},\npublisher = {Association for Computing Machinery},\naddress = {New York, NY, USA},\nurl = {https://doi.org/10.1145/3219819.3220046},\ndoi = {10.1145/3219819.3220046},\nabstract = {Discrimination via algorithmic decision making has received considerable attention. Prior work largely focuses on defining conditions for fairness, but does not define satisfactory measures of algorithmic unfairness. In this paper, we focus on the following question: Given two unfair algorithms, how should we determine which of the two is more unfair? Our core idea is to use existing inequality indices from economics to measure how unequally the outcomes of an algorithm benefit different individuals or groups in a population. Our work offers a justified and general framework to compare and contrast the (un)fairness of algorithmic predictors. This unifying approach enables us to quantify unfairness both at the individual and the group level. Further, our work reveals overlooked tradeoffs between different fairness notions: using our proposed measures, the overall individual-level unfairness of an algorithm can be decomposed into a between-group and a within-group component. Earlier methods are typically designed to tackle only between-group un- fairness, which may be justified for legal or other reasons. However, we demonstrate that minimizing exclusively the between-group component may, in fact, increase the within-group, and hence the overall unfairness. We characterize and illustrate the tradeoffs between our measures of (un)fairness and the prediction accuracy.},\nbooktitle = {Proceedings of the 24th ACM SIGKDD International Conference on Knowledge Discovery &amp; Data Mining},\npages = {2239–2248},\nnumpages = {10},\nkeywords = {algorithmic decision making, fairness in machine learning, fairness measures, generalized entropy, subgroup decomposability, group fairness, individual fairness, inequality indices},\nlocation = {London, United Kingdom},\nseries = {KDD '18}\n}"
+        },
+        "equal_opportunity_difference": {
+            "display_name": "Equal Opportunity Difference",
+            "type": "Numeric",
+            "tags": [],
+            "has_range": true,
+            "range": [-1, 1],
+            "explanation": "The difference of true positive rates between the unprivileged and the privileged groups.\nThe true positive rate is the ratio of true positives to the total number of actual positives for a given group.\nThe ideal value is 0. A value of < 0 implies higher benefit for the privileged group and a value > 0 implies higher benefit for the unprivileged group.",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1810.01943,\n  doi = {10.48550/ARXIV.1810.01943},\n  \n  url = {https://arxiv.org/abs/1810.01943},\n  \n  author = {Bellamy, Rachel K. E. and Dey, Kuntal and Hind, Michael and Hoffman, Samuel C. and Houde, Stephanie and Kannan, Kalapriya and Lohia, Pranay and Martino, Jacquelyn and Mehta, Sameep and Mojsilovic, Aleksandra and Nagar, Seema and Ramamurthy, Karthikeyan Natesan and Richards, John and Saha, Diptikalyan and Sattigeri, Prasanna and Singh, Moninder and Varshney, Kush R. and Zhang, Yunfeng},\n  \n  keywords = {Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {AI Fairness 360: An Extensible Toolkit for Detecting, Understanding, and Mitigating Unwanted Algorithmic Bias},\n  \n  publisher = {arXiv},\n  \n  year = {2018},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
+        },
+        "average_odds_difference": {
+            "display_name": "Average Odds Difference",
+            "type": "Numeric",
+            "tags": [],
+            "has_range": true,
+            "range": [-1, 1],
+            "explanation": "The average difference of false positive rate (false positives / negatives) and true positive rate (true positives / positives) between unprivileged and privileged groups.\nThe ideal value is 0.  A value of < 0 implies higher benefit for the privileged group and a value > 0 implies higher benefit for the unprivileged group..",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1810.01943,\n  doi = {10.48550/ARXIV.1810.01943},\n  \n  url = {https://arxiv.org/abs/1810.01943},\n  \n  author = {Bellamy, Rachel K. E. and Dey, Kuntal and Hind, Michael and Hoffman, Samuel C. and Houde, Stephanie and Kannan, Kalapriya and Lohia, Pranay and Martino, Jacquelyn and Mehta, Sameep and Mojsilovic, Aleksandra and Nagar, Seema and Ramamurthy, Karthikeyan Natesan and Richards, John and Saha, Diptikalyan and Sattigeri, Prasanna and Singh, Moninder and Varshney, Kush R. and Zhang, Yunfeng},\n  \n  keywords = {Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {AI Fairness 360: An Extensible Toolkit for Detecting, Understanding, and Mitigating Unwanted Algorithmic Bias},\n  \n  publisher = {arXiv},\n  \n  year = {2018},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
+        },
+        "average_odds_error": {
+            "display_name": "Average Odds Error",
+            "type": "Numeric",
+            "tags": [],
+            "has_range": true,
+            "range": [0, 1],
+            "explanation": "The average of the absolute difference in FPR and TPR for the unprivileged and privileged groups.\nCalculated via this formula: (|FPR unprivileged − FPR privileged|+|TPR unprivileged − TPR privileged|)/2\nThe idea value is 0.",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1810.01943,\n  doi = {10.48550/ARXIV.1810.01943},\n  \n  url = {https://arxiv.org/abs/1810.01943},\n  \n  author = {Bellamy, Rachel K. E. and Dey, Kuntal and Hind, Michael and Hoffman, Samuel C. and Houde, Stephanie and Kannan, Kalapriya and Lohia, Pranay and Martino, Jacquelyn and Mehta, Sameep and Mojsilovic, Aleksandra and Nagar, Seema and Ramamurthy, Karthikeyan Natesan and Richards, John and Saha, Diptikalyan and Sattigeri, Prasanna and Singh, Moninder and Varshney, Kush R. and Zhang, Yunfeng},\n  \n  keywords = {Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {AI Fairness 360: An Extensible Toolkit for Detecting, Understanding, and Mitigating Unwanted Algorithmic Bias},\n  \n  publisher = {arXiv},\n  \n  year = {2018},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
+        }
+    }
+}

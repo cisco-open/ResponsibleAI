@@ -1,0 +1,21 @@
+{
+    "name": "basic_explainablity",
+    "display_name": "Basic Robustness",
+    "compatibility": {"task_type": [],
+                      "data_type": ["Numeric"],
+                      "output_requirements": [],
+                      "dataset_requirements": []},
+    "dependency_list": [],
+    "tags": ["robustness", "Normalization"],
+    "complexity_class": "linear",
+    "metrics": {
+        "explainable_model": {
+            "display_name": "explainable model",
+            "type": "Boolean",
+            "has_range": false,
+            "range": [null, null],
+            "explanation": "Placeholder method for if a method is explainable.",
+            "citation": ""
+        }
+    }
+}

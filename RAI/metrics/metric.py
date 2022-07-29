@@ -1,12 +1,13 @@
-__all__ = ['Metric', 'metric_types']
-
-import os.path
-from RAI.metrics.registry import register_class
-
-metric_types = {"numeric", "multivalued", "other", "vector", "vector-dict", "matrix", "boolean"}
+from RAI.all_types import all_metric_types
+__all__ = ['Metric']
 
 
 class Metric:
+    """
+    Metric class loads in information about a Metric as part of a Metric Group.
+    Metrics are automatically created by Metric Groups.
+    """
+
     def __init__(self, name, config) -> None:
         self.config = config
         self.name = name
@@ -34,7 +35,7 @@ class Metric:
             self.explanation = config["explanation"]
         self.type = config["type"]
         if "type" in config:
-            if config["type"] in metric_types:
+            if config["type"] in all_metric_types:
                 self.type = config["type"]
             else:
                 self.type = "numeric"

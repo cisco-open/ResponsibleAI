@@ -1,0 +1,261 @@
+{
+    "name": "summary_stats",
+    "display_name": "Summary Statistics",
+    "compatibility": {"task_type": [],
+                      "data_type": ["Numeric"],
+                      "output_requirements": [],
+                      "dataset_requirements": ["X"]},
+    "dependency_list": [],
+    "tags": ["stats", "Summary Stats"],
+    "complexity_class": "linear",
+    "metrics": {
+        "mean": {
+            "display_name": "Mean",
+            "type": "Dict",
+            "has_range": false,
+            "range": null,
+            "explanation": "Mean is the expected value for each feature in data.",
+            "citation": "@Article{         harris2020array,\n title         = {Array programming with {NumPy}},\n author        = {Charles R. Harris and K. Jarrod Millman and St{\\'{e}}fan J.\n                 van der Walt and Ralf Gommers and Pauli Virtanen and David\n                 Cournapeau and Eric Wieser and Julian Taylor and Sebastian\n                 Berg and Nathaniel J. Smith and Robert Kern and Matti Picus\n                 and Stephan Hoyer and Marten H. van Kerkwijk and Matthew\n                 Brett and Allan Haldane and Jaime Fern{\\'{a}}ndez del\n                 R{\\'{i}}o and Mark Wiebe and Pearu Peterson and Pierre\n                 G{\\'{e}}rard-Marchant and Kevin Sheppard and Tyler Reddy and\n                 Warren Weckesser and Hameer Abbasi and Christoph Gohlke and\n                 Travis E. Oliphant},\n year          = {2020},\n month         = sep,\n journal       = {Nature},\n volume        = {585},\n number        = {7825},\n pages         = {357--362},\n doi           = {10.1038/s41586-020-2649-2},\n publisher     = {Springer Science and Business Media {LLC}},\n url           = {https://doi.org/10.1038/s41586-020-2649-2}\n}"
+        },
+        "covariance": {
+            "display_name": "Covariance Matrix",
+            "type": "Matrix",
+            "has_range": false,
+            "range": null,
+            "explanation": "Indicates the level to which two variables vary together. \nThe covariance matrix element C(i,j) is the covariance of X(i) and X(j). The element C(i,i)  is the variance of X(i).",
+            "citation": "@Article{         harris2020array,\n title         = {Array programming with {NumPy}},\n author        = {Charles R. Harris and K. Jarrod Millman and St{\\'{e}}fan J.\n                 van der Walt and Ralf Gommers and Pauli Virtanen and David\n                 Cournapeau and Eric Wieser and Julian Taylor and Sebastian\n                 Berg and Nathaniel J. Smith and Robert Kern and Matti Picus\n                 and Stephan Hoyer and Marten H. van Kerkwijk and Matthew\n                 Brett and Allan Haldane and Jaime Fern{\\'{a}}ndez del\n                 R{\\'{i}}o and Mark Wiebe and Pearu Peterson and Pierre\n                 G{\\'{e}}rard-Marchant and Kevin Sheppard and Tyler Reddy and\n                 Warren Weckesser and Hameer Abbasi and Christoph Gohlke and\n                 Travis E. Oliphant},\n year          = {2020},\n month         = sep,\n journal       = {Nature},\n volume        = {585},\n number        = {7825},\n pages         = {357--362},\n doi           = {10.1038/s41586-020-2649-2},\n publisher     = {Springer Science and Business Media {LLC}},\n url           = {https://doi.org/10.1038/s41586-020-2649-2}\n}"
+        },
+        "num_nan_rows": {
+            "display_name": "Number of NaN Rows",
+            "type": "Numeric",
+            "has_range": true,
+            "range": [0, null],
+            "explanation": "Indicates the number of NaN rows found in the data.",
+            "citation": "@Article{         harris2020array,\n title         = {Array programming with {NumPy}},\n author        = {Charles R. Harris and K. Jarrod Millman and St{\\'{e}}fan J.\n                 van der Walt and Ralf Gommers and Pauli Virtanen and David\n                 Cournapeau and Eric Wieser and Julian Taylor and Sebastian\n                 Berg and Nathaniel J. Smith and Robert Kern and Matti Picus\n                 and Stephan Hoyer and Marten H. van Kerkwijk and Matthew\n                 Brett and Allan Haldane and Jaime Fern{\\'{a}}ndez del\n                 R{\\'{i}}o and Mark Wiebe and Pearu Peterson and Pierre\n                 G{\\'{e}}rard-Marchant and Kevin Sheppard and Tyler Reddy and\n                 Warren Weckesser and Hameer Abbasi and Christoph Gohlke and\n                 Travis E. Oliphant},\n year          = {2020},\n month         = sep,\n journal       = {Nature},\n volume        = {585},\n number        = {7825},\n pages         = {357--362},\n doi           = {10.1038/s41586-020-2649-2},\n publisher     = {Springer Science and Business Media {LLC}},\n url           = {https://doi.org/10.1038/s41586-020-2649-2}\n}"
+        },
+        "percent_nan_rows": {
+            "display_name": "Percentage of NaN Rows",
+            "type": "Numeric",
+            "has_range": true,
+            "range": [0, 1],
+            "explanation": "Indicates the percentage of rows that are NaN in the data.",
+            "citation": "@Article{         harris2020array,\n title         = {Array programming with {NumPy}},\n author        = {Charles R. Harris and K. Jarrod Millman and St{\\'{e}}fan J.\n                 van der Walt and Ralf Gommers and Pauli Virtanen and David\n                 Cournapeau and Eric Wieser and Julian Taylor and Sebastian\n                 Berg and Nathaniel J. Smith and Robert Kern and Matti Picus\n                 and Stephan Hoyer and Marten H. van Kerkwijk and Matthew\n                 Brett and Allan Haldane and Jaime Fern{\\'{a}}ndez del\n                 R{\\'{i}}o and Mark Wiebe and Pearu Peterson and Pierre\n                 G{\\'{e}}rard-Marchant and Kevin Sheppard and Tyler Reddy and\n                 Warren Weckesser and Hameer Abbasi and Christoph Gohlke and\n                 Travis E. Oliphant},\n year          = {2020},\n month         = sep,\n journal       = {Nature},\n volume        = {585},\n number        = {7825},\n pages         = {357--362},\n doi           = {10.1038/s41586-020-2649-2},\n publisher     = {Springer Science and Business Media {LLC}},\n url           = {https://doi.org/10.1038/s41586-020-2649-2}\n}"
+        },
+        "geometric_mean": {
+            "display_name": "Geometric Mean",
+            "type": "Dict",
+            "has_range": false,
+            "range": [null, null],
+            "explanation": "The Geometric Mean shows the central tendency of a set of numbers. It is calculated by taking the n-th root of the product of n numbers.",
+            "citation": "@article{2020SciPy-NMeth,\n  author  = {Virtanen, Pauli and Gommers, Ralf and Oliphant, Travis E. and\n            Haberland, Matt and Reddy, Tyler and Cournapeau, David and\n            Burovski, Evgeni and Peterson, Pearu and Weckesser, Warren and\n            Bright, Jonathan and {van der Walt}, St{\\'e}fan J. and\n            Brett, Matthew and Wilson, Joshua and Millman, K. Jarrod and\n            Mayorov, Nikolay and Nelson, Andrew R. J. and Jones, Eric and\n            Kern, Robert and Larson, Eric and Carey, C J and\n            Polat, {\\.I}lhan and Feng, Yu and Moore, Eric W. and\n            {VanderPlas}, Jake and Laxalde, Denis and Perktold, Josef and\n            Cimrman, Robert and Henriksen, Ian and Quintero, E. A. and\n            Harris, Charles R. and Archibald, Anne M. and\n            Ribeiro, Ant{\\^o}nio H. and Pedregosa, Fabian and\n            {van Mulbregt}, Paul and {SciPy 1.0 Contributors}},\n  title   = {{{SciPy} 1.0: Fundamental Algorithms for Scientific\n            Computing in Python}},\n  journal = {Nature Methods},\n  year    = {2020},\n  volume  = {17},\n  pages   = {261--272},\n  adsurl  = {https://rdcu.be/b08Wh},\n  doi     = {10.1038/s41592-019-0686-2},\n}\n"
+        },
+        "kurtosis": {
+            "display_name": "Kurtosis",
+            "type": "Dict",
+            "has_range": false,
+            "range": [null, null],
+            "explanation": "The sharpness of the peak of a frequency-distribution curve.",
+            "citation": "@article{2020SciPy-NMeth,\n  author  = {Virtanen, Pauli and Gommers, Ralf and Oliphant, Travis E. and\n            Haberland, Matt and Reddy, Tyler and Cournapeau, David and\n            Burovski, Evgeni and Peterson, Pearu and Weckesser, Warren and\n            Bright, Jonathan and {van der Walt}, St{\\'e}fan J. and\n            Brett, Matthew and Wilson, Joshua and Millman, K. Jarrod and\n            Mayorov, Nikolay and Nelson, Andrew R. J. and Jones, Eric and\n            Kern, Robert and Larson, Eric and Carey, C J and\n            Polat, {\\.I}lhan and Feng, Yu and Moore, Eric W. and\n            {VanderPlas}, Jake and Laxalde, Denis and Perktold, Josef and\n            Cimrman, Robert and Henriksen, Ian and Quintero, E. A. and\n            Harris, Charles R. and Archibald, Anne M. and\n            Ribeiro, Ant{\\^o}nio H. and Pedregosa, Fabian and\n            {van Mulbregt}, Paul and {SciPy 1.0 Contributors}},\n  title   = {{{SciPy} 1.0: Fundamental Algorithms for Scientific\n            Computing in Python}},\n  journal = {Nature Methods},\n  year    = {2020},\n  volume  = {17},\n  pages   = {261--272},\n  adsurl  = {https://rdcu.be/b08Wh},\n  doi     = {10.1038/s41592-019-0686-2},\n}\n"
+        },
+        "mode": {
+            "display_name": "Mode",
+            "type": "Dict",
+            "has_range": false,
+            "range": [null, null],
+            "explanation": "The most often appearing value in a set of data values.",
+            "citation": "@article{2020SciPy-NMeth,\n  author  = {Virtanen, Pauli and Gommers, Ralf and Oliphant, Travis E. and\n            Haberland, Matt and Reddy, Tyler and Cournapeau, David and\n            Burovski, Evgeni and Peterson, Pearu and Weckesser, Warren and\n            Bright, Jonathan and {van der Walt}, St{\\'e}fan J. and\n            Brett, Matthew and Wilson, Joshua and Millman, K. Jarrod and\n            Mayorov, Nikolay and Nelson, Andrew R. J. and Jones, Eric and\n            Kern, Robert and Larson, Eric and Carey, C J and\n            Polat, {\\.I}lhan and Feng, Yu and Moore, Eric W. and\n            {VanderPlas}, Jake and Laxalde, Denis and Perktold, Josef and\n            Cimrman, Robert and Henriksen, Ian and Quintero, E. A. and\n            Harris, Charles R. and Archibald, Anne M. and\n            Ribeiro, Ant{\\^o}nio H. and Pedregosa, Fabian and\n            {van Mulbregt}, Paul and {SciPy 1.0 Contributors}},\n  title   = {{{SciPy} 1.0: Fundamental Algorithms for Scientific\n            Computing in Python}},\n  journal = {Nature Methods},\n  year    = {2020},\n  volume  = {17},\n  pages   = {261--272},\n  adsurl  = {https://rdcu.be/b08Wh},\n  doi     = {10.1038/s41592-019-0686-2},\n}\n"
+        },
+        "skew": {
+            "display_name": "Skew",
+            "type": "Dict",
+            "has_range": false,
+            "range": [null, null],
+            "explanation": "The symmetry of a data set.",
+            "citation": "@article{2020SciPy-NMeth,\n  author  = {Virtanen, Pauli and Gommers, Ralf and Oliphant, Travis E. and\n            Haberland, Matt and Reddy, Tyler and Cournapeau, David and\n            Burovski, Evgeni and Peterson, Pearu and Weckesser, Warren and\n            Bright, Jonathan and {van der Walt}, St{\\'e}fan J. and\n            Brett, Matthew and Wilson, Joshua and Millman, K. Jarrod and\n            Mayorov, Nikolay and Nelson, Andrew R. J. and Jones, Eric and\n            Kern, Robert and Larson, Eric and Carey, C J and\n            Polat, {\\.I}lhan and Feng, Yu and Moore, Eric W. and\n            {VanderPlas}, Jake and Laxalde, Denis and Perktold, Josef and\n            Cimrman, Robert and Henriksen, Ian and Quintero, E. A. and\n            Harris, Charles R. and Archibald, Anne M. and\n            Ribeiro, Ant{\\^o}nio H. and Pedregosa, Fabian and\n            {van Mulbregt}, Paul and {SciPy 1.0 Contributors}},\n  title   = {{{SciPy} 1.0: Fundamental Algorithms for Scientific\n            Computing in Python}},\n  journal = {Nature Methods},\n  year    = {2020},\n  volume  = {17},\n  pages   = {261--272},\n  adsurl  = {https://rdcu.be/b08Wh},\n  doi     = {10.1038/s41592-019-0686-2},\n}\n"
+        },
+        "kstat_1": {
+            "display_name": "K_Statistic 1",
+            "type": "Dict",
+            "has_range": false,
+            "range": [null, null],
+            "explanation": "The first cumulant is the mean of data.\nA unique, symmetric and unbiased estimator of the first cumulate kappa-n",
+            "citation": "@article{2020SciPy-NMeth,\n  author  = {Virtanen, Pauli and Gommers, Ralf and Oliphant, Travis E. and\n            Haberland, Matt and Reddy, Tyler and Cournapeau, David and\n            Burovski, Evgeni and Peterson, Pearu and Weckesser, Warren and\n            Bright, Jonathan and {van der Walt}, St{\\'e}fan J. and\n            Brett, Matthew and Wilson, Joshua and Millman, K. Jarrod and\n            Mayorov, Nikolay and Nelson, Andrew R. J. and Jones, Eric and\n            Kern, Robert and Larson, Eric and Carey, C J and\n            Polat, {\\.I}lhan and Feng, Yu and Moore, Eric W. and\n            {VanderPlas}, Jake and Laxalde, Denis and Perktold, Josef and\n            Cimrman, Robert and Henriksen, Ian and Quintero, E. A. and\n            Harris, Charles R. and Archibald, Anne M. and\n            Ribeiro, Ant{\\^o}nio H. and Pedregosa, Fabian and\n            {van Mulbregt}, Paul and {SciPy 1.0 Contributors}},\n  title   = {{{SciPy} 1.0: Fundamental Algorithms for Scientific\n            Computing in Python}},\n  journal = {Nature Methods},\n  year    = {2020},\n  volume  = {17},\n  pages   = {261--272},\n  adsurl  = {https://rdcu.be/b08Wh},\n  doi     = {10.1038/s41592-019-0686-2},\n}\n"
+        },
+        "kstat_2": {
+            "display_name": "K-Statistic 2",
+            "type": "Dict",
+            "has_range": false,
+            "range": [null, null],
+            "explanation": "The second cumulant is the variance of data.\nThis metric is a unique, symmetric and unbiased estimator of the second cumulate kappa-n",
+            "citation": "@article{2020SciPy-NMeth,\n  author  = {Virtanen, Pauli and Gommers, Ralf and Oliphant, Travis E. and\n            Haberland, Matt and Reddy, Tyler and Cournapeau, David and\n            Burovski, Evgeni and Peterson, Pearu and Weckesser, Warren and\n            Bright, Jonathan and {van der Walt}, St{\\'e}fan J. and\n            Brett, Matthew and Wilson, Joshua and Millman, K. Jarrod and\n            Mayorov, Nikolay and Nelson, Andrew R. J. and Jones, Eric and\n            Kern, Robert and Larson, Eric and Carey, C J and\n            Polat, {\\.I}lhan and Feng, Yu and Moore, Eric W. and\n            {VanderPlas}, Jake and Laxalde, Denis and Perktold, Josef and\n            Cimrman, Robert and Henriksen, Ian and Quintero, E. A. and\n            Harris, Charles R. and Archibald, Anne M. and\n            Ribeiro, Ant{\\^o}nio H. and Pedregosa, Fabian and\n            {van Mulbregt}, Paul and {SciPy 1.0 Contributors}},\n  title   = {{{SciPy} 1.0: Fundamental Algorithms for Scientific\n            Computing in Python}},\n  journal = {Nature Methods},\n  year    = {2020},\n  volume  = {17},\n  pages   = {261--272},\n  adsurl  = {https://rdcu.be/b08Wh},\n  doi     = {10.1038/s41592-019-0686-2},\n}\n"
+        },
+        "kstat_3": {
+            "display_name": "The third cumulant is the central moment.",
+            "type": "Dict",
+            "has_range": false,
+            "range": [null, null],
+            "explanation": "Equivalent to the central moment.\nThis metric is a unique, symmetric and unbiased estimator of the third cumulate kappa-n.",
+            "citation": "@article{2020SciPy-NMeth,\n  author  = {Virtanen, Pauli and Gommers, Ralf and Oliphant, Travis E. and\n            Haberland, Matt and Reddy, Tyler and Cournapeau, David and\n            Burovski, Evgeni and Peterson, Pearu and Weckesser, Warren and\n            Bright, Jonathan and {van der Walt}, St{\\'e}fan J. and\n            Brett, Matthew and Wilson, Joshua and Millman, K. Jarrod and\n            Mayorov, Nikolay and Nelson, Andrew R. J. and Jones, Eric and\n            Kern, Robert and Larson, Eric and Carey, C J and\n            Polat, {\\.I}lhan and Feng, Yu and Moore, Eric W. and\n            {VanderPlas}, Jake and Laxalde, Denis and Perktold, Josef and\n            Cimrman, Robert and Henriksen, Ian and Quintero, E. A. and\n            Harris, Charles R. and Archibald, Anne M. and\n            Ribeiro, Ant{\\^o}nio H. and Pedregosa, Fabian and\n            {van Mulbregt}, Paul and {SciPy 1.0 Contributors}},\n  title   = {{{SciPy} 1.0: Fundamental Algorithms for Scientific\n            Computing in Python}},\n  journal = {Nature Methods},\n  year    = {2020},\n  volume  = {17},\n  pages   = {261--272},\n  adsurl  = {https://rdcu.be/b08Wh},\n  doi     = {10.1038/s41592-019-0686-2},\n}\n"
+        },
+        "kstat_4": {
+            "display_name": "K-Statistic 4",
+            "type": "Dict",
+            "has_range": false,
+            "range": [null, null],
+            "explanation": "A unique, symmetric and unbiased estimator of the fourth cumulate kappa-n",
+            "citation": "@article{2020SciPy-NMeth,\n  author  = {Virtanen, Pauli and Gommers, Ralf and Oliphant, Travis E. and\n            Haberland, Matt and Reddy, Tyler and Cournapeau, David and\n            Burovski, Evgeni and Peterson, Pearu and Weckesser, Warren and\n            Bright, Jonathan and {van der Walt}, St{\\'e}fan J. and\n            Brett, Matthew and Wilson, Joshua and Millman, K. Jarrod and\n            Mayorov, Nikolay and Nelson, Andrew R. J. and Jones, Eric and\n            Kern, Robert and Larson, Eric and Carey, C J and\n            Polat, {\\.I}lhan and Feng, Yu and Moore, Eric W. and\n            {VanderPlas}, Jake and Laxalde, Denis and Perktold, Josef and\n            Cimrman, Robert and Henriksen, Ian and Quintero, E. A. and\n            Harris, Charles R. and Archibald, Anne M. and\n            Ribeiro, Ant{\\^o}nio H. and Pedregosa, Fabian and\n            {van Mulbregt}, Paul and {SciPy 1.0 Contributors}},\n  title   = {{{SciPy} 1.0: Fundamental Algorithms for Scientific\n            Computing in Python}},\n  journal = {Nature Methods},\n  year    = {2020},\n  volume  = {17},\n  pages   = {261--272},\n  adsurl  = {https://rdcu.be/b08Wh},\n  doi     = {10.1038/s41592-019-0686-2},\n}\n"
+        },
+        "kstatvar": {
+            "display_name": "K-Statistic Variance",
+            "type": "Dict",
+            "has_range": true,
+            "range": [0, null],
+            "explanation": "An unbiased estimator of the variance of the k statistic.",
+            "citation": "@article{2020SciPy-NMeth,\n  author  = {Virtanen, Pauli and Gommers, Ralf and Oliphant, Travis E. and\n            Haberland, Matt and Reddy, Tyler and Cournapeau, David and\n            Burovski, Evgeni and Peterson, Pearu and Weckesser, Warren and\n            Bright, Jonathan and {van der Walt}, St{\\'e}fan J. and\n            Brett, Matthew and Wilson, Joshua and Millman, K. Jarrod and\n            Mayorov, Nikolay and Nelson, Andrew R. J. and Jones, Eric and\n            Kern, Robert and Larson, Eric and Carey, C J and\n            Polat, {\\.I}lhan and Feng, Yu and Moore, Eric W. and\n            {VanderPlas}, Jake and Laxalde, Denis and Perktold, Josef and\n            Cimrman, Robert and Henriksen, Ian and Quintero, E. A. and\n            Harris, Charles R. and Archibald, Anne M. and\n            Ribeiro, Ant{\\^o}nio H. and Pedregosa, Fabian and\n            {van Mulbregt}, Paul and {SciPy 1.0 Contributors}},\n  title   = {{{SciPy} 1.0: Fundamental Algorithms for Scientific\n            Computing in Python}},\n  journal = {Nature Methods},\n  year    = {2020},\n  volume  = {17},\n  pages   = {261--272},\n  adsurl  = {https://rdcu.be/b08Wh},\n  doi     = {10.1038/s41592-019-0686-2},\n}\n"
+        },
+        "variation": {
+            "display_name": "Coefficient of Variation",
+            "type": "Dict",
+            "has_range": true,
+            "range": [0, null],
+            "explanation": "Indicates the ratio of the standard deviation to the mean.\nHigher values indicate a higher spread of data.",
+            "citation": "@article{2020SciPy-NMeth,\n  author  = {Virtanen, Pauli and Gommers, Ralf and Oliphant, Travis E. and\n            Haberland, Matt and Reddy, Tyler and Cournapeau, David and\n            Burovski, Evgeni and Peterson, Pearu and Weckesser, Warren and\n            Bright, Jonathan and {van der Walt}, St{\\'e}fan J. and\n            Brett, Matthew and Wilson, Joshua and Millman, K. Jarrod and\n            Mayorov, Nikolay and Nelson, Andrew R. J. and Jones, Eric and\n            Kern, Robert and Larson, Eric and Carey, C J and\n            Polat, {\\.I}lhan and Feng, Yu and Moore, Eric W. and\n            {VanderPlas}, Jake and Laxalde, Denis and Perktold, Josef and\n            Cimrman, Robert and Henriksen, Ian and Quintero, E. A. and\n            Harris, Charles R. and Archibald, Anne M. and\n            Ribeiro, Ant{\\^o}nio H. and Pedregosa, Fabian and\n            {van Mulbregt}, Paul and {SciPy 1.0 Contributors}},\n  title   = {{{SciPy} 1.0: Fundamental Algorithms for Scientific\n            Computing in Python}},\n  journal = {Nature Methods},\n  year    = {2020},\n  volume  = {17},\n  pages   = {261--272},\n  adsurl  = {https://rdcu.be/b08Wh},\n  doi     = {10.1038/s41592-019-0686-2},\n}\n"
+        },
+        "iqr": {
+            "display_name": "Interquartile Range",
+            "type": "Dict",
+            "has_range": false,
+            "range": [null, null],
+            "explanation": "IQR is the difference between the 75th and 25th percentile of data.\nIt is a robust measure of data dispersion.",
+            "citation": "@article{2020SciPy-NMeth,\n  author  = {Virtanen, Pauli and Gommers, Ralf and Oliphant, Travis E. and\n            Haberland, Matt and Reddy, Tyler and Cournapeau, David and\n            Burovski, Evgeni and Peterson, Pearu and Weckesser, Warren and\n            Bright, Jonathan and {van der Walt}, St{\\'e}fan J. and\n            Brett, Matthew and Wilson, Joshua and Millman, K. Jarrod and\n            Mayorov, Nikolay and Nelson, Andrew R. J. and Jones, Eric and\n            Kern, Robert and Larson, Eric and Carey, C J and\n            Polat, {\\.I}lhan and Feng, Yu and Moore, Eric W. and\n            {VanderPlas}, Jake and Laxalde, Denis and Perktold, Josef and\n            Cimrman, Robert and Henriksen, Ian and Quintero, E. A. and\n            Harris, Charles R. and Archibald, Anne M. and\n            Ribeiro, Ant{\\^o}nio H. and Pedregosa, Fabian and\n            {van Mulbregt}, Paul and {SciPy 1.0 Contributors}},\n  title   = {{{SciPy} 1.0: Fundamental Algorithms for Scientific\n            Computing in Python}},\n  journal = {Nature Methods},\n  year    = {2020},\n  volume  = {17},\n  pages   = {261--272},\n  adsurl  = {https://rdcu.be/b08Wh},\n  doi     = {10.1038/s41592-019-0686-2},\n}\n"
+        },
+        "sem": {
+            "display_name": "Standard Error of the Mean",
+            "type": "Dict",
+            "has_range": true,
+            "range": [0, null],
+            "explanation": "Measures how much discrepancy is likely in a sample's mean compared with the population mean.\nIt is the standard deviation of the sampling distribution of the mean, calculated by dividing the standard deviation of the sample by the root of the sample size.",
+            "citation": "@article{2020SciPy-NMeth,\n  author  = {Virtanen, Pauli and Gommers, Ralf and Oliphant, Travis E. and\n            Haberland, Matt and Reddy, Tyler and Cournapeau, David and\n            Burovski, Evgeni and Peterson, Pearu and Weckesser, Warren and\n            Bright, Jonathan and {van der Walt}, St{\\'e}fan J. and\n            Brett, Matthew and Wilson, Joshua and Millman, K. Jarrod and\n            Mayorov, Nikolay and Nelson, Andrew R. J. and Jones, Eric and\n            Kern, Robert and Larson, Eric and Carey, C J and\n            Polat, {\\.I}lhan and Feng, Yu and Moore, Eric W. and\n            {VanderPlas}, Jake and Laxalde, Denis and Perktold, Josef and\n            Cimrman, Robert and Henriksen, Ian and Quintero, E. A. and\n            Harris, Charles R. and Archibald, Anne M. and\n            Ribeiro, Ant{\\^o}nio H. and Pedregosa, Fabian and\n            {van Mulbregt}, Paul and {SciPy 1.0 Contributors}},\n  title   = {{{SciPy} 1.0: Fundamental Algorithms for Scientific\n            Computing in Python}},\n  journal = {Nature Methods},\n  year    = {2020},\n  volume  = {17},\n  pages   = {261--272},\n  adsurl  = {https://rdcu.be/b08Wh},\n  doi     = {10.1038/s41592-019-0686-2},\n}\n"
+        },
+        "bayes_mean": {
+            "display_name": "Bayesian Mean Confidence Interval",
+            "type": "Dict",
+            "has_range": false,
+            "range": [null, null],
+            "explanation": "Bayesian estimate of upper and lower bounds of the population mean.\nThere is a 95% chance that the true mean lies within this range given the sample data.",
+            "citation": "@article{2020SciPy-NMeth,\n  author  = {Virtanen, Pauli and Gommers, Ralf and Oliphant, Travis E. and\n            Haberland, Matt and Reddy, Tyler and Cournapeau, David and\n            Burovski, Evgeni and Peterson, Pearu and Weckesser, Warren and\n            Bright, Jonathan and {van der Walt}, St{\\'e}fan J. and\n            Brett, Matthew and Wilson, Joshua and Millman, K. Jarrod and\n            Mayorov, Nikolay and Nelson, Andrew R. J. and Jones, Eric and\n            Kern, Robert and Larson, Eric and Carey, C J and\n            Polat, {\\.I}lhan and Feng, Yu and Moore, Eric W. and\n            {VanderPlas}, Jake and Laxalde, Denis and Perktold, Josef and\n            Cimrman, Robert and Henriksen, Ian and Quintero, E. A. and\n            Harris, Charles R. and Archibald, Anne M. and\n            Ribeiro, Ant{\\^o}nio H. and Pedregosa, Fabian and\n            {van Mulbregt}, Paul and {SciPy 1.0 Contributors}},\n  title   = {{{SciPy} 1.0: Fundamental Algorithms for Scientific\n            Computing in Python}},\n  journal = {Nature Methods},\n  year    = {2020},\n  volume  = {17},\n  pages   = {261--272},\n  adsurl  = {https://rdcu.be/b08Wh},\n  doi     = {10.1038/s41592-019-0686-2},\n}\n"
+        },
+        "bayes_mean_avg": {
+            "display_name": "Bayesian Mean Confidence Interval Average",
+            "type": "Dict",
+            "has_range": false,
+            "range": [null, null],
+            "explanation": "Bayesian estimate of the population mean.",
+            "citation": "@article{2020SciPy-NMeth,\n  author  = {Virtanen, Pauli and Gommers, Ralf and Oliphant, Travis E. and\n            Haberland, Matt and Reddy, Tyler and Cournapeau, David and\n            Burovski, Evgeni and Peterson, Pearu and Weckesser, Warren and\n            Bright, Jonathan and {van der Walt}, St{\\'e}fan J. and\n            Brett, Matthew and Wilson, Joshua and Millman, K. Jarrod and\n            Mayorov, Nikolay and Nelson, Andrew R. J. and Jones, Eric and\n            Kern, Robert and Larson, Eric and Carey, C J and\n            Polat, {\\.I}lhan and Feng, Yu and Moore, Eric W. and\n            {VanderPlas}, Jake and Laxalde, Denis and Perktold, Josef and\n            Cimrman, Robert and Henriksen, Ian and Quintero, E. A. and\n            Harris, Charles R. and Archibald, Anne M. and\n            Ribeiro, Ant{\\^o}nio H. and Pedregosa, Fabian and\n            {van Mulbregt}, Paul and {SciPy 1.0 Contributors}},\n  title   = {{{SciPy} 1.0: Fundamental Algorithms for Scientific\n            Computing in Python}},\n  journal = {Nature Methods},\n  year    = {2020},\n  volume  = {17},\n  pages   = {261--272},\n  adsurl  = {https://rdcu.be/b08Wh},\n  doi     = {10.1038/s41592-019-0686-2},\n}\n"
+        },
+        "bayes_variance": {
+            "display_name": "Bayesian Variance Confidence Interval",
+            "type": "Dict",
+            "has_range": true,
+            "range": [0, null],
+            "explanation": "Bayesian estimate of upper and lower bounds of the population variance.There is a 95% chance that the true variance lies within this range given the sample data.",
+            "citation": "@article{2020SciPy-NMeth,\n  author  = {Virtanen, Pauli and Gommers, Ralf and Oliphant, Travis E. and\n            Haberland, Matt and Reddy, Tyler and Cournapeau, David and\n            Burovski, Evgeni and Peterson, Pearu and Weckesser, Warren and\n            Bright, Jonathan and {van der Walt}, St{\\'e}fan J. and\n            Brett, Matthew and Wilson, Joshua and Millman, K. Jarrod and\n            Mayorov, Nikolay and Nelson, Andrew R. J. and Jones, Eric and\n            Kern, Robert and Larson, Eric and Carey, C J and\n            Polat, {\\.I}lhan and Feng, Yu and Moore, Eric W. and\n            {VanderPlas}, Jake and Laxalde, Denis and Perktold, Josef and\n            Cimrman, Robert and Henriksen, Ian and Quintero, E. A. and\n            Harris, Charles R. and Archibald, Anne M. and\n            Ribeiro, Ant{\\^o}nio H. and Pedregosa, Fabian and\n            {van Mulbregt}, Paul and {SciPy 1.0 Contributors}},\n  title   = {{{SciPy} 1.0: Fundamental Algorithms for Scientific\n            Computing in Python}},\n  journal = {Nature Methods},\n  year    = {2020},\n  volume  = {17},\n  pages   = {261--272},\n  adsurl  = {https://rdcu.be/b08Wh},\n  doi     = {10.1038/s41592-019-0686-2},\n}\n"
+        },
+        "bayes_variance_avg": {
+            "display_name": "Bayesian Variance Confidence Interval Avg",
+            "type": "Dict",
+            "has_range": true,
+            "range": [0, null],
+            "explanation": "Bayesian estimate of the population variance.",
+            "citation": "@article{2020SciPy-NMeth,\n  author  = {Virtanen, Pauli and Gommers, Ralf and Oliphant, Travis E. and\n            Haberland, Matt and Reddy, Tyler and Cournapeau, David and\n            Burovski, Evgeni and Peterson, Pearu and Weckesser, Warren and\n            Bright, Jonathan and {van der Walt}, St{\\'e}fan J. and\n            Brett, Matthew and Wilson, Joshua and Millman, K. Jarrod and\n            Mayorov, Nikolay and Nelson, Andrew R. J. and Jones, Eric and\n            Kern, Robert and Larson, Eric and Carey, C J and\n            Polat, {\\.I}lhan and Feng, Yu and Moore, Eric W. and\n            {VanderPlas}, Jake and Laxalde, Denis and Perktold, Josef and\n            Cimrman, Robert and Henriksen, Ian and Quintero, E. A. and\n            Harris, Charles R. and Archibald, Anne M. and\n            Ribeiro, Ant{\\^o}nio H. and Pedregosa, Fabian and\n            {van Mulbregt}, Paul and {SciPy 1.0 Contributors}},\n  title   = {{{SciPy} 1.0: Fundamental Algorithms for Scientific\n            Computing in Python}},\n  journal = {Nature Methods},\n  year    = {2020},\n  volume  = {17},\n  pages   = {261--272},\n  adsurl  = {https://rdcu.be/b08Wh},\n  doi     = {10.1038/s41592-019-0686-2},\n}\n"
+        },
+        "bayes_std": {
+            "display_name": "Bayesian Standard Deviation Confidence Interval",
+            "type": "Dict",
+            "has_range": true,
+            "range": [0, null],
+            "explanation": "Bayesian estimate of upper and lower bounds of the population standard deviation.There is a 95% chance that the true standard deviation lies within this range given the sample data.",
+            "citation": "@article{2020SciPy-NMeth,\n  author  = {Virtanen, Pauli and Gommers, Ralf and Oliphant, Travis E. and\n            Haberland, Matt and Reddy, Tyler and Cournapeau, David and\n            Burovski, Evgeni and Peterson, Pearu and Weckesser, Warren and\n            Bright, Jonathan and {van der Walt}, St{\\'e}fan J. and\n            Brett, Matthew and Wilson, Joshua and Millman, K. Jarrod and\n            Mayorov, Nikolay and Nelson, Andrew R. J. and Jones, Eric and\n            Kern, Robert and Larson, Eric and Carey, C J and\n            Polat, {\\.I}lhan and Feng, Yu and Moore, Eric W. and\n            {VanderPlas}, Jake and Laxalde, Denis and Perktold, Josef and\n            Cimrman, Robert and Henriksen, Ian and Quintero, E. A. and\n            Harris, Charles R. and Archibald, Anne M. and\n            Ribeiro, Ant{\\^o}nio H. and Pedregosa, Fabian and\n            {van Mulbregt}, Paul and {SciPy 1.0 Contributors}},\n  title   = {{{SciPy} 1.0: Fundamental Algorithms for Scientific\n            Computing in Python}},\n  journal = {Nature Methods},\n  year    = {2020},\n  volume  = {17},\n  pages   = {261--272},\n  adsurl  = {https://rdcu.be/b08Wh},\n  doi     = {10.1038/s41592-019-0686-2},\n}\n"
+        },
+        "bayes_std_avg": {
+            "display_name": "Bayesian Standard Deviation Confidence Interval Avg",
+            "type": "Dict",
+            "has_range": true,
+            "range": [0, null],
+            "explanation": "Bayesian estimate of the population standard deviation.",
+            "citation": "@article{2020SciPy-NMeth,\n  author  = {Virtanen, Pauli and Gommers, Ralf and Oliphant, Travis E. and\n            Haberland, Matt and Reddy, Tyler and Cournapeau, David and\n            Burovski, Evgeni and Peterson, Pearu and Weckesser, Warren and\n            Bright, Jonathan and {van der Walt}, St{\\'e}fan J. and\n            Brett, Matthew and Wilson, Joshua and Millman, K. Jarrod and\n            Mayorov, Nikolay and Nelson, Andrew R. J. and Jones, Eric and\n            Kern, Robert and Larson, Eric and Carey, C J and\n            Polat, {\\.I}lhan and Feng, Yu and Moore, Eric W. and\n            {VanderPlas}, Jake and Laxalde, Denis and Perktold, Josef and\n            Cimrman, Robert and Henriksen, Ian and Quintero, E. A. and\n            Harris, Charles R. and Archibald, Anne M. and\n            Ribeiro, Ant{\\^o}nio H. and Pedregosa, Fabian and\n            {van Mulbregt}, Paul and {SciPy 1.0 Contributors}},\n  title   = {{{SciPy} 1.0: Fundamental Algorithms for Scientific\n            Computing in Python}},\n  journal = {Nature Methods},\n  year    = {2020},\n  volume  = {17},\n  pages   = {261--272},\n  adsurl  = {https://rdcu.be/b08Wh},\n  doi     = {10.1038/s41592-019-0686-2},\n}\n"
+        },
+        "frozen_mean_mean": {
+            "display_name": "Frozen Mean Mean",
+            "type": "Dict",
+            "has_range": false,
+            "range": [null, null],
+            "explanation": "Bayesian Estimate of the Mean Mean value.",
+            "citation": "@article{2020SciPy-NMeth,\n  author  = {Virtanen, Pauli and Gommers, Ralf and Oliphant, Travis E. and\n            Haberland, Matt and Reddy, Tyler and Cournapeau, David and\n            Burovski, Evgeni and Peterson, Pearu and Weckesser, Warren and\n            Bright, Jonathan and {van der Walt}, St{\\'e}fan J. and\n            Brett, Matthew and Wilson, Joshua and Millman, K. Jarrod and\n            Mayorov, Nikolay and Nelson, Andrew R. J. and Jones, Eric and\n            Kern, Robert and Larson, Eric and Carey, C J and\n            Polat, {\\.I}lhan and Feng, Yu and Moore, Eric W. and\n            {VanderPlas}, Jake and Laxalde, Denis and Perktold, Josef and\n            Cimrman, Robert and Henriksen, Ian and Quintero, E. A. and\n            Harris, Charles R. and Archibald, Anne M. and\n            Ribeiro, Ant{\\^o}nio H. and Pedregosa, Fabian and\n            {van Mulbregt}, Paul and {SciPy 1.0 Contributors}},\n  title   = {{{SciPy} 1.0: Fundamental Algorithms for Scientific\n            Computing in Python}},\n  journal = {Nature Methods},\n  year    = {2020},\n  volume  = {17},\n  pages   = {261--272},\n  adsurl  = {https://rdcu.be/b08Wh},\n  doi     = {10.1038/s41592-019-0686-2},\n}\n"
+        },
+        "frozen_mean_variance": {
+            "display_name": "Frozen Mean Variance",
+            "type": "Dict",
+            "has_range": true,
+            "range": [0, null],
+            "explanation": "Bayesian Estimate of the Variance of the Mean value.",
+            "citation": "@article{2020SciPy-NMeth,\n  author  = {Virtanen, Pauli and Gommers, Ralf and Oliphant, Travis E. and\n            Haberland, Matt and Reddy, Tyler and Cournapeau, David and\n            Burovski, Evgeni and Peterson, Pearu and Weckesser, Warren and\n            Bright, Jonathan and {van der Walt}, St{\\'e}fan J. and\n            Brett, Matthew and Wilson, Joshua and Millman, K. Jarrod and\n            Mayorov, Nikolay and Nelson, Andrew R. J. and Jones, Eric and\n            Kern, Robert and Larson, Eric and Carey, C J and\n            Polat, {\\.I}lhan and Feng, Yu and Moore, Eric W. and\n            {VanderPlas}, Jake and Laxalde, Denis and Perktold, Josef and\n            Cimrman, Robert and Henriksen, Ian and Quintero, E. A. and\n            Harris, Charles R. and Archibald, Anne M. and\n            Ribeiro, Ant{\\^o}nio H. and Pedregosa, Fabian and\n            {van Mulbregt}, Paul and {SciPy 1.0 Contributors}},\n  title   = {{{SciPy} 1.0: Fundamental Algorithms for Scientific\n            Computing in Python}},\n  journal = {Nature Methods},\n  year    = {2020},\n  volume  = {17},\n  pages   = {261--272},\n  adsurl  = {https://rdcu.be/b08Wh},\n  doi     = {10.1038/s41592-019-0686-2},\n}\n"
+        },
+        "frozen_mean_std": {
+            "display_name": "Frozen Mean Standard Deviation",
+            "type": "Dict",
+            "has_range": true,
+            "range": [0, null],
+            "explanation": "Bayesian Estimate of the Standard Deviation of the Mean value.",
+            "citation": "@article{2020SciPy-NMeth,\n  author  = {Virtanen, Pauli and Gommers, Ralf and Oliphant, Travis E. and\n            Haberland, Matt and Reddy, Tyler and Cournapeau, David and\n            Burovski, Evgeni and Peterson, Pearu and Weckesser, Warren and\n            Bright, Jonathan and {van der Walt}, St{\\'e}fan J. and\n            Brett, Matthew and Wilson, Joshua and Millman, K. Jarrod and\n            Mayorov, Nikolay and Nelson, Andrew R. J. and Jones, Eric and\n            Kern, Robert and Larson, Eric and Carey, C J and\n            Polat, {\\.I}lhan and Feng, Yu and Moore, Eric W. and\n            {VanderPlas}, Jake and Laxalde, Denis and Perktold, Josef and\n            Cimrman, Robert and Henriksen, Ian and Quintero, E. A. and\n            Harris, Charles R. and Archibald, Anne M. and\n            Ribeiro, Ant{\\^o}nio H. and Pedregosa, Fabian and\n            {van Mulbregt}, Paul and {SciPy 1.0 Contributors}},\n  title   = {{{SciPy} 1.0: Fundamental Algorithms for Scientific\n            Computing in Python}},\n  journal = {Nature Methods},\n  year    = {2020},\n  volume  = {17},\n  pages   = {261--272},\n  adsurl  = {https://rdcu.be/b08Wh},\n  doi     = {10.1038/s41592-019-0686-2},\n}\n"
+        },
+        "frozen_variance_mean": {
+            "display_name": "Frozen Variance Mean",
+            "type": "Dict",
+            "has_range": true,
+            "range": [0, null],
+            "explanation": "Bayesian Estimate of the Mean of the Variance.",
+            "citation": "@article{2020SciPy-NMeth,\n  author  = {Virtanen, Pauli and Gommers, Ralf and Oliphant, Travis E. and\n            Haberland, Matt and Reddy, Tyler and Cournapeau, David and\n            Burovski, Evgeni and Peterson, Pearu and Weckesser, Warren and\n            Bright, Jonathan and {van der Walt}, St{\\'e}fan J. and\n            Brett, Matthew and Wilson, Joshua and Millman, K. Jarrod and\n            Mayorov, Nikolay and Nelson, Andrew R. J. and Jones, Eric and\n            Kern, Robert and Larson, Eric and Carey, C J and\n            Polat, {\\.I}lhan and Feng, Yu and Moore, Eric W. and\n            {VanderPlas}, Jake and Laxalde, Denis and Perktold, Josef and\n            Cimrman, Robert and Henriksen, Ian and Quintero, E. A. and\n            Harris, Charles R. and Archibald, Anne M. and\n            Ribeiro, Ant{\\^o}nio H. and Pedregosa, Fabian and\n            {van Mulbregt}, Paul and {SciPy 1.0 Contributors}},\n  title   = {{{SciPy} 1.0: Fundamental Algorithms for Scientific\n            Computing in Python}},\n  journal = {Nature Methods},\n  year    = {2020},\n  volume  = {17},\n  pages   = {261--272},\n  adsurl  = {https://rdcu.be/b08Wh},\n  doi     = {10.1038/s41592-019-0686-2},\n}\n"
+        },
+        "frozen_variance_variance": {
+            "display_name": "Frozen Variance Variance",
+            "type": "Dict",
+            "has_range": true,
+            "range": [0, null],
+            "explanation": "Bayesian Estimate of the Variance of the Variance.",
+            "citation": "@article{2020SciPy-NMeth,\n  author  = {Virtanen, Pauli and Gommers, Ralf and Oliphant, Travis E. and\n            Haberland, Matt and Reddy, Tyler and Cournapeau, David and\n            Burovski, Evgeni and Peterson, Pearu and Weckesser, Warren and\n            Bright, Jonathan and {van der Walt}, St{\\'e}fan J. and\n            Brett, Matthew and Wilson, Joshua and Millman, K. Jarrod and\n            Mayorov, Nikolay and Nelson, Andrew R. J. and Jones, Eric and\n            Kern, Robert and Larson, Eric and Carey, C J and\n            Polat, {\\.I}lhan and Feng, Yu and Moore, Eric W. and\n            {VanderPlas}, Jake and Laxalde, Denis and Perktold, Josef and\n            Cimrman, Robert and Henriksen, Ian and Quintero, E. A. and\n            Harris, Charles R. and Archibald, Anne M. and\n            Ribeiro, Ant{\\^o}nio H. and Pedregosa, Fabian and\n            {van Mulbregt}, Paul and {SciPy 1.0 Contributors}},\n  title   = {{{SciPy} 1.0: Fundamental Algorithms for Scientific\n            Computing in Python}},\n  journal = {Nature Methods},\n  year    = {2020},\n  volume  = {17},\n  pages   = {261--272},\n  adsurl  = {https://rdcu.be/b08Wh},\n  doi     = {10.1038/s41592-019-0686-2},\n}\n"
+        },
+        "frozen_variance_std": {
+            "display_name": "Frozen Variance Standard Deviation",
+            "type": "Dict",
+            "has_range": true,
+            "range": [0, null],
+            "explanation": "Bayesian Estimate of the Standard Deviation of the Variance.",
+            "citation": "@article{2020SciPy-NMeth,\n  author  = {Virtanen, Pauli and Gommers, Ralf and Oliphant, Travis E. and\n            Haberland, Matt and Reddy, Tyler and Cournapeau, David and\n            Burovski, Evgeni and Peterson, Pearu and Weckesser, Warren and\n            Bright, Jonathan and {van der Walt}, St{\\'e}fan J. and\n            Brett, Matthew and Wilson, Joshua and Millman, K. Jarrod and\n            Mayorov, Nikolay and Nelson, Andrew R. J. and Jones, Eric and\n            Kern, Robert and Larson, Eric and Carey, C J and\n            Polat, {\\.I}lhan and Feng, Yu and Moore, Eric W. and\n            {VanderPlas}, Jake and Laxalde, Denis and Perktold, Josef and\n            Cimrman, Robert and Henriksen, Ian and Quintero, E. A. and\n            Harris, Charles R. and Archibald, Anne M. and\n            Ribeiro, Ant{\\^o}nio H. and Pedregosa, Fabian and\n            {van Mulbregt}, Paul and {SciPy 1.0 Contributors}},\n  title   = {{{SciPy} 1.0: Fundamental Algorithms for Scientific\n            Computing in Python}},\n  journal = {Nature Methods},\n  year    = {2020},\n  volume  = {17},\n  pages   = {261--272},\n  adsurl  = {https://rdcu.be/b08Wh},\n  doi     = {10.1038/s41592-019-0686-2},\n}\n"
+        },
+        "frozen_std_mean": {
+            "display_name": "Frozen Standard Deviation Mean",
+            "type": "Dict",
+            "has_range": true,
+            "range": [0, null],
+            "explanation": "Bayesian Estimate of the Mean of the Standard Deviation.",
+            "citation": "@article{2020SciPy-NMeth,\n  author  = {Virtanen, Pauli and Gommers, Ralf and Oliphant, Travis E. and\n            Haberland, Matt and Reddy, Tyler and Cournapeau, David and\n            Burovski, Evgeni and Peterson, Pearu and Weckesser, Warren and\n            Bright, Jonathan and {van der Walt}, St{\\'e}fan J. and\n            Brett, Matthew and Wilson, Joshua and Millman, K. Jarrod and\n            Mayorov, Nikolay and Nelson, Andrew R. J. and Jones, Eric and\n            Kern, Robert and Larson, Eric and Carey, C J and\n            Polat, {\\.I}lhan and Feng, Yu and Moore, Eric W. and\n            {VanderPlas}, Jake and Laxalde, Denis and Perktold, Josef and\n            Cimrman, Robert and Henriksen, Ian and Quintero, E. A. and\n            Harris, Charles R. and Archibald, Anne M. and\n            Ribeiro, Ant{\\^o}nio H. and Pedregosa, Fabian and\n            {van Mulbregt}, Paul and {SciPy 1.0 Contributors}},\n  title   = {{{SciPy} 1.0: Fundamental Algorithms for Scientific\n            Computing in Python}},\n  journal = {Nature Methods},\n  year    = {2020},\n  volume  = {17},\n  pages   = {261--272},\n  adsurl  = {https://rdcu.be/b08Wh},\n  doi     = {10.1038/s41592-019-0686-2},\n}\n"
+        },
+        "frozen_std_variance": {
+            "display_name": "Frozen Standard Deviation Variance",
+            "type": "Dict",
+            "has_range": true,
+            "range": [0, null],
+            "explanation": "Bayesian Estimate of the Variance of the Standard Deviation.",
+            "citation": "@article{2020SciPy-NMeth,\n  author  = {Virtanen, Pauli and Gommers, Ralf and Oliphant, Travis E. and\n            Haberland, Matt and Reddy, Tyler and Cournapeau, David and\n            Burovski, Evgeni and Peterson, Pearu and Weckesser, Warren and\n            Bright, Jonathan and {van der Walt}, St{\\'e}fan J. and\n            Brett, Matthew and Wilson, Joshua and Millman, K. Jarrod and\n            Mayorov, Nikolay and Nelson, Andrew R. J. and Jones, Eric and\n            Kern, Robert and Larson, Eric and Carey, C J and\n            Polat, {\\.I}lhan and Feng, Yu and Moore, Eric W. and\n            {VanderPlas}, Jake and Laxalde, Denis and Perktold, Josef and\n            Cimrman, Robert and Henriksen, Ian and Quintero, E. A. and\n            Harris, Charles R. and Archibald, Anne M. and\n            Ribeiro, Ant{\\^o}nio H. and Pedregosa, Fabian and\n            {van Mulbregt}, Paul and {SciPy 1.0 Contributors}},\n  title   = {{{SciPy} 1.0: Fundamental Algorithms for Scientific\n            Computing in Python}},\n  journal = {Nature Methods},\n  year    = {2020},\n  volume  = {17},\n  pages   = {261--272},\n  adsurl  = {https://rdcu.be/b08Wh},\n  doi     = {10.1038/s41592-019-0686-2},\n}\n"
+        },
+        "frozen_std_std": {
+            "display_name": "Frozen Standard Deviation Standard Deviation",
+            "type": "Dict",
+            "has_range": true,
+            "range": [0, null],
+            "explanation": "Bayesian Estimate of the Standard Deviation of the Standard Deviation.",
+            "citation": "@article{2020SciPy-NMeth,\n  author  = {Virtanen, Pauli and Gommers, Ralf and Oliphant, Travis E. and\n            Haberland, Matt and Reddy, Tyler and Cournapeau, David and\n            Burovski, Evgeni and Peterson, Pearu and Weckesser, Warren and\n            Bright, Jonathan and {van der Walt}, St{\\'e}fan J. and\n            Brett, Matthew and Wilson, Joshua and Millman, K. Jarrod and\n            Mayorov, Nikolay and Nelson, Andrew R. J. and Jones, Eric and\n            Kern, Robert and Larson, Eric and Carey, C J and\n            Polat, {\\.I}lhan and Feng, Yu and Moore, Eric W. and\n            {VanderPlas}, Jake and Laxalde, Denis and Perktold, Josef and\n            Cimrman, Robert and Henriksen, Ian and Quintero, E. A. and\n            Harris, Charles R. and Archibald, Anne M. and\n            Ribeiro, Ant{\\^o}nio H. and Pedregosa, Fabian and\n            {van Mulbregt}, Paul and {SciPy 1.0 Contributors}},\n  title   = {{{SciPy} 1.0: Fundamental Algorithms for Scientific\n            Computing in Python}},\n  journal = {Nature Methods},\n  year    = {2020},\n  volume  = {17},\n  pages   = {261--272},\n  adsurl  = {https://rdcu.be/b08Wh},\n  doi     = {10.1038/s41592-019-0686-2},\n}\n"
+        }
+    }
+}

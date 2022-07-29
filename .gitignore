@@ -1,10 +1,16 @@
 # data files
 DashboardJS/
+data/cifar-10-batches-py
+data/cifar-10-python.tar.gz
+cifar_net.pth
+datasets/
 cProfileExport
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
+
+demos/data/*
 
 # C extensions
 *.so
@@ -136,3 +142,6 @@ dmypy.json
 *~
 Dashboard/metric_info_page-copy.py
 Dashboard/certificate_info_page-copy.py
+
+# redis
+dump.rdb

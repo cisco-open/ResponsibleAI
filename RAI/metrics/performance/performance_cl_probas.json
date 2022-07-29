@@ -1,0 +1,23 @@
+{
+    "name" : "performance_cl_probas",
+    "display_name": "Probability Based Classification Performance",
+    "compatibility": {"task_type": ["binary_classification"],
+                      "data_type": ["Numeric"],
+                      "output_requirements": ["predict", "predict_proba"],
+                      "dataset_requirements": ["y"]},
+    "src": "stats",
+    "dependency_list": [],
+    "tags": ["performance", "Classification"],
+    "complexity_class": "linear",
+    "metrics": {
+        "roc_auc": {
+            "display_name": "Area Under the Receiver Operating Characteristic Curve",
+            "type": "Numeric",
+            "tags": [],
+            "has_range": true,
+            "range": [0, 1],
+            "explanation": "Indicates the performance of a model at classification at all classification levels.\nDescribes how much the model can distinguish between classes.\nIdeal value is 1.0, whereas a score of 0.5 indicates a model has no ability to distinguish between classes.",
+            "citation": "@article{scikit-learn,\n    title={Scikit-learn: Machine Learning in {P}ython},\n    author={Pedregosa, F. and Varoquaux, G. and Gramfort, A. and Michel, V.\n    and Thirion, B. and Grisel, O. and Blondel, M. and Prettenhofer, P.\n    and Weiss, R. and Dubourg, V. and Vanderplas, J. and Passos, A. and\n    Cournapeau, D. and Brucher, M. and Perrot, M. and Duchesnay, E.},\n    journal={Journal of Machine Learning Research},\n    volume={12},\n    pages={2825--2830},\n    year={2011}\n}"
+        }
+    }
+}

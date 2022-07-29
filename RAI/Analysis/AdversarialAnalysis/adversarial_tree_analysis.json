@@ -1,0 +1,13 @@
+{
+    "name": "adversarial_tree_classifier",
+    "display_name": "Adversarial Tree Classifier",
+    "compatibility": {"task_type": "classification",
+                      "data_type": ["Numeric"],
+                      "output_requirements": ["predict"],
+                      "dataset_requirements": ["X", "y"],
+                      "required_groups":  []},
+    "src": "",
+    "dependency_list": [],
+    "tags": [],
+    "complexity_class": "linear"
+}
