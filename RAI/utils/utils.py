@@ -119,7 +119,7 @@ def torch_to_RAI(torch_item):
 
 # Converts a pandas dataframe to a Rai Metadatabase and X and y data.
 def df_to_RAI(df, test_tf=None, target_column=None, clear_nans=True, extra_symbols="?", normalize=None,
-              max_categorical_threshold=None, text_columns=[]):
+              max_categorical_threshold=None, text_columns=[], image_columns=[]):
     if clear_nans:
         df_remove_nans(df, extra_symbols)
     if max_categorical_threshold:
@@ -140,6 +140,9 @@ def df_to_RAI(df, test_tf=None, target_column=None, clear_nans=True, extra_symbo
         if y.name in text_columns:
             f = Feature(y.name, "Text", y.name)
             y = y.tolist()
+        elif y.name in image_columns:
+            f = Feature(y.name, "image", y.name)
+            y = y.to_numpy()
         elif categorical:
             fact = y.factorize(sort=True)
             f = Feature(y.name, "integer", y.name, categorical=True,
@@ -157,6 +160,8 @@ def df_to_RAI(df, test_tf=None, target_column=None, clear_nans=True, extra_symbo
     for c in df:
         if c in text_columns:
             f = Feature(c, "Text", c)
+        elif c in image_columns:
+            f = Feature(c, "image", c)
         elif str(df.dtypes[c]) in ["object", "category"]:
             fact = df[c].factorize(sort=True)
             df[c] = fact[0]

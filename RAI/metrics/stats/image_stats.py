@@ -13,7 +13,6 @@ class ImageStatsGroup(MetricGroup, class_location=os.path.abspath(__file__)):
 
     def compute(self, data_dict):
         images = data_dict["data"].image
-        images = np.array(images)
 
         # images are of shape [examples, image columns, c, w, h]
         # TODO: needs to be calculated per image column, use calculate_per_feature
