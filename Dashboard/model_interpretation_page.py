@@ -1,6 +1,7 @@
 import logging
 import dash_bootstrap_components as dbc
 from dash import Dash, html, dcc, Input, Output
+import plotly.graph_objs as go
 import dash
 from server import redisUtil
 import dash_daq as daq
@@ -60,8 +61,6 @@ def display_gradcam_imgs(c_name):
     print("display_gradcam_imgs")
     ctx = dash.callback_context.triggered[0]["prop_id"]
     print("ctx: ", ctx)
-
-
     gradcam = interpretation["gradcam"][c_name]
     
     title_row = html.Tr([html.Td("Correct predicted"), html.Td("Wrongly predicted")])
@@ -77,7 +76,9 @@ def display_gradcam_imgs(c_name):
             correct_img, correct_heatmap = np.array(correct_data[0]), np.array(correct_data[1])
             print("Correct img", i, ", ", correct_img)
             print("Correct img ", i, ", ", correct_img.shape)
-            return [px.imshow(correct_img).show()]
+            fig = go.Figure(go.Image(z=correct_img.tolist()))
+            return [html.Div(id="test_image_container", children=[dcc.Graph(figure=fig)])]
+            # return dbc.Table([go.Figure(go.Image(z=correct_img))])
             print("Correct heatmap ", i, ", ", correct_heatmap.shape)
         else:
             correct_img, correct_heatmap = None, None
