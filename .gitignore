@@ -144,3 +144,6 @@ Dashboard/certificate_info_page-copy.py
 
 # redis
 dump.rdb
+
+#.DS_Store for mac
+*.DS_Store
