@@ -107,7 +107,6 @@ class RedisUtils(object):
         return self._current_project["model_interpretation"]
 
     def set_current_project(self, project_name):
-
         project_name = "CIFAR_Conv_1"
         logger.info(f"changing current project from {self._current_project_name} to {project_name}")
         if self._current_project_name == project_name:

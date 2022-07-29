@@ -1,6 +1,9 @@
 import logging
 import dash_bootstrap_components as dbc
 from dash import Dash, html, dcc, Input, Output
+import plotly.graph_objs as go
+from dash import dash_table
+import dash
 from server import redisUtil
 import dash_daq as daq
 import numpy as np
@@ -14,6 +17,7 @@ c_names = []
 interpretation = dict()
 
 def get_model_interpretation_page():
+    print("Get model interpretation page")
     return html.Div([
         html.H4(children='Model Interpretation'),
         get_interpretation()
@@ -21,6 +25,7 @@ def get_model_interpretation_page():
 
 
 def get_interpretation():
+    print("Get interpretation")
     global interpretation
     interpretation = redisUtil.get_model_interpretation()
     methods = interpretation.keys()
@@ -34,6 +39,7 @@ def get_interpretation():
 
 
 def display_gradcam(gradcam):
+    print("Display gradcam")
     title_div = html.Div("Grad-CAM")
     global c_names
     c_names = list(gradcam.keys())
@@ -50,31 +56,61 @@ def display_gradcam(gradcam):
 @app.callback(
     Output(component_id="gradcam-display", component_property="children"),
     Input(component_id="gradcam-class-radio", component_property="value"),
+    prevent_initial_call=True
 )
 def display_gradcam_imgs(c_name):
+    print("display_gradcam_imgs")
+    ctx = dash.callback_context.triggered[0]["prop_id"]
+    print("ctx: ", ctx)
     gradcam = interpretation["gradcam"][c_name]
     
     title_row = html.Tr([html.Td("Correct predicted"), html.Td("Wrongly predicted")])
 
     img_rows = []
+
+    # print("Gradcam correct: ", gradcam["correct"][0])
+    # print("Gradcam wrong: ", gradcam["wrong"][0])
+
     for i in range(5):
         if len(gradcam["correct"]) > i:
             correct_data = gradcam["correct"][i]
             correct_img, correct_heatmap = np.array(correct_data[0]), np.array(correct_data[1])
+            # print("Correct img", i, ", ", correct_img)
+            print("Correct img ", i, ", ", correct_img.shape)
+            fig_1 = go.Figure(go.Image(z=correct_img))
+            fig_1.update_xaxes(showticklabels=False).update_yaxes(showticklabels=False)
+            fig_graph_1 = dcc.Graph(figure=fig_1)
+
+            fig_2 = go.Figure(go.Image(z=correct_heatmap))
+            fig_2.update_xaxes(showticklabels=False).update_yaxes(showticklabels=False)
+            fig_graph_2 = dcc.Graph(figure=fig_2)
+
+            val = dbc.Table(children=[
+                html.Thead(html.Tr([html.Td([html.Th("Image")]), html.Td("Heatmap")])),
+                html.Tbody([
+                    html.Tr([html.Div(fig_graph_1, style={"display": "inline-block"}), html.Div(fig_graph_2, style={"display": "inline-block"})]),
+                    html.Tr([html.Td("text 1"), html.Td("text 2")])])
+            ])
+            return val
+            print("Correct heatmap ", i, ", ", correct_heatmap.shape)
         else:
             correct_img, correct_heatmap = None, None
         if len(gradcam["wrong"]) > i:
             wrong_data = gradcam["wrong"][i]
             wrong_img, wrong_heatmap = np.array(wrong_data[0]), np.array(wrong_data[1])
+            print("Wrong img ", i, ", ", wrong_img.shape)
+            print("wrong heatmap ", i, ", ", wrong_heatmap.shape)
         else:
             wrong_img, wrong_heatmap = None, None
 
-        correct_block = html.Td(html.Div([px.imshow(correct_img),px.imshow(correct_heatmap)]))
-        wrong_block = html.Td(html.Div([px.imshow(wrong_img),px.imshow(wrong_heatmap)]))
+        correct_block = html.Td(html.Div([px.imshow(correct_img), px.imshow(correct_heatmap)]))
+        wrong_block = html.Td(html.Div([px.imshow(wrong_img), px.imshow(wrong_heatmap)]))
 
         img_rows.append(html.Tr([correct_block, wrong_block]))
 
     table = dbc.Table([
         [title_row] + img_rows
     ])
+    table = dbc.Table([])
+    print("Completed Display Gradcam Images")
     return table
