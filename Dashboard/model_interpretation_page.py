@@ -2,6 +2,7 @@ import logging
 import dash_bootstrap_components as dbc
 from dash import Dash, html, dcc, Input, Output
 import plotly.graph_objs as go
+from dash import dash_table
 import dash
 from server import redisUtil
 import dash_daq as daq
@@ -74,12 +75,23 @@ def display_gradcam_imgs(c_name):
         if len(gradcam["correct"]) > i:
             correct_data = gradcam["correct"][i]
             correct_img, correct_heatmap = np.array(correct_data[0]), np.array(correct_data[1])
-            print("Correct img", i, ", ", correct_img)
+            # print("Correct img", i, ", ", correct_img)
             print("Correct img ", i, ", ", correct_img.shape)
-            fig = go.Figure(go.Image(z=correct_img.tolist()))
-            fig.update_xaxes(showticklabels=False).update_yaxes(showticklabels=False)
-            return [html.Div(id="test_image_container", children=[dcc.Graph(figure=fig)])]
-            # return dbc.Table([go.Figure(go.Image(z=correct_img))])
+            fig_1 = go.Figure(go.Image(z=correct_img))
+            fig_1.update_xaxes(showticklabels=False).update_yaxes(showticklabels=False)
+            fig_graph_1 = dcc.Graph(figure=fig_1)
+
+            fig_2 = go.Figure(go.Image(z=correct_heatmap))
+            fig_2.update_xaxes(showticklabels=False).update_yaxes(showticklabels=False)
+            fig_graph_2 = dcc.Graph(figure=fig_2)
+
+            val = dbc.Table(children=[
+                html.Thead(html.Tr([html.Td([html.Th("Image")]), html.Td("Heatmap")])),
+                html.Tbody([
+                    html.Tr([html.Div(fig_graph_1, style={"display": "inline-block"}), html.Div(fig_graph_2, style={"display": "inline-block"})]),
+                    html.Tr([html.Td("text 1"), html.Td("text 2")])])
+            ])
+            return val
             print("Correct heatmap ", i, ", ", correct_heatmap.shape)
         else:
             correct_img, correct_heatmap = None, None
