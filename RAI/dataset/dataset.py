@@ -107,7 +107,7 @@ class MetaDatabase:
                 else:
                     self.categorical_map.append(i)
                     self.categorical_mask[i] = True
-            elif f.dtype == "Image":
+            elif f.dtype == "image":
                 self.image_mask[i] = True
                 self.image_map.append(i)
             elif f.dtype not in all_data_types:
