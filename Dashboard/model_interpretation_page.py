@@ -48,9 +48,11 @@ def display_gradcam(gradcam):
     radios_div = dcc.RadioItems(c_names, c_names[0], id="gradcam-class-radio")
 
     # 2. display images below when each button is clicked
-    gradcam_display_div = html.Div(id="gradcam-display", children=[])
+    gradcam_display_div = html.Div(id="gradcam-display", children=display_gradcam_imgs(c_names[0]))
 
     return html.Div([title_div, radios_div, gradcam_display_div])
+
+
 
 
 @app.callback(
@@ -59,24 +61,78 @@ def display_gradcam(gradcam):
     prevent_initial_call=True
 )
 def display_gradcam_imgs(c_name):
-    print("display_gradcam_imgs")
     ctx = dash.callback_context.triggered[0]["prop_id"]
-    print("ctx: ", ctx)
+    gradcam = interpretation["gradcam"][c_name]
+    
+    title_row = html.Tr([html.Td("Correct predicted"), html.Td("Wrongly predicted")], id="gradcam-display-title-row", className="gradcam-display-table-row")
+    img_rows = []
+
+    for i in range(5):
+        if len(gradcam["correct"]) > i:
+            correct_data = gradcam["correct"][i]
+            correct_img, correct_heatmap = np.array(correct_data[0]), np.array(correct_data[1])
+
+            fig_1 = go.Figure(go.Image(z=correct_img))
+            fig_1.update_xaxes(showticklabels=False).update_yaxes(showticklabels=False)
+            fig_1.update_layout(width=70, height=70, margin=go.layout.Margin(l=0,r=0,b=0,t=0,pad=0))
+            fig_graph_1 = html.Div(dcc.Graph(figure=fig_1), style={"display": "inline-block", "padding": "0"})
+
+            fig_2 = go.Figure(go.Image(z=correct_heatmap))
+            fig_2.update_xaxes(showticklabels=False).update_yaxes(showticklabels=False)
+            fig_2.update_layout(width=70, height=70, margin=go.layout.Margin(l=0,r=0,b=0,t=0,pad=0))
+            fig_graph_2 = html.Div(dcc.Graph(figure=fig_2), style={"display": "inline-block", "padding": "0"})
+
+            # correct_img_map = html.Div()
+            # print("Correct heatmap ", i, ", ", correct_heatmap.shape)
+            correct_block=html.Td([fig_graph_1, fig_graph_2])
+        else:
+            correct_block=html.Td()
+        
+        if len(gradcam["wrong"]) > i:
+            wrong_data = gradcam["wrong"][i]
+            wrong_img, wrong_heatmap = np.array(wrong_data[0]), np.array(wrong_data[1])
+
+            fig_1 = go.Figure(go.Image(z=wrong_img))
+            fig_1.update_xaxes(showticklabels=False).update_yaxes(showticklabels=False)
+            fig_1.update_layout(width=70, height=70, margin=go.layout.Margin(l=0,r=0,b=0,t=0,pad=0))
+            fig_graph_1 = html.Div(dcc.Graph(figure=fig_1), style={"display": "inline-block", "padding": "0"})
+
+            fig_2 = go.Figure(go.Image(z=wrong_heatmap))
+            fig_2.update_xaxes(showticklabels=False).update_yaxes(showticklabels=False)
+            fig_2.update_layout(width=70, height=70, margin=go.layout.Margin(l=0,r=0,b=0,t=0,pad=0))
+            fig_graph_2 = html.Div(dcc.Graph(figure=fig_2), style={"display": "inline-block", "padding": "0"})
+
+            # wrong_img_map = html.Div([fig_graph_1, fig_graph_2])
+            wrong_block=html.Td([fig_graph_1, fig_graph_2])
+        else:
+            wrong_block=html.Td()
+
+        img_rows.append(html.Tr([correct_block, wrong_block], className="gradcam-display-table-row"))
+
+    table = dbc.Table(
+        [title_row] + img_rows
+    )
+    print("Completed Display Gradcam Images")
+    return table
+
+
+
+
+
+
+
+def display_gradcam_imgs_(c_name):
+    ctx = dash.callback_context.triggered[0]["prop_id"]
     gradcam = interpretation["gradcam"][c_name]
     
     title_row = html.Tr([html.Td("Correct predicted"), html.Td("Wrongly predicted")])
 
     img_rows = []
 
-    # print("Gradcam correct: ", gradcam["correct"][0])
-    # print("Gradcam wrong: ", gradcam["wrong"][0])
-
     for i in range(5):
         if len(gradcam["correct"]) > i:
             correct_data = gradcam["correct"][i]
             correct_img, correct_heatmap = np.array(correct_data[0]), np.array(correct_data[1])
-            # print("Correct img", i, ", ", correct_img)
-            print("Correct img ", i, ", ", correct_img.shape)
             fig_1 = go.Figure(go.Image(z=correct_img))
             fig_1.update_xaxes(showticklabels=False).update_yaxes(showticklabels=False)
             fig_graph_1 = dcc.Graph(figure=fig_1)
@@ -91,10 +147,11 @@ def display_gradcam_imgs(c_name):
                     html.Tr([html.Div(fig_graph_1, style={"display": "inline-block"}), html.Div(fig_graph_2, style={"display": "inline-block"})]),
                     html.Tr([html.Td("text 1"), html.Td("text 2")])])
             ])
-            return val
             print("Correct heatmap ", i, ", ", correct_heatmap.shape)
+            return val
         else:
             correct_img, correct_heatmap = None, None
+        
         if len(gradcam["wrong"]) > i:
             wrong_data = gradcam["wrong"][i]
             wrong_img, wrong_heatmap = np.array(wrong_data[0]), np.array(wrong_data[1])
@@ -111,6 +168,5 @@ def display_gradcam_imgs(c_name):
     table = dbc.Table([
         [title_row] + img_rows
     ])
-    table = dbc.Table([])
     print("Completed Display Gradcam Images")
     return table

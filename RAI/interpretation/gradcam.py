@@ -158,14 +158,7 @@ class GradCAM:
 
         print("Grad-CAM Visualize Done")
 
-        ### FOR SANITY CHECK 
 
-        plt.imshow(self.viz_results["dog"]["correct"][0][0])
-        plt.savefig("./dog_correct_img_0.png")
-        plt.close()
-        plt.imshow(self.viz_results["dog"]["correct"][0][1])
-        plt.savefig("./dog_correct_heatmap_0.png")
-        plt.close()
         
 
 
