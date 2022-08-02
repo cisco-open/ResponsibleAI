@@ -3,7 +3,7 @@ from sklearn.model_selection import train_test_split
 from RAI.AISystem import AISystem, Model
 from RAI.dataset import Data, Dataset, Feature
 from RAI.redis import RaiRedis
-from RAI.utils import df_to_RAI, torch_to_RAI
+from RAI.utils import df_to_RAI, torch_to_RAI, modals_to_RAI
 from datasets import load_dataset
 import torch
 import torchvision
@@ -12,6 +12,8 @@ from sklearn.ensemble import RandomForestClassifier
 
 use_dashboard = True
 
+
+# TODO: This file is for future testing purposes
 def main():
     # Get Dataset
     data_path = "../data/adult/"
@@ -27,16 +29,15 @@ def main():
                                             download=True, transform=transform)
     trainloader = torch.utils.data.DataLoader(trainset, batch_size=64, shuffle=True, num_workers=2)
     xTrainImage, _ = torch_to_RAI(trainloader)
-    image_df = pd.DataFrame(xTrainImage[:len(all_data)].tolist())
-    all_data["image"] = image_df
+    xTrainImage = xTrainImage[:len(all_data.index)]
 
     # Get text data
     text_df = pd.DataFrame(load_dataset("gigaword", split="train")[:len(all_data)])
     all_data["text"] = text_df["document"]
 
     # Get features, and X y for image data
-    meta, X, y, output = df_to_RAI(all_data, target_column="income-per-year", normalize="Scalar",
-                                   text_columns=["text"], image_columns=["image"])
+    meta, X, y, output = modals_to_RAI(all_data, df_target_column="income-per-year", image_X={"cifar": xTrainImage},
+                                       normalize="Scalar", text_columns=["text"])
 
     xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=1, stratify=y)
 
@@ -47,7 +48,7 @@ def main():
                                   "protected_attributes": ["race"], "positive_label": 1},
                      "time_complexity": "polynomial"}
 
-    dataset = Dataset({"train": Data(xTrain, yTrain), "test": Data(xTest, yTest)})
+    dataset = Dataset({"test": Data(X=xTrain, y=yTrain)})
     ai = AISystem(name="multi_modal_classification",  task='binary_classification', meta_database=meta, dataset=dataset, model=model)
     ai.initialize(user_config=configuration)
 
@@ -70,7 +71,6 @@ def main():
 
     analysis = AnalysisManager()
     print("available analysis: ", analysis.get_available_analysis(ai, "test"))
-    # result = analysis.run_analysis(ai, ["test"], ["FairnessAnalysis"])
     result = analysis.run_all(ai, "test", "Test run!")
     for analysis in result:
         print("Analysis: " + analysis)

@@ -59,13 +59,7 @@ class Data:
     def separate(self, scalar_mask, categorical_mask, image_mask, text_mask):
         self.scalar = np.array(self.X[:, scalar_mask]).astype(np.float64) if self.X is not None else None
         self.categorical = self.X[:, categorical_mask] if self.X is not None else None
-        self.image = None
-        if self.X is not None:
-            img_data = self.X[:, image_mask]
-            for i in range(len(img_data)):
-                for j in range(len(img_data[i])):
-                    img_data[i][j] = np.asarray(img_data[i][j])
-            self.image = img_data
+        self.image = self.X[:, image_mask] if self.X is not None else None
         self.text = self.X[:, text_mask] if self.X is not None else None
 
 

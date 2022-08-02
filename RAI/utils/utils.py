@@ -10,7 +10,7 @@ from RAI.dataset.dataset import Feature, MetaDatabase
 __all__ = ['jsonify', 'compare_runtimes', 'df_to_meta_database', 'df_to_RAI', 'reweighing',
            'calculate_per_mapped_features', 'convert_float32_to_float64',
            'convert_to_feature_value_dict', 'convert_to_feature_dict', 'map_to_feature_array', 'map_to_feature_dict',
-           'torch_to_RAI']
+           'torch_to_RAI', 'modals_to_RAI']
 
 
 # TODO: Remove?
@@ -118,8 +118,8 @@ def torch_to_RAI(torch_item):
 
 
 # Converts a pandas dataframe to a Rai Metadatabase and X and y data.
-def df_to_RAI(df, test_tf=None, target_column=None, clear_nans=True, extra_symbols="?", normalize=None,
-              max_categorical_threshold=None, text_columns=[], image_columns=[]):
+def df_to_RAI(df, target_column=None, clear_nans=True, extra_symbols="?", normalize=None,
+              max_categorical_threshold=None, text_columns=[]):
     if clear_nans:
         df_remove_nans(df, extra_symbols)
     if max_categorical_threshold:
@@ -130,19 +130,13 @@ def df_to_RAI(df, test_tf=None, target_column=None, clear_nans=True, extra_symbo
         if normalize == "Scalar":
             num_d = df.select_dtypes(exclude=['object', 'category'])
             df[num_d.columns] = StandardScaler().fit_transform(num_d)
-    features = []
-    cat_columns = []
     output_feature = []
     if target_column:
         y = df.pop(target_column)
         categorical = str(y.dtypes) in ["object", "category"]
-        f = None
         if y.name in text_columns:
             f = Feature(y.name, "Text", y.name)
             y = y.tolist()
-        elif y.name in image_columns:
-            f = Feature(y.name, "image", y.name)
-            y = y.to_numpy()
         elif categorical:
             fact = y.factorize(sort=True)
             f = Feature(y.name, "integer", y.name, categorical=True,
@@ -160,8 +154,6 @@ def df_to_RAI(df, test_tf=None, target_column=None, clear_nans=True, extra_symbo
     for c in df:
         if c in text_columns:
             f = Feature(c, "Text", c)
-        elif c in image_columns:
-            f = Feature(c, "image", c)
         elif str(df.dtypes[c]) in ["object", "category"]:
             fact = df[c].factorize(sort=True)
             df[c] = fact[0]
@@ -170,6 +162,64 @@ def df_to_RAI(df, test_tf=None, target_column=None, clear_nans=True, extra_symbo
         elif "float" in str(df.dtypes[c]):
             f = Feature(c, "float", c)
         features.append(f)
+    return MetaDatabase(features), df.to_numpy(), y, output_feature
+
+
+# Converts a pandas dataframe with numeric data and text, as well as image dictionaries to a Rai Metadatabase and X and y data.
+# TODO: This needs to be formalized for multi modal data
+def modals_to_RAI(df, df_target_column=None, image_X: dict = {}, image_y: dict = {}, clear_nans=True, extra_symbols="?", normalize=None,
+              max_categorical_threshold=None, text_columns=[]):
+    if max_categorical_threshold:
+        for col in df:
+            if len(df[col].unique()) > max_categorical_threshold:
+                if col not in text_columns:
+                    df[col] = pd.Categorical(df[col])
+    if normalize is not None:
+        if normalize == "Scalar":
+            num_d = df.select_dtypes(exclude=['object', 'category'])
+            df[num_d.columns] = StandardScaler().fit_transform(num_d)
+
+    output_feature = []
+    if df_target_column:
+        y = df.pop(df_target_column)
+        categorical = str(y.dtypes) in ["object", "category"]
+        f = None
+        if y.name in text_columns:
+            f = Feature(y.name, "Text", y.name)
+            y = y.tolist()
+        elif categorical:
+            fact = y.factorize(sort=True)
+            f = Feature(y.name, "integer", y.name, categorical=True,
+                    values={i: v for i, v in enumerate(fact[1])})
+            y, _ = y.factorize(sort=True)
+        else:
+            f = Feature(y.name, "float", y.name)
+            y = y.tolist()
+        output_feature.append(f)
+    else:
+        y = None
+    if image_y is not None:
+        for key in image_y:
+            f = Feature(key, "image", key)
+            image_y[key] = image_y[key].to_numpy()
+            y = image_y[key]
+    features = []
+
+    for c in df:
+        if c in text_columns:
+            f = Feature(c, "Text", c)
+        elif str(df.dtypes[c]) in ["object", "category"]:
+            fact = df[c].factorize(sort=True)
+            df[c] = fact[0]
+            f = Feature(c, "integer", c, categorical=True,
+                        values={i: v for i, v in enumerate(fact[1])})
+        elif "float" in str(df.dtypes[c]):
+            f = Feature(c, "float", c)
+        features.append(f)
+    if image_X is not None:
+        for key in image_X:
+            f = Feature(key, "image", key)
+            features.append(f)
     return MetaDatabase(features), df.to_numpy(), y, output_feature
 
 

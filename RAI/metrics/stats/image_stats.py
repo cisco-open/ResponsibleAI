@@ -1,7 +1,6 @@
 from RAI.metrics.metric_group import MetricGroup
 import os
-import numpy as np
-from RAI.utils import map_to_feature_array, map_to_feature_dict, convert_float32_to_float64
+from RAI.utils import convert_float32_to_float64
 
 
 class ImageStatsGroup(MetricGroup, class_location=os.path.abspath(__file__)):
