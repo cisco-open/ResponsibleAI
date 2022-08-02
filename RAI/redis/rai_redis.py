@@ -64,11 +64,11 @@ class RaiRedis:
         self.redis_connection.set(self.ai_system.name + '|project_info', json.dumps(project_info))
         self.redis_connection.sadd("projects", self.ai_system.name)
 
-    def summarize_data(self) -> None:
+    def export_visualizations(self) -> None:
         print("AI System Name: ", self.ai_system.name)
         data_summary = self.ai_system.get_data_summary()
-        print("Data Summary: ", data_summary)
         self.redis_connection.set(self.ai_system.name + '|data_summary', json.dumps(data_summary))
+        self.interpret_model()
 
     def add_dataset(self, loc=None):
         dataset = self.ai_system.dataset.data_dict

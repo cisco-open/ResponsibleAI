@@ -24,10 +24,10 @@ all_data = pd.concat([train_data, test_data], ignore_index=True)
 idx = all_data['race'] != 'White'
 all_data['race'][idx] = 'Black'
 
-meta, X, y = df_to_RAI(all_data, target_column="income-per-year", normalize=None, max_categorical_threshold=5)
+meta, X, y, output = df_to_RAI(all_data, target_column="income-per-year", normalize="Scalar", max_categorical_threshold=5)
 xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=1, stratify=y)
 
-model = Model(agent=clf, name="income ai", predict_fun=clf.predict, predict_prob_fun=clf.predict_proba,
+model = Model(agent=clf, output_features=output, name="income ai", predict_fun=clf.predict, predict_prob_fun=clf.predict_proba,
               model_class="Random Forest Classifier")
 configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}},
                               "protected_attributes": ["race"], "positive_label": 1},
@@ -52,4 +52,4 @@ print(metrics)
 def test_auc():
     """Tests that the RAI auc function is correct."""
     fpr, tpr, thresholds = sklearn.metrics.roc_curve(yTest, probas[:, 1])
-    assert metrics['performance_cl_probas']['auc'] == sklearn.metrics.auc(fpr, tpr)
+    assert metrics['performance_cl_probas']['roc_auc'] == sklearn.metrics.auc(fpr, tpr)

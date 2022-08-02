@@ -174,9 +174,9 @@ class MetricManager(object):
         assert "compatibility" in config, \
             config["name"] + " must contain compatibility details"
 
-        assert "task_type" in config["compatibility"] and "task_type" in config["compatibility"] and \
-               (config["compatibility"]["task_type"] is None or config["compatibility"]["task_type"] in all_task_types), \
-            config["name"] + "['compatibility']['task_type'] must be one of " + str(all_task_types)
+        assert "task_type" in config["compatibility"] and (config["compatibility"]["task_type"] == [] or
+                all(i in all_task_types for i in config["compatibility"]["task_type"])),\
+            config["name"] + "['compatibility']['task_type'] must be empty or one of " + str(all_task_types)
 
         assert "data_type" in config["compatibility"] and all(x in all_data_types for x in config["compatibility"]["data_type"]), \
             config["name"] + "['compatibility']['data_type'] must be one of " + str(all_data_types)

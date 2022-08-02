@@ -14,7 +14,5 @@ class NoiseRobustnessMetricGroup(MetricGroup, class_location=os.path.abspath(__f
         if self.ai_system.metric_manager.user_config is not None and "stats" in self.ai_system.metric_manager.user_config and "args" in self.ai_system.metric_manager.user_config["stats"]:
             args = self.ai_system.metric_manager.user_config["stats"]["args"]
 
-        data = data_dict["data"]
-        preds = data_dict["predict"]
 
 # TODO: Move to analysis class. 

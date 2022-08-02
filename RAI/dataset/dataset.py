@@ -30,8 +30,7 @@ class Data:
     """
     The RAI Data class contains X and y data for a single Data split (train, test, val).
     """
-
-    def __init__(self, X, y, rawX=None) -> None:
+    def __init__(self, X=None, y=None, rawX=None) -> None:
         self.X = X
         self.y = y
         self.rawX = rawX 
@@ -69,10 +68,11 @@ class Data:
         return self.rawX[key]
 
     # Splits up a dataset into its different data types, currently scalar and categorical
-    def separate(self, scalar_mask, categorical_mask, image_mask):
-        self.scalar = self.X[:, scalar_mask]
-        self.categorical = self.X[:, categorical_mask]
-        self.image = self.X[:, image_mask]
+    def separate(self, scalar_mask, categorical_mask, image_mask, text_mask):
+        self.scalar = np.array(self.X[:, scalar_mask]).astype(np.float64) if self.X is not None else None
+        self.categorical = self.X[:, categorical_mask] if self.X is not None else None
+        self.image = self.X[:, image_mask] if self.X is not None else None
+        self.text = self.X[:, text_mask] if self.X is not None else None
 
 
 class Dataset:
@@ -82,14 +82,12 @@ class Dataset:
     are RAI Data objects.
     """
 
-    def __init__(self, data_dict, target=None, y_name=None) -> None:
+    def __init__(self, data_dict) -> None:
         self.data_dict = data_dict
-        self.target = target
-        self.y_name = y_name
 
-    def separate_data(self, scalar_mask, categorical_mask, image_mask):
+    def separate_data(self, scalar_mask, categorical_mask, image_mask, text_mask):
         for data in self.data_dict:
-            self.data_dict[data].separate(scalar_mask, categorical_mask, image_mask)
+            self.data_dict[data].separate(scalar_mask, categorical_mask, image_mask, text_mask)
 
 
 class MetaDatabase:
@@ -105,9 +103,11 @@ class MetaDatabase:
         self.categorical_mask = np.zeros(len(features), dtype=bool)
         self.numerical_mask = np.zeros(len(features), dtype=bool)
         self.image_mask = np.zeros(len(features), dtype=bool)
+        self.text_mask = np.zeros(len(features), dtype=bool)
         self.scalar_map = []
         self.categorical_map = []
         self.image_map = []
+        self.text_map = []
         self.data_format = set()
         self.stored_data = set()
         self.sensitive_features = []
@@ -122,20 +122,26 @@ class MetaDatabase:
                 else:
                     self.categorical_map.append(i)
                     self.categorical_mask[i] = True
-            elif f.dtype == "Image":
+            elif f.dtype == "image":
                 self.image_mask[i] = True
                 self.image_map.append(i)
+            elif f.dtype == "text":
+                self.text_mask[i] = True
+                self.text_map.append(i)
             elif f.dtype not in all_data_types:
                 assert "Feature datatype must be one of: ", all_data_types
 
     def __repr__(self) -> str:
         return f" features: {self.features}"
 
-    def initialize_requirements(self, data: Data, sensitive: bool) -> None:
-        if data.X is not None and len(data.X) != 0:
-            self.stored_data.add("X")
-        if data.y is not None and len(data.y) != 0:
-            self.stored_data.add("y")
+    def initialize_requirements(self, dataset: Dataset, sensitive: bool) -> None:
+        data_dict = dataset.data_dict
+        if len(data_dict) > 0:
+            data = list(dataset.data_dict.values())[0]
+            if data.X is not None and len(data.X) != 0:
+                self.stored_data.add("X")
+            if data.y is not None and len(data.y) != 0:
+                self.stored_data.add("y")
         if sensitive:
             self.stored_data.add("sensitive_features")
         for feature in self.features:

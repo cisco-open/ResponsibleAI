@@ -1,7 +1,7 @@
 {
     "name" : "performance_cl_probas",
     "display_name": "Probability Based Classification Performance",
-    "compatibility": {"task_type": "binary_classification",
+    "compatibility": {"task_type": ["binary_classification"],
                       "data_type": ["Numeric"],
                       "output_requirements": ["predict", "predict_proba"],
                       "dataset_requirements": ["y"]},

@@ -1,7 +1,7 @@
 {
     "name" : "group_fairness",
     "display_name": "Group Fairness",
-    "compatibility": {"task_type": "classification",
+    "compatibility": {"task_type": ["classification"],
                       "data_type": ["Numeric"],
                       "output_requirements": ["predict"],
                       "dataset_requirements": ["X", "y", "sensitive_features"]},

@@ -28,7 +28,9 @@ features = [
 meta = MetaDatabase(features)
 
 reg = RandomForestRegressor(n_estimators=15, max_depth=20)
-model = Model(agent=reg, name="Cisco_RealEstate_AI", model_class="Random Forest Regressor")
+
+output = Feature("Predicted Value", "float", "Predicted Value")
+model = Model(agent=reg, output_features=output, name="Cisco_RealEstate_AI", model_class="Random Forest Regressor")
 
 configuration = {"equal_treatment": {"priv_groups": [("Gender", 1)]}}
 ai = AISystem("Regression example", task='regression', meta_database=meta, dataset=dataset, model=model, enable_certificates=False)
@@ -67,96 +69,91 @@ def test_percent_Nan_rows():
 def test_kstat_1():
     """Tests that the RAI kstat_1 calculation is correct."""
     for i, feature in enumerate(features):
+        res = None
         if not feature.categorical:
-            assert metrics['summary_stats']['kstat_1'][i] == scipy.stats.kstat(xTest[:, i], 1)
-        else:
-            assert metrics['summary_stats']['kstat_1'][i] is None
+            res = scipy.stats.kstat(xTest[:, i], 1)
+        assert metrics['summary_stats']['kstat_1'][features[i].name] == res
 
 
 def test_kstat_2():
     """Tests that the RAI kstat_2 calculation is correct."""
     for i, feature in enumerate(features):
+        res = None
         if not feature.categorical:
-            assert metrics['summary_stats']['kstat_2'][i] == scipy.stats.kstat(xTest[:, i], 2)
-        else:
-            assert metrics['summary_stats']['kstat_2'][i] is None
+            res = scipy.stats.kstat(xTest[:, i], 2)
+        assert metrics['summary_stats']['kstat_2'][features[i].name] == res
 
 
 def test_kstat_3():
     """Tests that the RAI kstat_3 calculation is correct."""
     for i, feature in enumerate(features):
+        res = None
         if not feature.categorical:
-            assert metrics['summary_stats']['kstat_3'][i] == scipy.stats.kstat(xTest[:, i], 3)
-        else:
-            assert metrics['summary_stats']['kstat_3'][i] is None
+            res = scipy.stats.kstat(xTest[:, i], 3)
+        assert metrics['summary_stats']['kstat_3'][features[i].name] == res
 
 
 def test_kstat_4():
     """Tests that the RAI kstat_1 calculation is correct."""
     for i, feature in enumerate(features):
+        res = None
         if not feature.categorical:
-            assert metrics['summary_stats']['kstat_4'][i] == scipy.stats.kstat(xTest[:, i], 4)
-        else:
-            assert metrics['summary_stats']['kstat_4'][i] is None
+            res = scipy.stats.kstat(xTest[:, i], 4)
+        assert metrics['summary_stats']['kstat_4'][features[i].name] == res
 
 
 def test_kstatvar():
     """Tests that the RAI kstatvar calculation is correct."""
     for i, feature in enumerate(features):
+        res = None
         if not feature.categorical:
-            assert metrics['summary_stats']['kstatvar'][i] == scipy.stats.kstatvar(xTest[:, i])
-        else:
-            assert metrics['summary_stats']['kstatvar'][i] is None
+            res = scipy.stats.kstatvar(xTest[:, i])
+        assert metrics['summary_stats']['kstatvar'][features[i].name] == res
 
 
 def test_iqr():
     """Tests that the RAI kstatvar calculation is correct."""
     for i, feature in enumerate(features):
+        res = None
         if not feature.categorical:
-            assert metrics['summary_stats']['iqr'][i] == scipy.stats.iqr(xTest[:, i])
-        else:
-            assert metrics['summary_stats']['iqr'][i] is None
+            res = scipy.stats.iqr(xTest[:, i])
+        assert metrics['summary_stats']['iqr'][features[i].name] == res
 
 
 def test_bayes_mvs():
     """Tests that the RAI kstatvar calculation is correct."""
     for i, feature in enumerate(features):
+        res = {"mean": [None], "var": [None], "std": [None]}
         if not feature.categorical:
-            mean, var, std = scipy.stats.bayes_mvs(xTest[:, i])
-            assert metrics['summary_stats']['bayes_mean_avg'][i] == mean[0]
-            assert metrics['summary_stats']['bayes_variance_avg'][i] == var[0]
-            assert metrics['summary_stats']['bayes_std_avg'][i] == std[0]
-        else:
-            assert metrics['summary_stats']['bayes_mean_avg'][i] is None
-            assert metrics['summary_stats']['bayes_variance_avg'][i] is None
-            assert metrics['summary_stats']['bayes_std_avg'][i] is None
+            res["mean"], res["var"], res["std"] = scipy.stats.bayes_mvs(xTest[:, i])
+        assert metrics['summary_stats']['bayes_mean_avg'][features[i].name] == res['mean'][0]
+        assert metrics['summary_stats']['bayes_variance_avg'][features[i].name] == res['var'][0]
+        assert metrics['summary_stats']['bayes_std_avg'][features[i].name] == res['std'][0]
 
 
 def test_frozen_mvs():
     """Tests that the RAI kstatvar calculation is correct."""
     for i, feature in enumerate(features):
+        res_mean = {"mean": None, "var": None, "std": None}
+        res_var = {"mean": None, "var": None, "std": None}
+        res_std = {"mean": None, "var": None, "std": None}
         if not feature.categorical:
             mean, var, std = scipy.stats.mvsdist(xTest[:, i])
-            assert metrics['summary_stats']['frozen_mean_mean'][i] == mean.mean()
-            assert metrics['summary_stats']['frozen_mean_variance'][i] == mean.var()
-            assert metrics['summary_stats']['frozen_mean_std'][i] == mean.std()
-
-            assert metrics['summary_stats']['frozen_variance_mean'][i] == var.mean()
-            assert metrics['summary_stats']['frozen_variance_variance'][i] == var.var()
-            assert metrics['summary_stats']['frozen_variance_std'][i] == var.std()
-
-            assert metrics['summary_stats']['frozen_std_mean'][i] == std.mean()
-            assert metrics['summary_stats']['frozen_std_variance'][i] == std.var()
-            assert metrics['summary_stats']['frozen_std_std'][i] == std.std()
-        else:
-            assert metrics['summary_stats']['frozen_mean_mean'][i] is None
-            assert metrics['summary_stats']['frozen_mean_variance'][i] is None
-            assert metrics['summary_stats']['frozen_mean_std'][i] is None
-
-            assert metrics['summary_stats']['frozen_variance_mean'][i] is None
-            assert metrics['summary_stats']['frozen_variance_variance'][i] is None
-            assert metrics['summary_stats']['frozen_variance_std'][i] is None
-
-            assert metrics['summary_stats']['frozen_std_mean'][i] is None
-            assert metrics['summary_stats']['frozen_std_variance'][i] is None
-            assert metrics['summary_stats']['frozen_std_std'][i] is None
+            res_mean['mean'] = mean.mean()
+            res_mean['var'] = mean.var()
+            res_mean['std'] = mean.std()
+            res_var['mean'] = var.mean()
+            res_var['var'] = var.var()
+            res_var['std'] = var.std()
+            res_std['mean'] = std.mean()
+            res_std['var'] = std.var()
+            res_std['std'] = std.std()
+        assert metrics['summary_stats']['frozen_mean_mean'][features[i].name] == res_mean['mean']
+        assert metrics['summary_stats']['frozen_mean_variance'][features[i].name] == res_mean['var']
+        assert metrics['summary_stats']['frozen_mean_std'][features[i].name] == res_mean['std']
+        assert metrics['summary_stats']['frozen_variance_mean'][features[i].name] == res_var['mean']
+        assert metrics['summary_stats']['frozen_variance_variance'][features[i].name] == res_var['var']
+        assert metrics['summary_stats']['frozen_variance_std'][features[i].name] == res_var['std']
+        assert metrics['summary_stats']['frozen_std_mean'][features[i].name] == res_std['mean']
+        assert metrics['summary_stats']['frozen_std_variance'][features[i].name] == res_std['var']
+        assert metrics['summary_stats']['frozen_std_std'][features[i].name] == res_std['std']

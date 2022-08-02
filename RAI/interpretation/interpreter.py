@@ -1,4 +1,3 @@
-import torch 
 from RAI.interpretation.gradcam import GradCAM
 
 class Interpreter:
@@ -16,9 +15,7 @@ class Interpreter:
     def getModelInterpretation(self):
         if "gradcam" in self.methods:
             self._gradcam()
-
         return self.interpretation
-
 
     def _gradcam(self):
         self.gradcam = GradCAM(self.model, self.datasets)

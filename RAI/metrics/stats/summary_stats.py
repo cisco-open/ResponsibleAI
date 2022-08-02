@@ -3,6 +3,7 @@ import numpy as np
 import scipy.stats
 import warnings
 import os
+import pandas as pd
 from RAI.utils.utils import calculate_per_mapped_features, map_to_feature_dict, map_to_feature_array, convert_float32_to_float64
 import json
 
@@ -26,13 +27,16 @@ class StatMetricGroup(MetricGroup, class_location=os.path.abspath(__file__)):
         self.metrics["mean"].value = map_to_feature_dict(np.mean(scalar_data, **args.get("mean", {}), axis=0), features, scalar_map)
         self.metrics["mean"].value = convert_float32_to_float64(self.metrics["mean"].value)
         self.metrics["covariance"].value = map_to_feature_array(np.cov(scalar_data.T, **args.get("covariance", {})), features, scalar_map)
-        self.metrics["num_nan_rows"].value = np.count_nonzero(np.isnan(data.X).any(axis=1))
+        self.metrics["num_nan_rows"].value = np.count_nonzero(pd.isna(data.X).any(axis=1))
         self.metrics["percent_nan_rows"].value = self.metrics["num_nan_rows"].value/np.shape(np.asarray(data.X))[0]
 
         with warnings.catch_warnings():
             warnings.filterwarnings('ignore')
-            self.metrics["geometric_mean"].value = map_to_feature_dict(scipy.stats.mstats.gmean(scalar_data), features, scalar_map)
-            self.metrics['geometric_mean'].value = convert_float32_to_float64(self.metrics['geometric_mean'].value)
+            try:
+                self.metrics["geometric_mean"].value = map_to_feature_dict(scipy.stats.mstats.gmean(scalar_data), features, scalar_map)
+                self.metrics['geometric_mean'].value = convert_float32_to_float64(self.metrics['geometric_mean'].value)
+            except:
+                self.metrics["geometric_mean"].value = None
 
         self.metrics["mode"].value = map_to_feature_dict(scipy.stats.mstats.mode(scalar_data)[0][0], features, scalar_map)
         self.metrics["skew"].value = map_to_feature_dict(scipy.stats.mstats.skew(scalar_data), features, scalar_map)

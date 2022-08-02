@@ -15,9 +15,9 @@ class BasicRobustMetricGroup(MetricGroup, class_location=os.path.abspath(__file_
         if self.ai_system.metric_manager.user_config is not None and "stats" in self.ai_system.metric_manager.user_config and "args" in self.ai_system.metric_manager.user_config["stats"]:
             args = self.ai_system.metric_manager.user_config["stats"]["args"]
         scalar_data = data_dict["data"].scalar
-
-        mean_v = np.mean(scalar_data, **args.get("mean", {}), axis=0, keepdims=True)
-        std_v = np.std(scalar_data, **args.get("covariance", {}), axis=0, keepdims= True )
+        # scalar_data = np.array(scalar_data)
+        mean_v = np.mean(scalar_data, axis=0, keepdims=True)
+        std_v = np.std(scalar_data, axis=0, keepdims=True)
         max_v = np.max(scalar_data, axis=0, keepdims=True)
         min_v = np.min(scalar_data, axis=0, keepdims=True)
 

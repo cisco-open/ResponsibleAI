@@ -24,10 +24,10 @@ all_data = pd.concat([train_data, test_data], ignore_index=True)
 idx = all_data['race'] != 'White'
 all_data['race'][idx] = 'Black'
 
-meta, X, y = df_to_RAI(all_data, target_column="income-per-year", normalize=None, max_categorical_threshold=5)
+meta, X, y, output = df_to_RAI(all_data, target_column="income-per-year", normalize="Scalar", max_categorical_threshold=5)
 xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=1, stratify=y)
 
-model = Model(agent=clf, name="Income classifier", predict_fun=clf.predict, predict_prob_fun=clf.predict_proba,
+model = Model(agent=clf, output_features=output, name="Income classifier", predict_fun=clf.predict, predict_prob_fun=clf.predict_proba,
               model_class="Random Forest Classifier",)
 configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}},
                               "positive_label": 1},
@@ -49,8 +49,3 @@ info = ai.get_metric_info()
 def test_inaccuracy():
     """Tests that the RAI inaccuracy calculation is correct."""
     assert metrics['adversarial_robustness']['inaccuracy'] == np.sqrt(1 - sklearn.metrics.accuracy_score(yTest, predictions))
-
-
-def test_data_dimensionality():
-    """Tests that the RAI data dimensionality calculation is correct."""
-    assert metrics['adversarial_robustness']['data_dimensionality'] == np.sqrt(len(xTest[0]))

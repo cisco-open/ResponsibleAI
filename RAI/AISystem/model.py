@@ -10,7 +10,7 @@ class Model:
     Attributes of the model are used to determine which metrics are relevant.
     """
 
-    def __init__(self, output_features=None, predict_fun=None, predict_prob_fun=None, generate_text_fun=None, name=None, display_name=None,
+    def __init__(self, output_features=None, predict_fun=None, predict_prob_fun=None, generate_text_fun=None, generate_image_fun=None, name=None, display_name=None,
                  agent=None, loss_function=None, optimizer=None, model_class=None, description=None) -> None:
         assert name is not None, "Please provide a model name"
         self.output_types = {}
@@ -28,6 +28,8 @@ class Model:
         self.generate_text_fun = generate_text_fun
         if generate_text_fun is not None:
             self.output_types["generate_text"] = generate_text_fun
+        if generate_image_fun is not None:
+            self.output_types["generate_image"] = generate_image_fun
         self.name = name
         self.display_name = name
         if display_name is not None:

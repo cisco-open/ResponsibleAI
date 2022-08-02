@@ -1,7 +1,7 @@
 {
     "name": "dataset_fairness",
     "display_name": "Dataset Fairness",
-    "compatibility": {"task_type": "classification",
+    "compatibility": {"task_type": ["classification"],
                       "data_type": ["Numeric"],
                       "output_requirements": [],
                       "dataset_requirements": ["X", "sensitive_features"]},

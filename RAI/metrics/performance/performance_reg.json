@@ -1,7 +1,7 @@
 {
     "name" : "performance_reg",
     "display_name": "Regression Performance",
-    "compatibility": {"task_type": "regression",
+    "compatibility": {"task_type": ["regression"],
                       "data_type": ["Numeric"],
                       "output_requirements": ["predict"],
                       "dataset_requirements": ["X", "y"]},

@@ -13,11 +13,15 @@ class AdversarialTreeAnalysis(Analysis, class_location=os.path.abspath(__file__)
         self.ai_system = ai_system
         self.dataset = dataset
         self.tag = tag
+        self.search_steps = 10
+        self.search_steps = 3
         self.distortion_size = 0.3
 
     @classmethod
     def is_compatible(cls, ai_system: AISystem, dataset: str):
         compatible = super().is_compatible(ai_system, dataset)
+        model_types = ["ExtraTreesClassifier", "RandomForestClassifier", "GradientBoostingClassifier"]
+        compatible = compatible and any(i in str(ai_system.model.agent.__class__) for i in model_types)
         return compatible and str(ai_system.model.agent.__class__).startswith("<class 'sklearn.ensemble.")
 
     def initialize(self):
@@ -36,7 +40,7 @@ class AdversarialTreeAnalysis(Analysis, class_location=os.path.abspath(__file__)
 
         # Note: This runs slow, to speed it up we can take portion of test set size
         result['adversarial_tree_verification_bound'], result['adversarial_tree_verification_error'] = \
-            rt.verify(data.X, y, eps_init=self.distortion_size, nb_search_steps=10, max_clique=2, max_level=2)
+            rt.verify(data.X, y, eps_init=self.distortion_size, nb_search_steps=self.search_steps, max_clique=2, max_level=2)
         return result
 
     def to_string(self):

@@ -22,10 +22,11 @@ features = [
     Feature("Latitude", 'float', "Block group Latitude"),
     Feature("Longitude", 'float', "Block group Longitude")
 ]
+output = Feature("Value Prediction", "float", "Predicted Value")
 
 meta = MetaDatabase(features)
 reg = RandomForestRegressor(n_estimators=15, max_depth=20)
-model = Model(agent=reg, predict_fun=reg.predict, name="Cisco_RealEstate_AI", model_class="Random Forest Regressor")
+model = Model(agent=reg, output_features=output, predict_fun=reg.predict, name="Cisco_RealEstate_AI", model_class="Random Forest Regressor")
 
 configuration = {"equal_treatment": {"priv_groups": [("Gender", 1)]}}
 ai = AISystem("Regression example", task='regression', meta_database=meta, dataset=dataset, model=model, enable_certificates=False)

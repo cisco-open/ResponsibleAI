@@ -15,7 +15,7 @@ import logging
 import numpy as np
 import dash
 import dash_bootstrap_components as dbc
-from dash import Input, Output, dcc, html
+from dash import Input, Output, dcc, html, State
 from server import app, redisUtil
 from home_page import get_home_page
 from model_info_page import get_model_info_page
@@ -144,51 +144,59 @@ content = html.Div(id="page-content", style=CONTENT_STYLE)
 
 
 @app.callback(
-    Output("page-content", "children"), 
+    Output("page-content", "children"),
+    Output("dataset_selector", "options"),
+    Output("dataset_selector", "value"),
     Input("url", "pathname"),
     Input('project_selector', 'value'),
     Input("url", "search"),
-    Input("dataset_selector", "value")
+    Input("dataset_selector", "value"),
+    State("dataset_selector", "options"),
 
 )
-def render_page_content(pathname, value, search, dataset_value):
+def render_page_content(pathname, value, search, dataset_value, dataset_options):
     if search:
         parsed = urllib.parse.urlparse(search)
         parsed_dict = urllib.parse.parse_qs(parsed.query)
     ctx = dash.callback_context
-
     redisUtil.set_current_project(value)
-    redisUtil.set_current_dataset(dataset_value)
+
+    if any("project_selector.value" in ctx.triggered[i]["prop_id"] for i in range(len(ctx.triggered))):
+        redisUtil.set_current_project(value)
+        dataset_options = redisUtil.get_dataset_list()
+        dataset_value = dataset_options[0]
+        redisUtil.set_current_dataset(dataset_value)
+    elif any("dataset_selector.value" in ctx.triggered[i]["prop_id"] for i in range(len(ctx.triggered))):
+        redisUtil.set_current_dataset(dataset_value)
 
     if pathname == "/":
-        return get_home_page() 
+        return get_home_page(), dataset_options, dataset_value
     elif pathname == "/settings":
-        return get_setting_page()
-    
+        return get_setting_page(), dataset_options, dataset_value
     elif pathname == "/metrics":
-        return get_metric_page()
+        return get_metric_page(), dataset_options, dataset_value
     elif pathname == "/metrics_details":
-        return get_metric_page_details() 
+        return get_metric_page_details(), dataset_options, dataset_value
     elif pathname == "/metrics_graphs":
-        return get_metric_page_graph()
+        return get_metric_page_graph(), dataset_options, dataset_value
     elif pathname == "/individual_metric_view":
-        return get_single_metric_display()
+        return get_single_metric_display(), dataset_options, dataset_value
     elif pathname == "/certificates":
-        return get_certificate_page()
+        return get_certificate_page(), dataset_options, dataset_value
     elif pathname == "/modelInfo":
-        return get_model_info_page()    
+        return get_model_info_page()    , dataset_options, dataset_value
     elif pathname == "/single_metric_info/":
-        return get_single_model_info_page(parsed_dict["g"][0], parsed_dict["m"][0])
+        return get_single_model_info_page(parsed_dict["g"][0], parsed_dict["m"][0]), dataset_options, dataset_value
     elif pathname == "/metricsInfo":
-        return get_metric_info_page()
+        return get_metric_info_page(), dataset_options, dataset_value
     elif pathname == "/certificateInfo":
-        return get_certificate_info_page()
+        return get_certificate_info_page(), dataset_options, dataset_value
     elif pathname == "/modelView":
-        return get_model_view_page()
+        return get_model_view_page(), dataset_options, dataset_value
     elif pathname == "/dataSummary":
-        return get_data_summary_page()
+        return get_data_summary_page(), dataset_options, dataset_value
     elif pathname == "/modelInterpretation":
-        return get_model_interpretation_page()
+        return get_model_interpretation_page(), dataset_options, dataset_value
         
     # If the user tries to reach a different page, return a 404 message
     return html.Div(
@@ -197,7 +205,7 @@ def render_page_content(pathname, value, search, dataset_value):
             html.Hr(),
             html.P(f"The pathname {pathname} was not recognised..."),
         ]
-    )
+    ), dataset_options, dataset_value
 
 
 if __name__ == "__main__":
@@ -208,7 +216,7 @@ if __name__ == "__main__":
     redisUtil.initialize(subscribers={"metric_detail", "metric_graph", "certificate"})
     project_list = redisUtil.get_projects_list()
     redisUtil.set_current_project(project_list[0])
-    print("Dataset list: ", redisUtil.get_dataset_list())
+    redisUtil.set_current_dataset(redisUtil.get_dataset_list()[0])
     app.layout = html.Div([dcc.Location(id="url"), get_sidebar(), content])
 
     app.run_server(debug=False)

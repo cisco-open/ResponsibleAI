@@ -18,11 +18,11 @@ class TreeModels(MetricGroup, class_location=os.path.abspath(__file__)):
 
     def compute(self, data_dict):
         model = self.ai_system.model.agent
-        self.metrics["estimator_counts"].value = None
+        self.metrics["estimator_counts"].value = 0
         self.metrics["estimator_params"].value = None
         self.metrics["feature_names"].value = None
         if hasattr(model, 'n_estimators'):
-            self.metrics["estimator_counts"].value = 0
+            self.metrics["estimator_counts"].value = model.n_estimators
         if hasattr(model, 'estimators_'):
             self.metrics["estimator_params"].value = copy.copy(model.estimators_)
         self.metrics["feature_names"].value = [f.name for f in self.ai_system.meta_database.features]

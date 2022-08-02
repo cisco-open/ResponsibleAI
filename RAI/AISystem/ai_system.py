@@ -2,7 +2,7 @@ from RAI.AISystem.model import Model
 from RAI.certificates import CertificateManager
 from RAI.dataset.dataset import Data, Dataset, MetaDatabase
 from RAI.metrics import MetricManager
-from RAI.all_types import all_output_requirements, all_task_types
+from RAI.all_types import all_output_requirements, all_task_types, all_metric_types
 from RAI.dataset.vis import DataSummarizer
 from RAI.interpretation.interpreter import Interpreter
 import numpy as np
@@ -19,7 +19,7 @@ class AISystem:
                  meta_database: MetaDatabase,
                  dataset: Dataset,
                  model: Model,
-                 interpret_methods: list[str],
+                 interpret_methods: list[str] = [],
                  enable_certificates: bool = True) -> None:
         assert task in all_task_types, "Task must be in " + str(all_task_types)
         self.name = name
@@ -40,17 +40,18 @@ class AISystem:
 
     def initialize(self, user_config: dict, custom_certificate_location: str = None, **kw_args):
         self.user_config = user_config
-        # print("Scalar mask: ", self.meta_database.scalar_mask)
-        # print("Image mask: ", self.meta_database.image_mask)
-        self.dataset.separate_data(self.meta_database.scalar_mask, self.meta_database.categorical_mask, self.meta_database.image_mask)
-        self.meta_database.initialize_requirements(list(self.dataset.data_dict.values())[0], "fairness" in user_config)
+        self.dataset.separate_data(self.meta_database.scalar_mask, self.meta_database.categorical_mask,
+                                   self.meta_database.image_mask, self.meta_database.text_mask)
+        self.meta_database.initialize_requirements(self.dataset, "fairness" in user_config)
         self.metric_manager = MetricManager(self)
         self.certificate_manager = CertificateManager()
         self.certificate_manager.load_stock_certificates()
         if custom_certificate_location is not None:
             self.certificate_manager.load_custom_certificates(custom_certificate_location)
-        self.data_summarizer = DataSummarizer(self.dataset, self.model.output_features[0].possibleValues, self.task)
+        # self.data_summarizer = DataSummarizer(self.dataset, self.model.output_features[0].possibleValues, self.task)
         self.interpreter = Interpreter(self.interpret_methods, self.model, self.dataset)
+        print("output features: ", self.model.output_features)
+        self.data_summarizer = DataSummarizer(self.dataset, self.task, self.model.output_features)
 
     def get_metric_values(self) -> dict:
         return self._last_metric_values
@@ -58,23 +59,21 @@ class AISystem:
     def display_metric_values(self, display_detailed=False):
         vals = self._last_metric_values
         info = self.get_metric_info()
-        # print(info)
         for dataset in vals:
             print("\n\n===== " + dataset + " Dataset =====")
             for group in vals[dataset]:
                 print("\n----- " + info[group]['meta']["display_name"] + " Metrics -----")
                 for metric in vals[dataset][group]:
-                    print(info[group][metric]["display_name"] + ": ", vals[dataset][group][metric])
-                    if display_detailed:
-                        print(info[group][metric]["display_name"] + " is " + info[group][metric]["explanation"], "\n")
+                    if(info[group][metric]["type"] in all_metric_types):
+                        print(info[group][metric]["display_name"] + ": ", vals[dataset][group][metric])
+                        if display_detailed:
+                            print(info[group][metric]["display_name"] + " is " + info[group][metric]["explanation"], "\n")
 
     def get_certificate_values(self) -> dict:
         return self._last_certificate_values
 
     def get_data(self, data_type: str) -> Data:
-        if data_type not in self.dataset.data_dict:
-            raise Exception(f"data_type must be found in Dataset. Got : {data_type}")
-        return self.dataset.data_dict[data_type]
+        return self.dataset.data_dict.get(data_type, None)
 
     def get_project_info(self) -> dict:
         result = {"id": self.name,
@@ -120,14 +119,18 @@ class AISystem:
         data_dict["tag"] = tag
         self.data_dict = data_dict
         self.metric_manager.initialize(self.user_config)
-        self._last_metric_values[data_type] = self.metric_manager.compute(data_dict)
+        self._last_metric_values[data_type if data_type is not None else "No Dataset"] = self.metric_manager.compute(data_dict)
         if self.enable_certificates:
             self._last_certificate_values = self.certificate_manager.compute(self._last_metric_values)
 
     # Compute will tell RAI to compute metric values across each dataset which predictions were made on.
     def compute(self, predictions: dict, tag=None) -> None:
         self._last_metric_values = {}
-        if not (isinstance(predictions, dict) and all(isinstance(v, dict) for v in predictions.values()) \
+        if len(self.dataset.data_dict) == 0:  # Model with no X, y data.
+            for key in predictions.keys():
+                self._single_compute(predictions, None, tag=tag)
+                return
+        elif not (isinstance(predictions, dict) and all(isinstance(v, dict) for v in predictions.values()) \
                 and all(isinstance(k, str) for k in predictions.keys())):
             raise Exception("Prediction dictionary should be in the form [dataset][output_type] -> nd.array")
         for key in predictions.keys():

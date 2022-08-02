@@ -1,7 +1,7 @@
 {
     "name": "adversarial_robustness",
     "display_name" : "Adversarial Robustness Metrics",
-    "compatibility": {"task_type": "classification",
+    "compatibility": {"task_type": ["classification"],
                       "data_type": ["Numeric"],
                       "output_requirements": ["predict"],
                       "dataset_requirements": ["X", "y"]},

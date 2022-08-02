@@ -1,7 +1,7 @@
 {
     "name": "correlation_stats_regression",
     "display_name" : "Correlation for Regression",
-    "compatibility": {"task_type": "regression",
+    "compatibility": {"task_type": ["regression"],
                       "data_type": ["Numeric"],
                       "output_requirements": [],
                       "dataset_requirements": ["X", "y"]},
