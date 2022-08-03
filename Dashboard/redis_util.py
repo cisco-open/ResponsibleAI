@@ -119,8 +119,8 @@ class RedisUtils(object):
 
     def set_data_summary(self):
         print("Current proj name: ", self._current_project_name)
-        self._current_project["data_summary"] = \
-            json.loads(self._redis.get(self._current_project_name + "|data_summary"))
+        summary = self._redis.get(self._current_project_name + "|data_summary")
+        self._current_project["data_summary"] = json.loads(summary) if summary is not None else {}
 
     def _update_projects(self):
         self._projects = self._redis.smembers("projects")

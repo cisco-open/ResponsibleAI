@@ -38,7 +38,8 @@ class AISystem:
 
     def initialize(self, user_config: dict, custom_certificate_location: str = None, **kw_args):
         self.user_config = user_config
-        self.dataset.separate_data(self.meta_database.scalar_mask, self.meta_database.categorical_mask, self.meta_database.image_mask)
+        self.dataset.separate_data(self.meta_database.scalar_mask, self.meta_database.categorical_mask,
+                                   self.meta_database.image_mask, self.meta_database.text_mask)
         self.meta_database.initialize_requirements(self.dataset, "fairness" in user_config)
         self.metric_manager = MetricManager(self)
         self.certificate_manager = CertificateManager()

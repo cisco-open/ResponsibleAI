@@ -14,7 +14,6 @@ class GeneralPredictionFairnessGroup(MetricGroup, class_location=os.path.abspath
 
     @classmethod
     def is_compatible(cls, ai_system):
-        print("GEN PREDICTION FAIRNESS STARTS")
         compatible = super().is_compatible(ai_system)
         return compatible \
             and "fairness" in ai_system.metric_manager.user_config \
@@ -83,10 +82,10 @@ class GeneralPredictionFairnessGroup(MetricGroup, class_location=os.path.abspath
 
 
 def get_class_dataset(metric_group, data, preds, prot_attr, priv_group_list, unpriv_group_list):
-    names = [feature.name for feature in metric_group.ai_system.meta_database.features]
-    df1 = pd.DataFrame(data.X, columns=names)
+    names = [feature.name for feature in metric_group.ai_system.meta_database.features if feature.categorical]
+    df1 = pd.DataFrame(data.categorical, columns=names)
     df1['y'] = data.y
-    df2 = pd.DataFrame(data.X, columns=names)
+    df2 = pd.DataFrame(data.categorical, columns=names)
     df2['y'] = preds
     binDataset1 = BinaryLabelDataset(df=df1, label_names=['y'], protected_attribute_names=prot_attr)
     binDataset2 = BinaryLabelDataset(df=df2, label_names=['y'], protected_attribute_names=prot_attr)

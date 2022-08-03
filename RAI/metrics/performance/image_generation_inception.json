@@ -1,0 +1,23 @@
+{
+    "name" : "image_generation_inception",
+    "display_name": "Image Generation Inception",
+    "compatibility": {"task_type": ["generate"],
+                      "data_type": [],
+                      "output_requirements": ["generate_image"],
+                      "dataset_requirements": []},
+    "src": "stats",
+    "dependency_list": [],
+    "tags": ["performance", "image"],
+    "complexity_class": "linear",
+    "metrics": {
+        "inception": {
+            "display_name": "Inception Score",
+            "type": "Dict",
+            "tags": [],
+            "has_range": true,
+            "range": [0, null],
+            "explanation": "Inception Score evaluates the quality of generated images.\nThis metric evaluates generated images on both quality and diversity and correlates well with subjective evaluation.\nHigher scores are better.",
+            "citation": "@misc{https://doi.org/10.48550/arxiv.1606.03498,\n  doi = {10.48550/ARXIV.1606.03498},\n  \n  url = {https://arxiv.org/abs/1606.03498},\n  \n  author = {Salimans, Tim and Goodfellow, Ian and Zaremba, Wojciech and Cheung, Vicki and Radford, Alec and Chen, Xi},\n  \n  keywords = {Machine Learning (cs.LG), Computer Vision and Pattern Recognition (cs.CV), Neural and Evolutionary Computing (cs.NE), FOS: Computer and information sciences, FOS: Computer and information sciences},\n  \n  title = {Improved Techniques for Training GANs},\n  \n  publisher = {arXiv},\n  \n  year = {2016},\n  \n  copyright = {arXiv.org perpetual, non-exclusive license}\n}\n"
+        }
+    }
+}

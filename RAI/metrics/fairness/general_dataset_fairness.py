@@ -38,8 +38,8 @@ class GeneralDatasetFairnessGroup(MetricGroup, class_location=os.path.abspath(__
 
 
 def get_bin_dataset(metric_group, data, prot_attr):
-    names = [feature.name for feature in metric_group.ai_system.meta_database.features]
-    df = pd.DataFrame(data.X, columns=names)
+    names = [feature.name for feature in metric_group.ai_system.meta_database.features if feature.categorical]
+    df = pd.DataFrame(data.categorical, columns=names)
     df['y'] = data.y
     binDataset = BinaryLabelDataset(df=df, label_names=['y'], protected_attribute_names=prot_attr)
     return BinaryLabelDatasetMetric(binDataset)

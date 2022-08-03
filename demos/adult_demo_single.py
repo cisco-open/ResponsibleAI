@@ -19,7 +19,7 @@ all_data = pd.concat([train_data, test_data], ignore_index=True)
 # print("all_data: ", all_data)
 
 # convert aggregated data into RAI format
-meta, X, y, output = df_to_RAI(all_data, target_column="income-per-year", normalize="Scalar", max_categorical_threshold=5)
+meta, X, y, output = df_to_RAI(all_data, target_column="income-per-year", normalize="Scalar")
 xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=1, stratify=y)
 
 clf = RandomForestClassifier(n_estimators=4, max_depth=6)

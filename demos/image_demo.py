@@ -91,7 +91,7 @@ def main():
     else:
         train()
 
-    image = Feature('Image', 'Image', 'The 32x32 input image')
+    image = Feature('image', 'image', 'The 32x32 input image')
     outputs = Feature('image_type', 'numerical', 'The type of image', categorical=True,
                       values={i: v for i, v in enumerate(classes)})
     meta = MetaDatabase([image])
