@@ -103,7 +103,11 @@ class RedisUtils(object):
     def get_data_summary(self):
         return self._current_project["data_summary"]
 
+    def get_model_interpretation(self):
+        return self._current_project["model_interpretation"]
+
     def set_current_project(self, project_name):
+        project_name = project_name
         logger.info(f"changing current project from {self._current_project_name} to {project_name}")
         if self._current_project_name == project_name:
             return
@@ -112,6 +116,7 @@ class RedisUtils(object):
         self._update_info()
         self._update_values()
         self.set_data_summary()
+        self.set_model_interpretation()
         self._current_project = self._reformat_data(self._current_project)
 
     def set_current_dataset(self, dataset):
@@ -121,6 +126,10 @@ class RedisUtils(object):
         print("Current proj name: ", self._current_project_name)
         summary = self._redis.get(self._current_project_name + "|data_summary")
         self._current_project["data_summary"] = json.loads(summary) if summary is not None else {}
+
+    def set_model_interpretation(self):
+        interpretation = self._redis.get(self._current_project_name + "|model_interpretation")
+        self._current_project["model_interpretation"] = json.loads(interpretation) if interpretation is not None else {}
 
     def _update_projects(self):
         self._projects = self._redis.smembers("projects")

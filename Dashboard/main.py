@@ -30,6 +30,7 @@ from single_metric_view_page import get_single_metric_display
 from setting_page import get_setting_page
 from model_view_page import get_model_view_page
 from data_summary_page import get_data_summary_page
+from model_interpretation_page import get_model_interpretation_page
 from utils import iconify
 import urllib
 import sys
@@ -49,6 +50,7 @@ SIDEBAR_STYLE = {
     "width": "16rem",
     "padding": "2rem 1rem",
     "background-color": "#f8f9fa",
+    "overflow": "auto",
 }
 
 
@@ -125,6 +127,9 @@ def get_sidebar():
                     dbc.NavLink( 
                         iconify("Data Summary", "fa-solid fa-check-double", "20px"),
                         href="/dataSummary", active="exact"),
+                    dbc.NavLink( 
+                        iconify("Model Interpretation", "fa-solid fa-check-double", "20px"),
+                        href="/modelInterpretation", active="exact"),
                 ],
                 vertical=True,
                 pills=True,
@@ -190,6 +195,8 @@ def render_page_content(pathname, value, search, dataset_value, dataset_options)
         return get_model_view_page(), dataset_options, dataset_value
     elif pathname == "/dataSummary":
         return get_data_summary_page(), dataset_options, dataset_value
+    elif pathname == "/modelInterpretation":
+        return get_model_interpretation_page(), dataset_options, dataset_value
         
     # If the user tries to reach a different page, return a 404 message
     return html.Div(

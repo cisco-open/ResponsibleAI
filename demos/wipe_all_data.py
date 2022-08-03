@@ -4,9 +4,9 @@ from RAI.AISystem import AISystem, Model
 from RAI.dataset import Data, Dataset, Feature
 from RAI.redis import RaiRedis
 from RAI.utils import df_to_RAI
-from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
+from sklearn.ensemble import RandomForestClassifier
 
-use_dashboard = True
+
 
 # Get Dataset
 data_path = "../data/adult/"
@@ -29,40 +29,11 @@ configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivil
                  "time_complexity": "polynomial"}
 
 dataset = Dataset({"train": Data(xTrain, yTrain), "test": Data(xTest, yTest)})
-ai = AISystem(name="AdultDB",  task='binary_classification', meta_database=meta, dataset=dataset, model=model)
+ai = AISystem(name="AdultDB_2",  task='binary_classification', meta_database=meta, dataset=dataset, model=model)
 ai.initialize(user_config=configuration)
 
-reg.fit(xTrain, yTrain)
+r = RaiRedis(ai)
+r.connect()
 
-print("\n\nTESTING PREDICTING METRICS:")
-test_preds = reg.predict(xTest)
-ai.compute({"test": {"predict": test_preds}}, tag='model1')
-
-if use_dashboard:
-    r = RaiRedis(ai)
-    r.connect()
-    r.reset_redis()
-    r.add_measurement()
-
-reg2 = AdaBoostClassifier()
-reg2.fit(xTrain, yTrain)
-ai.model.agent = reg2
-test_preds = reg2.predict(xTest)
-
-ai.compute({"test": {"predict": test_preds}}, tag="model2")
-v = ai.get_metric_values()
-v = v["test"]
-info = ai.get_metric_info()
-if use_dashboard:
-    r.add_measurement()
-
-from RAI.Analysis import AnalysisManager
-
-analysis = AnalysisManager()
-print("available analysis: ", analysis.get_available_analysis(ai, "test"))
-# result = analysis.run_analysis(ai, ["test"], ["FairnessAnalysis"])
-result = analysis.run_all(ai, "test", "Test run!")
-for analysis in result:
-    print("Analysis: " + analysis)
-    print(result[analysis].to_string())
-
+r.delete_all_data(confirm=False)
+# r.delete_data(ai)

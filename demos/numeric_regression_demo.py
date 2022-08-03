@@ -28,7 +28,7 @@ model = Model(agent=reg, output_features=output, name="cisco_income_ai", predict
 configuration = {"time_complexity": "polynomial"}
 
 dataset = Dataset({"train": Data(xTrain, yTrain), "test": Data(xTest, yTest)})
-ai = AISystem(name="AdultDB_2",  task='regression', meta_database=meta, dataset=dataset, model=model)
+ai = AISystem(name="AdultDB_regression",  task='regression', meta_database=meta, dataset=dataset, model=model)
 ai.initialize(user_config=configuration)
 
 reg.fit(xTrain, yTrain)

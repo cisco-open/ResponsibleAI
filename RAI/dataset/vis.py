@@ -3,7 +3,10 @@ import numpy as np
 
 class DataSummarizer:
     def __init__(self, dataset, task, output_features):
-        self.dataset = dataset 
+        self.dataset = dataset
+        self.label_name_dict = {str(val): output_features[0].values[val] for val in output_features[0].values} \
+            if output_features[0].values is not None else {}
+        print("label name dict: ", self.label_name_dict)
         self.task = task
         self.train_data = self.dataset.data_dict.get("train", None)
         self.test_data = self.dataset.data_dict.get("train", None)
@@ -33,6 +36,7 @@ class DataSummarizer:
     def setLabelDistribution(self):
         # dict with "train": distribution, "test": distribution
         train_y_dict, test_y_dict = dict(), dict()
+
         print(self.train_y[:10], self.labels)
         if self.labels is not None:
             for label in self.labels:
@@ -42,6 +46,7 @@ class DataSummarizer:
                 train_y_dict[l_name] = int((self.train_y==int(label)).sum())
                 test_y_dict[l_name] = int((self.test_y==int(label)).sum())
             self.label_dist_dict = {"train": train_y_dict, "test": test_y_dict}
+
 
     def getLabels(self):
         return self.labels 

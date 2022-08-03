@@ -28,3 +28,36 @@ td div.data-summary-content-hist {
     width: 30vw;
     height: 20vw;
 }
+
+#gradcam-class-radio label {
+    background: #f0f0f0;
+    border-color: #808080;
+    border-width: 1px 1px 0 1px;
+    cursor: pointer;
+    border-style: solid;
+    padding: 1px 6px 0 6px;
+}
+
+#gradcam-class-radio label input[type="radio"] {
+    visibility: hidden;
+    width: 0;
+    height: 0;
+}
+
+#gradcam-display tr {
+    border: 0px;
+}
+
+#gradcam-display table {
+    border: #808080 solid 1px;
+    text-align: center;
+}
+
+#gradcam-display-title-row {
+    padding: 3px 0 3px 0;
+    font-weight: 700;
+}
+
+.gradcam-display-table-row td:first-child {
+    border-right: #808080 solid 1px;
+}

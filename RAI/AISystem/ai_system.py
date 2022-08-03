@@ -4,8 +4,8 @@ from RAI.dataset.dataset import Data, Dataset, MetaDatabase
 from RAI.metrics import MetricManager
 from RAI.all_types import all_output_requirements, all_task_types, all_metric_types
 from RAI.dataset.vis import DataSummarizer
+from RAI.interpretation.interpreter import Interpreter
 import numpy as np
-
 
 class AISystem:
     """
@@ -19,6 +19,7 @@ class AISystem:
                  meta_database: MetaDatabase,
                  dataset: Dataset,
                  model: Model,
+                 interpret_methods: list[str] = [],
                  enable_certificates: bool = True) -> None:
         assert task in all_task_types, "Task must be in " + str(all_task_types)
         self.name = name
@@ -26,6 +27,7 @@ class AISystem:
         self.meta_database = meta_database
         self.model = model
         self.dataset = dataset
+        self.interpret_methods = interpret_methods
         self.enable_certificates = enable_certificates
         self.auto_id = 0
         self._last_metric_values = {}
@@ -46,6 +48,8 @@ class AISystem:
         self.certificate_manager.load_stock_certificates()
         if custom_certificate_location is not None:
             self.certificate_manager.load_custom_certificates(custom_certificate_location)
+        # self.data_summarizer = DataSummarizer(self.dataset, self.model.output_features[0].possibleValues, self.task)
+        self.interpreter = Interpreter(self.interpret_methods, self.model, self.dataset)
         self.data_summarizer = DataSummarizer(self.dataset, self.task, self.model.output_features)
 
     def get_metric_values(self) -> dict:
@@ -95,6 +99,10 @@ class AISystem:
             "label_dist": label_dist_dict,
         }
         return summary 
+
+    def get_interpretation(self) -> dict:
+        interpretation = self.interpreter.getModelInterpretation()
+        return interpretation 
     
     def _single_compute(self, predictions: dict, data_type: str = "test", tag=None) -> None:
     # Single compute accepts predictions and the name of a dataset, and then calculates metrics for that dataset.

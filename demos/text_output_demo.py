@@ -56,6 +56,7 @@ def main():
         r.reset_redis(summarize_data=False)
         r.add_measurement()
         r.add_dataset()
+        r.export_visualizations()
 
     ai.display_metric_values()
 

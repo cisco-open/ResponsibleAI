@@ -6,6 +6,7 @@ import torch
 import torch.utils.data
 from sklearn.preprocessing import StandardScaler
 from RAI.dataset.dataset import Feature, MetaDatabase
+import torchvision.transforms as transforms
 
 __all__ = ['jsonify', 'compare_runtimes', 'df_to_meta_database', 'df_to_RAI', 'reweighing',
            'calculate_per_mapped_features', 'convert_float32_to_float64',
@@ -95,7 +96,12 @@ def df_remove_nans(df, extra_symbols):
 def torch_to_RAI(torch_item):
     result_x = []
     result_y = []
+    raw_result_x = []
     if isinstance(torch_item, torch.utils.data.DataLoader):
+        transform = torch_item.dataset.transform
+        torch_item.dataset.transform = transforms.ToTensor()
+        torch_item.transform = transform
+
         for i, val in enumerate(torch_item, 0):
             x, y = val
             x = x.detach().numpy()
@@ -114,7 +120,7 @@ def torch_to_RAI(torch_item):
         result_x = np.array([[x] for x in torch_item])
     else:
         assert "torch_item must be of type DataLoader or Tensor"
-    return result_x, result_y
+    return result_x, result_y, result_x.copy()
 
 
 # Converts a pandas dataframe to a Rai Metadatabase and X and y data.
@@ -200,7 +206,7 @@ def modals_to_RAI(df, df_target_column=None, image_X: dict = {}, image_y: dict =
         y = None
     if image_y is not None:
         for key in image_y:
-            f = Feature(key, "image", key)
+            f = Feature(key, "Image", key)
             image_y[key] = image_y[key].to_numpy()
             y = image_y[key]
     features = []
@@ -218,7 +224,7 @@ def modals_to_RAI(df, df_target_column=None, image_X: dict = {}, image_y: dict =
         features.append(f)
     if image_X is not None:
         for key in image_X:
-            f = Feature(key, "image", key)
+            f = Feature(key, "Image", key)
             features.append(f)
     return MetaDatabase(features), df.to_numpy(), y, output_feature
 
