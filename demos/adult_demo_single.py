@@ -31,7 +31,7 @@ configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivil
 
 
 dataset = Dataset({"train": Data(xTrain, yTrain), "test": Data(xTest, yTest)})
-ai = AISystem(name="AdultDB_2",  task='binary_classification', meta_database=meta, dataset=dataset, model=model)
+ai = AISystem(name="AdultDB_one_model",  task='binary_classification', meta_database=meta, dataset=dataset, model=model)
 ai.initialize(user_config=configuration)
 
 clf.fit(xTrain, yTrain)

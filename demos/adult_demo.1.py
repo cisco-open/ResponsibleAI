@@ -31,7 +31,7 @@ model = Model(agent=reg, output_features=output, name="cisco_income_ai", predict
 configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}},
                               "protected_attributes": ["race"], "positive_label": 1}, "time_complexity": "polynomial"}
 dataset = Dataset({"train": Data(xTrain, yTrain), "test": Data(xTest, yTest)})
-ai = AISystem("AdultDB", task='binary_classification', meta_database=meta, dataset=dataset, model=model)
+ai = AISystem("AdultDB_1", task='binary_classification', meta_database=meta, dataset=dataset, model=model)
 ai.initialize(user_config=configuration)
 
 if use_dashboard:

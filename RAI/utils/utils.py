@@ -99,19 +99,8 @@ def torch_to_RAI(torch_item):
     raw_result_x = []
     if isinstance(torch_item, torch.utils.data.DataLoader):
         transform = torch_item.dataset.transform
-        torch_item.dataset.transform = transforms.ToTensor() 
-
-        for i, val in enumerate(torch_item, 0):
-            x, _ = val
-            x = x.detach().numpy()
-            raw_result_x.append(x)
-        raw_result_x = np.array(raw_result_x)
-        x_shape = list(raw_result_x.shape)
-        x_shape[0] = -1
-        x_shape[1] = 1
-        raw_result_x = raw_result_x.reshape(tuple(x_shape)).squeeze()
-
-        torch_item.transform = transform 
+        torch_item.dataset.transform = transforms.ToTensor()
+        torch_item.transform = transform
 
         for i, val in enumerate(torch_item, 0):
             x, y = val
@@ -128,10 +117,10 @@ def torch_to_RAI(torch_item):
         result_x = result_x.reshape(tuple(x_shape))
         result_y = result_y.reshape(-1)
     elif isinstance(torch_item, torch.Tensor):
-        result_x = raw_result_x = np.array([[x] for x in torch_item])
+        result_x = np.array([[x] for x in torch_item])
     else:
         assert "torch_item must be of type DataLoader or Tensor"
-    return result_x, result_y, raw_result_x 
+    return result_x, result_y, result_x.copy()
 
 
 # Converts a pandas dataframe to a Rai Metadatabase and X and y data.
@@ -217,7 +206,7 @@ def modals_to_RAI(df, df_target_column=None, image_X: dict = {}, image_y: dict =
         y = None
     if image_y is not None:
         for key in image_y:
-            f = Feature(key, "image", key)
+            f = Feature(key, "Image", key)
             image_y[key] = image_y[key].to_numpy()
             y = image_y[key]
     features = []
@@ -235,7 +224,7 @@ def modals_to_RAI(df, df_target_column=None, image_X: dict = {}, image_y: dict =
         features.append(f)
     if image_X is not None:
         for key in image_X:
-            f = Feature(key, "image", key)
+            f = Feature(key, "Image", key)
             features.append(f)
     return MetaDatabase(features), df.to_numpy(), y, output_feature
 

@@ -50,7 +50,6 @@ class AISystem:
             self.certificate_manager.load_custom_certificates(custom_certificate_location)
         # self.data_summarizer = DataSummarizer(self.dataset, self.model.output_features[0].possibleValues, self.task)
         self.interpreter = Interpreter(self.interpret_methods, self.model, self.dataset)
-        print("output features: ", self.model.output_features)
         self.data_summarizer = DataSummarizer(self.dataset, self.task, self.model.output_features)
 
     def get_metric_values(self) -> dict:

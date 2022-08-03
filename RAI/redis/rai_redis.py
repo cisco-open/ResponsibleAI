@@ -41,7 +41,7 @@ class RaiRedis:
         if export_metadata:
             self.export_metadata()
         if summarize_data:
-            self.summarize_data()
+            self.summarize()
         if interpret_model:
             self.interpret_model()
         self.redis_connection.publish('update', "cleared")
@@ -53,6 +53,14 @@ class RaiRedis:
             self.redis_connection.delete(system_name + "|" + key)
         self.redis_connection.srem("projects", system_name)
         self.redis_connection.publish('update', "cleared")
+
+    def delete_all_data(self, confirm=False):
+        if confirm:
+            print("Deleting!")
+            for key in self.redis_connection.scan_iter("*|project_info"):
+                val = key[:-13].decode("utf-8")
+                print("Deleting: ", val)
+                self.delete_data(val)
 
     def export_metadata(self) -> None:
         metric_info = self.ai_system.get_metric_info()
@@ -66,9 +74,13 @@ class RaiRedis:
 
     def export_visualizations(self) -> None:
         print("AI System Name: ", self.ai_system.name)
+        self.summarize()
+        self.interpret_model()
+
+    def summarize(self):
         data_summary = self.ai_system.get_data_summary()
         self.redis_connection.set(self.ai_system.name + '|data_summary', json.dumps(data_summary))
-        self.interpret_model()
+
 
     def add_dataset(self, loc=None):
         dataset = self.ai_system.dataset.data_dict

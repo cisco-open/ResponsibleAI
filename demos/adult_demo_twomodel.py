@@ -38,7 +38,7 @@ configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivil
                  "time_complexity": "polynomial"}
 
 dataset = Dataset({"train": Data(xTrain, yTrain), "test": Data(xTest, yTest)})
-ai = AISystem("AdultDB_3", task='binary_classification', meta_database=meta, dataset=dataset, model=model)
+ai = AISystem("AdultDB_two_model", task='binary_classification', meta_database=meta, dataset=dataset, model=model)
 ai.initialize(user_config=configuration)
 
 

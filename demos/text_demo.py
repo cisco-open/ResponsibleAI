@@ -38,7 +38,7 @@ def main():
                   description="SentimentAnalysis", model_class="Bert")
     configuration = {"time_complexity": "polynomial"}
     dataset = Dataset({"train": Data(xTrain, yTrain), "test": Data(xTest, yTest)})
-    ai = AISystem(name="Tweet_Sentiment_Analysis_1", task='binary_classification', meta_database=meta, dataset=dataset, model=model)
+    ai = AISystem(name="Sentiment_Analysis_1", task='binary_classification', meta_database=meta, dataset=dataset, model=model)
     ai.initialize(user_config=configuration)
 
     ai.compute({"test": {"predict": preds}}, tag='initial_preds')

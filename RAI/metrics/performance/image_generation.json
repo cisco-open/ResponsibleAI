@@ -7,7 +7,7 @@
                       "dataset_requirements": ["y"]},
     "src": "stats",
     "dependency_list": [],
-    "tags": ["performance", "image"],
+    "tags": ["performance", "Image"],
     "complexity_class": "linear",
     "metrics": {
         "fid": {

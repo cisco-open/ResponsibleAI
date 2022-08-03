@@ -3,8 +3,9 @@ import numpy as np
 
 class DataSummarizer:
     def __init__(self, dataset, task, output_features):
-        self.dataset = dataset 
-        self.label_name_dict = {str(val): output_features[0].values[val] for val in output_features[0].values}
+        self.dataset = dataset
+        self.label_name_dict = {str(val): output_features[0].values[val] for val in output_features[0].values} \
+            if output_features[0].values is not None else {}
         print("label name dict: ", self.label_name_dict)
         self.task = task
         self.train_data = self.dataset.data_dict.get("train", None)

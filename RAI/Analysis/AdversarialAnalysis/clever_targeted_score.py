@@ -41,7 +41,6 @@ class CleverTargetedScore(Analysis, class_location=os.path.abspath(__file__)):
 
         correct_classifications = self._get_correct_classifications(self.ai_system.model.predict_fun, xData, yData)
         balanced_classifications = self._balance_classifications_per_class(correct_classifications, yData, output_features)
-        print("Balanced classifications: ", balanced_classifications)
 
         for target_class in balanced_classifications:
             for example_num in balanced_classifications[target_class]:

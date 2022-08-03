@@ -130,12 +130,11 @@ class GradCAM:
             c_dict = self.gradcamResults[c]
             for heatmap, idx in zip(c_dict["correct_heatmap"], c_dict["correct_idx"]):
                 img = dataset.getRawItem(idx).squeeze()
-
-                img_size = (img.shape[1], img.shape[2])
+                img_size = (img.shape[-2], img.shape[-1])
                 resized_heatmap = cv2.resize(heatmap, img_size)
                 resized_heatmap = np.uint8(resized_heatmap*255)
                 resized_heatmap = cv2.applyColorMap(resized_heatmap, cv2.COLORMAP_JET)
-                img = np.transpose(np.uint8(img*255), (1,2,0))  #CHW to HWC
+                img = np.transpose(np.uint8(img*255), (1, 2, 0))  #CHW to HWC
 
                 superimposed_img = (0.3*resized_heatmap + 0.7*img).astype(np.uint8) 
                 self.viz_results[c]["correct"].append((img, superimposed_img))
