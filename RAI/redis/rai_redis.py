@@ -7,6 +7,11 @@ import pickle
 import os
 import numpy as np 
 from json import JSONEncoder
+import logging
+from RAI.Analysis import AnalysisManager
+import codecs
+
+logger = logging.getLogger(__name__)
 
 
 class NumpyArrayEncoder(JSONEncoder):
@@ -28,10 +33,39 @@ class RaiRedis:
     def __init__(self, ai_system: RAI.AISystem = None) -> None:
         self.redis_connection = None
         self.ai_system = ai_system
+        self._ai_request_pub = None
+        self._threads = []
+        self.analysis_manager = AnalysisManager()
 
     def connect(self, host: str = "localhost", port: int = 6379) -> bool:
         self.redis_connection = redis.Redis(host=host, port=port, db=0)
+        self._init_analysis_pubsub()
         return self.redis_connection.ping()
+
+    def _init_analysis_pubsub(self):
+        def sub_handler(msg):
+            logger.info(f"New Analysis message received: {msg}")
+            msg = msg['data'].decode("utf-8").split('|')
+            if msg[0] == self.ai_system.name:
+                if msg[1] == "available_analysis":  # Request for the available analysis
+                    available = self.analysis_manager.get_available_analysis(self.ai_system, msg[2])
+                    self.redis_connection.publish("ai_requests", self.ai_system.name+'|available_analysis_response|'+json.dumps(available))
+                elif msg[1] == "start_analysis":  # Request to start a specific analysis
+                    dataset = msg[2]
+                    analysis = msg[3]
+                    if analysis in self.analysis_manager.get_available_analysis(self.ai_system, msg[2]):
+                        result = self.analysis_manager.run_analysis(self.ai_system, dataset, analysis)
+                        encoded_res = codecs.encode(pickle.dumps(result[analysis].to_html()), "base64").decode()
+                        self.redis_connection.publish("ai_requests", self.ai_system.name + '|start_analysis_response|' +
+                                                      analysis + "|" + encoded_res)
+
+        self._ai_request_pub = self.redis_connection.pubsub()
+        try:
+            logger.info("channel subscribed")
+            self._ai_request_pub.subscribe(**{"ai_requests": sub_handler})
+            self._threads.append(self._ai_request_pub.run_in_thread(sleep_time=.1))
+        except:
+            logger.warning("unable to subscribe to redis pub/sub")
 
     def reset_redis(self, export_metadata: bool = True, summarize_data: bool = True, interpret_model: bool = True) -> None:
         to_delete = ["metric_values", "model_info", "metric_info", "metric", "certificate_metadata",
@@ -129,5 +163,8 @@ class RaiRedis:
         gui_launcher.start()
 
     def _view_gui_thread(self):
-        subprocess.call("start /wait python Dashboard\\main.py ", shell=True)
+        os.chdir(os.path.dirname(os.path.abspath(__file__)))
+        os.chdir("../../Dashboard")
+        file = os.path.abspath("main.py")
+        subprocess.call("start /wait python " + file, shell=True)
         print("GUI can be viewed in new terminal")

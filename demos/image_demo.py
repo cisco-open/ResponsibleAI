@@ -114,7 +114,7 @@ def main():
 
     # Select the images to visually interpret (Grad-CAM)
     interpretMethods = ["gradcam"]
-
+    interpretMethods = []
     ai = AISystem(name="cifar_categorization", task='classification', meta_database=meta, dataset=dataset, model=model, interpret_methods=interpretMethods)
     ai.initialize(user_config=configuration)
 
@@ -138,13 +138,15 @@ def main():
 
     from RAI.Analysis import AnalysisManager
     analysis = AnalysisManager()
-    print("available analysis: ", analysis.get_available_analysis(ai, "test"))
 
+    print("available analysis: ", analysis.get_available_analysis(ai, "test"))
+    '''
     result = analysis.run_all(ai, "test", "Test run!")
     # result = analysis.run_analysis(ai, "test", "CleverUntargetedScore", "Testing")
     for analysis in result:
         print("Analysis: " + analysis)
         print(result[analysis].to_string())
+    '''
 
 
 if __name__ == '__main__':

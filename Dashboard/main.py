@@ -31,6 +31,7 @@ from setting_page import get_setting_page
 from model_view_page import get_model_view_page
 from data_summary_page import get_data_summary_page
 from model_interpretation_page import get_model_interpretation_page
+from analysis_page import get_analysis_page
 from utils import iconify
 import urllib
 import sys
@@ -130,6 +131,9 @@ def get_sidebar():
                     dbc.NavLink( 
                         iconify("Model Interpretation", "fa-solid fa-check-double", "20px"),
                         href="/modelInterpretation", active="exact"),
+                    dbc.NavLink(
+                        iconify("Analysis", "fa-solid fa-check-double", "20px"),
+                        href="/analysis", active="exact"),
                 ],
                 vertical=True,
                 pills=True,
@@ -160,6 +164,7 @@ def render_page_content(pathname, value, search, dataset_value, dataset_options)
         parsed_dict = urllib.parse.parse_qs(parsed.query)
     ctx = dash.callback_context
     redisUtil.set_current_project(value)
+    redisUtil.set_current_dataset(dataset_value)
 
     if any("project_selector.value" in ctx.triggered[i]["prop_id"] for i in range(len(ctx.triggered))):
         redisUtil.set_current_project(value)
@@ -197,6 +202,8 @@ def render_page_content(pathname, value, search, dataset_value, dataset_options)
         return get_data_summary_page(), dataset_options, dataset_value
     elif pathname == "/modelInterpretation":
         return get_model_interpretation_page(), dataset_options, dataset_value
+    elif pathname == "/analysis":
+        return get_analysis_page(), dataset_options, dataset_value
         
     # If the user tries to reach a different page, return a 404 message
     return html.Div(
@@ -213,7 +220,7 @@ if __name__ == "__main__":
     if len(sys.argv) == 2:
         model_name = sys.argv[1]
 
-    redisUtil.initialize(subscribers={"metric_detail", "metric_graph", "certificate"})
+    redisUtil.initialize(subscribers={"metric_detail", "metric_graph", "certificate", "analysis_update"})
     project_list = redisUtil.get_projects_list()
     redisUtil.set_current_project(project_list[0])
     redisUtil.set_current_dataset(redisUtil.get_dataset_list()[0])
