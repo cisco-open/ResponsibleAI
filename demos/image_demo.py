@@ -95,6 +95,12 @@ def main():
         print('Finished Training')
         torch.save(net.state_dict(), PATH)
 
+    # TODO: Setup automatic transferring of datatypes
+    def predict(input):
+        if not isinstance(input, torch.Tensor):
+            input = torch.Tensor(input)
+        return net(input)
+
     if os.path.isfile(PATH):
         print("Loading model")
         net.load_state_dict(torch.load(PATH))
@@ -105,7 +111,7 @@ def main():
     outputs = Feature('image_type', 'numeric', 'The type of image', categorical=True,
                       values={i: v for i, v in enumerate(classes)})
     meta = MetaDatabase([image])
-    model = Model(agent=net, output_features=outputs, name="conv_net", predict_fun=net, description="ConvNet", model_class="ConvNet",
+    model = Model(agent=net, output_features=outputs, name="conv_net", predict_fun=predict, description="ConvNet", model_class="ConvNet",
                   loss_function=criterion, optimizer=optimizer)
     configuration = {"time_complexity": "polynomial"}
 
@@ -114,7 +120,6 @@ def main():
 
     # Select the images to visually interpret (Grad-CAM)
     interpretMethods = ["gradcam"]
-
     ai = AISystem(name="cifar_categorization", task='classification', meta_database=meta, dataset=dataset, model=model, interpret_methods=interpretMethods)
     ai.initialize(user_config=configuration)
 
@@ -138,13 +143,15 @@ def main():
 
     from RAI.Analysis import AnalysisManager
     analysis = AnalysisManager()
-    print("available analysis: ", analysis.get_available_analysis(ai, "test"))
 
+    print("available analysis: ", analysis.get_available_analysis(ai, "test"))
+    '''
     result = analysis.run_all(ai, "test", "Test run!")
     # result = analysis.run_analysis(ai, "test", "CleverUntargetedScore", "Testing")
     for analysis in result:
         print("Analysis: " + analysis)
         print(result[analysis].to_string())
+    '''
 
 
 if __name__ == '__main__':

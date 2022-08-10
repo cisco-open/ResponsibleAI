@@ -1,0 +1,13 @@
+{
+    "name": "fairness_analysis",
+    "display_name": "Fairness Analysis",
+    "compatibility": {"task_type": [],
+                      "data_type": [],
+                      "output_requirements": [],
+                      "dataset_requirements": [],
+                      "required_groups":  []},
+    "src": "equal_treatment",
+    "dependency_list": [],
+    "tags": ["fairness", "General Fairness"],
+    "complexity_class": "linear"
+}

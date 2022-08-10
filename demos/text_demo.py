@@ -1,6 +1,6 @@
 from RAI.AISystem import AISystem, Model
 from RAI.redis import RaiRedis
-from RAI.dataset import Dataset, Data
+from RAI.dataset import Dataset, Data, Feature
 import nltk
 from nltk.sentiment import SentimentIntensityAnalyzer
 from RAI.utils import df_to_RAI
@@ -23,11 +23,16 @@ def main():
     dataset['text'] = dataset['text'].replace(-1, 0)
     new_dataset = dataset
 
+    # TODO: Clarify running on numpy data across models
     def score_tweet(tweet: str) -> float:
+        while isinstance(tweet, np.ndarray) or isinstance(tweet, list):
+            tweet = tweet[0]
         return 0 if sentiment_model.polarity_scores(tweet)["compound"] <= 0 else 1
 
     meta, X, y, output = df_to_RAI(new_dataset, target_column="label", text_columns='text')
     xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=1)
+    output = Feature("Sentiment", "Numeric", "Sentiment Rating", categorical=True, values={
+        0: "Negative", 1: "Positive"})
 
     preds = []
     for val in xTest:
@@ -55,11 +60,11 @@ def main():
     from RAI.Analysis import AnalysisManager
     analysis = AnalysisManager()
     print("available analysis: ", analysis.get_available_analysis(ai, "test"))
-    result = analysis.run_all(ai, "test", "Test run!")
+    # result = analysis.run_all(ai, "test", "Test run!")
     # result = analysis.run_analysis(ai, "test", "CleverUntargetedScore", "Testing")
-    for analysis in result:
-        print("Analysis: " + analysis)
-        print(result[analysis].to_string())
+    # for analysis in result:
+    #    print("Analysis: " + analysis)
+    #    print(result[analysis].to_string())
 
 
 if __name__ == '__main__':

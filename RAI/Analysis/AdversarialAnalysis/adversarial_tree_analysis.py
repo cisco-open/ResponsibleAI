@@ -4,6 +4,8 @@ from art.metrics.verification_decisions_trees import RobustnessVerificationTreeM
 from art.estimators.classification.scikitlearn import SklearnClassifier
 import os
 import numpy as np
+from dash import html, dcc
+import plotly.graph_objs as go
 
 
 class AdversarialTreeAnalysis(Analysis, class_location=os.path.abspath(__file__)):
@@ -57,4 +59,28 @@ class AdversarialTreeAnalysis(Analysis, class_location=os.path.abspath(__file__)
         return result
 
     def to_html(self):
-        pass
+        result = []
+        text_style = {"text-align": "center", "display": "block"}
+        bound = self.result['adversarial_tree_verification_bound']
+        error = self.result['adversarial_tree_verification_error']
+        result.append(html.H1("Decision Tree Adversarial Analysis", style=text_style))
+        result.append(html.P("This test uses the Clique Method Robustness Verification method.", style=text_style))
+        result.append(html.Br())
+        result.append(html.B("Adversarial Tree Verification Lower Bound: " + str(bound)))
+        result.append(html.Br())
+        result.append(html.P("The Adversarial Tree Verification Lower Bound describes the lower bound of "
+                             "minimum L-infinity adversarial distortion averaged over all test examples."))
+        result.append(html.Br())
+        result.append(html.B("Adversarial Tree Verified Error: " + str(error)))
+        result.append(html.Br())
+        result.append(html.P("Adversarial Tree Verified Error is the upper bound of error under any attacks. "
+                             "Verified Error guarantees that within a L-infinity distortion norm of " +
+                             str(self.distortion_size) + ", that no attacks can achieve over X% error on test sets."))
+
+        fig = go.Figure([go.Bar(x=["Lower Bound", "Verified Error"], y=[bound, error])])
+        fig.update_layout(title={'text': "Adversarial Tree Results", 'y': 0.9, 'x': 0.5, 'xanchor': 'center', 'yanchor': 'top'})
+        graph_max = max(bound, error) * 1.2
+        fig.update_layout(yaxis_range=[0, graph_max])
+        fig_graph = html.Div(dcc.Graph(figure=fig), style={"display": "block", "margin": "0 auto 0 auto", "width": "60%"})
+        result.append(fig_graph)
+        return html.Div(result)

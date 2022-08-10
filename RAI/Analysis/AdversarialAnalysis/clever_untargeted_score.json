@@ -1,7 +1,7 @@
 {
     "name": "clever_untargeted_score",
     "display_name": "CLEVER Untargeted Score",
-    "compatibility": {"task_type": "classification",
+    "compatibility": {"task_type": ["classification"],
                       "data_type": ["Image"],
                       "output_requirements": ["predict"],
                       "dataset_requirements": ["X", "y"],

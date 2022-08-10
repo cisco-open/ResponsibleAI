@@ -1,0 +1,13 @@
+{
+    "name": "view_inference_analysis",
+    "display_name": "View Inference Analysis",
+    "compatibility": {"task_type": [],
+                      "data_type": [],
+                      "output_requirements": [],
+                      "dataset_requirements": [],
+                      "required_groups":  []},
+    "src": "",
+    "dependency_list": [],
+    "tags": [],
+    "complexity_class": "linear"
+}

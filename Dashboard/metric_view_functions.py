@@ -10,7 +10,7 @@ from display_types.display_factory import is_compatible
 logger = logging.getLogger(__name__)
 
 __all__ = ['get_nonempty_groups', 'get_valid_metrics', 'get_search_options', 'get_graph', 'get_display',
-           'get_reset_button', 'get_graph_update_purpose']
+           'get_reset_button', 'get_graph_update_purpose', 'is_time_update']
 
 
 def get_nonempty_groups(requirements):
@@ -73,6 +73,20 @@ def get_display(prefix, selectors):
 def get_reset_button(prefix):
     return dbc.Button("Reset Graph", id=prefix + "reset_graph", color="secondary",
                       style={"position": "absolute", "bottom": "0"})
+
+
+def analysis_update_cause(ctx, prefix):
+    is_time_update = False
+    is_button_click = False
+    is_value = False
+    for val in ctx.triggered:
+        if val['prop_id'] == prefix+'interval-component.n_intervals':
+            is_time_update = True
+        if val['prop_id'] == 'run_analysis_button.n_clicks':
+            is_button_click = True
+        if val['prop_id'] == 'analysis_selector.value':
+            is_value = True
+    return is_time_update, is_button_click, is_value
 
 
 def get_graph_update_purpose(ctx, prefix):

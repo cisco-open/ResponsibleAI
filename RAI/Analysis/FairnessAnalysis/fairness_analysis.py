@@ -1,6 +1,8 @@
 from RAI.Analysis import Analysis
 from RAI.AISystem import AISystem
 import os
+from dash import html, dcc
+import plotly.graph_objs as go
 
 
 class FairnessAnalysis(Analysis, class_location=os.path.abspath(__file__)):
@@ -32,7 +34,7 @@ class FairnessAnalysis(Analysis, class_location=os.path.abspath(__file__)):
         result = "==== Group Fairness Analysis Results ====\n"
         result += str(total - failures) + " of " + str(total) + " tests passed.\n"
         names = ['statistical_parity_difference', 'equal_opportunity_difference', 'average_odds_difference', 'disparate_impact_ratio']
-        conditions = ['between 0.1 and -0.1' for _ in range(4)]
+        conditions = ['between 0.1 and -0.1' for _ in range(3)]
         conditions.append('between 1.25 and 0.8')
         metric_info = self.ai_system.get_metric_info()['group_fairness']
         for i in range(len(names)):
@@ -46,4 +48,47 @@ class FairnessAnalysis(Analysis, class_location=os.path.abspath(__file__)):
         return result
 
     def to_html(self):
-        pass
+        text_style = {"text-align": "center", "display": "block"}
+        failures = 0
+        total = 0
+        for val in self.result:
+            total += 1
+            failures += not self.result[val]
+        result = []
+        result.append(html.H1("Group Fairness Analysis Results", style=text_style))
+        result.append(html.H2(str(total - failures) + " of " + str(total) + " tests passed.", style=text_style))
+        names = ['statistical_parity_difference', 'equal_opportunity_difference', 'average_odds_difference', 'disparate_impact_ratio']
+        conditions = ['between 0.1 and -0.1' for _ in range(3)]
+        conditions_num = [[0.1, -0.1] for _ in range(3)]
+        conditions.append('between 1.25 and 0.8')
+        conditions_num.append([1.25, 0.8])
+        metric_info = self.ai_system.get_metric_info()['group_fairness']
+        for i in range(len(names)):
+            result.append(html.Br())
+            result.append(html.Br())
+            result.append(html.H3(metric_info[names[i]]['display_name'] + ' Test:', style=text_style))
+            # https://stackoverflow.com/questions/59120877/how-to-create-a-bar-chart-with-a-mean-line-in-the-dash-app
+            graph_range = max(max(abs(self.values[names[i]]), abs(conditions_num[i][0])), abs(conditions_num[i][1]))
+            graph_range *= 1.2
+            layout = go.Layout(margin=go.layout.Margin(l=0, r=0, b=0))
+            fig = go.Figure([go.Bar(x=[0], y=[self.values[names[i]]])], layout=layout)
+            fig.add_shape(go.layout.Shape(
+                type="line", x0=-0.5, y0=conditions_num[i][0], x1=0.5, y1=conditions_num[i][0],
+                line=dict(color="Orange", width=4, dash="dash")))
+            fig.add_shape(go.layout.Shape(
+                type="line", x0=-0.5, y0=conditions_num[i][1], x1=0.5, y1=conditions_num[i][1],
+                line=dict(color="Orange", width=4, dash="dash")))
+            fig.update_layout(yaxis_range=[-graph_range, graph_range])
+            fig.update_xaxes(showticklabels=False)
+            fig.update_layout(title={'text': metric_info[names[i]]['display_name'], 'y': 0.9, 'x': 0.5, 'xanchor': 'center', 'yanchor': 'top'})
+            fig_graph = html.Div(dcc.Graph(figure=fig), style={"display": "block", "margin": "0 auto 0 auto", "width": "60%"})
+            result.append(fig_graph)
+            result.append(html.Br())
+            if self.result[names[i]]:
+                result.append(html.B("It's value of " + str(self.values[names[i]]) +
+                                     " is between " + conditions[i] + " indicating that there is fairness.", style=text_style))
+            else:
+                result.append(html.B("Its value of " + str(self.values[names[i]]) +
+                                     " is not between " + conditions[i] + " indicating that there is unfairness.", style=text_style))
+            result.append(html.P('This metric is ' + metric_info[names[i]]['explanation'], style=text_style))
+        return html.Div(result)
