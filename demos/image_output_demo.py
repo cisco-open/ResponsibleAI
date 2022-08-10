@@ -237,11 +237,12 @@ def main():
     from RAI.Analysis import AnalysisManager
     analysis = AnalysisManager()
     print("available analysis: ", analysis.get_available_analysis(ai, "test"))
+    '''
     result = analysis.run_all(ai, "test", "Test run!")
     for analysis in result:
         print("Analysis: " + analysis)
         print(result[analysis].to_string())
+    '''
 
 if __name__ == '__main__':
     main()
-

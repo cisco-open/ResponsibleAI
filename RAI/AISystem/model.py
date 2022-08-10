@@ -26,6 +26,7 @@ class Model:
         if predict_prob_fun is not None:
             self.output_types["predict_proba"] = predict_prob_fun
         self.generate_text_fun = generate_text_fun
+        self.generate_image_fun = generate_image_fun
         if generate_text_fun is not None:
             self.output_types["generate_text"] = generate_text_fun
         if generate_image_fun is not None:

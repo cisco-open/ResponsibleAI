@@ -1,13 +1,13 @@
 {
-    "name": "fairness_analysis",
-    "display_name": "Fairness Analysis",
+    "name": "view_inference_analysis",
+    "display_name": "View Inference Analysis",
     "compatibility": {"task_type": [],
                       "data_type": [],
                       "output_requirements": [],
                       "dataset_requirements": [],
                       "required_groups":  []},
-    "src": "equal_treatment",
+    "src": "",
     "dependency_list": [],
-    "tags": ["fairness", "General Fairness"],
+    "tags": [],
     "complexity_class": "linear"
 }

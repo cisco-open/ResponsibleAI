@@ -1,7 +1,7 @@
 {
     "name": "generate_brendel_bethge_adversarial_image",
     "display_name": "Generate Brendel Bethge Adversarial Image",
-    "compatibility": {"task_type": "classification",
+    "compatibility": {"task_type": ["classification"],
                       "data_type": ["Image"],
                       "output_requirements": ["predict"],
                       "dataset_requirements": ["X", "y"],

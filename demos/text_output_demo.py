@@ -14,7 +14,10 @@ t5 = T5ForConditionalGeneration.from_pretrained('t5-small')
 tokenizer = T5Tokenizer.from_pretrained('t5-small')
 
 
+# TODO: Refine RAI to model transformation
 def summarize(text):
+    while isinstance(text, list) or isinstance(text, np.ndarray):
+        text = text[0]
     text = "summarize: " + text
     input_ids = tokenizer.encode(text, return_tensors='pt', max_length=512)
     summary_ids = t5.generate(input_ids)
@@ -47,9 +50,7 @@ def main():
     dataset = Dataset({"train": Data(xTrain, yTrain), "test": Data(xTest, yTest)})
     ai = AISystem(name="Text_Summarizer_t5", task='generate', meta_database=meta, dataset=dataset, model=model)
     ai.initialize(user_config=configuration)
-
     ai.compute({"test": {"generate_text": preds}}, tag='initial_preds')
-
     if use_dashboard:
         r = RaiRedis(ai)
         r.connect()
@@ -62,12 +63,12 @@ def main():
 
     from RAI.Analysis import AnalysisManager
     analysis = AnalysisManager()
-    print("available analysis: ", analysis.get_available_analysis(ai, "test"))
-    result = analysis.run_all(ai, "test", "Test run!")
+    #print("available analysis: ", analysis.get_available_analysis(ai, "test"))
+    #result = analysis.run_all(ai, "test", "Test run!")
     # result = analysis.run_analysis(ai, "test", "CleverUntargetedScore", "Testing")
-    for analysis in result:
-        print("Analysis: " + analysis)
-        print(result[analysis].to_string())
+    # for analysis in result:
+    #     print("Analysis: " + analysis)
+    #     print(result[analysis].to_string())
 
 
 if __name__ == '__main__':
