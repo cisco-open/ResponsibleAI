@@ -35,5 +35,5 @@ ai.initialize(user_config=configuration)
 r = RaiRedis(ai)
 r.connect()
 
-r.delete_all_data(confirm=False)
+r.delete_all_data(confirm=True)
 # r.delete_data(ai)
