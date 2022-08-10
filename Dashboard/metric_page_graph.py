@@ -119,6 +119,7 @@ def get_metric_page_graph():
 def update_metric_choices(p_selected, c_selected, reset_button, metric_search, p_options, c_options, p_val, c_val, options):
     ctx = dash.callback_context.triggered[0]["prop_id"]
     metric_info = redisUtil.get_metric_info()
+    options = [] if options is None else options
     if ctx == prefix+'reset_graph.n_clicks':
         to_p_val = [[] for _ in range(len(p_val))]
         to_c_val = [[] for _ in range(len(p_val))]

@@ -69,7 +69,7 @@ def main():
         def forward(self, x):
             x = self.features_conv(x)
             x = self.f1(x)
-            x = torch.flatten(x,1)
+            x = torch.flatten(x, 1)
             x = self.classifier(x)
             return x
 

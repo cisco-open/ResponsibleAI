@@ -60,7 +60,7 @@ def get_graph(prefix):
 
 def get_display(prefix, selectors):
     return html.Div([
-        dcc.Store(id=prefix + 'legend_data', storage_type='local'),
+        dcc.Store(id=prefix + 'legend_data', storage_type='memory'),
         dcc.Interval(
             id=prefix + 'interval-component',
             interval=1 * 1000,  # in milliseconds
