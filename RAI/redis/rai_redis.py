@@ -42,6 +42,13 @@ class RaiRedis:
         self._init_analysis_pubsub()
         return self.redis_connection.ping()
 
+    def get_progress_update_lambda(self, analysis):
+        return lambda progress: self.analysis_progress_update(analysis, progress)
+
+    def analysis_progress_update(self, analysis: str, progress):
+        self.redis_connection.publish("ai_requests", self.ai_system.name + '|start_analysis_update|' +
+                                      analysis + "|" + progress)
+
     def _init_analysis_pubsub(self):
         def sub_handler(msg):
             logger.info(f"New Analysis message received: {msg}")
@@ -54,10 +61,9 @@ class RaiRedis:
                     dataset = msg[2]
                     analysis = msg[3]
                     if analysis in self.analysis_manager.get_available_analysis(self.ai_system, msg[2]):
-                        result = self.analysis_manager.run_analysis(self.ai_system, dataset, analysis)
-                        encoded_res = codecs.encode(pickle.dumps(result[analysis].to_html()), "base64").decode()
-                        self.redis_connection.publish("ai_requests", self.ai_system.name + '|start_analysis_response|' +
-                                                      analysis + "|" + encoded_res)
+                        connection = self.get_progress_update_lambda(analysis)
+                        x = threading.Thread(target=self._run_analysis_thread, args=(dataset, analysis, connection))
+                        x.start()
 
         self._ai_request_pub = self.redis_connection.pubsub()
         try:
@@ -66,6 +72,12 @@ class RaiRedis:
             self._threads.append(self._ai_request_pub.run_in_thread(sleep_time=.1))
         except:
             logger.warning("unable to subscribe to redis pub/sub")
+
+    def _run_analysis_thread(self, dataset, analysis, connection):
+        result = self.analysis_manager.run_analysis(self.ai_system, dataset, analysis, connection=connection)
+        encoded_res = codecs.encode(pickle.dumps(result[analysis].to_html()), "base64").decode()
+        self.redis_connection.publish("ai_requests", self.ai_system.name + '|start_analysis_response|' +
+                                      analysis + "|" + encoded_res)
 
     def reset_redis(self, export_metadata: bool = True, summarize_data: bool = True, interpret_model: bool = True) -> None:
         to_delete = ["metric_values", "model_info", "metric_info", "metric", "certificate_metadata",

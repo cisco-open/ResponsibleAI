@@ -28,12 +28,16 @@ class CleverTargetedScore(Analysis, class_location=os.path.abspath(__file__)):
 
     def _compute(self):
         result = {}
-        data = self.ai_system.get_data(self.dataset)
-        xData = data.X
-        yData = data.y
         output_features = self.ai_system.model.output_features[0].values
         self.output_features = output_features.copy()
         numClasses = len(output_features)
+        self.max_progress_tick = self.EXAMPLES_PER_CLASS*numClasses*(numClasses-1) + 3
+        self.progress_tick()
+
+        data = self.ai_system.get_data(self.dataset)
+        xData = data.X
+        yData = data.y
+
         shape = data.image[0].shape
 
         classifier = PyTorchClassifier(model=self.ai_system.model.agent, loss=self.ai_system.model.loss_function,
@@ -43,7 +47,12 @@ class CleverTargetedScore(Analysis, class_location=os.path.abspath(__file__)):
         result['clever_t_li'] = {i: [] for i in output_features}
 
         correct_classifications = self._get_correct_classifications(self.ai_system.model.predict_fun, xData, yData)
+
+        self.progress_tick()
+
         balanced_classifications = self._balance_classifications_per_class(correct_classifications, yData, output_features)
+
+        self.progress_tick()
 
         for target_class in balanced_classifications:
             for example_num in balanced_classifications[target_class]:
@@ -54,6 +63,7 @@ class CleverTargetedScore(Analysis, class_location=os.path.abspath(__file__)):
                     result['clever_t_l1'][val].append(clever_t(classifier, example, val, 10, 5, self.R_L1, norm=1, pool_factor=3))
                     result['clever_t_l2'][val].append(clever_t(classifier, example, val, 10, 5, self.R_L2, norm=2, pool_factor=3))
                     result['clever_t_li'][val].append(clever_t(classifier, example, val, 10, 5, self.R_LI, norm=np.inf, pool_factor=3))
+                    self.progress_tick()
         result['total_images'] = 0
         result['total_classes'] = len(result['clever_t_l1'])
         for val in balanced_classifications:

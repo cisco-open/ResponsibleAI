@@ -19,6 +19,7 @@ class GenerateBrendelBethgeAdversarialImage(Analysis, class_location=os.path.abs
         self.dataset = dataset
         self.tag = tag
         self.total_images = 10
+        self.max_progress_tick = self.total_images + 3
         self.eps = 0.1
 
     def initialize(self):
@@ -27,6 +28,8 @@ class GenerateBrendelBethgeAdversarialImage(Analysis, class_location=os.path.abs
 
     def _compute(self):
         result = {}
+        self.progress_tick()
+
         data = self.ai_system.get_data(self.dataset)
         xData = data.X
         yData = data.y
@@ -34,6 +37,8 @@ class GenerateBrendelBethgeAdversarialImage(Analysis, class_location=os.path.abs
         self.output_features = output_features.copy()
         numClasses = len(output_features)
         shape = data.image[0].shape
+
+        self.progress_tick()
 
         classifier = PyTorchClassifier(model=self.ai_system.model.agent, loss=self.ai_system.model.loss_function,
                                        optimizer=self.ai_system.model.optimizer, input_shape=shape, nb_classes=numClasses)
@@ -45,6 +50,8 @@ class GenerateBrendelBethgeAdversarialImage(Analysis, class_location=os.path.abs
         result['total_classes'] = 0
         result['adv_output'] = {}
 
+        self.progress_tick()
+
         for target_class in input_selections:
             result['total_images'] += 1
             result['total_classes'] += 1
@@ -55,6 +62,7 @@ class GenerateBrendelBethgeAdversarialImage(Analysis, class_location=os.path.abs
             result['adv_output'][target_class] = {"image": og_image,
                                     "adversarial": x_adv,
                                     "final_prediction": adv_output}
+            self.progress_tick()
         return result
 
     def _select_random(self, balanced_classifications):

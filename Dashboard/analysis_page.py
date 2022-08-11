@@ -1,14 +1,9 @@
 import logging
-import dash_bootstrap_components as dbc
-from dash import html, dcc
+from dash import dcc
 import dash
 from server import app, redisUtil
 import metric_view_functions as mvf
 from dash import Input, Output, html, State
-import dash_daq as daq
-import numpy as np
-import plotly.express as px
-import pandas as pd
 
 logger = logging.getLogger(__name__)
 
@@ -46,17 +41,16 @@ def get_analysis_updates(timer, btn, analysis_choice, analysis_choices, analysis
     ctx = dash.callback_context
     is_time_update, is_button, is_value = mvf.analysis_update_cause(ctx, "analysis-")
     analysis_choices = redisUtil.get_available_analysis()
-    if is_time_update:
-        if redisUtil.has_update("analysis_update", reset=True):
+    if is_time_update and analysis_choice is not None:
+        if redisUtil.has_analysis_update(analysis_choice, reset=True):
             print("updating analysis data")
             analysis_display = [html.P(redisUtil.get_analysis(analysis_choice))]
-            redisUtil._subscribers["analysis_update"] = False
     if is_button:
         if analysis_choice is None or analysis_choice == "":
             return analysis_choices, [html.P("Please select an analysis")]
         else:
             redisUtil.request_start_analysis(analysis_choice)
-            return redisUtil.get_available_analysis(), [html.P("Starting analysis")]
+            return redisUtil.get_available_analysis(), [html.P("Requesting Analysis..")]
     if is_value:
         analysis_display = [redisUtil.get_analysis(analysis_choice)]
     return analysis_choices, analysis_display

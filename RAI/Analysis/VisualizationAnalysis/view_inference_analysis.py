@@ -20,6 +20,7 @@ class ViewInferenceAnalysis(Analysis, class_location=os.path.abspath(__file__)):
         self.tag = tag
         self.total_examples = 5
         self.eps = 0.1
+        self.max_progress_tick = self.total_examples
 
     def initialize(self):
         if self.result is None:
@@ -58,6 +59,7 @@ class ViewInferenceAnalysis(Analysis, class_location=os.path.abspath(__file__)):
                 result['output'].append(output_fun(val))
             else:
                 result['output'].append(output_fun())
+            self.progress_tick()
         return result
 
     def _get_output_fun(self):

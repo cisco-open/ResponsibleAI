@@ -28,12 +28,17 @@ class CleverUntargetedScore(Analysis, class_location=os.path.abspath(__file__)):
 
     def _compute(self):
         result = {}
-        data = self.ai_system.get_data(self.dataset)
-        xData = data.X
-        yData = data.y
         output_features = self.ai_system.model.output_features[0].values
         self.output_features = output_features.copy()
         numClasses = len(output_features)
+
+        self.max_progress_tick = self.EXAMPLES_PER_CLASS * numClasses + 3
+        self.progress_tick()
+
+        data = self.ai_system.get_data(self.dataset)
+        xData = data.X
+        yData = data.y
+
         shape = data.image[0].shape
         classifier = PyTorchClassifier(model=self.ai_system.model.agent, loss=self.ai_system.model.loss_function,
                                        optimizer=self.ai_system.model.optimizer, input_shape=shape, nb_classes=numClasses)
@@ -43,8 +48,13 @@ class CleverUntargetedScore(Analysis, class_location=os.path.abspath(__file__)):
         result['clever_u_li'] = {i: [] for i in output_features}
 
         correct_classifications = self._get_correct_classifications(self.ai_system.model.predict_fun, xData, yData)
+
+        self.progress_tick()
+
         balanced_classifications = self._balance_classifications_per_class(correct_classifications, yData, output_features)
         result['total_images'] = 0
+
+        self.progress_tick()
 
         for target_class in balanced_classifications:
             result['total_images'] += len(balanced_classifications[target_class])
@@ -53,6 +63,7 @@ class CleverUntargetedScore(Analysis, class_location=os.path.abspath(__file__)):
                 result['clever_u_l1'][target_class].append(clever_u(classifier, example, 10, 5, self.R_L1, norm=1, pool_factor=3, verbose=False))
                 result['clever_u_l2'][target_class].append(clever_u(classifier, example, 10, 5, self.R_L2, norm=2, pool_factor=3, verbose=False))
                 result['clever_u_li'][target_class].append(clever_u(classifier, example, 10, 5, self.R_LI, norm=np.inf, pool_factor=3, verbose=False))
+                self.progress_tick()
         result['total_classes'] = len(result['clever_u_l1'])
         return result
 

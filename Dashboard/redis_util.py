@@ -5,7 +5,8 @@ from collections import defaultdict
 import numpy as np
 import redis
 import codecs
-
+import dash_bootstrap_components as dbc
+from dash import html
 logger = logging.getLogger(__name__)
 
 
@@ -26,9 +27,15 @@ class RedisUtils(object):
         self._ai_request_pub = None
         self._analysis_storage = {}
 
-
     def has_update(self, channel, reset=True):
         val = self._subscribers[channel]
+        if reset:
+            self.reset_channel(channel)
+        return val
+
+    def has_analysis_update(self, analysis, reset=True):
+        channel = "analysis_update|" + self._current_project_name + "|" + analysis
+        val = self._subscribers.get(channel, False)
         if reset:
             self.reset_channel(channel)
         return val
@@ -59,21 +66,25 @@ class RedisUtils(object):
         def sub_handler(msg):
             msg = msg['data'].decode("utf-8")
             msg_split = msg.split('|')
-            if self._current_project_name is not None and msg_split[0] == self._current_project_name:
-                if msg_split[1] == "available_analysis_response":
+            project_name = msg_split[0]
+            if msg_split[1] == "available_analysis_response":
+                if project_name == self._current_project_name:
                     val = json.loads(msg_split[2])
                     self.set_available_analysis(val)
                     self._subscribers["analysis_update"] = True
                     logger.info("Setting available analysis to: " + str(self.get_available_analysis()))
-                elif msg_split[1] == "start_analysis_response":
-                    analysis_name = msg_split[2]
-                    report_string = msg[len(msg_split[0]) + len(msg_split[1]) + len(msg_split[2]) + 3:]
-                    report_bytes = codecs.decode(report_string.encode(), "base64")
-                    print("msg: ", msg[len(msg_split[0]) + len(msg_split[1]) + len(msg_split[2]) + 3])
-                    report = pickle.loads(report_bytes)
-                    self.set_analysis(analysis_name, report)
-                    self._subscribers["analysis_update"] = True
-            logger.info(f"New Analysis message received: {msg_split}")
+            elif msg_split[1] == "start_analysis_response":  # update ping or final analysis
+                analysis_name = msg_split[2]
+                report_string = msg[len(msg_split[0]) + len(msg_split[1]) + len(msg_split[2]) + 3:]
+                report_bytes = codecs.decode(report_string.encode(), "base64")
+                report = pickle.loads(report_bytes)
+                self.set_analysis(project_name, analysis_name, report)
+                self._subscribers["analysis_update|" + project_name + "|" + analysis_name] = True
+            elif msg_split[1] == "start_analysis_update":  # update ping or final analysis
+                analysis_name = msg_split[2]
+                progress = msg_split[3]
+                self.set_analysis(project_name, analysis_name, self._progress_to_html(progress))
+                self._subscribers["analysis_update|" + project_name + "|" + analysis_name] = True
 
         self._ai_request_pub = self._redis.pubsub()
         try:
@@ -83,11 +94,15 @@ class RedisUtils(object):
         except:
             logger.warning("unable to subscribe to ai_requests pub/sub")
 
+    def _progress_to_html(self, progress):
+        return html.Div(dbc.Progress(value=progress, label=str(progress) + "%"))
+
     def request_start_analysis(self, analysis):
         self._redis.publish('ai_requests', self._current_project_name + "|start_analysis|" +
                             self.get_current_dataset() + "|" + analysis)
 
     def request_available_analysis(self):
+        print("requesting available analysis")
         self._redis.publish('ai_requests', self._current_project_name + "|available_analysis|" + self.get_current_dataset())
 
     def initialize(self, subscribers=None):
@@ -186,10 +201,10 @@ class RedisUtils(object):
     def set_available_analysis(self, available):
         self._current_project["available_analysis"] = available
 
-    def set_analysis(self, analysis_name, report):
-        if self._current_project_name not in self._analysis_storage:
-            self._analysis_storage[self._current_project_name] = {}
-        self._analysis_storage[self._current_project_name][analysis_name] = report
+    def set_analysis(self, project_name, analysis_name, report):
+        if project_name not in self._analysis_storage:
+            self._analysis_storage[project_name] = {}
+        self._analysis_storage[project_name][analysis_name] = report
 
     def _update_projects(self):
         self._projects = self._redis.smembers("projects")

@@ -1,12 +1,8 @@
 from RAI.Analysis import Analysis
 from RAI.AISystem import AISystem
 import os
-from dash import html, dcc
-import numpy as np
-import plotly.graph_objs as go
-import torch
-import torchvision
-import torchvision.transforms as transforms
+from dash import html
+import time
 
 
 class DummyAnalysis(Analysis, class_location=os.path.abspath(__file__)):
@@ -16,12 +12,17 @@ class DummyAnalysis(Analysis, class_location=os.path.abspath(__file__)):
         self.ai_system = ai_system
         self.dataset = dataset
         self.tag = tag
+        self.loops = 30
+        self.max_progress_tick = self.loops
 
     def initialize(self):
+        self._compute()
         pass
 
     def _compute(self):
-        pass
+        for i in range(self.loops):
+            time.sleep(1)
+            self.progress_tick()
 
     def to_string(self):
         return "TEST"
