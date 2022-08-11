@@ -117,14 +117,14 @@ def get_metric_page_graph():
     prevent_initial_call=True
 )
 def update_metric_choices(p_selected, c_selected, reset_button, metric_search, p_options, c_options, p_val, c_val, options):
-    ctx = dash.callback_context.triggered[0]["prop_id"]
+    ctx = dash.callback_context.triggered
     metric_info = redisUtil.get_metric_info()
     options = [] if options is None else options
-    if ctx == prefix+'reset_graph.n_clicks':
+    if any(prefix+'reset_graph.n_clicks' in i["prop_id"] for i in ctx):
         to_p_val = [[] for _ in range(len(p_val))]
         to_c_val = [[] for _ in range(len(p_val))]
         return [], to_p_val, to_c_val, None
-    if ctx == prefix+'metric_search.value':
+    if any(prefix+'metric_search.value' in i["prop_id"] for i in ctx):
         if metric_search is None:
             return options, p_val, c_val, metric_search
         else:
@@ -141,12 +141,12 @@ def update_metric_choices(p_selected, c_selected, reset_button, metric_search, p
             return options, p_val, c_val, metric_search
     group = dash.callback_context.triggered_id["group"]
     parent_index = p_options.index([{'label': metric_info[group]['meta']['display_name'], 'value': group}])
-    if "\"type\":\""+prefix+"group-checkbox" in ctx:
+    if any("\"type\":\""+prefix+"group-checkbox" in i["prop_id"] for i in ctx):
         child_selection = [option["value"] for option in c_options[parent_index] if p_selected[parent_index]]
         options = update_metric_selections(group, child_selection, options.copy())
         c_val[parent_index] = child_selection
         return options, p_val, c_val, None
-    elif "\"type\":\""+prefix+"child-checkbox" in ctx:
+    elif any("\"type\":\""+prefix+"child-checkbox" in i["prop_id"] for i in ctx):
         parent_return = []
         if len(c_selected[parent_index]) == len(c_options[parent_index]):
             parent_return = [p_options[parent_index][0]["value"]]
@@ -165,7 +165,6 @@ def update_metric_choices(p_selected, c_selected, reset_button, metric_search, p
 def update_graph(n, options, old_container):
     ctx = dash.callback_context
     is_new_data, is_time_update, _ = mvf.get_graph_update_purpose(ctx, prefix)
-
     if is_time_update:
         if redisUtil.has_update("metric_graph", reset=True):
             logger.info("new data")
@@ -174,9 +173,12 @@ def update_graph(n, options, old_container):
 
     if is_new_data:
         fig = go.Figure()
+        if options is None:
+            options = []
         if len(options) == 0:
             return []
         for item in options:
+            print(item)
             k, v = item.split(',')
             add_trace_to_fig(fig, k, v)
         return [dcc.Graph(figure=fig)]

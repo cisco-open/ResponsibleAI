@@ -1,5 +1,10 @@
-import pandas as pd
-from RAI.dataset import Feature, Data, MetaDatabase, Dataset
+import os
+import sys
+import inspect
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0, parentdir)
+from RAI.dataset import Data, Dataset
 from RAI.AISystem import AISystem, Model
 import numpy as np
 from RAI.redis import RaiRedis

@@ -1,3 +1,9 @@
+import os
+import sys
+import inspect
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0, parentdir)
 from RAI.AISystem import AISystem, Model
 from RAI.redis import RaiRedis
 from RAI.dataset import Dataset, Feature, MetaDatabase, Data

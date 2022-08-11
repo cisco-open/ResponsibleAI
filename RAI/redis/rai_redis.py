@@ -115,7 +115,6 @@ class RaiRedis:
         data_summary = self.ai_system.get_data_summary()
         self.redis_connection.set(self.ai_system.name + '|data_summary', json.dumps(data_summary))
 
-
     def add_dataset(self, loc=None):
         dataset = self.ai_system.dataset.data_dict
         if loc is None:
@@ -127,7 +126,7 @@ class RaiRedis:
     def add_measurement(self) -> None:
         certificates = self.ai_system.get_certificate_values()
         metrics = self.ai_system.get_metric_values()
-
+        print("Pushing to: ", self.ai_system.name)
         self.redis_connection.rpush(self.ai_system.name + '|certificate_values', json.dumps(certificates))  # True
         # Leaving this for now.
         # TODO: Set up standardized to json for all metrics.

@@ -76,30 +76,16 @@ def get_reset_button(prefix):
 
 
 def analysis_update_cause(ctx, prefix):
-    is_time_update = False
-    is_button_click = False
-    is_value = False
-    for val in ctx.triggered:
-        if val['prop_id'] == prefix+'interval-component.n_intervals':
-            is_time_update = True
-        if val['prop_id'] == 'run_analysis_button.n_clicks':
-            is_button_click = True
-        if val['prop_id'] == 'analysis_selector.value':
-            is_value = True
+    is_time_update = any(prefix+'interval-component.n_intervals' in i['prop_id'] for i in ctx.triggered)
+    is_button_click = any('run_analysis_button.n_clicks' in i['prop_id'] for i in ctx.triggered)
+    is_value = any('analysis_selector.value' == i['prop_id'] for i in ctx.triggered)
     return is_time_update, is_button_click, is_value
 
 
 def get_graph_update_purpose(ctx, prefix):
-    is_new_data = False
-    is_time_update = False
-    is_new_tag = False
-    for val in ctx.triggered:
-        if val['prop_id'] == prefix + 'legend_data.data':
-            is_new_data = True
-        if val['prop_id'] == prefix + 'select_metric_tag.value':
-            is_new_tag = True
-        if val['prop_id'] == prefix + 'interval-component.n_intervals':
-            is_time_update = True
+    is_new_data = any(prefix+'legend_data.data' in i['prop_id'] for i in ctx.triggered)
+    is_time_update = any(prefix+'interval-component.n_intervals' in i['prop_id'] for i in ctx.triggered)
+    is_new_tag = any(prefix+'select_metric_tag.value' in i['prop_id'] for i in ctx.triggered)
     return is_new_data, is_time_update, is_new_tag
 
 

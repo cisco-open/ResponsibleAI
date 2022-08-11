@@ -21,9 +21,11 @@ class RedisUtils(object):
         self.info = {}
         self._initialized = False
         self._subscribers = defaultdict(bool)
-        self._current_project = None  # Contains certificates, metrics, info, project info
+        self._current_project = {}  # Contains certificates, metrics, info, project info
         self._current_project_name = None  # Used with redis to get current project
         self._ai_request_pub = None
+        self._analysis_storage = {}
+
 
     def has_update(self, channel, reset=True):
         val = self._subscribers[channel]
@@ -37,6 +39,7 @@ class RedisUtils(object):
     def _init_pubsub(self):
         def sub_handler(msg):
             logger.info(f"a new message received: {msg}")
+            self._update_projects()
             if self._current_project_name:
                 self._update_info()
                 self._update_values()
@@ -123,34 +126,35 @@ class RedisUtils(object):
         self._redis.close()
 
     def get_project_info(self):
-        return self._current_project["project_info"]
+        return self._current_project.get("project_info", {})
 
     def get_metric_info(self):
-        return self._current_project["metric_info"]
+        return self._current_project.get("metric_info", {})
 
     def get_certificate_info(self):
-        return self._current_project["certificate_info"]
+        return self._current_project.get("certificate_info", {})
 
     def get_certificate_values(self):
-        return self._current_project["certificate_values"]
+        return self._current_project.get("certificate_values", {})
 
     def get_metric_values(self):
-        return self._current_project["metric_values"]
+        return self._current_project.get("metric_values", {})
 
     def get_current_dataset(self):
-        return self._current_project["current_dataset"]
+        return self._current_project.get("current_dataset", None)
 
     def get_data_summary(self):
-        return self._current_project["data_summary"]
+        return self._current_project.get("data_summary", {})
 
     def get_model_interpretation(self):
-        return self._current_project["model_interpretation"]
+        return self._current_project.get("model_interpretation", {})
 
     def get_available_analysis(self):
         return self._current_project.get("available_analysis", [])
 
     def get_analysis(self, analysis_name):
-        return self._current_project["analysis"].get(analysis_name, None)
+        print("getting analysis: ", analysis_name)
+        return self._analysis_storage.get(self._current_project_name, {}).get(analysis_name, None)
 
     def set_current_project(self, project_name):
         project_name = project_name
@@ -183,9 +187,9 @@ class RedisUtils(object):
         self._current_project["available_analysis"] = available
 
     def set_analysis(self, analysis_name, report):
-        if self._current_project["analysis"] is None:
-            self._current_project["analysis"] = {}
-        self._current_project["analysis"][analysis_name] = report
+        if self._current_project_name not in self._analysis_storage:
+            self._analysis_storage[self._current_project_name] = {}
+        self._analysis_storage[self._current_project_name][analysis_name] = report
 
     def _update_projects(self):
         self._projects = self._redis.smembers("projects")
@@ -195,7 +199,7 @@ class RedisUtils(object):
         return self._projects
 
     def get_dataset_list(self):
-        return self._current_project["dataset_values"]
+        return self._current_project.get("dataset_values", [])
 
     def _update_info(self):
         self.info = {}

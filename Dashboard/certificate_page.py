@@ -30,21 +30,22 @@ def get_cert_name(cert_id):
 
 def generate_cert_table(id, show_explanation=True):
     rows = []
-    for k, v in redisUtil.get_certificate_values()[id].items():
-        if v['value']:
-            status = html.Div([
-                "Passed ", html.I(className="fa-solid fa-check",
-                                  style={"width": "30px", "height": "30px", "margin-left": "10px", "color": "green"})
-            ])
-        else:
-            status = html.Div([
-                "Failed", html.I(className="fa-solid fa-xmark",
-                                 style={"width": "30px", "height": "30px", "margin-left": "25px", "color": "red"})
-            ])
-        rows.append(html.Tr(
-            [html.Td(get_cert_name(k)), html.Td(v['explanation']), html.Td(status)] if show_explanation else
-            [html.Td(get_cert_name(k)), html.Td(status)]
-        ))
+    if len(redisUtil.get_certificate_values()) > 0:
+        for k, v in redisUtil.get_certificate_values()[id].items():
+            if v['value']:
+                status = html.Div([
+                    "Passed ", html.I(className="fa-solid fa-check",
+                                      style={"width": "30px", "height": "30px", "margin-left": "10px", "color": "green"})
+                ])
+            else:
+                status = html.Div([
+                    "Failed", html.I(className="fa-solid fa-xmark",
+                                     style={"width": "30px", "height": "30px", "margin-left": "25px", "color": "red"})
+                ])
+            rows.append(html.Tr(
+                [html.Td(get_cert_name(k)), html.Td(v['explanation']), html.Td(status)] if show_explanation else
+                [html.Td(get_cert_name(k)), html.Td(status)]
+            ))
     return dbc.Table(
         children=[
             html.Thead(

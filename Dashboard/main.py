@@ -35,6 +35,7 @@ from analysis_page import get_analysis_page
 from utils import iconify
 import urllib
 import sys
+from dash.exceptions import PreventUpdate
 
 
 np.seterr(invalid='raise')
@@ -82,7 +83,7 @@ def get_sidebar():
                     dcc.Dropdown(
                         id="project_selector",
                         options=redisUtil.get_projects_list(),
-                        value=redisUtil.get_projects_list()[0],
+                        value=redisUtil.get_projects_list()[0] if len(redisUtil.get_projects_list()) > 0 else None,
                         persistence=True,),
                     html.Hr(),
                     html.P("Select the dataset"),
@@ -90,7 +91,7 @@ def get_sidebar():
                     dcc.Dropdown(
                         id="dataset_selector",
                         options=redisUtil.get_dataset_list(),
-                        value=redisUtil.get_dataset_list()[0],
+                        value=redisUtil.get_dataset_list()[0] if len(redisUtil.get_dataset_list()) > 0 else None,
                         persistence=True),
                     html.Hr(),
                     dbc.NavLink(  
@@ -148,63 +149,99 @@ content = html.Div(id="page-content", style=CONTENT_STYLE)
 
 
 @app.callback(
-    Output("page-content", "children"),
     Output("dataset_selector", "options"),
     Output("dataset_selector", "value"),
-    Input("url", "pathname"),
+    Output("project_selector", "options"),
+    Output("project_selector", "value"),
+    Output("main_refresh_reminder", "n_clicks"),
     Input('project_selector', 'value'),
-    Input("url", "search"),
     Input("dataset_selector", "value"),
+    Input('main-page-interval-component', 'n_intervals'),
     State("dataset_selector", "options"),
-
+    State("project_selector", "options"),
+    State("project_selector", "value"),
+    State("main_refresh_reminder", "n_clicks")
 )
-def render_page_content(pathname, value, search, dataset_value, dataset_options):
-    if search:
-        parsed = urllib.parse.urlparse(search)
-        parsed_dict = urllib.parse.parse_qs(parsed.query)
+def render_page_content(value, dataset_value, interval, dataset_options, project_options, project_val, r_reminder):
+    r_reminder = 0
     ctx = dash.callback_context
-    redisUtil.set_current_project(value)
-    redisUtil.set_current_dataset(dataset_value)
+    reload_required = False
 
-    if any("project_selector.value" in ctx.triggered[i]["prop_id"] for i in range(len(ctx.triggered))):
-        redisUtil.set_current_project(value)
+    if project_options == [] and len(redisUtil.get_projects_list()) > 0:
+        project_options = redisUtil.get_projects_list()
+        project_val = project_options[0]
+        redisUtil.set_current_project(project_val)
+        reload_required = True
+
+    project_options = redisUtil.get_projects_list()
+
+    if dataset_options == [] and len(redisUtil.get_dataset_list()) > 0:
         dataset_options = redisUtil.get_dataset_list()
         dataset_value = dataset_options[0]
         redisUtil.set_current_dataset(dataset_value)
-    elif any("dataset_selector.value" in ctx.triggered[i]["prop_id"] for i in range(len(ctx.triggered))):
-        redisUtil.set_current_dataset(dataset_value)
+        reload_required = True
 
+    if any("project_selector.value" in i["prop_id"] for i in ctx.triggered):
+        redisUtil.set_current_project(value)
+        dataset_options = redisUtil.get_dataset_list()
+        dataset_value = dataset_options[0] if len(dataset_options) > 0 else None
+        redisUtil.set_current_dataset(dataset_value)
+        reload_required = True
+
+    elif any("dataset_selector.value" in i["prop_id"] for i in ctx.triggered):
+        redisUtil.set_current_dataset(dataset_value)
+        reload_required = True
+
+    if reload_required:
+        r_reminder = 1
+
+    return dataset_options, dataset_value, project_options, project_val, r_reminder
+
+
+@app.callback(
+    Output("page-content", "children"),
+    Input("url", "pathname"),
+    Input("url", "search"),
+    Input("main_refresh_reminder", "n_clicks"),
+)
+def change_page(pathname, search, reminder):
+    ctx = dash.callback_context.triggered
+    if len(ctx) == 1 and "main_refresh_reminder" in ctx[0]['prop_id'] and reminder == 0:
+        raise PreventUpdate
+
+    if search:
+        parsed = urllib.parse.urlparse(search)
+        parsed_dict = urllib.parse.parse_qs(parsed.query)
     if pathname == "/":
-        return get_home_page(), dataset_options, dataset_value
+        return get_home_page()
     elif pathname == "/settings":
-        return get_setting_page(), dataset_options, dataset_value
+        return get_setting_page()
     elif pathname == "/metrics":
-        return get_metric_page(), dataset_options, dataset_value
+        return get_metric_page()
     elif pathname == "/metrics_details":
-        return get_metric_page_details(), dataset_options, dataset_value
+        return get_metric_page_details()
     elif pathname == "/metrics_graphs":
-        return get_metric_page_graph(), dataset_options, dataset_value
+        return get_metric_page_graph()
     elif pathname == "/individual_metric_view":
-        return get_single_metric_display(), dataset_options, dataset_value
+        return get_single_metric_display()
     elif pathname == "/certificates":
-        return get_certificate_page(), dataset_options, dataset_value
+        return get_certificate_page()
     elif pathname == "/modelInfo":
-        return get_model_info_page()    , dataset_options, dataset_value
+        return get_model_info_page()
     elif pathname == "/single_metric_info/":
-        return get_single_model_info_page(parsed_dict["g"][0], parsed_dict["m"][0]), dataset_options, dataset_value
+        return get_single_model_info_page(parsed_dict["g"][0], parsed_dict["m"][0])
     elif pathname == "/metricsInfo":
-        return get_metric_info_page(), dataset_options, dataset_value
+        return get_metric_info_page()
     elif pathname == "/certificateInfo":
-        return get_certificate_info_page(), dataset_options, dataset_value
+        return get_certificate_info_page()
     elif pathname == "/modelView":
-        return get_model_view_page(), dataset_options, dataset_value
+        return get_model_view_page()
     elif pathname == "/dataSummary":
-        return get_data_summary_page(), dataset_options, dataset_value
+        return get_data_summary_page()
     elif pathname == "/modelInterpretation":
-        return get_model_interpretation_page(), dataset_options, dataset_value
+        return get_model_interpretation_page()
     elif pathname == "/analysis":
-        return get_analysis_page(), dataset_options, dataset_value
-        
+        return get_analysis_page()
     # If the user tries to reach a different page, return a 404 message
     return html.Div(
         [
@@ -212,7 +249,8 @@ def render_page_content(pathname, value, search, dataset_value, dataset_options)
             html.Hr(),
             html.P(f"The pathname {pathname} was not recognised..."),
         ]
-    ), dataset_options, dataset_value
+    )
+
 
 
 if __name__ == "__main__":
@@ -222,9 +260,12 @@ if __name__ == "__main__":
 
     redisUtil.initialize(subscribers={"metric_detail", "metric_graph", "certificate", "analysis_update"})
     project_list = redisUtil.get_projects_list()
-    redisUtil.set_current_project(project_list[0])
-    redisUtil.set_current_dataset(redisUtil.get_dataset_list()[0])
-    app.layout = html.Div([dcc.Location(id="url"), get_sidebar(), content])
+    redisUtil.set_current_project(project_list[0]) if len(project_list) > 0 else None
+    if len(redisUtil.get_dataset_list()) > 0:
+        redisUtil.set_current_dataset(redisUtil.get_dataset_list()[0])
+    app.layout = html.Div([dcc.Location(id="url"), dcc.Interval(
+                id='main-page-interval-component', interval=1 * 2500, n_intervals=0),
+                dbc.Button(id='main_refresh_reminder', style={"display": "None"}), get_sidebar(), content])
 
     app.run_server(debug=False)
     redisUtil.close()

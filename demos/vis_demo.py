@@ -1,9 +1,12 @@
-import pandas as pd
-from sklearn.model_selection import train_test_split
-from RAI.AISystem import AISystem, Model
+import os
+import sys
+import inspect
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0, parentdir)
+from RAI.AISystem import AISystem
 from RAI.dataset import Data, Dataset
 from RAI.redis import RaiRedis
-from RAI.utils import df_to_RAI
 
 from tensorflow.keras.datasets import cifar10
 

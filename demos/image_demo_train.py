@@ -12,7 +12,6 @@ import torch
 import torchvision
 import torchvision.transforms as transforms
 import torch.nn as nn
-import torch.nn.functional as F
 import torch.optim as optim
 import os
 import random
@@ -83,35 +82,43 @@ def main():
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
 
-    def train():
-        print("Starting training")
-        for epoch in range(5):  # loop over the dataset multiple times
-            running_loss = 0.0
-            for i, data in enumerate(trainloader, 0):
-                inputs, labels = data
-                optimizer.zero_grad()
-                outputs = net(inputs)
-                loss = criterion(outputs, labels)
-                loss.backward()
-                optimizer.step()
-                running_loss += loss.item()
-                if i % 2000 == 1999:  # print every 2000 mini-batches
-                    print(f'[{epoch + 1}, {i + 1:5d}] loss: {running_loss / 2000:.3f}')
-                    running_loss = 0.0
-        print('Finished Training')
-        torch.save(net.state_dict(), PATH)
+    def train(epoch):
+        running_loss = 0.0
+        for i, data in enumerate(trainloader, 0):
+            inputs, labels = data
+            optimizer.zero_grad()
+            outputs = net(inputs)
+            loss = criterion(outputs, labels)
+            loss.backward()
+            optimizer.step()
+            running_loss += loss.item()
+            if i % 2000 == 1999:  # print every 2000 mini-batches
+                print(f'[{epoch + 1}, {i + 1:5d}] loss: {running_loss / 2000:.3f}')
+                running_loss = 0.0
+
+    def test(epoch: int, ai, rai_redis):
+        print("Beginning Test")
+        preds = []
+        for i, vals in enumerate(testloader, 0):
+            image, label = vals
+            _, predicted = torch.max(net(image), 1)
+            preds += predicted
+        ai.compute({"test": {"predict": preds}}, tag='epoch: ' + str(epoch))
+        ai.display_metric_values()
+        print("Adding measurement")
+        rai_redis.add_measurement()
+        rai_redis.export_metadata()
+
+    def train_test(ai, rai_redis):
+        for epoch in range(5):
+            train(epoch)
+            test(epoch, ai, rai_redis)
 
     # TODO: Setup automatic transferring of datatypes
     def predict(input):
         if not isinstance(input, torch.Tensor):
             input = torch.Tensor(input)
         return net(input)
-
-    if os.path.isfile(PATH):
-        print("Loading model")
-        net.load_state_dict(torch.load(PATH))
-    else:
-        train()
 
     image = Feature('image', 'Image', 'The 32x32 input image')
     outputs = Feature('image_type', 'numeric', 'The type of image', categorical=True,
@@ -120,30 +127,18 @@ def main():
     model = Model(agent=net, output_features=outputs, name="conv_net", predict_fun=predict, description="ConvNet", model_class="ConvNet",
                   loss_function=criterion, optimizer=optimizer)
     configuration = {"time_complexity": "polynomial"}
-
-
-    dataset = Dataset({"train": Data(xTrainData, yTrainData, rawXTrainData), "test": Data(xTestData, yTestData, rawXTestData)})
+    dataset = Dataset({"test": Data(xTestData, yTestData, rawXTestData)})
 
     # Select the images to visually interpret (Grad-CAM)
-    interpretMethods = ["gradcam"]
-    ai = AISystem(name="cifar_categorization", task='classification', meta_database=meta, dataset=dataset, model=model, interpret_methods=interpretMethods)
+    interpretMethods = []
+    ai = AISystem(name="cifar_cat_train", task='classification', meta_database=meta, dataset=dataset, model=model, interpret_methods=interpretMethods)
     ai.initialize(user_config=configuration)
 
+    r = RaiRedis(ai)
+    r.connect()
+    r.reset_redis()
 
-    preds = []
-    for i, vals in enumerate(testloader, 0):
-        image, label = vals
-        _, predicted = torch.max(net(image), 1)
-        preds += predicted
-
-    ai.compute({"test": {"predict": preds}}, tag='model1')
-
-    if use_dashboard:
-        r = RaiRedis(ai)
-        r.connect()
-        r.reset_redis()
-        r.add_measurement()
-        r.add_dataset()
+    train_test(ai, r)
 
     ai.display_metric_values()
 
