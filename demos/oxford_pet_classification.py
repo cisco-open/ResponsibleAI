@@ -142,33 +142,16 @@ def main():
                   interpret_methods=interpret_method)
     ai.initialize(user_config=configuration)
 
-
-
-    # Generate predictions
-    import pickle
     preds = []
-    file_name = "saved_preds.pkl"
-
-    # Temp measure to run code faster
-    if os.path.isfile(file_name):
-        print("Loading preds")
-        open_file = open(file_name, "rb")
-        preds = pickle.load(open_file)
-        open_file.close()
-    else:
-        net.eval()
-        print("Generating predictions")
-        with torch.no_grad():
-            for i, vals in enumerate(test_loader, 0):
-                if i % int(len(test_loader) / 20) == 0:
-                    print(str(int(100 * i / len(test_loader))), "% Done")
-                image, label = vals
-                _, predicted = torch.max(net(image), 1)
-                preds += predicted.tolist()
-
-        open_file = open(file_name, "wb")
-        pickle.dump(preds, open_file)
-        open_file.close()
+    net.eval()
+    print("Generating predictions")
+    with torch.no_grad():
+        for i, vals in enumerate(test_loader, 0):
+            if i % int(len(test_loader) / 20) == 0:
+                print(str(int(100 * i / len(test_loader))), "% Done")
+            image, label = vals
+            _, predicted = torch.max(net(image), 1)
+            preds += predicted.tolist()
 
     # Compute Metrics based on the predictions
     ai.compute({"test": {"predict": preds}}, tag='regnet')
