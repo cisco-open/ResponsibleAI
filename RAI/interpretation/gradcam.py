@@ -50,25 +50,23 @@ class GradCAM:
 
         loader = DataLoader(dataset, batch_size=batch_size)
 
-        counts = np.zeros((self.n_classes,2))  # counts[i,0] counts correct samples, counts[i,1] counts wrong samples of class i
+        counts = np.zeros((self.n_classes, 2))  # counts[i,0] counts correct samples, counts[i,1] counts wrong samples of class i
         self.gradcamImgs = {c: {"correct": [], "wrong": [], "correct_idx": [], "wrong_idx": [], "idx": c_idx} for c_idx, c in enumerate(self.all_classes)}
 
         for imgs, labels, idxs in loader:
-            if (counts==5).all():
-                break 
-
+            if (counts == self.n_img).all():
+                break
             imgs = imgs.squeeze()
-            
             _, predicted = torch.max(self.net(imgs), 1)
             correct = (predicted==labels).numpy()
-            
+
             for i in range(batch_size):
                 c_idx = labels[i]
-                if correct[i] and counts[c_idx,0] < 5:
+                if correct[i] and counts[c_idx,0] < self.n_img:
                     counts[c_idx,0] += 1
                     self.gradcamImgs[self.all_classes[c_idx]]["correct"].append(imgs[i])
                     self.gradcamImgs[self.all_classes[c_idx]]["correct_idx"].append(idxs[i].item())
-                elif not correct[i] and counts[c_idx,1] < 5:
+                elif not correct[i] and counts[c_idx, 1] < self.n_img:
                     counts[c_idx,1] += 1
                     self.gradcamImgs[self.all_classes[c_idx]]["wrong"].append(imgs[i])
                     self.gradcamImgs[self.all_classes[c_idx]]["wrong_idx"].append(idxs[i].item())
@@ -111,7 +109,7 @@ class GradCAM:
                 pred = self.gradcamModel(img)
                 pred[0, c_idx].backward()
                 gradients = self.gradcamModel.get_activations_gradient()
-                pooled_gradients = torch.mean(gradients, dim=[2,3])
+                pooled_gradients = torch.mean(gradients, dim=[2, 3])
                 activations = self.gradcamModel.get_activations(img).detach()
                 activations = activations * pooled_gradients.unsqueeze(-1).unsqueeze(-1)
                 heatmap = torch.mean(activations, dim=1).squeeze()
@@ -121,6 +119,12 @@ class GradCAM:
         
         print("Grad-CAM Compute Done")
 
+    def img_to_uint8(self, img):
+        imin = img.min()
+        imax = img.max()
+        a = 255 / (imax - imin)
+        b = 255 - a * imax
+        return (a * img + b).astype(np.uint8)
 
     def visualize(self):
         self.viz_results = {c:{"correct": [], "wrong": []} for c in self.gradcamImgs}
@@ -132,9 +136,10 @@ class GradCAM:
                 img = dataset.getRawItem(idx).squeeze()
                 img_size = (img.shape[-2], img.shape[-1])
                 resized_heatmap = cv2.resize(heatmap, img_size)
-                resized_heatmap = np.uint8(resized_heatmap*255)
+                resized_heatmap = self.img_to_uint8(resized_heatmap)
                 resized_heatmap = cv2.applyColorMap(resized_heatmap, cv2.COLORMAP_JET)
-                img = np.transpose(np.uint8(img*255), (1, 2, 0))  #CHW to HWC
+                img = np.transpose(img, (1, 2, 0))  #CHW to HWC
+                img = self.img_to_uint8(img)
 
                 superimposed_img = (0.3*resized_heatmap + 0.7*img).astype(np.uint8) 
                 self.viz_results[c]["correct"].append((img, superimposed_img))
@@ -146,9 +151,10 @@ class GradCAM:
 
                 img_size = (img.shape[2], img.shape[1])
                 resized_heatmap = cv2.resize(heatmap, img_size)
-                resized_heatmap = np.uint8(resized_heatmap*255)
+                resized_heatmap = self.img_to_uint8(resized_heatmap)
                 resized_heatmap = cv2.applyColorMap(resized_heatmap, cv2.COLORMAP_JET)
-                img = np.transpose(np.uint8(img*255), (1,2,0))  #CHW to HWC
+                img = np.transpose(img, (1, 2, 0))  #CHW to HWC
+                img = self.img_to_uint8(img)
 
                 superimposed_img = (0.3*resized_heatmap + 0.7*img).astype(np.uint8) 
                 self.viz_results[c]["wrong"].append((img, superimposed_img))
@@ -177,6 +183,8 @@ class GradCAMModel(nn.Module):
     def hookTorchvisionModel(self):
         if self.net.__class__.__name__ in ["VGG"]:
             self.features_conv = self.net.features[:36]  #vgg19
+        elif self.net.__class__.__name__ in ["RegNet"]:
+            self.hookUserDefinedModel()
 
     def hookUserDefinedModel(self):
         self.features_conv = self.net.features_conv 

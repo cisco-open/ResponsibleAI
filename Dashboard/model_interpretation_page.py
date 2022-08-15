@@ -74,12 +74,12 @@ def display_gradcam_imgs(c_name):
 
             fig_1 = go.Figure(go.Image(z=correct_img))
             fig_1.update_xaxes(showticklabels=False).update_yaxes(showticklabels=False)
-            fig_1.update_layout(width=70, height=70, margin=go.layout.Margin(l=0,r=0,b=0,t=0,pad=0))
+            fig_1.update_layout(width=200, height=200, margin=go.layout.Margin(l=0,r=0,b=0,t=0,pad=0))
             fig_graph_1 = html.Div(dcc.Graph(figure=fig_1), style={"display": "inline-block", "padding": "0"})
 
             fig_2 = go.Figure(go.Image(z=correct_heatmap))
             fig_2.update_xaxes(showticklabels=False).update_yaxes(showticklabels=False)
-            fig_2.update_layout(width=70, height=70, margin=go.layout.Margin(l=0,r=0,b=0,t=0,pad=0))
+            fig_2.update_layout(width=200, height=200, margin=go.layout.Margin(l=0,r=0,b=0,t=0,pad=0))
             fig_graph_2 = html.Div(dcc.Graph(figure=fig_2), style={"display": "inline-block", "padding": "0"})
 
             # correct_img_map = html.Div()
@@ -94,12 +94,12 @@ def display_gradcam_imgs(c_name):
 
             fig_1 = go.Figure(go.Image(z=wrong_img))
             fig_1.update_xaxes(showticklabels=False).update_yaxes(showticklabels=False)
-            fig_1.update_layout(width=70, height=70, margin=go.layout.Margin(l=0,r=0,b=0,t=0,pad=0))
+            fig_1.update_layout(width=200, height=200, margin=go.layout.Margin(l=0,r=0,b=0,t=0,pad=0))
             fig_graph_1 = html.Div(dcc.Graph(figure=fig_1), style={"display": "inline-block", "padding": "0"})
 
             fig_2 = go.Figure(go.Image(z=wrong_heatmap))
             fig_2.update_xaxes(showticklabels=False).update_yaxes(showticklabels=False)
-            fig_2.update_layout(width=70, height=70, margin=go.layout.Margin(l=0,r=0,b=0,t=0,pad=0))
+            fig_2.update_layout(width=200, height=200, margin=go.layout.Margin(l=0,r=0,b=0,t=0,pad=0))
             fig_graph_2 = html.Div(dcc.Graph(figure=fig_2), style={"display": "inline-block", "padding": "0"})
 
             # wrong_img_map = html.Div([fig_graph_1, fig_graph_2])

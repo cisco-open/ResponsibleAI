@@ -47,11 +47,9 @@ class CleverUntargetedScore(Analysis, class_location=os.path.abspath(__file__)):
         result['clever_u_l2'] = {i: [] for i in output_features}
         result['clever_u_li'] = {i: [] for i in output_features}
 
-        correct_classifications = self._get_correct_classifications(self.ai_system.model.predict_fun, xData, yData)
+        balanced_classifications = self._get_balanced_correct_classifications(self.ai_system.model.predict_fun, xData, yData, output_features)
 
         self.progress_tick()
-
-        balanced_classifications = self._balance_classifications_per_class(correct_classifications, yData, output_features)
         result['total_images'] = 0
 
         self.progress_tick()
@@ -67,20 +65,22 @@ class CleverUntargetedScore(Analysis, class_location=os.path.abspath(__file__)):
         result['total_classes'] = len(result['clever_u_l1'])
         return result
 
-    def _get_correct_classifications(self, predict_fun, xData, yData):
-        result = []
-        for i, example in enumerate(xData):
-            pred = predict_fun(torch.Tensor(example))
-            if np.argmax(pred.detach().numpy(), axis=1)[0] == yData[i]:
-                result.append(i)
-        return result
 
-    def _balance_classifications_per_class(self, classifications, yData, class_values):
-        result = {i: [] for i in class_values}
-        for classification in classifications:
-            if len(result[yData[classification]]) < self.EXAMPLES_PER_CLASS:
-                result[yData[classification]].append(classification)
-        return result
+    def _get_balanced_correct_classifications(self, predict_fun, xData, yData, class_values):
+        result_balanced = {i: [] for i in class_values}
+        total_images = len(class_values)*self.EXAMPLES_PER_CLASS
+        added = 0
+        r = list(range(len(yData)))
+        random.shuffle(r)
+        for i in r:
+            if len(result_balanced[yData[i]]) < self.EXAMPLES_PER_CLASS:
+                pred = predict_fun(torch.Tensor(xData[i]))[0]
+                if pred == yData[i]:
+                    result_balanced[yData[i]].append(i)
+                    added += 1
+                    if added >= total_images:
+                        break
+        return result_balanced
 
     def _get_selection(self, misclassifications):
         offset = int(len(misclassifications)/self.MAX_COMPUTES)

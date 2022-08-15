@@ -74,7 +74,7 @@ def get_sidebar():
     sidebar = html.Div(
         [
             html.H2(["RAI", html.Img(src="./assets/img/rai_logo.png", style={"float": "right", "width": "62px", "height": "80px"})], className="display-4"),
-            html.P("A framework for responsible AI development", className="small"),
+            html.P("A framework for Responsible AI development", className="small"),
             html.Hr(),
             dbc.Nav(
                 [ 
@@ -127,13 +127,13 @@ def get_sidebar():
                         iconify("Certificates Info", "fa-solid fa-check-double", "20px"),
                         href="/certificateInfo", active="exact"),
                     dbc.NavLink( 
-                        iconify("Data Summary", "fa-solid fa-check-double", "20px"),
+                        iconify("Data Summary", "fa-solid fa-newspaper", "20px"),
                         href="/dataSummary", active="exact"),
                     dbc.NavLink( 
-                        iconify("Model Interpretation", "fa-solid fa-check-double", "20px"),
+                        iconify("Model Interpretation", "fa-solid fa-microscope", "20px"),
                         href="/modelInterpretation", active="exact"),
                     dbc.NavLink(
-                        iconify("Analysis", "fa-solid fa-check-double", "20px"),
+                        iconify("Analysis", "fa-solid fa-flask-vial", "20px"),
                         href="/analysis", active="exact"),
                 ],
                 vertical=True,
@@ -250,7 +250,6 @@ def change_page(pathname, search, reminder):
             html.P(f"The pathname {pathname} was not recognised..."),
         ]
     )
-
 
 
 if __name__ == "__main__":

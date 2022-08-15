@@ -30,10 +30,10 @@ def main():
     new_dataset = dataset
 
     # TODO: Clarify running on numpy data across models
-    def score_tweet(tweet: str) -> float:
+    def score_tweet(tweet: str) -> list[int]:
         while isinstance(tweet, np.ndarray) or isinstance(tweet, list):
             tweet = tweet[0]
-        return 0 if sentiment_model.polarity_scores(tweet)["compound"] <= 0 else 1
+        return [0 if sentiment_model.polarity_scores(tweet)["compound"] <= 0 else 1]
 
     meta, X, y, output = df_to_RAI(new_dataset, target_column="label", text_columns='text')
     xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=1)
@@ -42,7 +42,7 @@ def main():
 
     preds = []
     for val in xTest:
-        score = score_tweet(val[0])
+        score = score_tweet(val[0])[0]
         preds.append(score)
 
     model = Model(agent=sentiment_model, output_features=output, name="conv_net", predict_fun=score_tweet,
@@ -59,7 +59,7 @@ def main():
         r.connect()
         r.reset_redis(summarize_data=False)
         r.add_measurement()
-        r.add_dataset()
+        r.add_dataset_loc()
 
     ai.display_metric_values()
 

@@ -1,9 +1,6 @@
 import os
 import sys
 import inspect
-currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parentdir = os.path.dirname(currentdir)
-sys.path.insert(0, parentdir)
 import pandas as pd
 from RAI.AISystem import AISystem, Model
 from RAI.redis import RaiRedis
@@ -15,68 +12,68 @@ import numpy as np
 from datasets import load_dataset
 from transformers import T5Tokenizer, T5ForConditionalGeneration
 
+current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parent_dir = os.path.dirname(current_dir)
+sys.path.insert(0, parent_dir)
 
+
+# Get Model
 t5 = T5ForConditionalGeneration.from_pretrained('t5-small')
 tokenizer = T5Tokenizer.from_pretrained('t5-small')
 
 
-# TODO: Refine RAI to model transformation
+# Function to produce summarized text
 def summarize(text):
     while isinstance(text, list) or isinstance(text, np.ndarray):
         text = text[0]
     text = "summarize: " + text
     input_ids = tokenizer.encode(text, return_tensors='pt', max_length=512)
     summary_ids = t5.generate(input_ids)
-    return tokenizer.decode(summary_ids[0])
+    return [tokenizer.decode(summary_ids[0])]
 
 
 def main():
-    use_dashboard = True
     random.seed(0)
     np.random.seed(10)
 
+    # Get dataset
     dataset = load_dataset("gigaword", split="test")
     df = pd.DataFrame(dataset)
 
+    # Convert dataset to RAI
     meta, X, y, output = df_to_RAI(df, target_column="summary", text_columns=['document', 'summary'])
-    xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=1)
+    x_train, x_test, y_train, y_test = train_test_split(X, y, random_state=1)
+    x_test = x_test[:10]
+    y_test = y_test[:10]
 
-    # I don't have a GPU!
-    xTest = xTest[:10]
-    yTest = yTest[:10]
+    # Produce Summarizations
+    summaries = []
+    for i, val in enumerate(x_test):
+        summary = summarize(val[0])[0]
+        summaries.append(summary)
 
-    preds = []
-    for i, val in enumerate(xTest):
-        summary = summarize(val[0])
-        preds.append(summary)
-
+    # Create RAIs representation of the model
     model = Model(agent=t5, output_features=output, name="t5", generate_text_fun=summarize,
                   description="Text Summarizer", model_class="t5")
-    configuration = {"time_complexity": "polynomial"}
-    dataset = Dataset({"train": Data(xTrain, yTrain), "test": Data(xTest, yTest)})
+
+    # Create RAIs representation of the data splits
+    dataset = Dataset({"train": Data(x_train, y_train), "test": Data(x_test, y_test)})
+
+    # Create a RAI AISystem to calculate metrics and run analysis
     ai = AISystem(name="Text_Summarizer_t5", task='generate', meta_database=meta, dataset=dataset, model=model)
+    configuration = {"time_complexity": "polynomial"}
     ai.initialize(user_config=configuration)
-    ai.compute({"test": {"generate_text": preds}}, tag='initial_preds')
-    if use_dashboard:
-        r = RaiRedis(ai)
-        r.connect()
-        r.reset_redis(summarize_data=False)
-        r.add_measurement()
-        r.add_dataset()
-        r.export_visualizations()
 
-    ai.display_metric_values()
+    # Compute metrics on the summarization
+    ai.compute({"test": {"generate_text": summaries}}, tag='t5_small')
 
-    from RAI.Analysis import AnalysisManager
-    analysis = AnalysisManager()
-    #print("available analysis: ", analysis.get_available_analysis(ai, "test"))
-    #result = analysis.run_all(ai, "test", "Test run!")
-    # result = analysis.run_analysis(ai, "test", "CleverUntargetedScore", "Testing")
-    # for analysis in result:
-    #     print("Analysis: " + analysis)
-    #     print(result[analysis].to_string())
+    r = RaiRedis(ai)
+    r.connect()
+    r.reset_redis(summarize_data=False)
+    r.add_measurement()
+    r.add_dataset_loc()
+    r.export_visualizations()
 
 
 if __name__ == '__main__':
     main()
-

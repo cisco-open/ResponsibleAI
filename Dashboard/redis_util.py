@@ -80,6 +80,8 @@ class RedisUtils(object):
                 report = pickle.loads(report_bytes)
                 self.set_analysis(project_name, analysis_name, report)
                 self._subscribers["analysis_update|" + project_name + "|" + analysis_name] = True
+                # print("project: ", project_name, ", analysis: ", analysis_name)
+                # print("report: ", report)
             elif msg_split[1] == "start_analysis_update":  # update ping or final analysis
                 analysis_name = msg_split[2]
                 progress = msg_split[3]

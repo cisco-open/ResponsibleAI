@@ -19,7 +19,7 @@ class GenerateBrendelBethgeAdversarialImage(Analysis, class_location=os.path.abs
         self.dataset = dataset
         self.tag = tag
         self.total_images = 10
-        self.max_progress_tick = self.total_images + 3
+        self.max_progress_tick = self.total_images*2 + 5
         self.eps = 0.1
 
     def initialize(self):
@@ -42,9 +42,9 @@ class GenerateBrendelBethgeAdversarialImage(Analysis, class_location=os.path.abs
 
         classifier = PyTorchClassifier(model=self.ai_system.model.agent, loss=self.ai_system.model.loss_function,
                                        optimizer=self.ai_system.model.optimizer, input_shape=shape, nb_classes=numClasses)
-        correct_classifications = self._get_correct_classifications(self.ai_system.model.predict_fun, xData, yData)
-        balanced_classifications = self._balance_classifications_per_class(correct_classifications, yData, output_features)
-        input_selections = self._select_random(balanced_classifications)
+        balanced_classifications = self._get_balanced_correct_classifications(self.ai_system.model.predict_fun,
+                                                                              xData, yData, output_features)
+        input_selections = self._remove_none(balanced_classifications)
         attack = FastGradientMethod(estimator=classifier, eps=self.eps, minimal=True, eps_step=0.005, num_random_init=3)
         result['total_images'] = 0
         result['total_classes'] = 0
@@ -57,38 +57,34 @@ class GenerateBrendelBethgeAdversarialImage(Analysis, class_location=os.path.abs
             result['total_classes'] += 1
             og_image = xData[input_selections[target_class]]
             x_adv = attack.generate(x=og_image)
-            adv_output = self.ai_system.model.predict_fun(torch.from_numpy(x_adv))
-            adv_output = np.argmax(adv_output.detach().numpy(), axis=1)[0]
-            result['adv_output'][target_class] = {"image": og_image,
-                                    "adversarial": x_adv,
-                                    "final_prediction": adv_output}
+            adv_output = self.ai_system.model.predict_fun(torch.from_numpy(x_adv))[0]
+            result['adv_output'][target_class] = {"image": og_image, "adversarial": x_adv, "final_prediction": adv_output}
             self.progress_tick()
+        print("Finished compute")
         return result
 
-    def _select_random(self, balanced_classifications):
+    def _remove_none(self, balanced_classifications):
         result = {}
-        while len(balanced_classifications) > 0 and len(result) < self.total_images:
-            selection = random.choice(list(balanced_classifications.keys()))
-            result[selection] = balanced_classifications[selection]
-            balanced_classifications.pop(selection)
+        for key in balanced_classifications:
+            if balanced_classifications[key] is not None:
+                result[key] = balanced_classifications[key]
         return result
 
-    def _get_correct_classifications(self, predict_fun, xData, yData):
-        result = []
-        for i, example in enumerate(xData):
-            pred = predict_fun(torch.Tensor(example))
-            if np.argmax(pred.detach().numpy(), axis=1)[0] == yData[i]:
-                result.append(i)
-        return result
-
-    def _balance_classifications_per_class(self, classifications, yData, class_values):
-        result = {i: None for i in class_values}
+    def _get_balanced_correct_classifications(self, predict_fun, xData, yData, class_values):
+        result_balanced = {i: None for i in class_values}
+        added = 0
         r = list(range(len(yData)))
         random.shuffle(r)
-        for classification in r:
-            if result[yData[classification]] is None:
-                result[yData[classification]] = classification
-        return result
+        for i in r:
+            if result_balanced[yData[i]] is None:
+                pred = predict_fun(torch.Tensor(xData[i]))[0]
+                if pred == yData[i]:
+                    result_balanced[yData[i]] = i
+                    added += 1
+                    self.progress_tick()
+                    if added >= self.total_images:
+                        break
+        return result_balanced
 
     def to_string(self):
         result = "\n==== Generate Brendle Bethge Adversarial Image Analysis ====\nThis Analysis uses the Brendle Bethge Method to " \
@@ -99,12 +95,21 @@ class GenerateBrendelBethgeAdversarialImage(Analysis, class_location=os.path.abs
         result += "Please view this analysis in the Dashboard."
         return result
 
+    def get_normalized_uint8(self, img):
+        imin = img.min()
+        imax = img.max()
+        img = np.transpose(img, (1, 2, 0))
+        a = 255 / (imax - imin)
+        b = 255 - a * imax
+        img = (a * img + b).astype(np.uint8)
+        return img
+
     def to_display_image(self, image):
         shape = list(image.shape)
         shape = tuple(shape[-3:])
         res = image.reshape(shape)
-        img = np.transpose(np.uint8(res * 255), (1, 2, 0))
-        layout = go.Layout(margin=go.layout.Margin(l=0, r=0, b=0, t=0), width=100, height=100)
+        img = self.get_normalized_uint8(res)
+        layout = go.Layout(margin=go.layout.Margin(l=0, r=0, b=0, t=0), width=200, height=200)
         fig = go.Figure(go.Image(z=img), layout=layout)
         fig.update_xaxes(showticklabels=False).update_yaxes(showticklabels=False)
         fig_graph = html.Div(dcc.Graph(figure=fig), style={"display": "inline-block", "padding": "0"})
@@ -114,14 +119,14 @@ class GenerateBrendelBethgeAdversarialImage(Analysis, class_location=os.path.abs
         shape = list(org.shape)
         shape = shape[-3:]
         org = org.reshape(shape)
-        org = np.transpose(np.uint8(org * 255), (1, 2, 0))
+        org = self.get_normalized_uint8(org)
         org = org.astype('int32')
         adv = adv.reshape(shape)
-        adv = np.transpose(np.uint8(adv * 255), (1, 2, 0))
+        adv = self.get_normalized_uint8(adv)
         adv = adv.astype('int32')
         diff = np.abs(adv - org)
         diff = diff.astype("uint8")
-        layout = go.Layout(margin=go.layout.Margin(l=0, r=0, b=0, t=0), width=100, height=100)
+        layout = go.Layout(margin=go.layout.Margin(l=0, r=0, b=0, t=0), width=200, height=200)
         fig = go.Figure(go.Image(z=diff), layout=layout)
         fig.update_xaxes(showticklabels=False).update_yaxes(showticklabels=False)
         fig_graph = html.Div(dcc.Graph(figure=fig), style={"display": "inline-block", "padding": "0"})
@@ -129,6 +134,7 @@ class GenerateBrendelBethgeAdversarialImage(Analysis, class_location=os.path.abs
 
     def to_html(self):
         result = []
+        print("Returning HTML")
         adv_res = self.result['adv_output']
         total_images = self.result['total_images']
         total_classes = self.result['total_classes']
@@ -148,7 +154,7 @@ class GenerateBrendelBethgeAdversarialImage(Analysis, class_location=os.path.abs
         for target_class in adv_res:
             og_img = self.to_display_image(adv_res[target_class]["image"].copy())
             adv_img = self.to_display_image(adv_res[target_class]["adversarial"].copy())
-            pert_dis = self.get_diff(adv_res[target_class]["image"].copy(), adv_res[target_class]["adversarial"].copy())
+            pert_dis = self.get_diff(adv_res[target_class]["image"], adv_res[target_class]["adversarial"])
             initial_pred = target_class
             final_pred = adv_res[target_class]["final_prediction"]
             data_rows.append(html.Tr([html.Td(og_img), html.Td(html.B(self.output_features[initial_pred])),
@@ -160,4 +166,5 @@ class GenerateBrendelBethgeAdversarialImage(Analysis, class_location=os.path.abs
         table = dbc.Table(table_header + [html.Tbody(data_rows)], striped=True, bordered=True)
         result.append(html.Div([table], style={"display": "inline-block", "width": str(width) + "%"}))
         result.append(html.Div(style={"display": "inline-block", "width": small_width}))
+        print("returning html")
         return html.Div(result)

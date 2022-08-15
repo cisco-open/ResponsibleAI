@@ -1,6 +1,6 @@
 {
     "name": "basic_explainablity",
-    "display_name": "Basic Robustness",
+    "display_name": "Basic Explainability",
     "compatibility": {"task_type": [],
                       "data_type": ["Numeric"],
                       "output_requirements": [],

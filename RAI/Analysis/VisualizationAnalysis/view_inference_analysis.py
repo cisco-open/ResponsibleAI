@@ -1,10 +1,7 @@
 import random
 import numpy as np
-import torch
-from art.attacks.evasion import FastGradientMethod
 from RAI.AISystem import AISystem
 from RAI.Analysis import Analysis
-from art.estimators.classification import PyTorchClassifier
 import os
 from dash import html, dcc
 import dash_bootstrap_components as dbc
@@ -46,8 +43,10 @@ class ViewInferenceAnalysis(Analysis, class_location=os.path.abspath(__file__)):
             size = len(data_x)
         elif data_y is not None:
             size = len(data_y)
-        r = list(range(size))[:self.total_examples]
+        print("size: ", size)
+        r = list(range(size))
         random.shuffle(r)
+        r = r[:self.total_examples]
         for example in r:
             if data_y is not None:
                 result['y'].append(data_y[example])
@@ -56,9 +55,10 @@ class ViewInferenceAnalysis(Analysis, class_location=os.path.abspath(__file__)):
                 val = data_x[example]
                 if not isinstance(val[0], np.ndarray) and not isinstance(val[0], list):
                     val = [val]
-                result['output'].append(output_fun(val))
+                output = output_fun(val)[0]
+                result['output'].append(output)
             else:
-                result['output'].append(output_fun())
+                result['output'].append(output_fun()[0])
             self.progress_tick()
         return result
 
@@ -83,10 +83,15 @@ class ViewInferenceAnalysis(Analysis, class_location=os.path.abspath(__file__)):
         shape = list(image.shape)
         shape = tuple(shape[-3:])
         res = image.reshape(shape)
-        img = np.transpose(np.uint8(res * 255), (1, 2, 0))
-        layout = go.Layout(margin=go.layout.Margin(l=0, r=0, b=0, t=0), width=100, height=100)
-        fig = go.Figure(go.Image(z=img), layout=layout)
+        imin = res.min()
+        imax = res.max()
+        img = np.transpose(res, (1, 2, 0))
+        a = 255 / (imax - imin)
+        b = 255 - a * imax
+        img = (a * img + b).astype(np.uint8)
+        fig = go.Figure(go.Image(z=img))
         fig.update_xaxes(showticklabels=False).update_yaxes(showticklabels=False)
+        fig.update_layout(width=200, height=200, margin=go.layout.Margin(l=0, r=0, b=0, t=0, pad=0))
         fig_graph = html.Div(dcc.Graph(figure=fig), style={"display": "inline-block", "padding": "0"})
         return fig_graph
 
@@ -127,7 +132,7 @@ class ViewInferenceAnalysis(Analysis, class_location=os.path.abspath(__file__)):
             self._display_features(header, table_body, self.input_features, self.result['X'], "Data X")
         if self.result['y'] is not None:
             self._display_features(header, table_body, [self.output_feature], self.result['y'], "Data y")
-        self._display_features(header, table_body, [self.output_feature], self.result['y'], "Output")
+        self._display_features(header, table_body, [self.output_feature], self.result['output'], "Output")
         for i in range(len(header)):
             header[i] = html.Thead(html.Tr(header[i]))
         for i in range(len(table_body)):

@@ -127,7 +127,7 @@ class RaiRedis:
         data_summary = self.ai_system.get_data_summary()
         self.redis_connection.set(self.ai_system.name + '|data_summary', json.dumps(data_summary))
 
-    def add_dataset(self, loc=None):
+    def add_dataset_loc(self, loc=None):
         dataset = self.ai_system.dataset.data_dict
         if loc is None:
             loc = './data/'
@@ -138,7 +138,7 @@ class RaiRedis:
     def add_measurement(self) -> None:
         certificates = self.ai_system.get_certificate_values()
         metrics = self.ai_system.get_metric_values()
-        print("Pushing to: ", self.ai_system.name)
+        print("Sharing: ", self.ai_system.name)
         self.redis_connection.rpush(self.ai_system.name + '|certificate_values', json.dumps(certificates))  # True
         # Leaving this for now.
         # TODO: Set up standardized to json for all metrics.
@@ -167,7 +167,6 @@ class RaiRedis:
     def interpret_model(self):
         interpretation = self.ai_system.get_interpretation()
         self.redis_connection.set(self.ai_system.name + '|model_interpretation', json.dumps(interpretation, cls=NumpyArrayEncoder))
-
 
     def viewGUI(self):
         gui_launcher = threading.Thread(target=self._view_gui_thread, args=[])

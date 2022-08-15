@@ -69,10 +69,18 @@ class Data:
 
     # Splits up a dataset into its different data types, currently scalar and categorical
     def separate(self, scalar_mask, categorical_mask, image_mask, text_mask):
-        self.scalar = np.array(self.X[:, scalar_mask]).astype(np.float64) if self.X is not None else None
-        self.categorical = self.X[:, categorical_mask] if self.X is not None else None
-        self.image = self.X[:, image_mask] if self.X is not None else None
-        self.text = self.X[:, text_mask] if self.X is not None else None
+        self.scalar = None
+        if any(val for val in scalar_mask):
+            self.scalar = np.array(self.X[:, scalar_mask]).astype(np.float64) if self.X is not None else None
+        self.categorical = None
+        if any(val for val in categorical_mask):
+            self.categorical = self.X[:, categorical_mask] if self.X is not None else None
+        self.image = None
+        if any(val for val in image_mask):
+            self.image = self.X[:, image_mask] if self.X is not None else None
+        self.text = None
+        if any(val for val in text_mask):
+            self.text = self.X[:, text_mask] if self.X is not None else None
 
 
 class Dataset:

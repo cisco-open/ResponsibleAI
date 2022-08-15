@@ -23,7 +23,7 @@ meta, X, y, output = df_to_RAI(df, target_column="MedHouseVal")
 xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=1)
 
 
-use_dashboard = False
+use_dashboard = True
 
 
 reg = RandomForestRegressor(n_estimators=15, max_depth=20)
