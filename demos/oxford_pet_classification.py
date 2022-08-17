@@ -3,8 +3,7 @@ import inspect
 from torch.optim.lr_scheduler import StepLR
 from RAI.AISystem import AISystem, Model
 from RAI.redis import RaiRedis
-from RAI.utils import torch_to_RAI
-from RAI.dataset import MetaDatabase, Feature, Dataset, Data
+from RAI.dataset import MetaDatabase, Feature, Dataset, IteratorData
 import torch
 import torchvision
 import torchvision.transforms as transforms
@@ -124,16 +123,12 @@ def main():
     net.features_conv = nn.Sequential(net.stem, net.trunk_output)
     net.flatten = True
 
-    # Get the data in RAIs format
-    print("putting it in RAI format")
-    x_test_data, y_test_data, raw_x_test_data = torch_to_RAI(test_loader)
-
     # Define the RAI input and output features
     image = Feature('image', 'Image', 'The 32x32 input image')
     meta = MetaDatabase([image])
 
     # Pass test data split to RAI
-    dataset = Dataset({"test": Data(x_test_data, y_test_data, raw_x_test_data)})
+    dataset = Dataset({"test": IteratorData(test_loader)})
 
     # Create the RAI AISystem
     interpret_method = []  # ["gradcam"]

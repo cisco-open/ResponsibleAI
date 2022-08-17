@@ -7,14 +7,17 @@ import numpy as np
 class ImageStatsGroup(MetricGroup, class_location=os.path.abspath(__file__)):
     def __init__(self, ai_system) -> None:
         super().__init__(ai_system)
+        self._batch_total_examples = 0
+        self._batch_average = [0, 0, 0]
+        self._batch_d_squared = [0.0, 0.0, 0.0]
         
     def update(self, data):
         pass
 
     def compute(self, data_dict):
-        images = data_dict["data"].image
-
+        data = data_dict["data"]
         # images are of shape [examples, image columns, c, w, h]
+        images = data.image
         means = convert_float32_to_float64(images.mean(axis=(0, 1, 3, 4)))  # images.mean((0, 1, 3, 4))
         self.metrics["mean"].value = {"red": convert_float32_to_float64([0]),
                                       "green": convert_float32_to_float64(means[1]),
@@ -24,3 +27,26 @@ class ImageStatsGroup(MetricGroup, class_location=os.path.abspath(__file__)):
                                      "green": convert_float32_to_float64(std[1]),
                                      "blue": convert_float32_to_float64(std[2])}  # images.std((0, 1, 3, 4))
 
+    def reset(self):
+        super().reset()
+        self._batch_total_examples = 0
+        self._batch_average = [0, 0, 0]
+        self._batch_d_squared = [0.0, 0.0, 0.0]
+
+    def compute_batch(self, data_dict):
+        data = data_dict["data"]
+        images = data.image
+        for image in images:
+            self._batch_total_examples += 1
+            means = convert_float32_to_float64(image.mean(axis=(0, 2, 3)))
+            for i in range(len(self._batch_average)):
+                prev_avg = self._batch_average[i]
+                self._batch_average[i] = (self._batch_average[i] - means[i]) / self._batch_total_examples
+                self._batch_d_squared[i] = self._batch_d_squared[i] + (means[i] - self._batch_average[i]) * (means[i] - prev_avg)
+
+        for i in range(len(self._batch_d_squared)):
+            self._batch_d_squared[i] = self._batch_d_squared[i] / self._batch_total_examples
+            self._batch_d_squared[i] = np.sqrt(self._batch_d_squared[i])
+        self.metrics["mean"].value = {"red": self._batch_average[0], "green": self._batch_average[1], "blue": self._batch_average[2]}
+        self.metrics["std"].value = {"red": self._batch_d_squared[0], "green": self._batch_d_squared[1], "blue": self._batch_d_squared[2]}
+        pass

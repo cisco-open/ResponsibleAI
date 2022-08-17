@@ -138,6 +138,41 @@ class MetricManager(object):
     def compute(self, data_dict) -> dict:
         for metric_group_name in self.metric_groups:
             self.metric_groups[metric_group_name].compute(data_dict)
+        result = {}
+        for group in self.metric_groups:
+            result[group] = {}
+            for metric in self.metric_groups[group].metrics:
+                metric_obj = self.metric_groups[group].metrics[metric]
+                result[group][metric] = utils.jsonify(metric_obj.value)
+        return result
+
+    def iterator_compute(self, data_dict, preds: dict) -> dict:
+        data = data_dict["data"]
+        data.reset()
+        cur_idx = 0
+        # Need to reset metric group values
+        for group in self.metric_groups:
+            self.metric_groups[group].reset()
+
+        while data.next_batch():
+            data_len = 0
+            if data.X is not None:
+                data_len = len(data.X)
+            elif data.y is not None:
+                data_len = len(data.y)
+
+            for output_type in all_output_requirements:
+                if output_type in data_dict:
+                    data_dict[output_type] = preds[output_type][cur_idx: cur_idx + data_len]
+                elif output_type in data_dict:
+                    data_dict.pop(output_type)
+            cur_idx += data_len
+
+            for metric_group_name in self.metric_groups:
+                self.metric_groups[metric_group_name].compute_batch(data_dict)
+
+        for metric_group_name in self.metric_groups:
+            self.metric_groups[metric_group_name].finalize_batch_compute()
 
         result = {}
         for group in self.metric_groups:
@@ -146,6 +181,9 @@ class MetricManager(object):
                 metric_obj = self.metric_groups[group].metrics[metric]
                 result[group][metric] = utils.jsonify(metric_obj.value)
         return result
+
+    # batched_compute
+    # if data instance of IteratorData, iterate through batches,
 
     # Searches all metrics. Queries based on Metric Name, Metric Group Name, Category, and Tags.
     def search(self, query: str) -> dict:

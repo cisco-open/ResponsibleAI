@@ -4,6 +4,7 @@ import torch
 from art.attacks.evasion import FastGradientMethod
 from RAI.AISystem import AISystem
 from RAI.Analysis import Analysis
+from RAI.dataset import IteratorData, NumpyData
 from art.estimators.classification import PyTorchClassifier
 import os
 from dash import html, dcc
@@ -29,21 +30,22 @@ class GenerateBrendelBethgeAdversarialImage(Analysis, class_location=os.path.abs
     def _compute(self):
         result = {}
         self.progress_tick()
-
         data = self.ai_system.get_data(self.dataset)
-        xData = data.X
-        yData = data.y
         output_features = self.ai_system.model.output_features[0].values
         self.output_features = output_features.copy()
         numClasses = len(output_features)
-        shape = data.image[0].shape
+        shape = None
 
         self.progress_tick()
-
+        if isinstance(data, NumpyData):
+            shape = data.image[0].shape
+            balanced_classifications = self._get_balanced_correct_classifications(self.ai_system.model.predict_fun,
+                                                                                  data.X, data.y, output_features)
+        elif isinstance(data, IteratorData):
+            balanced_classifications, shape = self._get_balanced_correct_classifications_iterative(self.ai_system.model.predict_fun,
+                                                                                            data, output_features)
         classifier = PyTorchClassifier(model=self.ai_system.model.agent, loss=self.ai_system.model.loss_function,
                                        optimizer=self.ai_system.model.optimizer, input_shape=shape, nb_classes=numClasses)
-        balanced_classifications = self._get_balanced_correct_classifications(self.ai_system.model.predict_fun,
-                                                                              xData, yData, output_features)
         input_selections = self._remove_none(balanced_classifications)
         attack = FastGradientMethod(estimator=classifier, eps=self.eps, minimal=True, eps_step=0.005, num_random_init=3)
         result['total_images'] = 0
@@ -55,7 +57,7 @@ class GenerateBrendelBethgeAdversarialImage(Analysis, class_location=os.path.abs
         for target_class in input_selections:
             result['total_images'] += 1
             result['total_classes'] += 1
-            og_image = xData[input_selections[target_class]]
+            og_image = input_selections[target_class]
             x_adv = attack.generate(x=og_image)
             adv_output = self.ai_system.model.predict_fun(torch.from_numpy(x_adv))[0]
             result['adv_output'][target_class] = {"image": og_image, "adversarial": x_adv, "final_prediction": adv_output}
@@ -79,12 +81,33 @@ class GenerateBrendelBethgeAdversarialImage(Analysis, class_location=os.path.abs
             if result_balanced[yData[i]] is None:
                 pred = predict_fun(torch.Tensor(xData[i]))[0]
                 if pred == yData[i]:
-                    result_balanced[yData[i]] = i
+                    result_balanced[yData[i]] = xData[i]
                     added += 1
                     self.progress_tick()
                     if added >= self.total_images:
                         break
         return result_balanced
+
+    def _get_balanced_correct_classifications_iterative(self, predict_fun, data: IteratorData, class_values):
+        result_balanced = {i: None for i in class_values}
+        added = 0
+        shape = None
+        data.reset()
+        while data.next_batch() and added < self.total_images:
+            if shape is None:
+                shape = data.image[0]
+            r = list(range(len(data.y)))
+            random.shuffle(r)
+            for i in r:
+                if result_balanced[data.y[i]] is None:
+                    pred = predict_fun(torch.Tensor(data.X[i]))[0]
+                    if pred == data.y[i]:
+                        result_balanced[data.y[i]] = data.X[i]
+                        added += 1
+                        self.progress_tick()
+                        if added >= self.total_images:
+                            break
+        return result_balanced, shape
 
     def to_string(self):
         result = "\n==== Generate Brendle Bethge Adversarial Image Analysis ====\nThis Analysis uses the Brendle Bethge Method to " \

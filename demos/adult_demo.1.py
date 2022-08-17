@@ -7,7 +7,7 @@ sys.path.insert(0, parentdir)
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from RAI.AISystem import AISystem, Model
-from RAI.dataset import Data, Dataset, Feature
+from RAI.dataset import NumpyData, Dataset
 from RAI.redis import RaiRedis
 from RAI.utils import df_to_RAI
 from sklearn.ensemble import RandomForestClassifier
@@ -34,7 +34,7 @@ model = Model(agent=reg, output_features=output, name="cisco_income_ai", predict
               description="Income Prediction Model", model_class="Random Forest Classifier")
 configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}},
                               "protected_attributes": ["race"], "positive_label": 1}, "time_complexity": "polynomial"}
-dataset = Dataset({"train": Data(xTrain, yTrain), "test": Data(xTest, yTest)})
+dataset = Dataset({"train": NumpyData(xTrain, yTrain), "test": NumpyData(xTest, yTest)})
 ai = AISystem("AdultDB_1", task='binary_classification', meta_database=meta, dataset=dataset, model=model)
 ai.initialize(user_config=configuration)
 

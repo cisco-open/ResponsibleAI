@@ -4,7 +4,7 @@ import inspect
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from RAI.AISystem import AISystem, Model
-from RAI.dataset import Data, Dataset
+from RAI.dataset import NumpyData, Dataset
 from RAI.redis import RaiRedis
 from RAI.utils import df_to_RAI
 from sklearn.ensemble import RandomForestClassifier
@@ -27,7 +27,7 @@ rai_meta_information, X, y, rai_output_feature = df_to_RAI(all_data, target_colu
 
 # Create Data Splits and pass them to RAI
 xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=1, stratify=y)
-dataset = Dataset({"train": Data(xTrain, yTrain), "test": Data(xTest, yTest)})
+dataset = Dataset({"train": NumpyData(xTrain, yTrain), "test": NumpyData(xTest, yTest)})
 
 
 # Create Model and RAIs representation of it

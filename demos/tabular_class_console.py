@@ -5,7 +5,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from RAI.AISystem import AISystem, Model
 from RAI.Analysis import AnalysisManager
-from RAI.dataset import Data, Dataset
+from RAI.dataset import NumpyData, Dataset
 from RAI.utils import df_to_RAI
 from sklearn.ensemble import RandomForestClassifier
 current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
@@ -28,7 +28,7 @@ rai_meta_information, X, y, rai_output_feature = df_to_RAI(all_data, target_colu
 
 # Create Data Splits and pass them to RAI
 xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=1, stratify=y)
-dataset = Dataset({"train": Data(xTrain, yTrain), "test": Data(xTest, yTest)})
+dataset = Dataset({"train": NumpyData(xTrain, yTrain), "test": NumpyData(xTest, yTest)})
 
 
 # Create Model and RAIs representation of it
@@ -56,3 +56,7 @@ ai.compute({"test": {"predict": test_predictions}}, tag='model')
 
 # View results computed by RAI
 ai.display_metric_values(display_detailed=True)
+
+analysis = AnalysisManager()
+result = analysis.run_analysis(ai, "test", "FairnessAnalysis")
+print(result["FairnessAnalysis"].to_string())

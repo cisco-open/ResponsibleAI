@@ -4,7 +4,7 @@ import inspect
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
-from RAI.dataset import Data, Dataset
+from RAI.dataset import NumpyData, Dataset
 from RAI.AISystem import AISystem, Model
 import numpy as np
 from RAI.redis import RaiRedis
@@ -32,7 +32,7 @@ model = Model(agent=reg, output_features=output, name="cisco_income_ai", predict
               description="Income Prediction AI", model_class="Random Forest Regressor", )
 configuration = {"time_complexity": "polynomial"}
 
-dataset = Dataset({"train": Data(xTrain, yTrain), "test": Data(xTest, yTest)})
+dataset = Dataset({"train": NumpyData(xTrain, yTrain), "test": NumpyData(xTest, yTest)})
 ai = AISystem(name="AdultDB_regression",  task='regression', meta_database=meta, dataset=dataset, model=model)
 ai.initialize(user_config=configuration)
 

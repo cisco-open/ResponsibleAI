@@ -1,5 +1,6 @@
 from RAI.metrics.metric_group import MetricGroup
 from RAI.all_types import all_output_requirements
+from RAI.dataset import NumpyData, IteratorData
 import datetime
 import os
 
@@ -17,10 +18,12 @@ class MetadataGroup(MetricGroup, class_location=os.path.abspath(__file__)):
 
         samples = 0
         if "data" in data_dict and data_dict["data"] is not None:
-            if data_dict["data"].X is not None:
-                samples = data_dict["data"].X.shape[0]
-            elif data_dict["data"].y is not None:
-                samples = len(data_dict["data"].y)
+            data = data_dict["data"]
+            if isinstance(data, NumpyData):
+                if data.X is not None:
+                    samples = data.X.shape[0]
+                elif data.y is not None:
+                    samples = len(data.y)
         else:
             for output_type in all_output_requirements:
                 if output_type in data_dict and data_dict[output_type] is not None:
@@ -34,6 +37,12 @@ class MetadataGroup(MetricGroup, class_location=os.path.abspath(__file__)):
             self.metrics["model"].value = "None"
 
         self.metrics["tag"].value = data_dict["tag"]
+
+    def compute_batch(self, data_dict):
+        prev_samples = self.metrics["sample_count"].value
+        prev_samples = 0 if prev_samples is None else prev_samples
+        self.compute(data_dict)
+        self.metrics["sample_count"].value += prev_samples
 
     def _get_time(self):
         now = datetime.datetime.now()

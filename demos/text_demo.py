@@ -6,7 +6,7 @@ parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
 from RAI.AISystem import AISystem, Model
 from RAI.redis import RaiRedis
-from RAI.dataset import Dataset, Data, Feature
+from RAI.dataset import Dataset, NumpyData, Feature
 import nltk
 from nltk.sentiment import SentimentIntensityAnalyzer
 from RAI.utils import df_to_RAI
@@ -48,7 +48,7 @@ def main():
     model = Model(agent=sentiment_model, output_features=output, name="conv_net", predict_fun=score_tweet,
                   description="SentimentAnalysis", model_class="Bert")
     configuration = {"time_complexity": "polynomial"}
-    dataset = Dataset({"train": Data(xTrain, yTrain), "test": Data(xTest, yTest)})
+    dataset = Dataset({"train": NumpyData(xTrain, yTrain), "test": NumpyData(xTest, yTest)})
     ai = AISystem(name="Sentiment_Analysis_1", task='binary_classification', meta_database=meta, dataset=dataset, model=model)
     ai.initialize(user_config=configuration)
 
@@ -59,7 +59,6 @@ def main():
         r.connect()
         r.reset_redis(summarize_data=False)
         r.add_measurement()
-        r.add_dataset_loc()
 
     ai.display_metric_values()
 

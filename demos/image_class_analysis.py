@@ -3,7 +3,7 @@ import inspect
 from RAI.AISystem import AISystem, Model
 from RAI.redis import RaiRedis
 from RAI.utils import torch_to_RAI
-from RAI.dataset import MetaDatabase, Feature, Dataset, Data
+from RAI.dataset import MetaDatabase, Feature, Dataset, IteratorData
 import torch
 import torchvision
 import torchvision.transforms as transforms
@@ -31,11 +31,6 @@ def main():
     train_loader = torch.utils.data.DataLoader(train_set, batch_size=batch_size, shuffle=True, num_workers=2)
     test_set = torchvision.datasets.CIFAR10(root='./data', train=False, download=True, transform=transform)
     test_loader = torch.utils.data.DataLoader(test_set, batch_size=batch_size, shuffle=False, num_workers=2)
-
-    # Convert data for RAI
-    print("Converting to RAI")
-    x_test_data, y_test_data, raw_x_test_data = torch_to_RAI(test_loader)
-    x_train_data, y_train_data, raw_x_train_data = torch_to_RAI(train_loader)
     classes = ('plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
 
     # Define Model
@@ -90,6 +85,17 @@ def main():
                     running_loss = 0.0
         torch.save(net.state_dict(), PATH)
 
+    def test():
+        with torch.no_grad():
+            n_val_correct = 0
+            for i, data in enumerate(test_loader, 0):
+                inputs, labels = data
+                outputs = net(inputs)
+                n_val_correct += (torch.max(outputs.data, 1)[1] == labels).sum().item()
+
+        val_acc = 100. * n_val_correct / len(test_loader.dataset)
+        print("Accuracy: ", val_acc)
+
     # Define predict function to use for RAI
     def predict_proba(input_image):
         if not isinstance(input_image, torch.Tensor):
@@ -114,16 +120,17 @@ def main():
     outputs = Feature('image_type', 'numeric', 'The type of image', categorical=True, values={i: v for i, v in enumerate(classes)})
     meta = MetaDatabase([image])
 
+    net.eval()
     # Pass model to RAI
     model = Model(agent=net, output_features=outputs, name="conv_net", predict_fun=predict, predict_prob_fun=predict_proba,
                   description="ConvNet", model_class="ConvNet", loss_function=criterion, optimizer=optimizer)
     configuration = {"time_complexity": "polynomial"}
 
     # Pass data splits to RAI
-    dataset = Dataset({"train": Data(x_train_data, y_train_data, raw_x_train_data), "test": Data(x_test_data, y_test_data, raw_x_test_data)})
+    dataset = Dataset({"train": IteratorData(train_loader), "test": IteratorData(test_loader)})
 
     # Create the RAI AISystem
-    interpret_method = ["gradcam"]
+    interpret_method = []  # ["gradcam"]
     ai = AISystem(name="cifar_classification", task='classification', meta_database=meta, dataset=dataset, model=model, interpret_methods=interpret_method)
     ai.initialize(user_config=configuration)
 
@@ -134,6 +141,7 @@ def main():
         _, predicted = torch.max(net(image), 1)
         preds += predicted
 
+    print("Predictions generated")
     # Compute Metrics based on the predictions
     ai.compute({"test": {"predict": preds}}, tag='model 1')
 
@@ -142,7 +150,6 @@ def main():
     r.connect()
     r.reset_redis()
     r.add_measurement()
-    r.add_dataset_loc()
 
 
 if __name__ == '__main__':

@@ -225,7 +225,6 @@ def main():
         r.connect()
         r.reset_redis(summarize_data=False)
         r.add_measurement()
-        r.add_dataset_loc()
 
     ai.display_metric_values()
 

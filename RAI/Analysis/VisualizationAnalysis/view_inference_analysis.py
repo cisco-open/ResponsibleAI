@@ -2,7 +2,9 @@ import random
 import numpy as np
 from RAI.AISystem import AISystem
 from RAI.Analysis import Analysis
+from RAI.dataset import IteratorData, NumpyData
 import os
+import torch
 from dash import html, dcc
 import dash_bootstrap_components as dbc
 import plotly.graph_objs as go
@@ -30,7 +32,10 @@ class ViewInferenceAnalysis(Analysis, class_location=os.path.abspath(__file__)):
         self.input_features = self.ai_system.meta_database.features.copy()
         self.task = self.ai_system.task
         self.model = self.ai_system.model
-        result = self._get_examples(data.X, data.y)
+        if isinstance(data, NumpyData):
+            result = self._get_examples(data.X, data.y)
+        elif isinstance(data, IteratorData):
+            result = self._get_examples_iterative(data)
         return result
 
     def _get_examples(self, data_x, data_y):
@@ -43,7 +48,6 @@ class ViewInferenceAnalysis(Analysis, class_location=os.path.abspath(__file__)):
             size = len(data_x)
         elif data_y is not None:
             size = len(data_y)
-        print("size: ", size)
         r = list(range(size))
         random.shuffle(r)
         r = r[:self.total_examples]
@@ -60,6 +64,41 @@ class ViewInferenceAnalysis(Analysis, class_location=os.path.abspath(__file__)):
             else:
                 result['output'].append(output_fun()[0])
             self.progress_tick()
+        return result
+
+    def _get_examples_iterative(self, data: IteratorData):
+        result = {'X': [] if data.contains_x else None,
+                  'y': [] if data.contains_y else None,
+                  'output': []}
+        size = 0
+        output_fun = self._get_output_fun()
+        if not data.next_batch():
+            data.reset()
+            data.next_batch()
+        if data.X is not None:
+            size = len(data.X)
+        elif data.y is not None:
+            size = len(data.y)
+        r = list(range(size))
+        random.shuffle(r)
+        r = r[:self.total_examples]
+        for example in r:
+            if data.y is not None:
+                result['y'].append(data.y[example])
+            if data.X is not None:
+                result['X'].append(data.X[example])
+                val = data.rawX[example]
+
+                # TODO: standardize getting output and converting to output, or just run the model on the whole batch
+                if hasattr(val, "reshape"):
+                    shape = list(val.shape)
+                    shape.insert(0, 1)
+                    val = val.reshape(tuple(shape))
+                output = output_fun(val)
+                result['output'].append(output)
+            else:
+                result['output'].append(output_fun()[0])
+        self.progress_tick()
         return result
 
     def _get_output_fun(self):

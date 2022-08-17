@@ -1,6 +1,6 @@
 from RAI.AISystem.model import Model
 from RAI.certificates import CertificateManager
-from RAI.dataset.dataset import Data, Dataset, MetaDatabase
+from RAI.dataset.dataset import Data, NumpyData, IteratorData, Dataset, MetaDatabase
 from RAI.metrics import MetricManager
 from RAI.all_types import all_output_requirements, all_task_types, all_metric_types
 from RAI.dataset.vis import DataSummarizer
@@ -40,8 +40,9 @@ class AISystem:
 
     def initialize(self, user_config: dict, custom_certificate_location: str = None, **kw_args):
         self.user_config = user_config
-        self.dataset.separate_data(self.meta_database.scalar_mask, self.meta_database.categorical_mask,
-                                   self.meta_database.image_mask, self.meta_database.text_mask)
+        masks = {"scalar": self.meta_database.scalar_mask, "categorical": self.meta_database.categorical_mask,
+                 "image": self.meta_database.image_mask, "text": self.meta_database.text_mask}
+        self.dataset.separate_data(masks)
         self.meta_database.initialize_requirements(self.dataset, "fairness" in user_config)
         self.metric_manager = MetricManager(self)
         self.certificate_manager = CertificateManager()
@@ -50,7 +51,7 @@ class AISystem:
             self.certificate_manager.load_custom_certificates(custom_certificate_location)
         # self.data_summarizer = DataSummarizer(self.dataset, self.model.output_features[0].possibleValues, self.task)
         self.interpreter = Interpreter(self.interpret_methods, self.model, self.dataset)
-        self.data_summarizer = DataSummarizer(self.dataset, self.task, self.model.output_features)
+        # self.data_summarizer = DataSummarizer(self.dataset, self.task, self.model.output_features)
 
     def get_metric_values(self) -> dict:
         return self._last_metric_values
@@ -118,7 +119,12 @@ class AISystem:
         data_dict["tag"] = tag
         self.data_dict = data_dict
         self.metric_manager.initialize(self.user_config)
-        self._last_metric_values[data_type if data_type is not None else "No Dataset"] = self.metric_manager.compute(data_dict)
+        if isinstance(data_dict["data"], NumpyData):
+            self._last_metric_values[data_type if data_type is not None else "No Dataset"] = \
+                self.metric_manager.compute(data_dict)
+        elif isinstance(data_dict["data"], IteratorData):
+            self._last_metric_values[data_type if data_type is not None else "No Dataset"] = \
+                self.metric_manager.iterator_compute(data_dict, predictions)
         if self.enable_certificates:
             self._last_certificate_values = self.certificate_manager.compute(self._last_metric_values)
 

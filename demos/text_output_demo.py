@@ -4,7 +4,7 @@ import inspect
 import pandas as pd
 from RAI.AISystem import AISystem, Model
 from RAI.redis import RaiRedis
-from RAI.dataset import Dataset, Data
+from RAI.dataset import Dataset, NumpyData
 from RAI.utils import df_to_RAI
 from sklearn.model_selection import train_test_split
 import random
@@ -57,7 +57,7 @@ def main():
                   description="Text Summarizer", model_class="t5")
 
     # Create RAIs representation of the data splits
-    dataset = Dataset({"train": Data(x_train, y_train), "test": Data(x_test, y_test)})
+    dataset = Dataset({"train": NumpyData(x_train, y_train), "test": NumpyData(x_test, y_test)})
 
     # Create a RAI AISystem to calculate metrics and run analysis
     ai = AISystem(name="Text_Summarizer_t5", task='generate', meta_database=meta, dataset=dataset, model=model)
@@ -71,8 +71,7 @@ def main():
     r.connect()
     r.reset_redis(summarize_data=False)
     r.add_measurement()
-    r.add_dataset_loc()
-    r.export_visualizations()
+    # r.export_visualizations()
 
 
 if __name__ == '__main__':

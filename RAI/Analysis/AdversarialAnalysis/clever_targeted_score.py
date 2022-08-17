@@ -3,6 +3,7 @@ import numpy as np
 import torch
 from RAI.AISystem import AISystem
 from RAI.Analysis import Analysis
+from RAI.dataset import IteratorData, NumpyData
 from art.estimators.classification import PyTorchClassifier
 from art.metrics import clever_t
 import os
@@ -35,23 +36,24 @@ class CleverTargetedScore(Analysis, class_location=os.path.abspath(__file__)):
         self.progress_tick()
 
         data = self.ai_system.get_data(self.dataset)
-        xData = data.X
-        yData = data.y
+        shape = None
 
-        shape = data.image[0].shape
-
-        classifier = PyTorchClassifier(model=self.ai_system.model.agent, loss=self.ai_system.model.loss_function,
-                                       optimizer=self.ai_system.model.optimizer, input_shape=shape, nb_classes=numClasses)
         result['clever_t_l1'] = {i: [] for i in output_features}
         result['clever_t_l2'] = {i: [] for i in output_features}
         result['clever_t_li'] = {i: [] for i in output_features}
 
-        balanced_classifications = self._get_balanced_correct_classifications(self.ai_system.model.predict_fun, xData, yData, output_features)
+        if isinstance(data, NumpyData):
+            shape = data.image[0].shape
+            balanced_classifications = self._get_balanced_correct_classifications(self.ai_system.model.predict_fun, data.X, data.y, output_features)
+        elif isinstance(data, IteratorData):
+            balanced_classifications, shape = self._get_balanced_correct_classifications_iterative(self.ai_system.model.predict_fun, data, output_features)
+
         self.progress_tick()
+        classifier = PyTorchClassifier(model=self.ai_system.model.agent, loss=self.ai_system.model.loss_function,
+                                       optimizer=self.ai_system.model.optimizer, input_shape=shape, nb_classes=numClasses)
 
         for target_class in balanced_classifications:
-            for example_num in balanced_classifications[target_class]:
-                example = data.X[example_num][0]
+            for example in balanced_classifications[target_class]:
                 for val in output_features:
                     if val == target_class:
                         continue
@@ -75,11 +77,32 @@ class CleverTargetedScore(Analysis, class_location=os.path.abspath(__file__)):
             if len(result_balanced[yData[i]]) < self.EXAMPLES_PER_CLASS:
                 pred = predict_fun(torch.Tensor(xData[i]))[0]
                 if pred == yData[i]:
-                    result_balanced[yData[i]].append(i)
+                    result_balanced[yData[i]].append(xData[i])
                     added += 1
                     if added >= total_images:
                         break
         return result_balanced
+
+    def _get_balanced_correct_classifications_iterative(self, predict_fun, data:IteratorData, class_values):
+        result_balanced = {i: [] for i in class_values}
+        total_images = len(class_values)*self.EXAMPLES_PER_CLASS
+        added = 0
+        shape = None
+        data.reset()
+        while data.next_batch() and added < total_images:
+            if shape is None:
+                shape = data.image[0]
+            r = list(range(len(data.y)))
+            random.shuffle(r)
+            for i in r:
+                if len(result_balanced[data.y[i]]) < self.EXAMPLES_PER_CLASS:
+                    pred = predict_fun(torch.Tensor(data.X[i]))[0]
+                    if pred == data.y[i]:
+                        result_balanced[data.y[i]].append(data.X[i][0])
+                        added += 1
+                        if added >= total_images:
+                            break
+            return result_balanced, shape
 
     def _result_stats(self, res):
         return "Average Value " + str(sum(res)/len(res)) + ", Minimum Value: " + str(min(res)) + ", Maximum Value: " + str(max(res))

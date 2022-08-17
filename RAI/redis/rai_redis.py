@@ -79,7 +79,7 @@ class RaiRedis:
         self.redis_connection.publish("ai_requests", self.ai_system.name + '|start_analysis_response|' +
                                       analysis + "|" + encoded_res)
 
-    def reset_redis(self, export_metadata: bool = True, summarize_data: bool = True, interpret_model: bool = True) -> None:
+    def reset_redis(self, export_metadata: bool = True, summarize_data: bool = False, interpret_model: bool = True) -> None:
         to_delete = ["metric_values", "model_info", "metric_info", "metric", "certificate_metadata",
                      "certificate_values", "certificate"]
         for key in to_delete:
@@ -126,14 +126,6 @@ class RaiRedis:
     def summarize(self):
         data_summary = self.ai_system.get_data_summary()
         self.redis_connection.set(self.ai_system.name + '|data_summary', json.dumps(data_summary))
-
-    def add_dataset_loc(self, loc=None):
-        dataset = self.ai_system.dataset.data_dict
-        if loc is None:
-            loc = './data/'
-        loc = os.path.abspath(loc)
-        pickle.dump(dataset, open(loc + '/' + self.ai_system.name + "_dataset", "wb"))
-        self.redis_connection.set(self.ai_system.name + '_dataset_loc', json.dumps(loc))
 
     def add_measurement(self) -> None:
         certificates = self.ai_system.get_certificate_values()
