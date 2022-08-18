@@ -1,1 +1,2 @@
 from .view_inference_analysis import ViewInferenceAnalysis
+from .gradcam_analysis import GradCamAnalysis

@@ -1,9 +1,12 @@
 import json
 import subprocess
 import threading
+
+import dill
 import redis
 import RAI
 import pickle
+import marshal
 import os
 import numpy as np 
 from json import JSONEncoder
@@ -75,21 +78,36 @@ class RaiRedis:
 
     def _run_analysis_thread(self, dataset, analysis, connection):
         result = self.analysis_manager.run_analysis(self.ai_system, dataset, analysis, connection=connection)
-        encoded_res = codecs.encode(pickle.dumps(result[analysis].to_html()), "base64").decode()
+        # encoded_res = pickle.dumps(result[analysis].to_html())
+        encoded_res = json.dumps(self._jsonify_analysis(result[analysis].to_html()))
+        self.redis_connection.set(self.ai_system.name + "|analysis|"+analysis, encoded_res)
         self.redis_connection.publish("ai_requests", self.ai_system.name + '|start_analysis_response|' +
-                                      analysis + "|" + encoded_res)
+                                      analysis + "|COMPLETE")
 
-    def reset_redis(self, export_metadata: bool = True, summarize_data: bool = False, interpret_model: bool = True) -> None:
+    def _jsonify_analysis(self, analysis):
+        if "dash" in str(type(analysis)) or "plotly" in str(type(analysis)):
+            analysis = analysis.to_plotly_json()
+        if isinstance(analysis, dict):
+            for key in analysis:
+                analysis[key] = self._jsonify_analysis(analysis[key])
+        elif isinstance(analysis, list):
+            for i in range(len(analysis)):
+                analysis[i] = self._jsonify_analysis(analysis[i])
+        elif isinstance(analysis, np.ndarray):
+            analysis = analysis.tolist()
+        return analysis
+
+    def reset_redis(self, export_metadata: bool = True, summarize_data: bool = False) -> None:
         to_delete = ["metric_values", "model_info", "metric_info", "metric", "certificate_metadata",
                      "certificate_values", "certificate"]
         for key in to_delete:
             self.redis_connection.delete(self.ai_system.name + "|" + key)
+        for key in self.redis_connection.scan_iter(self.ai_system.name + "|analysis|*"):
+            self.redis_connection.delete(key)
         if export_metadata:
             self.export_metadata()
         if summarize_data:
             self.summarize()
-        if interpret_model:
-            self.interpret_model()
         self.redis_connection.publish('update', "cleared")
 
     def delete_data(self, system_name) -> None:
@@ -97,6 +115,8 @@ class RaiRedis:
                      "certificate_values", "certificate", "certificate_info", "project_info"]
         for key in to_delete:
             self.redis_connection.delete(system_name + "|" + key)
+        for key in self.redis_connection.scan_iter(self.ai_system.name + "|analysis|*"):
+            self.redis_connection.delete(key)
         self.redis_connection.srem("projects", system_name)
         self.redis_connection.publish('update', "cleared")
 
@@ -117,11 +137,6 @@ class RaiRedis:
         self.redis_connection.set(self.ai_system.name + '|certificate_info', json.dumps(certificate_info))
         self.redis_connection.set(self.ai_system.name + '|project_info', json.dumps(project_info))
         self.redis_connection.sadd("projects", self.ai_system.name)
-
-    def export_visualizations(self) -> None:
-        print("AI System Name: ", self.ai_system.name)
-        self.summarize()
-        self.interpret_model()
 
     def summarize(self):
         data_summary = self.ai_system.get_data_summary()
@@ -155,10 +170,6 @@ class RaiRedis:
         self.redis_connection.rpush(self.ai_system.name + '|metric_values', json.dumps(metrics))  # True
         self.redis_connection.publish('update',
                                       "New measurement: %s" % metrics[list(metrics.keys())[0]]["metadata"]["date"])
-
-    def interpret_model(self):
-        interpretation = self.ai_system.get_interpretation()
-        self.redis_connection.set(self.ai_system.name + '|model_interpretation', json.dumps(interpretation, cls=NumpyArrayEncoder))
 
     def viewGUI(self):
         gui_launcher = threading.Thread(target=self._view_gui_thread, args=[])

@@ -44,6 +44,11 @@ def display_gradcam(gradcam):
     global c_names
     c_names = list(gradcam.keys())
 
+    tab_content = dbc.Card(
+        dbc.CardBody([html.P("This is tab 1!", className="card-text"),
+                      dbc.Button("Click here", color="success")]),
+        className="mt-3")
+
     # 1. create buttons to select class names
     radios_div = dcc.RadioItems(c_names, c_names[0], id="gradcam-class-radio")
 
@@ -63,7 +68,7 @@ def display_gradcam(gradcam):
 def display_gradcam_imgs(c_name):
     ctx = dash.callback_context.triggered[0]["prop_id"]
     gradcam = interpretation["gradcam"][c_name]
-    
+
     title_row = html.Tr([html.Td("Correct predicted"), html.Td("Wrongly predicted")], id="gradcam-display-title-row", className="gradcam-display-table-row")
     img_rows = []
 
@@ -87,7 +92,7 @@ def display_gradcam_imgs(c_name):
             correct_block=html.Td([fig_graph_1, fig_graph_2])
         else:
             correct_block=html.Td()
-        
+
         if len(gradcam["wrong"]) > i:
             wrong_data = gradcam["wrong"][i]
             wrong_img, wrong_heatmap = np.array(wrong_data[0]), np.array(wrong_data[1])
@@ -116,15 +121,10 @@ def display_gradcam_imgs(c_name):
     return table
 
 
-
-
-
-
-
 def display_gradcam_imgs_(c_name):
     ctx = dash.callback_context.triggered[0]["prop_id"]
     gradcam = interpretation["gradcam"][c_name]
-    
+
     title_row = html.Tr([html.Td("Correct predicted"), html.Td("Wrongly predicted")])
 
     img_rows = []
@@ -151,7 +151,7 @@ def display_gradcam_imgs_(c_name):
             return val
         else:
             correct_img, correct_heatmap = None, None
-        
+
         if len(gradcam["wrong"]) > i:
             wrong_data = gradcam["wrong"][i]
             wrong_img, wrong_heatmap = np.array(wrong_data[0]), np.array(wrong_data[1])

@@ -6,6 +6,7 @@ from server import app, redisUtil
 from dash import dcc, ALL
 from display_types import get_display
 import metric_view_functions as mvf
+from dash.exceptions import PreventUpdate
 logger = logging.getLogger(__name__)
 
 requirements = []
@@ -195,5 +196,4 @@ def update_display(n, options, tag_selection, old_graph, old_style, old_children
         display_obj, _ = populate_display_obj(k, v)
         tags = display_obj.get_tags()
         return display_obj.display_tag_num(tags.index(tag_selection)), old_style, old_children, tag_selection, old_info
-
-    return old_graph, old_style, old_children, old_tag_selection, old_info
+    raise PreventUpdate()

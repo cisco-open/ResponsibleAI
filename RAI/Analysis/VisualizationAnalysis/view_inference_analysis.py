@@ -179,4 +179,6 @@ class ViewInferenceAnalysis(Analysis, class_location=os.path.abspath(__file__)):
 
         table = dbc.Table(header + [html.Tbody(table_body)], striped=True, bordered=True)
         result.append(html.Div(table, style={"width": "100%", "height": "100%", "overflow": "scroll"}))
-        return html.Div(result)
+        result = html.Div(result)
+        return result
+

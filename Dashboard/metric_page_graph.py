@@ -7,6 +7,7 @@ from dash import dcc, ALL
 import plotly.graph_objs as go
 from display_types import get_display
 import metric_view_functions as mvf
+from dash.exceptions import PreventUpdate
 logger = logging.getLogger(__name__)
 
 requirements = ["Traceable"]
@@ -183,4 +184,4 @@ def update_graph(n, options, old_container):
             add_trace_to_fig(fig, k, v)
         return [dcc.Graph(figure=fig)]
 
-    return old_container
+    raise PreventUpdate()

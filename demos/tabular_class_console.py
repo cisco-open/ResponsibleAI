@@ -25,7 +25,6 @@ all_data = pd.concat([train_data, test_data], ignore_index=True)
 # Get X and y data, as well as RAI Meta information from the Dataframe
 rai_meta_information, X, y, rai_output_feature = df_to_RAI(all_data, target_column="income-per-year", normalize="Scalar")
 
-
 # Create Data Splits and pass them to RAI
 xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=1, stratify=y)
 dataset = Dataset({"train": NumpyData(xTrain, yTrain), "test": NumpyData(xTest, yTest)})

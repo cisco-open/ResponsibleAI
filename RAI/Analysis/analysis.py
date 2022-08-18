@@ -13,7 +13,7 @@ class Analysis(ABC):
         self.tag = None
         self.max_progress_tick = 5
         self.current_tick = 0
-        self.connection = None # connection is an optional function passed to share progress with dashboard
+        self.connection = None  # connection is an optional function passed to share progress with dashboard
         print("Analysis created")
 
     def __init_subclass__(cls, class_location=None, **kwargs):

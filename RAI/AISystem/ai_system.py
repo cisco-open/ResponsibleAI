@@ -4,7 +4,6 @@ from RAI.dataset.dataset import Data, NumpyData, IteratorData, Dataset, MetaData
 from RAI.metrics import MetricManager
 from RAI.all_types import all_output_requirements, all_task_types, all_metric_types
 from RAI.dataset.vis import DataSummarizer
-from RAI.interpretation.interpreter import Interpreter
 import numpy as np
 
 class AISystem:
@@ -50,7 +49,6 @@ class AISystem:
         if custom_certificate_location is not None:
             self.certificate_manager.load_custom_certificates(custom_certificate_location)
         # self.data_summarizer = DataSummarizer(self.dataset, self.model.output_features[0].possibleValues, self.task)
-        self.interpreter = Interpreter(self.interpret_methods, self.model, self.dataset)
         # self.data_summarizer = DataSummarizer(self.dataset, self.task, self.model.output_features)
 
     def get_metric_values(self) -> dict:
@@ -99,11 +97,7 @@ class AISystem:
             "labels": labels,
             "label_dist": label_dist_dict,
         }
-        return summary 
-
-    def get_interpretation(self) -> dict:
-        interpretation = self.interpreter.getModelInterpretation()
-        return interpretation 
+        return summary
     
     def _single_compute(self, predictions: dict, data_type: str = "test", tag=None) -> None:
     # Single compute accepts predictions and the name of a dataset, and then calculates metrics for that dataset.

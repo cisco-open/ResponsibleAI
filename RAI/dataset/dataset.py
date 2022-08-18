@@ -40,6 +40,7 @@ class IteratorData(Data):
         self.X = None
         self.y = None
         self.rawX = None
+        self.rawY = None
         self.mapping = {}
         self.categorical = None
         self.scalar = None
@@ -61,7 +62,9 @@ class IteratorData(Data):
             pos += 1
         if self.contains_y:
             y = val[pos]
+            self.rawY = y
             self.y = y
+
         x, y = self._convert_image_data(x, y)
         self.X = x
         self.y = y
@@ -86,7 +89,7 @@ class IteratorData(Data):
             x_shape.insert(0, -1)
             x = x.reshape(x_shape)
         if y is not None:
-            y = y.detach().numpy().tolist()
+            y = y.detach().numpy()
         return x, y
 
     def _separate_data(self, x):

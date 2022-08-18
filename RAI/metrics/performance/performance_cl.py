@@ -67,6 +67,7 @@ class PerformanceClassificationMetricGroup(MetricGroup, class_location=os.path.a
         temp_dict["predict"] = self._preds
         self.compute(temp_dict)
 
+
 def get_fptn(confusion_matrix):
     result = {'fp': confusion_matrix.sum(axis=0) - np.diag(confusion_matrix),
               'fn': confusion_matrix.sum(axis=1) - np.diag(confusion_matrix),
@@ -89,4 +90,3 @@ def _precision_score(fptn):
 
 def _recall_score(fptn):
     return fptn['tp'] / (fptn['tp'] + fptn['fn'])
-
