@@ -1,7 +1,7 @@
 import sklearn
 import os
 import sys
-from RAI.dataset import Data, Dataset
+from RAI.dataset import NumpyData, Dataset
 from RAI.AISystem import AISystem, Model
 from RAI.utils import df_to_RAI
 import numpy as np
@@ -33,7 +33,7 @@ configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivil
                               "protected_attributes": ["race"], "positive_label": 1},
                  "time_complexity": "polynomial"}
 
-dataset = Dataset({"train": Data(xTrain, yTrain), "test": Data(xTest, yTest)})
+dataset = Dataset({"train": NumpyData(xTrain, yTrain), "test": NumpyData(xTest, yTest)})
 ai = AISystem("AdultDB_Test1", task='binary_classification', meta_database=meta, dataset=dataset, model=model, enable_certificates=False)
 ai.initialize(user_config=configuration)
 

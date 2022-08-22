@@ -6,7 +6,7 @@ parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
 from RAI.AISystem import AISystem, Model
 from RAI.redis import RaiRedis
-from RAI.dataset import Dataset, Feature, MetaDatabase, Data
+from RAI.dataset import Dataset, Feature, MetaDatabase, NumpyData
 import random  # to set the python random seed
 import os
 import numpy as np
@@ -222,7 +222,7 @@ def main():
     testloader = torch.utils.data.DataLoader(testset, batch_size=config.batch_size, shuffle=True, num_workers=config.workers)
     xTestData, yTestData, raw = torch_to_RAI(testloader)
 
-    dataset = Dataset({"cifar": Data(None, xTestData)})
+    dataset = Dataset({"cifar": NumpyData(None, xTestData)})
     image = Feature('Cifar Images', 'Image', 'The 32x32 input image')
     meta = MetaDatabase([image])
 

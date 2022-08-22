@@ -1,5 +1,5 @@
 import scipy.stats
-from RAI.dataset import Feature, Data, MetaDatabase, Dataset
+from RAI.dataset import Feature, NumpyData, MetaDatabase, Dataset
 from RAI.AISystem import AISystem, Model
 import numpy as np
 from sklearn.datasets import fetch_california_housing
@@ -10,7 +10,7 @@ np.random.seed(21)
 x, y = fetch_california_housing(return_X_y=True)
 xTrain, xTest, yTrain, yTest = train_test_split(x, y)
 
-dataset = Dataset({"train": Data(xTrain, yTrain), "test": Data(xTest, yTest)})
+dataset = Dataset({"train": NumpyData(xTrain, yTrain), "test": NumpyData(xTest, yTest)})
 
 features = [
     Feature("MedInc", 'float', "Median Income"),

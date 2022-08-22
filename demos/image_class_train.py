@@ -3,7 +3,7 @@ import inspect
 from RAI.AISystem import AISystem, Model
 from RAI.redis import RaiRedis
 from RAI.utils import torch_to_RAI
-from RAI.dataset import MetaDatabase, Feature, Dataset, Data
+from RAI.dataset import MetaDatabase, Feature, Dataset, NumpyData
 import torch
 import torchvision
 import torchvision.transforms as transforms
@@ -119,7 +119,7 @@ def main():
     model = Model(agent=net, output_features=outputs, name="conv_net", predict_fun=predict, description="ConvNet", model_class="ConvNet",
                   loss_function=criterion, optimizer=optimizer)
     # Convert the data split to a RAI Dataset
-    dataset = Dataset({"test": Data(x_test_data, y_test_data, raw_x_test_data)})
+    dataset = Dataset({"test": NumpyData(x_test_data, y_test_data, raw_x_test_data)})
 
     # Create a RAI AI System
     ai = AISystem(name="cifar_classification_train", task='classification', meta_database=meta, dataset=dataset, model=model, interpret_methods=[])

@@ -5,7 +5,7 @@ currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentfram
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
 from RAI.AISystem import AISystem
-from RAI.dataset import Data, Dataset
+from RAI.dataset import NumpyData, Dataset
 from RAI.redis import RaiRedis
 
 from tensorflow.keras.datasets import cifar10
@@ -14,7 +14,7 @@ use_dashboard = True
 
 # Get Dataset
 (x_train, y_train), (x_test, y_test) = cifar10.load_data()
-dataset = Dataset({"train": Data(x_train, y_train), "test": Data(x_test, y_test)})
+dataset = Dataset({"train": NumpyData(x_train, y_train), "test": NumpyData(x_test, y_test)})
 
 # set configuration
 configuration = {}
