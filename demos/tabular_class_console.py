@@ -52,7 +52,6 @@ test_predictions = clf.predict(xTest)
 # Pass predictions to RAI
 ai.compute({"test": {"predict": test_predictions}}, tag='model')
 
-
 # View results computed by RAI
 ai.display_metric_values(display_detailed=True)
 

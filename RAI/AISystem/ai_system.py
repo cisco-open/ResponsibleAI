@@ -3,8 +3,6 @@ from RAI.certificates import CertificateManager
 from RAI.dataset.dataset import Data, NumpyData, IteratorData, Dataset, MetaDatabase
 from RAI.metrics import MetricManager
 from RAI.all_types import all_output_requirements, all_task_types, all_metric_types
-from RAI.dataset.vis import DataSummarizer
-import numpy as np
 
 class AISystem:
     """
@@ -49,7 +47,6 @@ class AISystem:
         if custom_certificate_location is not None:
             self.certificate_manager.load_custom_certificates(custom_certificate_location)
         # self.data_summarizer = DataSummarizer(self.dataset, self.model.output_features[0].possibleValues, self.task)
-        # self.data_summarizer = DataSummarizer(self.dataset, self.task, self.model.output_features)
 
     def get_metric_values(self) -> dict:
         return self._last_metric_values

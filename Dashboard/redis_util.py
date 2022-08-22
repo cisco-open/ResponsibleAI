@@ -1,12 +1,8 @@
 import json
 import logging
-import dash
-import plotly
-import pickle
 from collections import defaultdict
 import numpy as np
 import redis
-import codecs
 import dash_bootstrap_components as dbc
 from dash import html
 logger = logging.getLogger(__name__)
@@ -172,7 +168,7 @@ class RedisUtils(object):
         return self._current_project.get("available_analysis", [])
 
     def get_analysis(self, analysis_name):
-        return self._load_analysis_storage.get(self._current_project_name, {}).get(analysis_name, None)
+        # return self._load_analysis_storage.get(self._current_project_name, {}).get(analysis_name, None)
         analysis = None
         if analysis_name is not None:
             analysis = self._load_analysis_storage.get(self._current_project_name, {}).get(analysis_name, None)
@@ -193,7 +189,8 @@ class RedisUtils(object):
         self._update_values()
         self.set_data_summary()
         self.set_model_interpretation()
-        self.set_available_analysis([])
+        available_analysis = self._query_existing_analysis()
+        self.set_available_analysis(available_analysis)
         self._current_project["analysis"] = {}
         self._current_project = self._reformat_data(self._current_project)
 
@@ -211,6 +208,15 @@ class RedisUtils(object):
 
     def set_available_analysis(self, available):
         self._current_project["available_analysis"] = available
+
+    def _query_existing_analysis(self):
+        available = []
+        if self._current_project_name is not None:
+            for key in self._redis.scan_iter(self._current_project_name+"|analysis|*"):
+                print("key: ", key)
+                key = key.decode("utf-8")
+                available.append(key[len(self._current_project_name + "|analysis|"):])
+            return available
 
     def set_analysis_progress(self, project_name, analysis_name, report):
         if project_name not in self._load_analysis_storage:

@@ -1,19 +1,13 @@
 import json
 import subprocess
 import threading
-
-import dill
 import redis
 import RAI
-import pickle
-import marshal
 import os
 import numpy as np 
 from json import JSONEncoder
 import logging
 from RAI.Analysis import AnalysisManager
-import codecs
-
 logger = logging.getLogger(__name__)
 
 
@@ -137,6 +131,25 @@ class RaiRedis:
         self.redis_connection.set(self.ai_system.name + '|certificate_info', json.dumps(certificate_info))
         self.redis_connection.set(self.ai_system.name + '|project_info', json.dumps(project_info))
         self.redis_connection.sadd("projects", self.ai_system.name)
+
+    def export_visualizations(self, model_interpretation_dataset: str, data_visualization_dataset: str):
+        data_visualizations = ["DataVisualization"]
+        interpretations = ["GradCamAnalysis"]
+        for analysis in data_visualizations:
+            if data_visualization_dataset:
+                connection = self.get_progress_update_lambda(analysis)
+                self.analysis_manager.run_analysis(self.ai_system, data_visualization_dataset, analysis, connection)
+                result = self.analysis_manager.run_analysis(self.ai_system, data_visualization_dataset, analysis, connection=connection)
+                encoded_res = json.dumps(self._jsonify_analysis(result[analysis].to_html()))
+                self.redis_connection.set(self.ai_system.name + "|analysis|" + analysis, encoded_res)
+        for analysis in interpretations:
+            if model_interpretation_dataset:
+                connection = self.get_progress_update_lambda(analysis)
+                self.analysis_manager.run_analysis(self.ai_system, model_interpretation_dataset, analysis, connection)
+                result = self.analysis_manager.run_analysis(self.ai_system, model_interpretation_dataset, analysis, connection=connection)
+                if analysis in result:
+                    encoded_res = json.dumps(self._jsonify_analysis(result[analysis].to_html()))
+                    self.redis_connection.set(self.ai_system.name + "|analysis|" + analysis, encoded_res)
 
     def summarize(self):
         data_summary = self.ai_system.get_data_summary()
