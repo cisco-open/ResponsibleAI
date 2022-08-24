@@ -83,8 +83,9 @@ def get_sidebar():
                     dcc.Dropdown(
                         id="project_selector",
                         options=redisUtil.get_projects_list(),
-                        value=redisUtil.get_projects_list()[0] if len(redisUtil.get_projects_list()) > 0 else None,
-                        persistence=True,),
+                        value=redisUtil._current_project_name,
+                        persistence=True,
+                        persistence_type="session"),
                     html.Hr(),
                     html.P("Select the dataset"),
                     html.Div(id="dummy_div_2", style={"display": "no"}),
@@ -168,9 +169,6 @@ def render_page_content(value, dataset_value, interval, dataset_options, project
     reload_required = False
 
     if project_options == [] and len(redisUtil.get_projects_list()) > 0:
-        project_options = redisUtil.get_projects_list()
-        project_val = project_options[0]
-        redisUtil.set_current_project(project_val)
         reload_required = True
 
     project_options = redisUtil.get_projects_list()
@@ -183,6 +181,7 @@ def render_page_content(value, dataset_value, interval, dataset_options, project
 
     if any("project_selector.value" in i["prop_id"] for i in ctx.triggered):
         redisUtil.set_current_project(value)
+        print("Current project: ", redisUtil._current_project_name)
         dataset_options = redisUtil.get_dataset_list()
         dataset_value = dataset_options[0] if len(dataset_options) > 0 else None
         redisUtil.set_current_dataset(dataset_value)
@@ -194,6 +193,9 @@ def render_page_content(value, dataset_value, interval, dataset_options, project
 
     if reload_required:
         r_reminder = 1
+
+    if not any("project_selector.value" in i["prop_id"] for i in ctx.triggered):
+        project_val = redisUtil._current_project_name
 
     return dataset_options, dataset_value, project_options, project_val, r_reminder
 
@@ -253,10 +255,8 @@ def change_page(pathname, search, reminder):
 
 
 if __name__ == "__main__":
-    model_name = "AdultDB_3"
     if len(sys.argv) == 2:
         model_name = sys.argv[1]
-
     redisUtil.initialize(subscribers={"metric_detail", "metric_graph", "certificate", "analysis_update"})
     project_list = redisUtil.get_projects_list()
     redisUtil.set_current_project(project_list[0]) if len(project_list) > 0 else None

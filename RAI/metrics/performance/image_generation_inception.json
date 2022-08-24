@@ -5,7 +5,7 @@
                       "data_type": [],
                       "output_requirements": ["generate_image"],
                       "dataset_requirements": [],
-                      "data_requirements": ["IteratorData"]},
+                      "data_requirements": []},
     "src": "stats",
     "dependency_list": [],
     "tags": ["performance", "Image"],

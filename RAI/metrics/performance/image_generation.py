@@ -20,18 +20,21 @@ class ImageGeneration(MetricGroup, class_location=os.path.abspath(__file__)):
     def compute(self, data_dict):
         gt_images = data_dict["data"].y
         gen_images = data_dict["generate_image"]
-
         gt_images = gt_images[:self.max_samples]
         gen_images = gen_images[:self.max_samples]
 
         gen_images = np.array(gen_images)
         gt_images = np.array(gt_images)
 
-        gen_images = gen_images.reshape((-1, gen_images.shape[2], gen_images.shape[3], gen_images.shape[4]))
-        gt_images = gt_images.reshape((-1, gt_images.shape[2], gt_images.shape[3], gt_images.shape[4]))
+        img_shape = list(gen_images.shape)
+        img_shape = img_shape[-3:]
+        img_shape.insert(0, -1)
 
-        gt_images = torch.from_numpy(_convert_float_to_uint8(gt_images))
-        gen_images = torch.from_numpy(_convert_float_to_uint8(gen_images))
+        gen_shaped_images = gen_images.reshape(tuple(img_shape))
+        gt_shaped_images = gt_images.reshape(tuple(img_shape))
+
+        gt_images = torch.from_numpy(_convert_float_to_uint8(gt_shaped_images))
+        gen_images = torch.from_numpy(_convert_float_to_uint8(gen_shaped_images))
 
         # I lack the memory to run this!
         self.metrics["fid"].value = _fid(gt_images, gen_images)

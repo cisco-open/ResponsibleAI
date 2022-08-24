@@ -91,7 +91,7 @@ class RaiRedis:
             analysis = analysis.tolist()
         return analysis
 
-    def reset_redis(self, export_metadata: bool = True, summarize_data: bool = False) -> None:
+    def reset_redis(self, export_metadata: bool = True) -> None:
         to_delete = ["metric_values", "model_info", "metric_info", "metric", "certificate_metadata",
                      "certificate_values", "certificate"]
         for key in to_delete:
@@ -100,8 +100,6 @@ class RaiRedis:
             self.redis_connection.delete(key)
         if export_metadata:
             self.export_metadata()
-        if summarize_data:
-            self.summarize()
         self.redis_connection.publish('update', "cleared")
 
     def delete_data(self, system_name) -> None:
@@ -114,13 +112,12 @@ class RaiRedis:
         self.redis_connection.srem("projects", system_name)
         self.redis_connection.publish('update', "cleared")
 
-    def delete_all_data(self, confirm=False):
-        if confirm:
-            print("Deleting!")
-            for key in self.redis_connection.scan_iter("*|project_info"):
-                val = key[:-13].decode("utf-8")
-                print("Deleting: ", val)
-                self.delete_data(val)
+    def delete_all_data(self):
+        print("Deleting!")
+        for key in self.redis_connection.scan_iter("*|project_info"):
+            val = key[:-13].decode("utf-8")
+            print("Deleting: ", val)
+            self.delete_data(val)
 
     def export_metadata(self) -> None:
         metric_info = self.ai_system.get_metric_info()
@@ -138,22 +135,16 @@ class RaiRedis:
         for analysis in data_visualizations:
             if data_visualization_dataset:
                 connection = self.get_progress_update_lambda(analysis)
-                self.analysis_manager.run_analysis(self.ai_system, data_visualization_dataset, analysis, connection)
-                result = self.analysis_manager.run_analysis(self.ai_system, data_visualization_dataset, analysis, connection=connection)
+                result = self.analysis_manager.run_analysis(self.ai_system, data_visualization_dataset, analysis, connection)
                 encoded_res = json.dumps(self._jsonify_analysis(result[analysis].to_html()))
                 self.redis_connection.set(self.ai_system.name + "|analysis|" + analysis, encoded_res)
         for analysis in interpretations:
             if model_interpretation_dataset:
                 connection = self.get_progress_update_lambda(analysis)
-                self.analysis_manager.run_analysis(self.ai_system, model_interpretation_dataset, analysis, connection)
-                result = self.analysis_manager.run_analysis(self.ai_system, model_interpretation_dataset, analysis, connection=connection)
+                result = self.analysis_manager.run_analysis(self.ai_system, model_interpretation_dataset, analysis, connection)
                 if analysis in result:
                     encoded_res = json.dumps(self._jsonify_analysis(result[analysis].to_html()))
                     self.redis_connection.set(self.ai_system.name + "|analysis|" + analysis, encoded_res)
-
-    def summarize(self):
-        data_summary = self.ai_system.get_data_summary()
-        self.redis_connection.set(self.ai_system.name + '|data_summary', json.dumps(data_summary))
 
     def add_measurement(self) -> None:
         certificates = self.ai_system.get_certificate_values()

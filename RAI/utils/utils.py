@@ -96,6 +96,7 @@ def df_remove_nans(df, extra_symbols):
 def torch_to_RAI(torch_item, max_size=None, detailed=True):
     result_x = None
     result_y = []
+    raw_x = None
     x_shape = None
 
     if isinstance(torch_item, torch.utils.data.DataLoader):
@@ -104,9 +105,11 @@ def torch_to_RAI(torch_item, max_size=None, detailed=True):
             torch_item.dataset.transform = transforms.ToTensor()
             torch_item.transform = transform
         for i, val in enumerate(torch_item, 0):
-            if i % int(len(torch_item)/20) == 0 and detailed:
-                print(str(int(100*i/len(torch_item))), "% Done")
             x, y = val
+            if raw_x is None:
+                raw_x = x
+            else:
+                raw_x = torch.vstack((raw_x, x))
             x = x.detach().numpy()
             y = y.detach().numpy()
             if x_shape is None:
@@ -127,7 +130,7 @@ def torch_to_RAI(torch_item, max_size=None, detailed=True):
         result_x = np.array([[x] for x in torch_item])
     else:
         assert "torch_item must be of type DataLoader or Tensor"
-    return result_x, result_y, result_x
+    return result_x, result_y, raw_x
 
 
 # Converts a pandas dataframe to a Rai Metadatabase and X and y data.

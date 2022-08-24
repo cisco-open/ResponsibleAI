@@ -1,4 +1,6 @@
 import random
+
+import numpy
 import numpy as np
 from RAI.AISystem import AISystem
 from RAI.Analysis import Analysis
@@ -33,12 +35,12 @@ class ViewInferenceAnalysis(Analysis, class_location=os.path.abspath(__file__)):
         self.task = self.ai_system.task
         self.model = self.ai_system.model
         if isinstance(data, NumpyData):
-            result = self._get_examples(data.X, data.y)
+            result = self._get_examples(data.X, data.y, data.rawX)
         elif isinstance(data, IteratorData):
             result = self._get_examples_iterative(data)
         return result
 
-    def _get_examples(self, data_x, data_y):
+    def _get_examples(self, data_x, data_y, raw_x):
         result = {'X': [] if data_x is not None else None,
                   'y': [] if data_y is not None else None,
                   'output': []}
@@ -56,10 +58,12 @@ class ViewInferenceAnalysis(Analysis, class_location=os.path.abspath(__file__)):
                 result['y'].append(data_y[example])
             if data_x is not None:
                 result['X'].append(data_x[example])
-                val = data_x[example]
-                if not isinstance(val[0], np.ndarray) and not isinstance(val[0], list):
-                    val = [val]
+                val = raw_x[example]
+                if isinstance(val, torch.Tensor) or isinstance(val, numpy.ndarray):
+                    val = val.reshape(1, -1)
+                print("val: ", val)
                 output = output_fun(val)[0]
+                print("output: ", output)
                 result['output'].append(output)
             else:
                 result['output'].append(output_fun()[0])

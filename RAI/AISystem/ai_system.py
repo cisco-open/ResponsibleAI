@@ -16,7 +16,6 @@ class AISystem:
                  meta_database: MetaDatabase,
                  dataset: Dataset,
                  model: Model,
-                 interpret_methods: list[str] = [],
                  enable_certificates: bool = True) -> None:
         assert task in all_task_types, "Task must be in " + str(all_task_types)
         self.name = name
@@ -24,7 +23,6 @@ class AISystem:
         self.meta_database = meta_database
         self.model = model
         self.dataset = dataset
-        self.interpret_methods = interpret_methods
         self.enable_certificates = enable_certificates
         self.auto_id = 0
         self._last_metric_values = {}
@@ -35,7 +33,7 @@ class AISystem:
         self.user_config = None
         self.data_dict = {}
 
-    def initialize(self, user_config: dict, custom_certificate_location: str = None, **kw_args):
+    def initialize(self, user_config: dict = {}, custom_certificate_location: str = None, **kw_args):
         self.user_config = user_config
         masks = {"scalar": self.meta_database.scalar_mask, "categorical": self.meta_database.categorical_mask,
                  "image": self.meta_database.image_mask, "text": self.meta_database.text_mask}

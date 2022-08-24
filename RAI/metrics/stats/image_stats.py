@@ -19,7 +19,7 @@ class ImageStatsGroup(MetricGroup, class_location=os.path.abspath(__file__)):
         # images are of shape [examples, image columns, c, w, h]
         images = data.image
         means = convert_float32_to_float64(images.mean(axis=(0, 1, 3, 4)))  # images.mean((0, 1, 3, 4))
-        self.metrics["mean"].value = {"red": convert_float32_to_float64([0]),
+        self.metrics["mean"].value = {"red": convert_float32_to_float64(means[0]),
                                       "green": convert_float32_to_float64(means[1]),
                                       "blue": convert_float32_to_float64(means[2])}
         std = convert_float32_to_float64(images.std(axis=(0, 1, 3, 4)))

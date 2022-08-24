@@ -2,7 +2,8 @@ import sys
 import inspect
 from RAI.AISystem import AISystem, Model
 from RAI.redis import RaiRedis
-from RAI.dataset import MetaDatabase, Feature, Dataset, IteratorData
+from RAI.utils import torch_to_RAI
+from RAI.dataset import MetaDatabase, Feature, Dataset, NumpyData
 import torch
 import torchvision
 import torchvision.transforms as transforms
@@ -25,7 +26,7 @@ def main():
 
     # Get Data
     batch_size = 256
-    transform = transforms.Compose([transforms.ToTensor()])
+    transform = transforms.Compose([transforms.ToTensor()])  # transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
     train_set = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=transform)
     train_loader = torch.utils.data.DataLoader(train_set, batch_size=batch_size, shuffle=True, num_workers=2)
     test_set = torchvision.datasets.CIFAR10(root='./data', train=False, download=True, transform=transform)
@@ -86,9 +87,14 @@ def main():
 
     # Define predict function to use for RAI
     def predict_proba(input_image):
+        if not isinstance(input_image, torch.Tensor):
+            input_image = torch.Tensor(input_image)
         return torch.softmax(net(input_image), 1)
 
     def predict(input_image):
+        if not isinstance(input_image, torch.Tensor):
+            input_image = torch.Tensor(input_image)
+        print("input image shape: ", input_image.shape)
         _, predicted = torch.max(net(input_image), 1)
         return predicted.tolist()
 
@@ -98,24 +104,24 @@ def main():
         net.load_state_dict(torch.load(PATH))
     else:
         train()
-    net.eval()
 
-    # Define the content of the dataset
-    image = Feature(name='Input Image', dtype='Image', description='The 32x32 input image')
+    # Define input and output features
+    xTestData, yTestData, rawXTestData = torch_to_RAI(test_loader)
+    image = Feature('image', 'Image', 'The 32x32 input image')
+    outputs = Feature('image_type', 'numeric', 'The type of image', categorical=True, values={i: v for i, v in enumerate(classes)})
     meta = MetaDatabase([image])
 
-    # Define the model
-    outputs = Feature(name='Image class', dtype='numeric', description='The type of image',
-                      categorical=True, values={i: v for i, v in enumerate(classes)})
+    net.eval()
+    # Pass model to RAI
     model = Model(agent=net, output_features=outputs, name="conv_net", predict_fun=predict, predict_prob_fun=predict_proba,
                   description="ConvNet", model_class="ConvNet", loss_function=criterion, optimizer=optimizer)
     configuration = {"time_complexity": "polynomial"}
 
     # Pass data splits to RAI
-    dataset = Dataset({"train": IteratorData(train_loader), "test": IteratorData(test_loader)})
+    dataset = Dataset({"test": NumpyData(xTestData, yTestData, rawXTestData)})
 
     # Create the RAI AISystem
-    ai = AISystem(name="cifar_classification", task='classification', meta_database=meta, dataset=dataset, model=model)
+    ai = AISystem(name="cifar_classification_np", task='classification', meta_database=meta, dataset=dataset, model=model)
     ai.initialize(user_config=configuration)
 
     # Generate predictions
@@ -125,8 +131,9 @@ def main():
         _, predicted = torch.max(net(image), 1)
         preds += predicted
 
+    print("Predictions generated")
     # Compute Metrics based on the predictions
-    ai.compute({"test": {"predict": preds}}, tag='Resnet')
+    ai.compute({"test": {"predict": preds}}, tag='model 1')
 
     # View the dashboard
     r = RaiRedis(ai)

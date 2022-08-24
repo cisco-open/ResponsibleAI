@@ -63,8 +63,8 @@ class DataVisualization(Analysis, class_location=os.path.abspath(__file__)):
                 feature_dict["dtype"] = "image"
                 feature_dict["value"] = {"mean": self.values["image_stats"]["mean"],
                                          "std": self.values["image_stats"]["std"]}
-                feature_dict["dis_type"] = "chart"
-                feature_dict["dis_name"] = "Image stats"
+                feature_dict["dis_type"] = "img_chart"
+                feature_dict["dis_name"] = {"mean": "Image Mean Stats", "std": "Image Stdev Stats"}
             results.append(feature_dict)
         return results
 
@@ -77,6 +77,17 @@ class DataVisualization(Analysis, class_location=os.path.abspath(__file__)):
         elif feature['dis_type'] == "chart":
             fig = go.Figure([go.Bar(x=[i], y=[feature["value"][i]], showlegend=False) for i in feature["value"]])
             fig.update_layout(title={'text': feature["dis_name"] + " of " + feature["name"], 'y': 0.9, 'x': 0.5,
+                                     'xanchor': 'center', 'yanchor': 'top'})
+            fig = html.Div(dcc.Graph(figure=fig), style={"display": "block", "margin": "0 auto 0 auto", "width": "60%"})
+            result.append(fig)
+        elif feature['dis_type'] == "img_chart":
+            fig = go.Figure([go.Bar(x=[i], y=[feature["value"]["mean"][i]], showlegend=False) for i in feature["value"]["mean"]])
+            fig.update_layout(title={'text': feature["dis_name"]["mean"] + " of " + feature["name"], 'y': 0.9, 'x': 0.5,
+                                     'xanchor': 'center', 'yanchor': 'top'})
+            fig = html.Div(dcc.Graph(figure=fig), style={"display": "block", "margin": "0 auto 0 auto", "width": "60%"})
+            result.append(fig)
+            fig = go.Figure([go.Bar(x=[i], y=[feature["value"]["std"][i]], showlegend=False) for i in feature["value"]["std"]])
+            fig.update_layout(title={'text': feature["dis_name"]["std"] + " of " + feature["name"], 'y': 0.9, 'x': 0.5,
                                      'xanchor': 'center', 'yanchor': 'top'})
             fig = html.Div(dcc.Graph(figure=fig), style={"display": "block", "margin": "0 auto 0 auto", "width": "60%"})
             result.append(fig)

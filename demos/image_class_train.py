@@ -99,7 +99,7 @@ def main():
 
     # Train and test loop
     def train_test(conv_net, rai_redis):
-        for epoch in range(5):
+        for epoch in range(20):
             train(epoch)
             test(epoch, conv_net, rai_redis)
 
@@ -110,8 +110,8 @@ def main():
         return net(input_image)
 
     # Define input and output features of the model
-    image = Feature('image', 'Image', 'The 32x32 input image')
-    outputs = Feature('image_type', 'numeric', 'The type of image', categorical=True, values={i: v for i, v in enumerate(classes)})
+    image = Feature('Input Image', 'Image', 'The 32x32 input image')
+    outputs = Feature('Image Class', 'numeric', 'The type of image', categorical=True, values={i: v for i, v in enumerate(classes)})
 
     # Create the meta database describing the dataset
     meta = MetaDatabase([image])
@@ -122,7 +122,7 @@ def main():
     dataset = Dataset({"test": NumpyData(x_test_data, y_test_data, raw_x_test_data)})
 
     # Create a RAI AI System
-    ai = AISystem(name="cifar_classification_train", task='classification', meta_database=meta, dataset=dataset, model=model, interpret_methods=[])
+    ai = AISystem(name="cifar_classification_train", task='classification', meta_database=meta, dataset=dataset, model=model)
     configuration = {"time_complexity": "polynomial"}
     ai.initialize(user_config=configuration)
 
@@ -133,6 +133,7 @@ def main():
 
     # Run the training and test loop
     train_test(ai, r)
+    r.export_visualizations("test", "test")
 
 
 if __name__ == '__main__':

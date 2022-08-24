@@ -1,9 +1,6 @@
 import os
 import sys
 import inspect
-currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parentdir = os.path.dirname(currentdir)
-sys.path.insert(0, parentdir)
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from RAI.AISystem import AISystem, Model
@@ -11,7 +8,9 @@ from RAI.dataset import NumpyData, Dataset
 from RAI.redis import RaiRedis
 from RAI.utils import df_to_RAI
 from sklearn.ensemble import RandomForestClassifier
-
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0, parentdir)
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 use_dashboard = True
@@ -35,7 +34,7 @@ model = Model(agent=reg, output_features=output, name="cisco_income_ai", predict
 configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}},
                               "protected_attributes": ["race"], "positive_label": 1}, "time_complexity": "polynomial"}
 dataset = Dataset({"train": NumpyData(xTrain, yTrain), "test": NumpyData(xTest, yTest)})
-ai = AISystem("AdultDB_1", task='binary_classification', meta_database=meta, dataset=dataset, model=model)
+ai = AISystem("Adult_rfc_selection", task='binary_classification', meta_database=meta, dataset=dataset, model=model)
 ai.initialize(user_config=configuration)
 
 if use_dashboard:
@@ -47,12 +46,18 @@ if use_dashboard:
 def test_model(mdl, name):
     mdl.fit(xTrain, yTrain)
     ai.model.agent = mdl
+    ai.model.predict_fun = mdl.predict
+    ai.model.predict_prob_fun = mdl.predict_proba
     ai.compute({"test": {"predict": mdl.predict(xTest)}}, tag=name)
 
     if use_dashboard:
+        r.export_metadata()
         r.add_measurement()
 
 
-test_model(reg, "mdl1")
+test_model(reg, "rfc_entropy")
 reg2 = RandomForestClassifier(n_estimators=11, criterion='gini', random_state=0, min_samples_leaf=10, max_depth=3)
-test_model(reg2, "mdl2")
+test_model(reg2, "rfc_gini")
+
+if use_dashboard:
+    r.export_visualizations("test", "test")

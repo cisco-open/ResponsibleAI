@@ -12,13 +12,14 @@ import torch.optim as optim
 import os
 import random
 import numpy as np
-from torchvision.models import resnet50, regnet_y_800mf
+from torchvision.models import regnet_y_800mf
 current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir)
 
 
 def main():
+    # Configuration
     os.environ["CUDA_VISIBLE_DEVICES"] = "cpu"
     torch.manual_seed(0)
     random.seed(0)
@@ -26,10 +27,11 @@ def main():
     PATH = './oxford_pet_net.pth'
     device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 
+    # Get Data
     batch_size = 128
-    train_transform = transforms.Compose(
-        [transforms.ToTensor(), transforms.Normalize((0.485, 0.4484, 0.3949), (0.2693, 0.2648, 0.2728)),
-         transforms.Resize(256), transforms.CenterCrop(224)])
+    train_transform = transforms.Compose([transforms.ToTensor(),
+                                          transforms.Normalize((0.485, 0.4484, 0.3949), (0.2693, 0.2648, 0.2728)),
+                                          transforms.Resize(256), transforms.CenterCrop(224)])
     train_set = torchvision.datasets.OxfordIIITPet(root='./data', split="trainval", download=True,
                                                    transform=train_transform)
     train_loader = torch.utils.data.DataLoader(train_set, batch_size=batch_size, shuffle=True)
@@ -38,7 +40,7 @@ def main():
     test_loader = torch.utils.data.DataLoader(test_set, batch_size=batch_size, shuffle=False)
     output_mapping = train_set.class_to_idx
 
-    # Get a finetuned model
+    # Get a Finetuned model for transfer learning
     net = regnet_y_800mf(pretrained=True)
     net.fc = nn.Sequential(torch.nn.Linear(784, 1000), torch.nn.Linear(1000, len(output_mapping)))
     net = net.to(device)
@@ -47,14 +49,14 @@ def main():
     optimizer = optim.Adam(net.parameters(), lr=0.01)
     scheduler = StepLR(optimizer, step_size=30, gamma=0.1)
 
-    # Define predict function to use for RAI
+    # Define predict function to return class with highest value
     def predict(input_image):
         if not isinstance(input_image, torch.Tensor):
             input_image = torch.Tensor(input_image)
         _, predicted = torch.max(net(input_image), 1)
         return predicted.tolist()
 
-    # Pass model to RAI
+    # Define the output of the model and the RAI model
     output_mapping = {int(v): k for k, v in output_mapping.items()}
     outputs = Feature('image_type', 'Numeric', 'The type of image', categorical=True, values=output_mapping)
     model = Model(agent=net, output_features=outputs, name="reg_net", predict_fun=predict, description="RegNet",
@@ -62,13 +64,12 @@ def main():
 
     # Train the model
     def train():
-        # Freeze all but last layer
         for name, param in net.named_parameters():
             if name not in ["fc.weight", "fc.bias"] and not 'block4' in name and not 'block3' in name:
                 param.requires_grad = False
 
         print("Starting training")
-        for epoch in range(90):  # loop over the dataset multiple times
+        for epoch in range(90):
             running_loss = 0.0
             for i, data in enumerate(train_loader, 0):
                 inputs, labels = data
@@ -91,31 +92,12 @@ def main():
             param.requires_grad = True
         torch.save(net.state_dict(), PATH)
 
-
-    def test():
-        net.eval()
-        with torch.no_grad():
-            n_val_correct = 0
-            for i, data in enumerate(test_loader, 0):
-                inputs, labels = data
-                inputs = inputs.to(device)
-                labels = labels.to(device)
-
-                outputs = net(inputs)
-
-                n_val_correct += (torch.max(outputs.data, 1)[1] == labels).sum().item()
-
-        val_acc = 100. * n_val_correct / len(test_loader.dataset)
-        print("Accuracy: ", val_acc)
-
     # Load the model if it exists, otherwise train one
     if os.path.isfile(PATH):
         print("Loading model")
         net.load_state_dict(torch.load(PATH, map_location=device))
     else:
         train()
-
-    # test()
 
     # Define model parameters required for Gradcam: f1, classifier, features_conv, flatten
     net.f1 = nn.Sequential(net.avgpool)
@@ -131,10 +113,8 @@ def main():
     dataset = Dataset({"test": IteratorData(test_loader)})
 
     # Create the RAI AISystem
-    interpret_method = []  # ["gradcam"]
     configuration = {"time_complexity": "polynomial"}
-    ai = AISystem(name="oxford_pets_class", task='classification', meta_database=meta, dataset=dataset, model=model,
-                  interpret_methods=interpret_method)
+    ai = AISystem(name="oxford_pets_class", task='classification', meta_database=meta, dataset=dataset, model=model)
     ai.initialize(user_config=configuration)
 
     preds = []
@@ -157,6 +137,8 @@ def main():
     r.connect()
     r.reset_redis()
     r.add_measurement()
+    r.export_metadata()
+    r.export_visualizations("test", "test")
 
 
 if __name__ == '__main__':

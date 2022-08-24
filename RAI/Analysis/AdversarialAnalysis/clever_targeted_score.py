@@ -77,7 +77,7 @@ class CleverTargetedScore(Analysis, class_location=os.path.abspath(__file__)):
             if len(result_balanced[yData[i]]) < self.EXAMPLES_PER_CLASS:
                 pred = predict_fun(torch.Tensor(xData[i]))[0]
                 if pred == yData[i]:
-                    result_balanced[yData[i]].append(xData[i])
+                    result_balanced[yData[i]].append(xData[i][0])
                     added += 1
                     if added >= total_images:
                         break

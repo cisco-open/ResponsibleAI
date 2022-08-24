@@ -37,7 +37,7 @@ model = Model(agent=clf, output_features=rai_output_feature, name="cisco_income_
 
 
 # Create RAI AISystem to pass all relevant data to RAI
-ai = AISystem(name="income_classification_reg",  task='binary_classification', meta_database=rai_meta_information,
+ai = AISystem(name="income_classification",  task='binary_classification', meta_database=rai_meta_information,
               dataset=dataset, model=model)
 configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}},
                               "protected_attributes": ["race"], "positive_label": 1},
@@ -52,12 +52,12 @@ test_predictions = clf.predict(xTest)
 
 # Pass predictions to RAI
 ai.compute({"test": {"predict": test_predictions}}, tag='model')
-
+ai.display_metric_values()
 
 # Connect to the Dashboard
 r = RaiRedis(ai)
 r.connect()
 r.reset_redis()
-r.export_visualizations("test", "test")
 r.add_measurement()
 r.export_metadata()
+r.export_visualizations("test", "test")

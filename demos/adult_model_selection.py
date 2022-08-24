@@ -1,9 +1,6 @@
 import os
 import sys
 import inspect
-currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parentdir = os.path.dirname(currentdir)
-sys.path.insert(0, parentdir)
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from RAI.AISystem import AISystem, Model
@@ -11,6 +8,9 @@ from RAI.dataset import NumpyData, Dataset
 from RAI.redis import RaiRedis
 from RAI.utils import df_to_RAI
 from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0, parentdir)
 
 use_dashboard = True
 
@@ -34,8 +34,8 @@ configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivil
                               "protected_attributes": ["race"], "positive_label": 1},
                  "time_complexity": "polynomial"}
 
-dataset = Dataset({"train": NumpyData(xTrain, yTrain), "test": NumpyData(xTest, yTest)})
-ai = AISystem(name="AdultDB",  task='binary_classification', meta_database=meta, dataset=dataset, model=model)
+dataset = Dataset({"train": NumpyData(xTrain, yTrain, xTrain), "test": NumpyData(xTest, yTest, xTest)})
+ai = AISystem(name="Adult_model_selection",  task='binary_classification', meta_database=meta, dataset=dataset, model=model)
 ai.initialize(user_config=configuration)
 
 reg.fit(xTrain, yTrain)
@@ -59,16 +59,7 @@ ai.compute({"test": {"predict": test_preds}}, tag="model2")
 v = ai.get_metric_values()
 v = v["test"]
 info = ai.get_metric_info()
+
 if use_dashboard:
     r.add_measurement()
-
-from RAI.Analysis import AnalysisManager
-
-analysis = AnalysisManager()
-print("available analysis: ", analysis.get_available_analysis(ai, "test"))
-# result = analysis.run_analysis(ai, ["test"], ["FairnessAnalysis"])
-result = analysis.run_all(ai, "test", "Test run!")
-for analysis in result:
-    print("Analysis: " + analysis)
-    print(result[analysis].to_string())
-
+    r.export_visualizations("test", "test")

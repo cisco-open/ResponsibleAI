@@ -69,9 +69,9 @@ def main():
 
     r = RaiRedis(ai)
     r.connect()
-    r.reset_redis(summarize_data=False)
+    r.reset_redis()
     r.add_measurement()
-    # r.export_visualizations()
+    r.export_visualizations("test", "test")
 
 
 if __name__ == '__main__':

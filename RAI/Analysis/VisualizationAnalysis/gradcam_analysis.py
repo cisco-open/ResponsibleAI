@@ -1,8 +1,7 @@
 import numpy as np
 import random
 import cv2
-import plotly.io
-
+from RAI.dataset import IteratorData, NumpyData
 from RAI.AISystem import AISystem
 from RAI.Analysis import Analysis
 import os
@@ -57,8 +56,15 @@ class GradCamAnalysis(Analysis, class_location=os.path.abspath(__file__)):
         self.visualize()
 
     def setGradcamImgs(self):
+        data = self.ai_system.get_data(self.dataset)
+        if isinstance(data, NumpyData):
+            self.set_gradcam_imgs_numpy()
+        elif isinstance(data, IteratorData):
+            self.set_gradcam_imgs_iterator()
+
+    def set_gradcam_imgs_iterator(self):
         counts = {i: [0, 0] for i in self.all_classes}
-        # counts[i,0] counts correct samples, counts[i,1] counts wrong samples of class i
+        # counts[i, 0] counts correct samples, counts[i,1] counts wrong samples of class i
         self.gradcamImgs = {c: {"correct": [], "wrong": [], "correct_img": [], "wrong_img": [], "idx": c_idx} for
                             c_idx, c in enumerate(self.all_classes)}
         data = self.ai_system.get_data(self.dataset)
@@ -88,6 +94,34 @@ class GradCamAnalysis(Analysis, class_location=os.path.abspath(__file__)):
                         self.gradcamImgs[self.output_map[c_idx]]["wrong"].append(imgs[i])
                         self.gradcamImgs[self.output_map[c_idx]]["wrong_img"].append(data.X[i][0])
                         self.progress_tick()
+        print("Grad-CAM Image Setting done")
+
+    def set_gradcam_imgs_numpy(self):
+        counts = {i: [0, 0] for i in self.all_classes}
+        # counts[i, 0] counts correct samples, counts[i,1] counts wrong samples of class i
+        self.gradcamImgs = {c: {"correct": [], "wrong": [], "correct_img": [], "wrong_img": [], "idx": c_idx} for
+                            c_idx, c in enumerate(self.all_classes)}
+        data = self.ai_system.get_data(self.dataset)
+        r = list(range(len(data.y)))
+        random.shuffle(r)
+        output_fun = self.ai_system.model.predict_fun
+        for i in r:
+            if not data.y[i] in self.all_classes_num or sum(counts[self.output_map[data.y[i]]]) >= self.n_img*2:
+                continue
+            img = data.rawX[i]
+            pred = output_fun(img.unsqueeze(0))[0]
+            correct = pred == data.y[i]
+            c_idx = data.y[i]
+            if correct and counts[self.output_map[data.y[i]]][0] < self.n_img:
+                counts[self.output_map[data.y[i]]][0] += 1
+                self.gradcamImgs[self.output_map[c_idx]]["correct"].append(img)
+                self.gradcamImgs[self.output_map[c_idx]]["correct_img"].append(data.X[i][0])
+                self.progress_tick()
+            elif not correct and counts[self.output_map[data.y[i]]][1] < self.n_img:
+                counts[self.output_map[data.y[i]]][1] += 1
+                self.gradcamImgs[self.output_map[c_idx]]["wrong"].append(img)
+                self.gradcamImgs[self.output_map[c_idx]]["wrong_img"].append(data.X[i][0])
+                self.progress_tick()
         print("Grad-CAM Image Setting done")
 
     def setHeatmap(self):

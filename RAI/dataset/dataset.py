@@ -118,6 +118,8 @@ class NumpyData(Data):
         self.contains_x = X is not None
         self.contains_y = y is not None
         self.rawX = rawX
+        if self.rawX is None:
+            self.rawX = self.X
         self.categorical = None
         self.scalar = None
         self.image = None
