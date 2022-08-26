@@ -19,7 +19,7 @@ class GenerateBrendelBethgeAdversarialImage(Analysis, class_location=os.path.abs
         self.ai_system = ai_system
         self.dataset = dataset
         self.tag = tag
-        self.total_images = 5
+        self.total_images = 3
         self.max_progress_tick = self.total_images*2 + 5
         self.eps = 0.1
 

@@ -21,9 +21,9 @@ sys.path.insert(0, parent_dir)
 def main():
     # Configuration
     os.environ["CUDA_VISIBLE_DEVICES"] = "cpu"
-    torch.manual_seed(0)
-    random.seed(0)
-    np.random.seed(10)
+    # torch.manual_seed(0)
+    # random.seed(0)
+    # np.random.seed(10)
     PATH = './oxford_pet_net.pth'
     device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 

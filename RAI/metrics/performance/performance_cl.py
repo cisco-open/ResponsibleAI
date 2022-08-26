@@ -36,13 +36,13 @@ class PerformanceClassificationMetricGroup(MetricGroup, class_location=os.path.a
         self.metrics["f1"].value = sklearn.metrics.f1_score(y_data, preds, average=None, **args.get("f1", {}))
         self.metrics["f1_avg"].value = np.mean(self.metrics["f1"].value)
 
-        self.metrics["jaccard_score"].value = sklearn.metrics.jaccard_score(y_data, preds, average=None, **args.get("jaccard_score", {}))
+        self.metrics["jaccard_score"].value = np.nan_to_num(sklearn.metrics.jaccard_score(y_data, preds, average=None, **args.get("jaccard_score", {})),  nan=0)
         self.metrics["jaccard_score_avg"].value = np.mean(self.metrics["jaccard_score"].value)
 
-        self.metrics["precision_score"].value = _precision_score(fptn, **args.get("precision_score", {}))
+        self.metrics["precision_score"].value = sklearn.metrics.precision_score(y_data, preds, average=None)
         self.metrics["precision_score_avg"].value = np.mean(self.metrics["precision_score"].value)
 
-        self.metrics["recall_score"].value = _recall_score(fptn, **args.get("recall_score", {}))
+        self.metrics["recall_score"].value = np.nan_to_num(_recall_score(fptn, **args.get("recall_score", {})), nan=0)
         self.metrics["recall_score_avg"].value = np.mean(self.metrics["recall_score"].value)
 
     def reset(self):

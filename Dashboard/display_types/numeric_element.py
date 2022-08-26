@@ -16,7 +16,10 @@ class NumericElement(TraceableElement):
         self.x += 1
         self._data["y"].append(metric_data)
         self._data["tag"].append(tag)
-        self._data["text"].append("%.2f" % metric_data)
+        if metric_data is not None:
+            self._data["text"].append("%.2f" % metric_data)
+        else:
+            self._data["text"].append("")
 
     def to_string(self):
         print(self._data)
