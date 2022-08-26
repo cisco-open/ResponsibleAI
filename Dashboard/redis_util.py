@@ -213,7 +213,6 @@ class RedisUtils(object):
         available = []
         if self._current_project_name is not None:
             for key in self._redis.scan_iter(self._current_project_name+"|analysis|*"):
-                print("key: ", key)
                 key = key.decode("utf-8")
                 available.append(key[len(self._current_project_name + "|analysis|"):])
             return available

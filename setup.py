@@ -15,10 +15,10 @@ setup(name='rai',
       description="Responsible AI framework.",
       long_description=open('README.md').read(),
       install_requires=[
-          'redis~=4.0.1',
+          'redis~=4.0.2',
           'sklearn~=0.0',
           'numpy~=1.20.3',
-          'pandas~=1.3.4',
+          'pandas~=1.3.5',
           'apscheduler',
           'adversarial-robustness-toolbox',
       ])

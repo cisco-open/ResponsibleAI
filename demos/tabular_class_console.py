@@ -7,11 +7,12 @@ from RAI.AISystem import AISystem, Model
 from RAI.Analysis import AnalysisManager
 from RAI.dataset import NumpyData, Dataset
 from RAI.utils import df_to_RAI
+import numpy as np
 from sklearn.ensemble import RandomForestClassifier
 current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir)
-
+np.random.seed(50)
 
 # Get Dataset
 data_path = "../data/adult/"

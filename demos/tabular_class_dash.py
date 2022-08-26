@@ -8,10 +8,14 @@ from RAI.dataset import NumpyData, Dataset
 from RAI.redis import RaiRedis
 from RAI.utils import df_to_RAI
 from sklearn.ensemble import RandomForestClassifier
+import numpy as np
+
+
 current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir)
 use_dashboard = True
+np.random.seed(50)
 
 
 # Get Dataset
@@ -31,7 +35,7 @@ dataset = Dataset({"train": NumpyData(xTrain, yTrain), "test": NumpyData(xTest, 
 
 
 # Create Model and RAIs representation of it
-clf = RandomForestClassifier(n_estimators=4, max_depth=6)
+clf = RandomForestClassifier(n_estimators=4, max_depth=2)
 model = Model(agent=clf, output_features=rai_output_feature, name="cisco_income_ai", predict_fun=clf.predict,
               predict_prob_fun=clf.predict_proba, description="Income Prediction AI", model_class="RFC")
 
@@ -48,10 +52,11 @@ ai.initialize(user_config=configuration)
 # Train the model, generate predictions
 clf.fit(xTrain, yTrain)
 test_predictions = clf.predict(xTest)
+train_predictions = clf.predict(xTrain)
 
 
 # Pass predictions to RAI
-ai.compute({"test": {"predict": test_predictions}}, tag='model')
+ai.compute({"test": {"predict": test_predictions}, "train": {"predict": train_predictions}}, tag='income_preds')
 ai.display_metric_values()
 
 # Connect to the Dashboard

@@ -4,8 +4,12 @@ Please also run pip install -r requirements.txt, as you most likely need the red
 
 The GUI is currently designed around 1920x1080 displays (the Cisco Laptop, and may have issues with scaling to other device sizes)
 
+# To Install
+Please first install the required packages found in requirements.txt.
+RAI can then be installed using "pip install --editable .".
 
-this is the initial repo for the responsible AI library RAI
+
+This is the initial repo for the responsible AI library RAI
 Ali Payani (apayani@cisco.com)
 Chris Vattheuer (cvattheu@cisco.com)
 
