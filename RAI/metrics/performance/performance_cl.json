@@ -13,7 +13,7 @@
     "metrics": {
         "accuracy": {
             "display_name": "Accuracy",
-            "type": "Numeric",
+            "type": "numeric",
             "tags": [],
             "has_range": true,
             "range": [0, 1],
@@ -22,7 +22,7 @@
         },
         "balanced_accuracy": {
             "display_name": "Balanced Accuracy",
-            "type": "Numeric",
+            "type": "numeric",
             "tags": [],
             "has_range": true,
             "range": [0, 1],
@@ -49,7 +49,7 @@
         },
         "f1_avg": {
             "display_name": "Average F1 Score",
-            "type": "Numeric",
+            "type": "numeric",
             "tags": [],
             "has_range": true,
             "range": [0, 1],
@@ -58,7 +58,7 @@
         },
         "fp_rate_avg": {
             "display_name": "Average False Positive Rate",
-            "type": "Numeric",
+            "type": "numeric",
             "tags": [],
             "has_range": true,
             "range": [0, 1],
@@ -85,7 +85,7 @@
         },
         "jaccard_score_avg": {
             "display_name": "Average Jaccard Score",
-            "type": "Numeric",
+            "type": "numeric",
             "tags": [],
             "has_range": true,
             "range": [0, 1],
@@ -103,7 +103,7 @@
         },
         "precision_score_avg": {
             "display_name": "Average Precision Score",
-            "type": "Numeric",
+            "type": "numeric",
             "tags": [],
             "has_range": true,
             "range": [0, 1],
@@ -121,7 +121,7 @@
         },
         "recall_score_avg": {
             "display_name": "Average Recall Score",
-            "type": "Numeric",
+            "type": "numeric",
             "tags": [],
             "has_range": true,
             "range": [0, 1],

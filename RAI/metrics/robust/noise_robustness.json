@@ -12,7 +12,7 @@
     "metrics": {
         "certified_adversarial_noise": {
             "display_name": "Certified Adversarial Robustness with Additive Noise Score",
-            "type": "Numeric",
+            "type": "numeric",
             "has_range": false,
             "range": [null, null],
             "explanation": "Provides certified bounds on the norm of input perturbation.\nLarger is better. \nhttps://github.com/Bai-Li/STN-Code",
@@ -20,7 +20,7 @@
         },
         "robust_signal_noise_ratio": {
             "display_name": "Robust Signal Noise Ratio",
-            "type": "Numeric",
+            "type": "numeric",
             "has_range": false,
             "range": [null, null],
             "explanation": "Measures the similarity of image pairs.\nhttps://kevinmusgrave.github.io/pytorch-metric-learning/distances/#snrdistance",
@@ -28,7 +28,7 @@
         },
         "decision_curve_upper_bound": {
             "display_name": "Robustness of classifiers: from adversarial to random noise score",
-            "type": "Numeric",
+            "type": "numeric",
             "has_range": false,
             "range": [null, null],
             "explanation": "Upper bound of noise robustness.\nUses curvature of classifiers decision boundary.",
@@ -36,7 +36,7 @@
         },
         "decision_curve_lower_bound": {
             "display_name": "Robustness of classifiers: from adversarial to random noise score",
-            "type": "Numeric",
+            "type": "numeric",
             "has_range": false,
             "range": [null, null],
             "explanation": "Lower bound of noise robustness.\nUses curvature of classifiers decision boundary. ",

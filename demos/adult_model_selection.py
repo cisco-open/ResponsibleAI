@@ -62,4 +62,5 @@ info = ai.get_metric_info()
 
 if use_dashboard:
     r.add_measurement()
+    r.export_metadata()
     r.export_visualizations("test", "test")

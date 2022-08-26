@@ -25,7 +25,7 @@ features = [
 meta = MetaDatabase(features)
 
 reg = RandomForestRegressor(n_estimators=15, max_depth=20)
-output = Feature("Predicted Value", "float", "Predicted Value")
+output = Feature("Predicted Value", "numeric", "Predicted Value")
 model = Model(agent=reg, output_features=output, name="Cisco_RealEstate_AI", model_class="Random Forest Regressor")
 
 configuration = {"equal_treatment": {"priv_groups": [("Gender", 1)]}}

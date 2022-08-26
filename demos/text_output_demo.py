@@ -1,3 +1,4 @@
+# This code requires the sentencepiece package
 import os
 import sys
 import inspect
@@ -71,6 +72,7 @@ def main():
     r.connect()
     r.reset_redis()
     r.add_measurement()
+    r.export_metadata()
     r.export_visualizations("test", "test")
 
 

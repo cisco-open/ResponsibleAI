@@ -2,7 +2,7 @@
     "name": "summary_stats",
     "display_name": "Summary Statistics",
     "compatibility": {"task_type": [],
-                      "data_type": ["Numeric"],
+                      "data_type": ["numeric"],
                       "output_requirements": [],
                       "dataset_requirements": ["X"],
                       "data_requirements": ["NumpyData"]},
@@ -28,7 +28,7 @@
         },
         "num_nan_rows": {
             "display_name": "Number of NaN Rows",
-            "type": "Numeric",
+            "type": "numeric",
             "has_range": true,
             "range": [0, null],
             "explanation": "Indicates the number of NaN rows found in the data.",
@@ -36,7 +36,7 @@
         },
         "percent_nan_rows": {
             "display_name": "Percentage of NaN Rows",
-            "type": "Numeric",
+            "type": "numeric",
             "has_range": true,
             "range": [0, 1],
             "explanation": "Indicates the percentage of rows that are NaN in the data.",

@@ -2,7 +2,7 @@
     "name": "image_stats",
     "display_name": "Image Statistics",
     "compatibility": {"task_type": [],
-                      "data_type": ["Image"],
+                      "data_type": ["image"],
                       "output_requirements": [],
                       "dataset_requirements": ["X"],
                       "data_requirements": []},

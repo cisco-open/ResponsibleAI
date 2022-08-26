@@ -8,7 +8,7 @@
                       "data_requirements": []},
     "src": "stats",
     "dependency_list": [],
-    "tags": ["performance", "Image"],
+    "tags": ["performance", "image"],
     "complexity_class": "linear",
     "metrics": {
         "inception": {

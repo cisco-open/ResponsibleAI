@@ -2,7 +2,7 @@
     "name": "dataset_fairness",
     "display_name": "Dataset Fairness",
     "compatibility": {"task_type": ["classification"],
-                      "data_type": ["Numeric"],
+                      "data_type": ["numeric"],
                       "output_requirements": [],
                       "dataset_requirements": ["X", "sensitive_features"],
                       "data_requirements": ["NumpyData"]},
@@ -13,7 +13,7 @@
     "metrics": {
         "base_rate": {
             "display_name": "Base Rate",
-            "type": "Numeric",
+            "type": "numeric",
             "tags": [],
             "has_range": true,
             "range": [0, 1],
@@ -22,7 +22,7 @@
         },
         "num_instances": {
             "display_name": "Num Instances",
-            "type": "Numeric",
+            "type": "numeric",
             "tags": [],
             "has_range": true,
             "range": [0, null],
@@ -31,7 +31,7 @@
         },
         "num_negatives": {
             "display_name": "Num Negatives",
-            "type": "Numeric",
+            "type": "numeric",
             "tags": [],
             "has_range": true,
             "range": [0, null],
@@ -40,7 +40,7 @@
         },
         "num_positives": {
             "display_name": "Num Positives",
-            "type": "Numeric",
+            "type": "numeric",
             "tags": [],
             "has_range": true,
             "range": [0, null],

@@ -22,9 +22,9 @@ features_raw = load_breast_cancer().feature_names
 features = []
 
 for feature in features_raw:
-    features.append(Feature(feature, "float", feature))
-features.append(Feature("race", "integer", "race value", categorical=True, values={0: "black", 1: "white"}))
-features.append(Feature("gender", "integer", "race value", categorical=True, values={0: "female", 1: "male"}))
+    features.append(Feature(feature, "numeric", feature))
+features.append(Feature("race", "numeric", "race value", categorical=True, values={0: "black", 1: "white"}))
+features.append(Feature("gender", "numeric", "race value", categorical=True, values={0: "female", 1: "male"}))
 
 training_data = NumpyData(xTrain, yTrain)
 test_data = NumpyData(xTest, yTest)
@@ -33,7 +33,7 @@ meta = MetaDatabase(features)
 
 from sklearn.ensemble import RandomForestClassifier
 rfc = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=0)
-output = Feature("Cancer Prediction", "integer", "Cancer Prediction", categorical=True,
+output = Feature("Cancer Prediction", "numeric", "Cancer Prediction", categorical=True,
                  values={0: "No Cancer", 1: "Cancer"})
 model = Model(agent=rfc, output_features=output, predict_fun=rfc.predict, predict_prob_fun=rfc.predict_proba,
               description="Detect Cancer in patients using skin measurements", name="cisco_cancer_ai",

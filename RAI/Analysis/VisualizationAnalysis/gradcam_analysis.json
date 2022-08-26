@@ -2,7 +2,7 @@
     "name": "gradcam_analysis",
     "display_name": "GradCam Analysis",
     "compatibility": {"task_type": ["classification"],
-                      "data_type": ["Image"],
+                      "data_type": ["image"],
                       "output_requirements": ["predict"],
                       "dataset_requirements": ["X", "y"],
                       "required_groups":  [],

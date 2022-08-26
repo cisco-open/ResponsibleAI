@@ -2,7 +2,7 @@
     "name": "frequency_stats",
     "display_name" : "Frequency Statistics",
     "compatibility": {"task_type": [],
-                      "data_type": ["Numeric"],
+                      "data_type": ["numeric"],
                       "output_requirements": [],
                       "dataset_requirements": ["X", "y"],
                       "data_requirements": ["NumpyData"]},

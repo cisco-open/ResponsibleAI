@@ -2,7 +2,7 @@
     "name" : "performance_cl_probas",
     "display_name": "Probability Based Classification Performance",
     "compatibility": {"task_type": ["binary_classification"],
-                      "data_type": ["Numeric"],
+                      "data_type": ["numeric"],
                       "output_requirements": ["predict", "predict_proba"],
                       "dataset_requirements": ["y"],
                       "data_requirements": ["NumpyData"]},
@@ -13,7 +13,7 @@
     "metrics": {
         "roc_auc": {
             "display_name": "Area Under the Receiver Operating Characteristic Curve",
-            "type": "Numeric",
+            "type": "numeric",
             "tags": [],
             "has_range": true,
             "range": [0, 1],

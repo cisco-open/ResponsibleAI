@@ -15,7 +15,7 @@ import numpy as np
 current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir)
-
+image = Feature(name='Input Image', dtype='image', description='The 32x32 input image')
 
 def main():
     os.environ["CUDA_VISIBLE_DEVICES"] = "cpu"
@@ -102,7 +102,7 @@ def main():
     net.eval()
 
     # Define the content of the dataset
-    image = Feature(name='Input Image', dtype='Image', description='The 32x32 input image')
+    image = Feature(name='Input Image', dtype='image', description='The 32x32 input image')
     meta = MetaDatabase([image])
 
     # Define the model

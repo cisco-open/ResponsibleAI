@@ -1,5 +1,5 @@
 import numpy as np
-from RAI.all_types import all_data_types, all_data_types_lax
+from RAI.all_types import all_data_types
 from abc import ABC, abstractmethod
 
 __all__ = ['Feature', 'MetaDatabase', 'Data', 'NumpyData', 'IteratorData', 'Dataset']
@@ -13,9 +13,8 @@ class Feature:
 
     def __init__(self, name: str, dtype: str, description: str, categorical=False, values=None) -> None:
         self.name = name
-        self.dtype = dtype
-        if dtype not in all_data_types_lax and not dtype.startswith("float") and not dtype.startswith("integer"):
-            assert "dtype must be one of: ", all_data_types_lax
+        self.dtype = dtype.lower()
+        assert self.dtype in all_data_types, "dtype must be one of: " + str(all_data_types)
         self.description = description
         self.categorical = categorical
         self.values = values
@@ -210,7 +209,7 @@ class MetaDatabase:
 
         # Initialize maps and masks
         for i, f in enumerate(features):
-            if f.dtype.startswith("int") or f.dtype.startswith("float") or f.dtype == "Numeric":
+            if f.dtype == "numeric":
                 self.numerical_mask[i] = True
                 if not f.categorical:
                     self.scalar_mask[i] = True
@@ -218,7 +217,7 @@ class MetaDatabase:
                 else:
                     self.categorical_map.append(i)
                     self.categorical_mask[i] = True
-            elif f.dtype == "Image":
+            elif f.dtype == "image":
                 self.image_mask[i] = True
                 self.image_map.append(i)
             elif f.dtype == "text":
@@ -241,7 +240,4 @@ class MetaDatabase:
         if sensitive:
             self.stored_data.add("sensitive_features")
         for feature in self.features:
-            if feature.dtype.startswith("float") or feature.dtype.startswith("int"):
-                self.data_format.add("Numeric")
-            else:
                 self.data_format.add(feature.dtype)

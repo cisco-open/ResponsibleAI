@@ -39,8 +39,8 @@ features = []
 
 for feature in features_raw:
     features.append(Feature(feature, "float32", feature))
-features.append(Feature("race", "integer", "race value", categorical=True, values= {0:"black", 1:"white"}))
-features.append(Feature("gender", "integer", "race value", categorical=True, values={1:"male", 0:"female"}))
+features.append(Feature("race", "numeric", "race value", categorical=True, values= {0:"black", 1:"white"}))
+features.append(Feature("gender", "numeric", "race value", categorical=True, values={1:"male", 0:"female"}))
 
 # Hook data in with our Representation
 training_data = Data(xTrain, yTrain)  # Accepts Data and GT

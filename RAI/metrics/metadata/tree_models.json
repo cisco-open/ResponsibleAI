@@ -12,7 +12,7 @@
     "metrics": {
         "estimator_counts": {
             "display_name": "Estimator Count",
-            "type": "Numeric",
+            "type": "numeric",
             "has_range": true,
             "range": [1, null],
             "explanation": "The number of estimators in the tree.",

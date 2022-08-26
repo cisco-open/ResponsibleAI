@@ -61,9 +61,7 @@ class ViewInferenceAnalysis(Analysis, class_location=os.path.abspath(__file__)):
                 val = raw_x[example]
                 if isinstance(val, torch.Tensor) or isinstance(val, numpy.ndarray):
                     val = val.reshape(1, -1)
-                print("val: ", val)
                 output = output_fun(val)[0]
-                print("output: ", output)
                 result['output'].append(output)
             else:
                 result['output'].append(output_fun()[0])
@@ -147,7 +145,7 @@ class ViewInferenceAnalysis(Analysis, class_location=os.path.abspath(__file__)):
             if not isinstance(example, list) and not isinstance(example, np.ndarray):
                 example = [example]
             for i, feature in enumerate(features):  # TODO: find a cleaner way to get dtype
-                if feature.dtype.lower().startswith("int") or feature.dtype.lower().startswith("float") or feature.dtype.lower() == "numeric":
+                if feature.dtype == "numeric":
                     if feature.categorical:
                         td_list.append(html.Td(html.P(feature.values[example[i]], style=sty)))
                     else:

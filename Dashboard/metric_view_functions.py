@@ -10,7 +10,7 @@ from display_types.display_factory import is_compatible
 logger = logging.getLogger(__name__)
 
 __all__ = ['get_nonempty_groups', 'get_valid_metrics', 'get_search_options', 'get_graph', 'get_display',
-           'get_reset_button', 'get_graph_update_purpose', 'is_time_update']
+           'get_reset_button', 'get_graph_update_purpose']
 
 
 def get_nonempty_groups(requirements):
