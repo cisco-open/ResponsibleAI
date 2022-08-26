@@ -18,6 +18,7 @@ class AdversarialTreeAnalysis(Analysis, class_location=os.path.abspath(__file__)
         self.search_steps = 10
         self.search_steps = 3
         self.distortion_size = 0.3
+        self.max_progress_tick = 4
 
     @classmethod
     def is_compatible(cls, ai_system: AISystem, dataset: str):
@@ -32,9 +33,12 @@ class AdversarialTreeAnalysis(Analysis, class_location=os.path.abspath(__file__)
 
     def _compute(self):
         result = {}
+        self.progress_tick()
         data = self.ai_system.get_data(self.dataset)
         classifier = SklearnClassifier(model=self.ai_system.model.agent)
+        self.progress_tick()
         rt = RobustnessVerificationTreeModelsCliqueMethod(classifier=classifier, verbose=False)
+        self.progress_tick()
         if data.y.ndim == 1:
             y = np.stack([data.y == 0, data.y == 1], 1)
         else:
@@ -43,6 +47,7 @@ class AdversarialTreeAnalysis(Analysis, class_location=os.path.abspath(__file__)
         # Note: This runs slow, to speed it up we can take portion of test set size
         result['adversarial_tree_verification_bound'], result['adversarial_tree_verification_error'] = \
             rt.verify(data.X, y, eps_init=self.distortion_size, nb_search_steps=self.search_steps, max_clique=2, max_level=2)
+        self.progress_tick()
         return result
 
     def to_string(self):

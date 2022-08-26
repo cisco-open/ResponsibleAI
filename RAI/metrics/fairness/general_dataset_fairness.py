@@ -1,6 +1,4 @@
-import pandas as pd
-from RAI.metrics.AIF360.datasets import BinaryLabelDataset
-from RAI.metrics.AIF360.metrics import BinaryLabelDatasetMetric
+from RAI.metrics.ai360_helper import get_binary_dataset
 from RAI.metrics.metric_group import MetricGroup
 import os
 
@@ -30,16 +28,8 @@ class GeneralDatasetFairnessGroup(MetricGroup, class_location=os.path.abspath(__
                 self.ai_system.metric_manager.user_config["fairness"]:
             prot_attr = self.ai_system.metric_manager.user_config["fairness"]["protected_attributes"]
 
-        bin_dataset = get_bin_dataset(self, data, prot_attr)
+        bin_dataset = get_binary_dataset(self, data, prot_attr)
         self.metrics['base_rate'].value = bin_dataset.base_rate()
         self.metrics['num_instances'].value = bin_dataset.num_instances()
         self.metrics['num_negatives'].value = bin_dataset.num_negatives()
         self.metrics['num_positives'].value = bin_dataset.num_positives()
-
-
-def get_bin_dataset(metric_group, data, prot_attr):
-    names = [feature.name for feature in metric_group.ai_system.meta_database.features if feature.categorical]
-    df = pd.DataFrame(data.categorical, columns=names)
-    df['y'] = data.y
-    binDataset = BinaryLabelDataset(df=df, label_names=['y'], protected_attribute_names=prot_attr)
-    return BinaryLabelDatasetMetric(binDataset)

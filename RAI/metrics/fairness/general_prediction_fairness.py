@@ -1,7 +1,6 @@
 from RAI.metrics.metric_group import MetricGroup
 import pandas as pd
-from RAI.metrics.AIF360.datasets import BinaryLabelDataset
-from RAI.metrics.AIF360.metrics import ClassificationMetric
+from RAI.metrics.ai360_helper import get_classification_dataset
 import os
 
 
@@ -37,7 +36,7 @@ class GeneralPredictionFairnessGroup(MetricGroup, class_location=os.path.abspath
                 priv_group_list.append({group: self.ai_system.metric_manager.user_config["fairness"]["priv_group"][group]["privileged"]})
                 unpriv_group_list.append({group: self.ai_system.metric_manager.user_config["fairness"]["priv_group"][group]["unprivileged"]})
 
-        cd = get_class_dataset(self, data, preds, prot_attr, priv_group_list, unpriv_group_list)
+        cd = get_classification_dataset(self, data, preds, prot_attr, priv_group_list, unpriv_group_list)
         self.metrics['average_odds_difference'].value = cd.average_odds_difference()
         self.metrics['between_all_groups_coefficient_of_variation'].value = cd.between_all_groups_coefficient_of_variation()
         self.metrics['between_all_groups_generalized_entropy_index'].value = cd.between_all_groups_generalized_entropy_index()
@@ -79,14 +78,3 @@ class GeneralPredictionFairnessGroup(MetricGroup, class_location=os.path.abspath
         self.metrics['true_negative_rate'].value = cd.true_negative_rate()
         self.metrics['true_positive_rate'].value = cd.true_positive_rate()
         self.metrics['true_positive_rate_difference'].value = cd.true_positive_rate_difference()
-
-
-def get_class_dataset(metric_group, data, preds, prot_attr, priv_group_list, unpriv_group_list):
-    names = [feature.name for feature in metric_group.ai_system.meta_database.features if feature.categorical]
-    df1 = pd.DataFrame(data.categorical, columns=names)
-    df1['y'] = data.y
-    df2 = pd.DataFrame(data.categorical, columns=names)
-    df2['y'] = preds
-    binDataset1 = BinaryLabelDataset(df=df1, label_names=['y'], protected_attribute_names=prot_attr)
-    binDataset2 = BinaryLabelDataset(df=df2, label_names=['y'], protected_attribute_names=prot_attr)
-    return ClassificationMetric(binDataset1, binDataset2, unprivileged_groups=unpriv_group_list, privileged_groups=priv_group_list)

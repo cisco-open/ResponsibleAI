@@ -93,34 +93,44 @@ def df_remove_nans(df, extra_symbols):
     df.dropna(inplace=True)
 
 
-def torch_to_RAI(torch_item):
-    result_x = []
+def torch_to_RAI(torch_item, max_size=None, detailed=True):
+    result_x = None
     result_y = []
-    raw_result_x = []
+    raw_x = None
+    x_shape = None
+
     if isinstance(torch_item, torch.utils.data.DataLoader):
         transform = torch_item.dataset.transform
-        torch_item.dataset.transform = transforms.ToTensor()
-        torch_item.transform = transform
-
+        if torch_item.dataset.transform is None:
+            torch_item.dataset.transform = transforms.ToTensor()
+            torch_item.transform = transform
         for i, val in enumerate(torch_item, 0):
             x, y = val
+            if raw_x is None:
+                raw_x = x
+            else:
+                raw_x = torch.vstack((raw_x, x))
             x = x.detach().numpy()
             y = y.detach().numpy()
-            for item in x:
-                result_x.append(item)
-            for item in y:
-                result_y.append(item)
-        result_x = np.array(result_x)
-        result_y = np.array(result_y)
-        x_shape = list(result_x.shape)
-        x_shape.insert(1, 1)
-        result_x = result_x.reshape(tuple(x_shape))
-        result_y = result_y.reshape(-1)
+            if x_shape is None:
+                x_shape = list(x.shape)
+                x_shape[0] = 1
+                x_shape.insert(0, -1)
+            x = x.reshape(x_shape)
+            if result_x is None:
+                result_x = x
+            else:
+                result_x = np.vstack((result_x, x))
+            result_y.extend(y.tolist())
+            if max_size is not None and len(result_x) > max_size:
+                result_x = result_x[:max_size]
+                break
+
     elif isinstance(torch_item, torch.Tensor):
         result_x = np.array([[x] for x in torch_item])
     else:
         assert "torch_item must be of type DataLoader or Tensor"
-    return result_x, result_y, result_x.copy()
+    return result_x, result_y, raw_x
 
 
 # Converts a pandas dataframe to a Rai Metadatabase and X and y data.

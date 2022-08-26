@@ -47,7 +47,9 @@ def get_home_page():
     score_robust = []
     score_fair = []
     score_perform = []
-    cert_values = redisUtil.get_certificate_values()[-1]
+    cert_values = []
+    if len(redisUtil.get_certificate_values()) > 0:
+        cert_values = redisUtil.get_certificate_values()[-1]
 
     for c in certs:
         for t in certs[c]["tags"]:

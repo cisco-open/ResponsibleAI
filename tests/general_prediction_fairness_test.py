@@ -1,7 +1,7 @@
 import math
 import os
 import sys
-from RAI.dataset import Data, Dataset
+from RAI.dataset import NumpyData, Dataset
 from RAI.AISystem import AISystem, Model
 from RAI.utils import df_to_RAI
 import numpy as np
@@ -10,6 +10,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from aif360.datasets import BinaryLabelDataset
 from aif360.metrics import ClassificationMetric
+from numpy.testing import assert_almost_equal
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 use_dashboard = False
@@ -35,7 +36,7 @@ model = Model(agent=clf, output_features=output, name="Cancer detection AI", pre
 configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}}, "positive_label": 1},
                  "time_complexity": "polynomial"}
 
-dataset = Dataset({"train": Data(xTrain, yTrain), "test": Data(xTest, yTest)})
+dataset = Dataset({"train": NumpyData(xTrain, yTrain), "test": NumpyData(xTest, yTest)})
 ai = AISystem("AdultDB_Test1", task='binary_classification', meta_database=meta, dataset=dataset, model=model, enable_certificates=False)
 ai.initialize(user_config=configuration)
 
@@ -103,7 +104,7 @@ def test_coefficient_of_variation():
 
 def test_consistency():
     """Tests that the RAI consistency calculation is correct."""
-    assert metrics['prediction_fairness']['consistency'] == benchmark.consistency()
+    assert_almost_equal(metrics['prediction_fairness']['consistency'], benchmark.consistency()[0], 1)
 
 
 def test_differential_fairness_bias_amplification():

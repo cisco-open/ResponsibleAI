@@ -6,14 +6,16 @@ from server import app, redisUtil
 from dash import dcc, ALL
 from display_types import get_display
 import metric_view_functions as mvf
+from dash.exceptions import PreventUpdate
 logger = logging.getLogger(__name__)
 
 requirements = []
 prefix = "indiv_"
-
 selector_height = "350px"
 
+
 def populate_display_obj(group, metric):
+    print("populate display object: ", metric)
     d = {"x": [], "y": [], "tag": [], "metric": [], "text": []}
     dataset = redisUtil.get_current_dataset()
     metric_values = redisUtil.get_metric_values()
@@ -113,13 +115,13 @@ def get_metric_info_display(group, metric, metric_info):
     prevent_initial_call=True
 )
 def update_metric_choice(c_selected, reset_button, metric_search, c_options, c_val, c_ids, options):
-    ctx = dash.callback_context.triggered[0]["prop_id"]
+    ctx = dash.callback_context.triggered
     print("CONTEXT: ", ctx)
     ids = [c_ids[i]['group'] for i in range(len(c_ids))]
-    if ctx == prefix+'reset_graph.n_clicks':
+    if any(prefix+'reset_graph.n_clicks' in i['prop_id'] for i in ctx):
         to_c_val = [[] for _ in range(len(c_val))]
         return "", to_c_val, None
-    if ctx == prefix + 'metric_search.value':
+    if any(prefix + 'metric_search.value' in i['prop_id'] for i in ctx):
         if metric_search is None:
             return options, c_val, metric_search
         else:
@@ -136,7 +138,7 @@ def update_metric_choice(c_selected, reset_button, metric_search, c_options, c_v
             return options, c_val, metric_search
     group = dash.callback_context.triggered_id["group"]
     parent_index = ids.index(group)
-    if "\"type\":\"" + prefix +"child-checkbox" in ctx:
+    if any("\"type\":\"" + prefix +"child-checkbox" in i['prop_id'] for i in ctx):
         metric = c_val[parent_index]
         options = group + "," + c_val[parent_index]
         c_val = [[] for _ in range(len(c_val))]
@@ -194,5 +196,4 @@ def update_display(n, options, tag_selection, old_graph, old_style, old_children
         display_obj, _ = populate_display_obj(k, v)
         tags = display_obj.get_tags()
         return display_obj.display_tag_num(tags.index(tag_selection)), old_style, old_children, tag_selection, old_info
-
-    return old_graph, old_style, old_children, old_tag_selection, old_info
+    raise PreventUpdate()

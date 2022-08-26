@@ -13,6 +13,7 @@ class FairnessAnalysis(Analysis, class_location=os.path.abspath(__file__)):
         self.ai_system = ai_system
         self.dataset = dataset
         self.tag = tag
+        self.max_progress_tick = 1
 
     def initialize(self):
         if self.result is None:
@@ -23,6 +24,7 @@ class FairnessAnalysis(Analysis, class_location=os.path.abspath(__file__)):
                   'equal_opportunity_difference': 0.1 >= self.values['equal_opportunity_difference'] >= -0.1,
                   'average_odds_difference': 0.1 >= self.values['average_odds_difference'] >= -0.1,
                   'disparate_impact_ratio': 1.25 >= self.values['disparate_impact_ratio'] >= 0.8}
+        self.progress_tick()
         return result
 
     def to_string(self):

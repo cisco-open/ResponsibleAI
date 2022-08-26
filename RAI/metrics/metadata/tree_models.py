@@ -27,6 +27,10 @@ class TreeModels(MetricGroup, class_location=os.path.abspath(__file__)):
             self.metrics["estimator_params"].value = copy.copy(model.estimators_)
         self.metrics["feature_names"].value = [f.name for f in self.ai_system.meta_database.features]
 
+    def compute_batch(self, data_dict):
+        if self.metrics["feature_names"].value is not None:
+            self.compute(data_dict)
+
     # TODO: Does not work with Decision Trees
 
     def _get_time(self):

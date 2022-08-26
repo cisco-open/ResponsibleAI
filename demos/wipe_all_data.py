@@ -1,7 +1,13 @@
+import os
+import sys
+import inspect
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0, parentdir)
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from RAI.AISystem import AISystem, Model
-from RAI.dataset import Data, Dataset, Feature
+from RAI.dataset import NumpyData, Dataset
 from RAI.redis import RaiRedis
 from RAI.utils import df_to_RAI
 from sklearn.ensemble import RandomForestClassifier
@@ -28,12 +34,11 @@ configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivil
                               "protected_attributes": ["race"], "positive_label": 1},
                  "time_complexity": "polynomial"}
 
-dataset = Dataset({"train": Data(xTrain, yTrain), "test": Data(xTest, yTest)})
+dataset = Dataset({"train": NumpyData(xTrain, yTrain), "test": NumpyData(xTest, yTest)})
 ai = AISystem(name="AdultDB_2",  task='binary_classification', meta_database=meta, dataset=dataset, model=model)
 ai.initialize(user_config=configuration)
 
 r = RaiRedis(ai)
 r.connect()
 
-r.delete_all_data(confirm=True)
-# r.delete_data(ai)
+r.delete_all_data()

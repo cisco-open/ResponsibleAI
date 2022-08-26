@@ -2,5 +2,3 @@ from .group_fairness import GroupFairnessMetricGroup
 from .individual_fairness import IndividualFairnessMetricGroup
 from .general_dataset_fairness import GeneralDatasetFairnessGroup
 from .general_prediction_fairness import GeneralPredictionFairnessGroup
-from .sample_distortion_metric import SampleDistortionFairnessGroup
-

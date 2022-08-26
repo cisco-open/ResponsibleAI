@@ -1,0 +1,14 @@
+{
+    "name": "data_visualization",
+    "display_name": "Data Visualization",
+    "compatibility": {"task_type": [],
+                      "data_type": [],
+                      "output_requirements": [],
+                      "dataset_requirements": [],
+                      "required_groups":  [],
+                      "data_requirements": []},
+    "src": "",
+    "dependency_list": [],
+    "tags": [],
+    "complexity_class": "linear"
+}

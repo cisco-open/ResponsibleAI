@@ -3,6 +3,7 @@ import numpy as np
 import torch
 from RAI.AISystem import AISystem
 from RAI.Analysis import Analysis
+from RAI.dataset import IteratorData, NumpyData
 from art.estimators.classification import PyTorchClassifier
 from art.metrics import clever_t
 import os
@@ -28,52 +29,80 @@ class CleverTargetedScore(Analysis, class_location=os.path.abspath(__file__)):
 
     def _compute(self):
         result = {}
-        data = self.ai_system.get_data(self.dataset)
-        xData = data.X
-        yData = data.y
         output_features = self.ai_system.model.output_features[0].values
         self.output_features = output_features.copy()
         numClasses = len(output_features)
-        shape = data.image[0].shape
+        self.max_progress_tick = self.EXAMPLES_PER_CLASS*numClasses*(numClasses-1) + 2
+        self.progress_tick()
 
-        classifier = PyTorchClassifier(model=self.ai_system.model.agent, loss=self.ai_system.model.loss_function,
-                                       optimizer=self.ai_system.model.optimizer, input_shape=shape, nb_classes=numClasses)
+        data = self.ai_system.get_data(self.dataset)
+        shape = None
+
         result['clever_t_l1'] = {i: [] for i in output_features}
         result['clever_t_l2'] = {i: [] for i in output_features}
         result['clever_t_li'] = {i: [] for i in output_features}
 
-        correct_classifications = self._get_correct_classifications(self.ai_system.model.predict_fun, xData, yData)
-        balanced_classifications = self._balance_classifications_per_class(correct_classifications, yData, output_features)
+        if isinstance(data, NumpyData):
+            shape = data.image[0].shape
+            balanced_classifications = self._get_balanced_correct_classifications(self.ai_system.model.predict_fun, data.X, data.y, output_features)
+        elif isinstance(data, IteratorData):
+            balanced_classifications, shape = self._get_balanced_correct_classifications_iterative(self.ai_system.model.predict_fun, data, output_features)
+
+        self.progress_tick()
+        classifier = PyTorchClassifier(model=self.ai_system.model.agent, loss=self.ai_system.model.loss_function,
+                                       optimizer=self.ai_system.model.optimizer, input_shape=shape, nb_classes=numClasses)
 
         for target_class in balanced_classifications:
-            for example_num in balanced_classifications[target_class]:
-                example = data.X[example_num][0]
+            for example in balanced_classifications[target_class]:
                 for val in output_features:
                     if val == target_class:
                         continue
                     result['clever_t_l1'][val].append(clever_t(classifier, example, val, 10, 5, self.R_L1, norm=1, pool_factor=3))
                     result['clever_t_l2'][val].append(clever_t(classifier, example, val, 10, 5, self.R_L2, norm=2, pool_factor=3))
                     result['clever_t_li'][val].append(clever_t(classifier, example, val, 10, 5, self.R_LI, norm=np.inf, pool_factor=3))
+                    self.progress_tick()
         result['total_images'] = 0
         result['total_classes'] = len(result['clever_t_l1'])
         for val in balanced_classifications:
             result['total_images'] += len(balanced_classifications[val])
         return result
 
-    def _get_correct_classifications(self, predict_fun, xData, yData):
-        result = []
-        for i, example in enumerate(xData):
-            pred = predict_fun(torch.Tensor(example))
-            if np.argmax(pred.detach().numpy(), axis=1)[0] == yData[i]:
-                result.append(i)
-        return result
+    def _get_balanced_correct_classifications(self, predict_fun, xData, yData, class_values):
+        result_balanced = {i: [] for i in class_values}
+        total_images = len(class_values)*self.EXAMPLES_PER_CLASS
+        added = 0
+        r = list(range(len(yData)))
+        random.shuffle(r)
+        for i in r:
+            if len(result_balanced[yData[i]]) < self.EXAMPLES_PER_CLASS:
+                pred = predict_fun(torch.Tensor(xData[i]))[0]
+                if pred == yData[i]:
+                    result_balanced[yData[i]].append(xData[i][0])
+                    added += 1
+                    if added >= total_images:
+                        break
+        return result_balanced
 
-    def _balance_classifications_per_class(self, classifications, yData, class_values):
-        result = {i: [] for i in class_values}
-        for classification in classifications:
-            if len(result[yData[classification]]) < self.EXAMPLES_PER_CLASS:
-                result[yData[classification]].append(classification)
-        return result
+    def _get_balanced_correct_classifications_iterative(self, predict_fun, data:IteratorData, class_values):
+        result_balanced = {i: [] for i in class_values}
+        total_images = len(class_values)*self.EXAMPLES_PER_CLASS
+        added = 0
+        shape = None
+        data.reset()
+        while data.next_batch() and added < total_images:
+            if shape is None:
+                shape = data.image[0]
+            r = list(range(len(data.y)))
+            random.shuffle(r)
+            for i in r:
+                if len(result_balanced[data.y[i]]) < self.EXAMPLES_PER_CLASS:
+                    pred = predict_fun(torch.Tensor(data.X[i]))[0]
+                    if pred == data.y[i]:
+                        result_balanced[data.y[i]].append(data.X[i][0])
+                        added += 1
+                        if added >= total_images:
+                            break
+            return result_balanced, shape
 
     def _result_stats(self, res):
         return "Average Value " + str(sum(res)/len(res)) + ", Minimum Value: " + str(min(res)) + ", Maximum Value: " + str(max(res))

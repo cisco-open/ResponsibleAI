@@ -1,6 +1,8 @@
+import sys
+import inspect
 from RAI.AISystem import AISystem, Model
 from RAI.redis import RaiRedis
-from RAI.dataset import Dataset, Feature, MetaDatabase, Data
+from RAI.dataset import Dataset, Feature, MetaDatabase, NumpyData
 import random  # to set the python random seed
 import os
 import numpy as np
@@ -11,18 +13,18 @@ import torch.backends.cudnn as cudnn
 import torch.utils.data
 import torch.optim as optim
 from torchvision import datasets, transforms
-
 # https://colab.research.google.com/drive/1Ozin9zX89xfoyn63o5B7l5bR5W_E1oy0#scrollTo=7hAFf5Ue4VP_
 from RAI.utils import torch_to_RAI
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0, parentdir)
 
 manualSeed = 42
 random.seed(manualSeed)
 torch.manual_seed(manualSeed)
 
-
 class Object(object):
     pass
-
 
 config = Object()
 config.batch_size = 128
@@ -197,14 +199,15 @@ def main():
 
     def generate_fake_image():
         noise = torch.randn(1, config.nz, 1, 1)
-        return gan(noise).detach().numpy()
+        return [gan(noise).detach().numpy()]
 
-    generated = []
+    generated = None
     for i in range(50):
-        generated.append(generate_fake_image())
-
-    # plt.imshow(torch.Tensor(generated[0][0]).permute(1, 2, 0))
-    # plt.show()
+        img = generate_fake_image()
+        if generated is None:
+            generated = img
+        else:
+            generated = np.vstack((generated, img))
 
     output = Feature("Cifar Image", "Image", "CIFAR Image produced by GAN")
     model = Model(agent=gan, output_features=output, name="gan", generate_image_fun=generate_fake_image,
@@ -216,21 +219,19 @@ def main():
     testloader = torch.utils.data.DataLoader(testset, batch_size=config.batch_size, shuffle=True, num_workers=config.workers)
     xTestData, yTestData, raw = torch_to_RAI(testloader)
 
-    dataset = Dataset({"cifar": Data(None, xTestData)})
-    image = Feature('Cifar Images', 'Image', 'The 32x32 input image')
-    meta = MetaDatabase([image])
+    dataset = Dataset({"cifar": NumpyData(None, xTestData, raw)})
+    meta = MetaDatabase([])
 
     ai = AISystem(name="cifar_gan_x_y", task='generate', meta_database=meta, dataset=dataset, model=model)
     ai.initialize(user_config=configuration)
-
     ai.compute({"cifar": {"generate_image": generated}}, tag='epoch_1_generations')
 
     if use_dashboard:
         r = RaiRedis(ai)
         r.connect()
-        r.reset_redis(summarize_data=False)
+        r.reset_redis()
         r.add_measurement()
-        r.add_dataset()
+        r.export_visualizations("cifar", "cifar")
 
     ai.display_metric_values()
 

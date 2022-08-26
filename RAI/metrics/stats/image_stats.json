@@ -4,14 +4,15 @@
     "compatibility": {"task_type": [],
                       "data_type": ["Image"],
                       "output_requirements": [],
-                      "dataset_requirements": ["X"]},
+                      "dataset_requirements": ["X"],
+                      "data_requirements": []},
     "dependency_list": [],
     "tags": ["stats", "Image Stats"],
     "complexity_class": "linear",
     "metrics": {
         "mean": {
             "display_name": "Mean",
-            "type": "Numeric",
+            "type": "Dict",
             "has_range": false,
             "range": null,
             "explanation": "Mean is average value per channel of the image data.",
@@ -19,7 +20,7 @@
         },
         "std": {
             "display_name": "Standard Deviation",
-            "type": "Numeric",
+            "type": "Dict",
             "has_range": false,
             "range": null,
             "explanation": "Standard deviation measures the dispersion of the data.\nIt is calculated per channel.",

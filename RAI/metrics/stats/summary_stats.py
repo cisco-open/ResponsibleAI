@@ -43,6 +43,14 @@ class StatMetricGroup(MetricGroup, class_location=os.path.abspath(__file__)):
         self.metrics['skew'].value = convert_float32_to_float64(self.metrics['skew'].value)
         self.metrics["variation"].value = map_to_feature_dict(scipy.stats.mstats.variation(scalar_data), features, scalar_map)
         self.metrics['variation'].value = convert_float32_to_float64(self.metrics['variation'].value)
+
+        self.metrics["median"].value = map_to_feature_dict(np.median(scalar_data, axis=0), features, scalar_map)
+        self.metrics["quantile_1"].value = map_to_feature_dict(np.quantile(scalar_data, 0.25, axis=0), features, scalar_map)
+        self.metrics["quantile_3"].value = map_to_feature_dict(np.quantile(scalar_data, 0.75, axis=0), features, scalar_map)
+        self.metrics["min"].value = map_to_feature_dict(np.min(scalar_data, axis=0), features, scalar_map)
+        self.metrics["max"].value = map_to_feature_dict(np.max(scalar_data, axis=0), features, scalar_map)
+        self.metrics["standard_deviation"].value = map_to_feature_dict(np.std(scalar_data, axis=0), features, scalar_map)
+
         self.metrics["sem"].value = map_to_feature_dict(scipy.stats.mstats.sem(scalar_data), features, scalar_map)
         self.metrics['kurtosis'].value = map_to_feature_dict(scipy.stats.mstats.kurtosis(scalar_data), features, scalar_map)
         self.metrics['kurtosis'].value = convert_float32_to_float64(self.metrics['kurtosis'].value)

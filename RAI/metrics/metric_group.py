@@ -34,6 +34,9 @@ class MetricGroup(ABC):
         compatible = compatible and (cls.config["compatibility"]["dataset_requirements"] is None or
                                      all(item in ai_system.meta_database.stored_data for item in
                                          cls.config["compatibility"]["dataset_requirements"]))
+        compatible = compatible and (cls.config["compatibility"]["data_requirements"] == [] or
+                                     all(type(item).__name__ in cls.config["compatibility"]["data_requirements"] for
+                                         item in ai_system.dataset.data_dict.values()))
         compatible = compatible and compare_runtimes(ai_system.metric_manager.user_config.get("time_complexity"),
                                                      cls.config["complexity_class"])
         return compatible
@@ -67,7 +70,8 @@ class MetricGroup(ABC):
         if self.status == "BAD":
             return
         self.persistent_data = {}
-        self.value = None
+        for metric in self.metrics:
+            self.metrics[metric].value = None
         self.status = "OK"
 
     def load_config(self, config):
@@ -128,6 +132,12 @@ class MetricGroup(ABC):
 
     @abstractmethod
     def compute(self, data):
+        pass
+
+    def compute_batch(self, data):
+        pass
+
+    def finalize_batch_compute(self):
         pass
 
     def update(self, data):

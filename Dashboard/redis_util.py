@@ -1,11 +1,10 @@
 import json
 import logging
-import pickle
 from collections import defaultdict
 import numpy as np
 import redis
-import codecs
-
+import dash_bootstrap_components as dbc
+from dash import html
 logger = logging.getLogger(__name__)
 
 
@@ -21,12 +20,20 @@ class RedisUtils(object):
         self.info = {}
         self._initialized = False
         self._subscribers = defaultdict(bool)
-        self._current_project = None  # Contains certificates, metrics, info, project info
+        self._current_project = {}  # Contains certificates, metrics, info, project info
         self._current_project_name = None  # Used with redis to get current project
         self._ai_request_pub = None
+        self._load_analysis_storage = {}
 
     def has_update(self, channel, reset=True):
         val = self._subscribers[channel]
+        if reset:
+            self.reset_channel(channel)
+        return val
+
+    def has_analysis_update(self, analysis, reset=True):
+        channel = "analysis_update|" + self._current_project_name + "|" + analysis
+        val = self._subscribers.get(channel, False)
         if reset:
             self.reset_channel(channel)
         return val
@@ -37,6 +44,7 @@ class RedisUtils(object):
     def _init_pubsub(self):
         def sub_handler(msg):
             logger.info(f"a new message received: {msg}")
+            self._update_projects()
             if self._current_project_name:
                 self._update_info()
                 self._update_values()
@@ -56,21 +64,26 @@ class RedisUtils(object):
         def sub_handler(msg):
             msg = msg['data'].decode("utf-8")
             msg_split = msg.split('|')
-            if self._current_project_name is not None and msg_split[0] == self._current_project_name:
-                if msg_split[1] == "available_analysis_response":
+            project_name = msg_split[0]
+            if msg_split[1] == "available_analysis_response":
+                if project_name == self._current_project_name:
                     val = json.loads(msg_split[2])
                     self.set_available_analysis(val)
                     self._subscribers["analysis_update"] = True
                     logger.info("Setting available analysis to: " + str(self.get_available_analysis()))
-                elif msg_split[1] == "start_analysis_response":
-                    analysis_name = msg_split[2]
-                    report_string = msg[len(msg_split[0]) + len(msg_split[1]) + len(msg_split[2]) + 3:]
-                    report_bytes = codecs.decode(report_string.encode(), "base64")
-                    print("msg: ", msg[len(msg_split[0]) + len(msg_split[1]) + len(msg_split[2]) + 3])
-                    report = pickle.loads(report_bytes)
-                    self.set_analysis(analysis_name, report)
-                    self._subscribers["analysis_update"] = True
-            logger.info(f"New Analysis message received: {msg_split}")
+            elif msg_split[1] == "start_analysis_response":  # update ping or final analysis
+                analysis_name = msg_split[2]
+                print("Analysis received")
+                report = self._redis.get(self._current_project_name+"|analysis|"+analysis_name)
+                self.set_analysis_progress(project_name, analysis_name, html.Div(json.loads(report)))
+                # self.set_analysis_progress(project_name, analysis_name, None)
+                self._subscribers["analysis_update|" + project_name + "|" + analysis_name] = True
+            elif msg_split[1] == "start_analysis_update":  # update ping or final analysis
+                analysis_name = msg_split[2]
+                progress = msg_split[3]
+                print("Analysis update recieved")
+                self.set_analysis_progress(project_name, analysis_name, self._progress_to_html(progress))
+                self._subscribers["analysis_update|" + project_name + "|" + analysis_name] = True
 
         self._ai_request_pub = self._redis.pubsub()
         try:
@@ -80,11 +93,16 @@ class RedisUtils(object):
         except:
             logger.warning("unable to subscribe to ai_requests pub/sub")
 
+    def _progress_to_html(self, progress):
+        return html.Div(dbc.Progress(value=progress, label=str(progress) + "%"))
+
     def request_start_analysis(self, analysis):
+        self.set_analysis_progress(self._current_project_name, analysis, html.Div())
         self._redis.publish('ai_requests', self._current_project_name + "|start_analysis|" +
                             self.get_current_dataset() + "|" + analysis)
 
     def request_available_analysis(self):
+        print("requesting available analysis")
         self._redis.publish('ai_requests', self._current_project_name + "|available_analysis|" + self.get_current_dataset())
 
     def initialize(self, subscribers=None):
@@ -123,34 +141,42 @@ class RedisUtils(object):
         self._redis.close()
 
     def get_project_info(self):
-        return self._current_project["project_info"]
+        return self._current_project.get("project_info", {})
 
     def get_metric_info(self):
-        return self._current_project["metric_info"]
+        return self._current_project.get("metric_info", {})
 
     def get_certificate_info(self):
-        return self._current_project["certificate_info"]
+        return self._current_project.get("certificate_info", {})
 
     def get_certificate_values(self):
-        return self._current_project["certificate_values"]
+        return self._current_project.get("certificate_values", {})
 
     def get_metric_values(self):
-        return self._current_project["metric_values"]
+        return self._current_project.get("metric_values", {})
 
     def get_current_dataset(self):
-        return self._current_project["current_dataset"]
+        return self._current_project.get("current_dataset", None)
 
     def get_data_summary(self):
-        return self._current_project["data_summary"]
+        return self._current_project.get("data_summary", {})
 
     def get_model_interpretation(self):
-        return self._current_project["model_interpretation"]
+        return self._current_project.get("model_interpretation", {})
 
     def get_available_analysis(self):
         return self._current_project.get("available_analysis", [])
 
     def get_analysis(self, analysis_name):
-        return self._current_project["analysis"].get(analysis_name, None)
+        # return self._load_analysis_storage.get(self._current_project_name, {}).get(analysis_name, None)
+        analysis = None
+        if analysis_name is not None:
+            analysis = self._load_analysis_storage.get(self._current_project_name, {}).get(analysis_name, None)
+            if analysis is None:
+                analysis = self._redis.get(self._current_project_name+"|analysis|"+analysis_name)
+                if analysis is not None:
+                    analysis = json.loads(analysis)
+        return analysis
 
     def set_current_project(self, project_name):
         project_name = project_name
@@ -163,7 +189,8 @@ class RedisUtils(object):
         self._update_values()
         self.set_data_summary()
         self.set_model_interpretation()
-        self.set_available_analysis([])
+        available_analysis = self._query_existing_analysis()
+        self.set_available_analysis(available_analysis)
         self._current_project["analysis"] = {}
         self._current_project = self._reformat_data(self._current_project)
 
@@ -182,10 +209,19 @@ class RedisUtils(object):
     def set_available_analysis(self, available):
         self._current_project["available_analysis"] = available
 
-    def set_analysis(self, analysis_name, report):
-        if self._current_project["analysis"] is None:
-            self._current_project["analysis"] = {}
-        self._current_project["analysis"][analysis_name] = report
+    def _query_existing_analysis(self):
+        available = []
+        if self._current_project_name is not None:
+            for key in self._redis.scan_iter(self._current_project_name+"|analysis|*"):
+                print("key: ", key)
+                key = key.decode("utf-8")
+                available.append(key[len(self._current_project_name + "|analysis|"):])
+            return available
+
+    def set_analysis_progress(self, project_name, analysis_name, report):
+        if project_name not in self._load_analysis_storage:
+            self._load_analysis_storage[project_name] = {}
+        self._load_analysis_storage[project_name][analysis_name] = report
 
     def _update_projects(self):
         self._projects = self._redis.smembers("projects")
@@ -195,7 +231,7 @@ class RedisUtils(object):
         return self._projects
 
     def get_dataset_list(self):
-        return self._current_project["dataset_values"]
+        return self._current_project.get("dataset_values", [])
 
     def _update_info(self):
         self.info = {}

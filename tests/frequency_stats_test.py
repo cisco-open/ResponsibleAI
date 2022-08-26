@@ -1,4 +1,4 @@
-from RAI.dataset import Feature, Data, MetaDatabase, Dataset
+from RAI.dataset import Feature, NumpyData, MetaDatabase, Dataset
 from RAI.AISystem import AISystem, Model
 import numpy as np
 from sklearn.datasets import load_breast_cancer
@@ -26,8 +26,8 @@ for feature in features_raw:
 features.append(Feature("race", "integer", "race value", categorical=True, values={0: "black", 1: "white"}))
 features.append(Feature("gender", "integer", "race value", categorical=True, values={0: "female", 1: "male"}))
 
-training_data = Data(xTrain, yTrain)
-test_data = Data(xTest, yTest)
+training_data = NumpyData(xTrain, yTrain)
+test_data = NumpyData(xTest, yTest)
 dataset = Dataset({"train": training_data, "test": test_data})
 meta = MetaDatabase(features)
 

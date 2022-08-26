@@ -1,92 +1,90 @@
 import logging
-import dash_bootstrap_components as dbc
-from dash import html, dcc
-from server import redisUtil
-import dash_daq as daq
-import numpy as np
-import plotly.express as px
-import pandas as pd
+from dash import dcc
+import dash
+from server import app, redisUtil
+from dash import Input, Output, html, State
+from dash.exceptions import PreventUpdate
 
 logger = logging.getLogger(__name__)
+INTERPRETATION_ANALYSIS = ["DataVisualization"]
+prefix = "data_"
+
+
+def get_available_options(options):
+    result = [option for option in options if option in INTERPRETATION_ANALYSIS]
+    return result
+
 
 def get_data_summary_page():
-    return html.Div([
-        html.H4(children='Data Summary'),
-        get_summary()
-    ])
+    redisUtil.request_available_analysis()
+    options = redisUtil.get_available_analysis()
+    options = get_available_options(options)
+    choice = options[0] if (options is not None and len(options) > 0) else None
+    result = html.Div([
+        html.H4("Run analysis"),
+        dcc.Interval(
+            id=prefix + 'interval-component',
+            interval=1 * 3000,  # in milliseconds
+            n_intervals=0),
+        dcc.Dropdown(
+            id=prefix + "analysis_selector",
+            options=options,
+            value=choice,
+            persistence=True),
+        html.Button("Run Analysis", id=prefix + "run_analysis_button", style={"margin-top": "20px"}),
+        html.Div([], id=prefix + "analysis_display", style={"margin-top": "20px"})
+    ], style={})
+    return result
 
 
-def get_label_str(labels, label_name_dict):
-    if label_name_dict == None or label_name_dict == "":
-        labels_str = ",".join(str(i) for i in labels)
-    else:
-        label_str = ""
-        for i, label in enumerate(label_name_dict):
-            label_str += f"{label}({label_name_dict[label]})"
-            if i < len(label_name_dict) - 1:
-                label_str += ", "
-    return label_str
+@app.callback(
+    Output(prefix + 'analysis_selector', 'options'),
+    Output(prefix + 'analysis_display', 'children'),
+    Output(prefix + 'analysis_selector', 'value'),
+    Input(prefix + 'interval-component', 'n_intervals'),
+    Input(prefix + 'run_analysis_button', 'n_clicks'),
+    Input(prefix + 'analysis_selector', 'value'),
+    State(prefix + 'analysis_selector', 'options'),
+    State(prefix + 'analysis_display', 'children'),
+)
+def get_analysis_updates(timer, btn, analysis_choice, analysis_choices, analysis_display):
+    ctx = dash.callback_context
+    is_time_update = any(prefix + 'interval-component.n_intervals' in i['prop_id'] for i in ctx.triggered)
+    is_button = any(prefix + 'run_analysis_button.n_clicks' in i['prop_id'] for i in ctx.triggered)
+    is_value = any(prefix + 'analysis_selector.value' == i['prop_id'] for i in ctx.triggered)
+    should_update = False
+    force_new_display = False
 
+    if analysis_choices != get_available_options(redisUtil.get_available_analysis()):
+        analysis_choices = get_available_options(redisUtil.get_available_analysis())
+        should_update = True
+    if analysis_choice is None and (analysis_choices is not None and len(analysis_choices) > 0):
+        analysis_choice = analysis_choices[0]
+        force_new_display = True
 
-def get_summary():
-    data_summary = redisUtil.get_data_summary()
+    if is_time_update and analysis_choice is not None:
+        if redisUtil.has_analysis_update(analysis_choice, reset=True):
+            print("Analysis update: ")
+            analysis_display = [redisUtil.get_analysis(analysis_choice),
+                                html.P(analysis_choice, style={"display": "none"})]
+            return analysis_choices, analysis_display
+    if is_button:
+        if analysis_choice is None or analysis_choice == "":
+            return analysis_choices, [html.P("Please select an analysis")]
+        else:
+            redisUtil.request_start_analysis(analysis_choice)
+            return redisUtil.get_available_analysis(), [html.P("Requesting Analysis..")]
 
-    label_name = data_summary["label_name"]
-    target = data_summary["pred_target"]
-    labels = data_summary["labels"]
+    # Extra condition was added because dash would not always update when changing to/from a large analysis
+    if force_new_display or is_value or (analysis_choice and analysis_display==[]) \
+            or ((len(analysis_display) > 1 and analysis_choice != analysis_display[1].get("props", {}).get("children", {}))):
+        print("Value triggered")
+        analysis_display = [redisUtil.get_analysis(analysis_choice),
+                            html.P(analysis_choice, style={"display": "none"})]
+        should_update = True
 
-    label_str = get_label_str(labels, label_name)
-    
-    train_label_dist = data_summary["label_dist"]["train"]
-    test_label_dist = data_summary["label_dist"]["test"]
-    train_label_df = pd.DataFrame({
-        "label": train_label_dist.keys(),
-        "freq": train_label_dist.values()
-    })
-    test_label_df = pd.DataFrame({
-        "label": test_label_dist.keys(),
-        "freq": test_label_dist.values()
-    })
+    if not should_update:
+        raise PreventUpdate
 
-    train_hist = px.bar(train_label_df, x="label", y="freq", labels={})
-    test_hist = px.bar(test_label_df, x="label", y="freq", labels={})
-    train_hist.update_layout({"margin":{"l":0, "r":0, "t":0, "b":0}})
-    train_hist.update_layout(xaxis={"visible": True, "showticklabels": True, "title": None}, yaxis={"visible": False, "showticklabels": False})
-    test_hist.update_layout({"margin":{"l":0, "r":0, "t":0, "b":0}})
-    test_hist.update_layout(xaxis={"visible": True, "showticklabels": True, "title": None}, yaxis={"visible": False, "showticklabels": False})
+    return analysis_choices, analysis_display, analysis_choice
 
-    row_target = html.Tr([
-        html.Td("Target", className="data-summary-title"),
-        html.Td(target, className="data-summary-content"),
-    ], className="data-summary-main-row")
-    row_label = html.Tr([
-        html.Td("Labels", className="data-summary-title"), 
-        html.Td(label_str, className="data-summary-content")
-    ], className="data-summary-main-row")
-    
-    row_histogram = html.Tr([
-        html.Td("Label Distribution", className="data-summary-title"), 
-        html.Td(get_histogram_cell(train_hist, test_hist))
-    ], className="data-summary-main-row")
-
-    return dbc.Table(
-        [row_target, row_label, row_histogram],
-        striped=True,
-        borderless=True,
-    )
-
-def get_histogram_cell(train_hist, test_hist):
-    return dbc.Table([
-        html.Tr([
-            html.Td("Train Data", className="data-summary-content-hist-title"), 
-            html.Td("Test Data", className="data-summary-content-hist-title")
-        ]),
-        html.Tr([
-            html.Td([
-                dcc.Graph(figure=train_hist, className="data-summary-content-hist", config={"responsive": True})
-            ], className="data-summary-content-half"),
-            html.Td([
-                dcc.Graph(figure=test_hist, className="data-summary-content-hist", config={"responsive": True})
-            ], className="data-summary-content-half")
-        ])
-    ], borderless=True, style={"margin": 0})

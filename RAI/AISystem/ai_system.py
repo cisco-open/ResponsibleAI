@@ -1,11 +1,8 @@
 from RAI.AISystem.model import Model
 from RAI.certificates import CertificateManager
-from RAI.dataset.dataset import Data, Dataset, MetaDatabase
+from RAI.dataset.dataset import Data, NumpyData, IteratorData, Dataset, MetaDatabase
 from RAI.metrics import MetricManager
 from RAI.all_types import all_output_requirements, all_task_types, all_metric_types
-from RAI.dataset.vis import DataSummarizer
-from RAI.interpretation.interpreter import Interpreter
-import numpy as np
 
 class AISystem:
     """
@@ -19,7 +16,6 @@ class AISystem:
                  meta_database: MetaDatabase,
                  dataset: Dataset,
                  model: Model,
-                 interpret_methods: list[str] = [],
                  enable_certificates: bool = True) -> None:
         assert task in all_task_types, "Task must be in " + str(all_task_types)
         self.name = name
@@ -27,7 +23,6 @@ class AISystem:
         self.meta_database = meta_database
         self.model = model
         self.dataset = dataset
-        self.interpret_methods = interpret_methods
         self.enable_certificates = enable_certificates
         self.auto_id = 0
         self._last_metric_values = {}
@@ -38,10 +33,11 @@ class AISystem:
         self.user_config = None
         self.data_dict = {}
 
-    def initialize(self, user_config: dict, custom_certificate_location: str = None, **kw_args):
+    def initialize(self, user_config: dict = {}, custom_certificate_location: str = None, **kw_args):
         self.user_config = user_config
-        self.dataset.separate_data(self.meta_database.scalar_mask, self.meta_database.categorical_mask,
-                                   self.meta_database.image_mask, self.meta_database.text_mask)
+        masks = {"scalar": self.meta_database.scalar_mask, "categorical": self.meta_database.categorical_mask,
+                 "image": self.meta_database.image_mask, "text": self.meta_database.text_mask}
+        self.dataset.separate_data(masks)
         self.meta_database.initialize_requirements(self.dataset, "fairness" in user_config)
         self.metric_manager = MetricManager(self)
         self.certificate_manager = CertificateManager()
@@ -49,8 +45,6 @@ class AISystem:
         if custom_certificate_location is not None:
             self.certificate_manager.load_custom_certificates(custom_certificate_location)
         # self.data_summarizer = DataSummarizer(self.dataset, self.model.output_features[0].possibleValues, self.task)
-        self.interpreter = Interpreter(self.interpret_methods, self.model, self.dataset)
-        self.data_summarizer = DataSummarizer(self.dataset, self.task, self.model.output_features)
 
     def get_metric_values(self) -> dict:
         return self._last_metric_values
@@ -98,11 +92,7 @@ class AISystem:
             "labels": labels,
             "label_dist": label_dist_dict,
         }
-        return summary 
-
-    def get_interpretation(self) -> dict:
-        interpretation = self.interpreter.getModelInterpretation()
-        return interpretation 
+        return summary
     
     def _single_compute(self, predictions: dict, data_type: str = "test", tag=None) -> None:
     # Single compute accepts predictions and the name of a dataset, and then calculates metrics for that dataset.
@@ -118,7 +108,12 @@ class AISystem:
         data_dict["tag"] = tag
         self.data_dict = data_dict
         self.metric_manager.initialize(self.user_config)
-        self._last_metric_values[data_type if data_type is not None else "No Dataset"] = self.metric_manager.compute(data_dict)
+        if isinstance(data_dict["data"], NumpyData):
+            self._last_metric_values[data_type if data_type is not None else "No Dataset"] = \
+                self.metric_manager.compute(data_dict)
+        elif isinstance(data_dict["data"], IteratorData):
+            self._last_metric_values[data_type if data_type is not None else "No Dataset"] = \
+                self.metric_manager.iterator_compute(data_dict, predictions)
         if self.enable_certificates:
             self._last_certificate_values = self.certificate_manager.compute(self._last_metric_values)
 
