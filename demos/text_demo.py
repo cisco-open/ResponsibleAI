@@ -42,7 +42,7 @@ def main():
     dataset = Dataset({"train": NumpyData(xTrain, yTrain, xTrain), "test": NumpyData(xTest, yTest, xTest)})
 
     # Define model within RAI
-    output_feature = Feature(name="Sentiment", dtype="Numeric", description="Review Sentiment Rating",
+    output_feature = Feature(name="Sentiment", dtype="numeric", description="Review Sentiment Rating",
                              categorical=True, values={0: "Negative", 1: "Positive"})
     model = Model(agent=sentiment_model, output_features=output_feature, name="T5 small", predict_fun=score_text,
                   description="SentimentAnalysis", model_class="T5")

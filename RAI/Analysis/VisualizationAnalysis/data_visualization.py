@@ -38,8 +38,7 @@ class DataVisualization(Analysis, class_location=os.path.abspath(__file__)):
         results = []
         for i, feature in enumerate(features):  # TODO: find a cleaner way to get dtype
             feature_dict = {"name": feature.name, "feature": feature}
-            if feature.dtype.lower().startswith("int") or feature.dtype.lower().startswith("float") or \
-                    feature.dtype.lower() == "numeric":
+            if feature.dtype.lower() == "numeric":
                 if feature.categorical:
                     feature_dict['dtype'] = "categorical"
                     feature_dict['value'] = self.values["frequency_stats"]["relative_freq"][feature.name]

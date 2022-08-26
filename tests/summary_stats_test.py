@@ -16,20 +16,20 @@ np.random.seed(21)
 dataset = Dataset({"train": NumpyData(xTrain, yTrain), "test": NumpyData(xTest, yTest)})
 
 features = [
-    Feature("MedInc", 'float32', "Median Income"),
-    Feature("HouseAge", 'float32', "Median House age in Block Group"),
-    Feature("AveRooms", 'float32', "Average number of rooms per household"),
-    Feature("AveBedrms", 'float32', "Average number of bedrooms per household"),
-    Feature("Population", 'float32', "Block group population"),
-    Feature("AveOccup", 'float32', "Average Number of Household members"),
-    Feature("Latitude", 'float32', "Block group Latitude"),
-    Feature("Longitude", 'float32', "Block group Longitude")
+    Feature("MedInc", 'numeric', "Median Income"),
+    Feature("HouseAge", 'numeric', "Median House age in Block Group"),
+    Feature("AveRooms", 'numeric', "Average number of rooms per household"),
+    Feature("AveBedrms", 'numeric', "Average number of bedrooms per household"),
+    Feature("Population", 'numeric', "Block group population"),
+    Feature("AveOccup", 'numeric', "Average Number of Household members"),
+    Feature("Latitude", 'numeric', "Block group Latitude"),
+    Feature("Longitude", 'numeric', "Block group Longitude")
 ]
 meta = MetaDatabase(features)
 
 reg = RandomForestRegressor(n_estimators=15, max_depth=20)
 
-output = Feature("Predicted Value", "float", "Predicted Value")
+output = Feature("Predicted Value", "numeric", "Predicted Value")
 model = Model(agent=reg, output_features=output, name="Cisco_RealEstate_AI", model_class="Random Forest Regressor")
 
 configuration = {"equal_treatment": {"priv_groups": [("Gender", 1)]}}

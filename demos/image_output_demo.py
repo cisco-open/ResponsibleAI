@@ -3,7 +3,7 @@ import inspect
 from RAI.AISystem import AISystem, Model
 from RAI.redis import RaiRedis
 from RAI.dataset import Dataset, Feature, MetaDatabase, NumpyData
-import random  # to set the python random seed
+import random
 import os
 import numpy as np
 import torch
@@ -209,7 +209,7 @@ def main():
         else:
             generated = np.vstack((generated, img))
 
-    output = Feature("Cifar Image", "Image", "CIFAR Image produced by GAN")
+    output = Feature("Cifar Image", "image", "CIFAR Image produced by GAN")
     model = Model(agent=gan, output_features=output, name="gan", generate_image_fun=generate_fake_image,
                   description="Text Summarizer", model_class="gan")
     configuration = {"time_complexity": "polynomial"}

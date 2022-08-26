@@ -2,7 +2,7 @@
     "name": "correlation_stats_binary",
     "display_name": "Correlation for Binary Classification",
     "compatibility": {"task_type": ["binary_classification"],
-                      "data_type": ["Numeric"],
+                      "data_type": ["numeric"],
                       "output_requirements": [],
                       "dataset_requirements": ["X", "y"],
                       "data_requirements": ["NumpyData"]},

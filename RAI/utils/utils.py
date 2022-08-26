@@ -151,15 +151,15 @@ def df_to_RAI(df, target_column=None, clear_nans=True, extra_symbols="?", normal
         y = df.pop(target_column)
         categorical = str(y.dtypes) in ["object", "category"]
         if y.name in text_columns:
-            f = Feature(y.name, "Text", y.name)
+            f = Feature(y.name, "text", y.name)
             y = y.tolist()
         elif categorical:
             fact = y.factorize(sort=True)
-            f = Feature(y.name, "integer", y.name, categorical=True,
+            f = Feature(y.name, "numeric", y.name, categorical=True,
                     values={i: v for i, v in enumerate(fact[1])})
             y, _ = y.factorize(sort=True)
         else:
-            f = Feature(y.name, "float", y.name)
+            f = Feature(y.name, "numeric", y.name)
             y = y.tolist()
         output_feature.append(f)
     else:
@@ -169,14 +169,14 @@ def df_to_RAI(df, target_column=None, clear_nans=True, extra_symbols="?", normal
 
     for c in df:
         if c in text_columns:
-            f = Feature(c, "Text", c)
+            f = Feature(c, "text", c)
         elif str(df.dtypes[c]) in ["object", "category"]:
             fact = df[c].factorize(sort=True)
             df[c] = fact[0]
-            f = Feature(c, "integer", c, categorical=True,
+            f = Feature(c, "numeric", c, categorical=True,
                         values={i: v for i, v in enumerate(fact[1])})
         elif "float" in str(df.dtypes[c]):
-            f = Feature(c, "float", c)
+            f = Feature(c, "numeric", c)
         features.append(f)
     return MetaDatabase(features), df.to_numpy(), y, output_feature
 
@@ -201,40 +201,40 @@ def modals_to_RAI(df, df_target_column=None, image_X: dict = {}, image_y: dict =
         categorical = str(y.dtypes) in ["object", "category"]
         f = None
         if y.name in text_columns:
-            f = Feature(y.name, "Text", y.name)
+            f = Feature(y.name, "text", y.name)
             y = y.tolist()
         elif categorical:
             fact = y.factorize(sort=True)
-            f = Feature(y.name, "integer", y.name, categorical=True,
+            f = Feature(y.name, "numeric", y.name, categorical=True,
                     values={i: v for i, v in enumerate(fact[1])})
             y, _ = y.factorize(sort=True)
         else:
-            f = Feature(y.name, "float", y.name)
+            f = Feature(y.name, "numeric", y.name)
             y = y.tolist()
         output_feature.append(f)
     else:
         y = None
     if image_y is not None:
         for key in image_y:
-            f = Feature(key, "Image", key)
+            f = Feature(key, "image", key)
             image_y[key] = image_y[key].to_numpy()
             y = image_y[key]
     features = []
 
     for c in df:
         if c in text_columns:
-            f = Feature(c, "Text", c)
+            f = Feature(c, "text", c)
         elif str(df.dtypes[c]) in ["object", "category"]:
             fact = df[c].factorize(sort=True)
             df[c] = fact[0]
-            f = Feature(c, "integer", c, categorical=True,
+            f = Feature(c, "numeric", c, categorical=True,
                         values={i: v for i, v in enumerate(fact[1])})
         elif "float" in str(df.dtypes[c]):
-            f = Feature(c, "float", c)
+            f = Feature(c, "numeric", c)
         features.append(f)
     if image_X is not None:
         for key in image_X:
-            f = Feature(key, "Image", key)
+            f = Feature(key, "image", key)
             features.append(f)
     return MetaDatabase(features), df.to_numpy(), y, output_feature
 

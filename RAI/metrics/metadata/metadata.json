@@ -28,7 +28,7 @@
         }, 
          "sample_count": {
             "display_name": "Number of Samples",
-            "type": "Numeric",
+            "type": "numeric",
             "tags": [],
             "has_range": true,
             "range": [0, null],

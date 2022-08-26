@@ -2,7 +2,7 @@
     "name": "clever_targeted_score",
     "display_name": "CLEVER Targeted Score",
     "compatibility": {"task_type": ["classification"],
-                      "data_type": ["Image"],
+                      "data_type": ["image"],
                       "output_requirements": ["predict"],
                       "dataset_requirements": ["X"],
                       "required_groups":  [],

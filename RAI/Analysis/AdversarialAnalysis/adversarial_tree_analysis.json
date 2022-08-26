@@ -2,7 +2,7 @@
     "name": "adversarial_tree_classifier",
     "display_name": "Adversarial Tree Classifier",
     "compatibility": {"task_type": ["classification"],
-                      "data_type": ["Numeric"],
+                      "data_type": ["numeric"],
                       "output_requirements": ["predict"],
                       "dataset_requirements": ["X", "y"],
                       "required_groups":  [],

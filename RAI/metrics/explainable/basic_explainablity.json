@@ -2,7 +2,7 @@
     "name": "basic_explainablity",
     "display_name": "Basic Explainability",
     "compatibility": {"task_type": [],
-                      "data_type": ["Numeric"],
+                      "data_type": ["numeric"],
                       "output_requirements": [],
                       "dataset_requirements": [],
                       "data_requirements": ["NumpyData"]},

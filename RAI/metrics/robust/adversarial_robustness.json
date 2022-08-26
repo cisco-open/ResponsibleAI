@@ -2,7 +2,7 @@
     "name": "adversarial_robustness",
     "display_name" : "Adversarial Robustness Metrics",
     "compatibility": {"task_type": ["classification"],
-                      "data_type": ["Numeric"],
+                      "data_type": ["numeric"],
                       "output_requirements": ["predict"],
                       "dataset_requirements": ["X", "y"],
                       "data_requirements": ["NumpyData"]},
@@ -12,7 +12,7 @@
     "metrics": {
         "inaccuracy": {
             "display_name": "Inaccuracy",
-            "type": "Numeric",
+            "type": "numeric",
             "has_range": true,
             "range": [0, 1],
             "explanation": "Distortion metrics scale linearly with the log of inaccuracy.\nInaccuracy is calculated by taking sqrt(1 - accuracy).",

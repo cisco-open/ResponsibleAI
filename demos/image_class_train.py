@@ -110,7 +110,7 @@ def main():
         return net(input_image)
 
     # Define input and output features of the model
-    image = Feature('Input Image', 'Image', 'The 32x32 input image')
+    image = Feature('Input Image', 'image', 'The 32x32 input image')
     outputs = Feature('Image Class', 'numeric', 'The type of image', categorical=True, values={i: v for i, v in enumerate(classes)})
 
     # Create the meta database describing the dataset

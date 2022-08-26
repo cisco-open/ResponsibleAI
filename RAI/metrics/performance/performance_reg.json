@@ -2,7 +2,7 @@
     "name" : "performance_reg",
     "display_name": "Regression Performance",
     "compatibility": {"task_type": ["regression"],
-                      "data_type": ["Numeric"],
+                      "data_type": ["numeric"],
                       "output_requirements": ["predict"],
                       "dataset_requirements": ["X", "y"],
                       "data_requirements": ["NumpyData"]},
@@ -13,7 +13,7 @@
     "metrics": {
         "explained_variance": {
             "display_name": "Explained Variance",
-            "type": "Numeric",
+            "type": "numeric",
             "has_range": true,
             "range": [0, 1],
             "explanation": "Measures the proportion to which a mathematical model accounts for the variation of a given data set.\nIdeal value is 1.0.",
@@ -21,7 +21,7 @@
         },
         "mean_absolute_error": {
             "display_name": "Mean Absolute Error",
-            "type": "Numeric",
+            "type": "numeric",
             "has_range": true,
             "range": [0, null],
             "explanation": "Indicates the average residual error.\nIt is calculated as the sum of absolute errors divided by the sample size.\nIdeal value is 0.0.",
@@ -29,7 +29,7 @@
         },
         "mean_absolute_percentage_error": {
             "display_name": "Mean Absolute Percentage Error",
-            "type": "Numeric",
+            "type": "numeric",
             "has_range": true,
             "range": [0, null],
             "explanation": "Measures regression accuracy.\nDetermined by the average residual error divided by the actual value.\nIdeal value is 0.0.",
@@ -37,7 +37,7 @@
         },
         "mean_gamma_deviance": {
             "display_name": "Mean Gamma Deviance",
-            "type": "Numeric",
+            "type": "numeric",
             "has_range": true,
             "range": [0, null],
             "explanation": "Calculated by taking the Tweedie Deviance with a power of 2.",
@@ -45,7 +45,7 @@
         },
         "mean_poisson_deviance": {
             "display_name": "Mean Poisson Deviance",
-            "type": "Numeric",
+            "type": "numeric",
             "has_range": true,
             "range": [0, null],
             "explanation": "Calculated by taking the Tweedie Deviance with a power of 1.",
@@ -53,7 +53,7 @@
         },
         "mean_squared_error": {
             "display_name": "Mean Squared Error",
-            "type": "Numeric",
+            "type": "numeric",
             "has_range": true,
             "range": [0, null],
             "explanation": "Mean Squared Error indicates the the performance of a model.\nIt is calculated by taking the mean of the square of the residual error.\nIdeal value is 0.0.",
@@ -61,7 +61,7 @@
         },
         "mean_squared_log_error": {
             "display_name": "Mean Squared Log Error",
-            "type": "Numeric",
+            "type": "numeric",
             "has_range": true,
             "range": [0, null],
             "explanation": "Mean Squared Log Error indicates the performance of a model.\nIt is calculated by taking the log of the square of the residual error.\nIdeal value is 0.0.",
@@ -69,7 +69,7 @@
         },
         "median_absolute_error": {
             "display_name": "Median Absolute Error",
-            "type": "Numeric",
+            "type": "numeric",
             "has_range": true,
             "range": [0, null],
             "explanation": "Median Absolute Error indicates the median value for absolute residual error.\nIdeal value is 0.0.",
@@ -77,7 +77,7 @@
         },
         "r2": {
             "display_name": "R2 Score",
-            "type": "Numeric",
+            "type": "numeric",
             "has_range": true,
             "range": [0, 1],
             "explanation": "Indicates the proportion of the variance in the dependent variable that is predictable from the independent variable.\nIdeal value is 1.0.",

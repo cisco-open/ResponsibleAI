@@ -8,12 +8,12 @@
                       "data_requirements": []},
     "src": "stats",
     "dependency_list": [],
-    "tags": ["performance", "Image"],
+    "tags": ["performance", "image"],
     "complexity_class": "linear",
     "metrics": {
         "fid": {
             "display_name": "Frechet Inception Distance",
-            "type": "Numeric",
+            "type": "numeric",
             "tags": [],
             "has_range": true,
             "range": [1, 1000],

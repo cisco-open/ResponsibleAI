@@ -2,7 +2,7 @@
     "name" : "group_fairness",
     "display_name": "Group Fairness",
     "compatibility": {"task_type": ["classification"],
-                      "data_type": ["Numeric"],
+                      "data_type": ["numeric"],
                       "output_requirements": ["predict"],
                       "dataset_requirements": ["X", "y", "sensitive_features"],
                       "data_requirements": ["NumpyData"]},
@@ -13,7 +13,7 @@
     "metrics": {
         "disparate_impact_ratio": {
             "display_name": "Disparate Impact Ratio",
-            "type": "Numeric",
+            "type": "numeric",
             "tags": [],
             "has_range": true,
             "range": [0, null],
@@ -22,7 +22,7 @@
         },
         "statistical_parity_difference": {
             "display_name": "Statistical Parity Difference",
-            "type": "Numeric",
+            "type": "numeric",
             "tags": [],
             "has_range": true,
             "range": [-1, 1],
@@ -31,7 +31,7 @@
         },
         "between_group_generalized_entropy_error": {
             "display_name": "Between Group Generalized Entropy Error",
-            "type": "Numeric",
+            "type": "numeric",
             "tags": [],
             "has_range": false,
             "range": [null, null],
@@ -40,7 +40,7 @@
         },
         "equal_opportunity_difference": {
             "display_name": "Equal Opportunity Difference",
-            "type": "Numeric",
+            "type": "numeric",
             "tags": [],
             "has_range": true,
             "range": [-1, 1],
@@ -49,7 +49,7 @@
         },
         "average_odds_difference": {
             "display_name": "Average Odds Difference",
-            "type": "Numeric",
+            "type": "numeric",
             "tags": [],
             "has_range": true,
             "range": [-1, 1],
@@ -58,7 +58,7 @@
         },
         "average_odds_error": {
             "display_name": "Average Odds Error",
-            "type": "Numeric",
+            "type": "numeric",
             "tags": [],
             "has_range": true,
             "range": [0, 1],

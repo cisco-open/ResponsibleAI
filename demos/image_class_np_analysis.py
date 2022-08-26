@@ -87,14 +87,9 @@ def main():
 
     # Define predict function to use for RAI
     def predict_proba(input_image):
-        if not isinstance(input_image, torch.Tensor):
-            input_image = torch.Tensor(input_image)
         return torch.softmax(net(input_image), 1)
 
     def predict(input_image):
-        if not isinstance(input_image, torch.Tensor):
-            input_image = torch.Tensor(input_image)
-        print("input image shape: ", input_image.shape)
         _, predicted = torch.max(net(input_image), 1)
         return predicted.tolist()
 
@@ -107,7 +102,7 @@ def main():
 
     # Define input and output features
     xTestData, yTestData, rawXTestData = torch_to_RAI(test_loader)
-    image = Feature('image', 'Image', 'The 32x32 input image')
+    image = Feature('image', 'image', 'The 32x32 input image')
     outputs = Feature('image_type', 'numeric', 'The type of image', categorical=True, values={i: v for i, v in enumerate(classes)})
     meta = MetaDatabase([image])
 

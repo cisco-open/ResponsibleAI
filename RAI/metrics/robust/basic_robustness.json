@@ -2,7 +2,7 @@
     "name": "basic_robustness",
     "display_name": "Basic Robustness",
     "compatibility": {"task_type": [],
-                      "data_type": ["Numeric"],
+                      "data_type": ["numeric"],
                       "output_requirements": [],
                       "dataset_requirements": ["X"],
                       "data_requirements": ["NumpyData"]},
