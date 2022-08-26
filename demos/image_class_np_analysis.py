@@ -87,13 +87,9 @@ def main():
 
     # Define predict function to use for RAI
     def predict_proba(input_image):
-        if not isinstance(input_image, torch.Tensor):
-            input_image = torch.Tensor(input_image)
         return torch.softmax(net(input_image), 1)
 
     def predict(input_image):
-        if not isinstance(input_image, torch.Tensor):
-            input_image = torch.Tensor(input_image)
         _, predicted = torch.max(net(input_image), 1)
         return predicted.tolist()
 

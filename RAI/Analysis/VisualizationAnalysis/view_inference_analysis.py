@@ -1,5 +1,4 @@
 import random
-
 import numpy
 import numpy as np
 from RAI.AISystem import AISystem
@@ -60,7 +59,9 @@ class ViewInferenceAnalysis(Analysis, class_location=os.path.abspath(__file__)):
                 result['X'].append(data_x[example])
                 val = raw_x[example]
                 if isinstance(val, torch.Tensor) or isinstance(val, numpy.ndarray):
-                    val = val.reshape(1, -1)
+                    shape = [1]
+                    shape.extend(list(val.shape))
+                    val = val.reshape(tuple(shape))
                 output = output_fun(val)[0]
                 result['output'].append(output)
             else:
