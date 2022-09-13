@@ -12,6 +12,8 @@ __pycache__/
 *$py.class
 
 demos/data/*
+.vscode/
+old/
 
 # C extensions
 *.so
