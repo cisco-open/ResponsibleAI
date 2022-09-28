@@ -41,9 +41,7 @@ Note:
     
      
 
+ 
+Cisco Research, Emerging Tech and Incubations,
 
-project owener: 
-Ali Payani (apayani@cisco.com) 
-
-Cisco Research, Emerging Tech and Incubations
 Cisco Systems Inc. 
