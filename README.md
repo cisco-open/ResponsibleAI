@@ -1,17 +1,45 @@
 # RAI
-Project Requires Redis. Redis can be downloaded using the .msi file at: https://github.com/microsoftarchive/redis/releases/tag/win-3.2.100  
-Please also run pip install -r requirements.txt, as you most likely need the redis version for python too.
 
-The GUI is currently designed around 1920x1080 displays (the Cisco Laptop, and may have issues with scaling to other device sizes)
+
+Note: 
+ - The dashboard GUI is currently designed around 1920x1080 displays 
 
 # To Install
-Please first install the required packages found in requirements.txt.
-RAI can then be installed using "pip install --editable .".
+1) Project Requires Redis. Redis can be downloaded using the .msi file at: https://github.com/microsoftarchive/redis/releases/tag/win-3.2.100  
+
+2) Please also run pip install -r requirements.txt.
+
+3) Please first install the required packages found in requirements.txt. RAI can then be installed using "pip install --editable .".
+
+# Demos:
+    there are a few small demo projects to showcase some of the capabilities of RAI.
+    to run any of the demos please use. For instance : 
+    python ./demos/adult_demo_grid_search.py
+
+    below is a short description of the provided demos:
+
+    File: adult_demo_grid_search.py 
+    Description: This demo uses the Adults dataset (https://archive.ics.uci.edu/ml/datasets/adult) to show how RAI can be used in model selection
+
+    File: image_class_analysis.py 
+    Description: this demo uses Cifar10 dataset and shows how RAI can be used to evaluate image classification tasks
+    
+    File: image_class_training.py 
+    Description: this demo uses Cifar10 dataset and shows how RAI can be used monitor image processing tasks during training
+    
+    
+    File: tabular_class_console.py 
+    Description: this demo shows how RAI can be used without the dashboard to calculate and report on the metrics for a machine learning task
+    
+    File: text.py 
+    File: text_output.py 
+    Description: these demos show how RAI and its dashboard can be used for evaluating the natural language modeling tasks
+    
+     
 
 
-This is the initial repo for the responsible AI library RAI
-Ali Payani (apayani@cisco.com)
-Chris Vattheuer (cvattheu@cisco.com)
+project owener: 
+Ali Payani (apayani@cisco.com) 
 
-
+Cisco Research, Emerging Tech and Incubations
 Cisco Systems Inc. 

@@ -78,7 +78,7 @@ def get_project_list():
 def get_sidebar():
     sidebar = html.Div(
         [
-            html.H2(["RAI", html.Img(src="./assets/img/rai_logo.png", style={"float": "right", "width": "62px", "height": "80px"})], className="display-4"),
+            html.Img(src="./assets/img/rai_logo.png", style={"margin-left":"30px", "float": "right", "width": "242px", "height": "180px"}),
             html.P("A framework for Responsible AI development", className="small"),
             html.Hr(),
             dbc.Nav(
@@ -262,7 +262,7 @@ def change_page(pathname, search, reminder):
 if __name__ == "__main__":
     if len(sys.argv) == 2:
         model_name = sys.argv[1]
-    redisUtil.initialize(subscribers={"metric_detail", "metric_graph", "certificate", "analysis_update"})
+    redisUtil.initialize(subscribers={"metric_detail", "metric_graph", "certificate", "analysis_update"}) 
     project_list = redisUtil.get_projects_list()
     redisUtil.set_current_project(project_list[0]) if len(project_list) > 0 else None
     if len(redisUtil.get_dataset_list()) > 0:
@@ -271,5 +271,5 @@ if __name__ == "__main__":
                 id='main-page-interval-component', interval=1 * 2500, n_intervals=0),
                 dbc.Button(id='main_refresh_reminder', style={"display": "None"}), get_sidebar(), content])
 
-    app.run_server(debug=False)
+    app.run_server(debug=True)
     redisUtil.close()
