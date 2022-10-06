@@ -41,6 +41,14 @@ from utils import iconify
 import urllib
 import sys
 from dash.exceptions import PreventUpdate
+import signal
+def handler(signum, frame):
+    print("before closing")
+    redisUtil.close()
+    print("after closing")
+    exit()
+signal.signal(signal.SIGINT, handler)
+        
 
 
 np.seterr(invalid='raise')
@@ -78,11 +86,16 @@ def get_project_list():
 def get_sidebar():
     sidebar = html.Div(
         [
-            html.Img(src="./assets/img/rai_logo.png", style={"margin-left":"30px", "float": "right", "width": "242px", "height": "180px"}),
-            html.P("A framework for Responsible AI development", className="small"),
-            html.Hr(),
+            
+            
+            # html.P("A framework for Responsible AI development" ),
+            # html.P("A framework for Responsible AI development", className="small"),
+            
             dbc.Nav(
-                [ 
+                [   html.Img(src="./assets/img/rai_logo_blue3.png", style={  "margin-left":"40px",   "width": "100px","height": "60px" }),
+                    html.Div([
+                    
+                    html.Hr( className="nav_div" ), #style={"border": "2px solid green", "border-radius": "1px"}),
                     html.P("Select the active project"),
                     html.Div(id="dummy_div", style={"display": "no"}),
                     dcc.Dropdown(
@@ -91,7 +104,8 @@ def get_sidebar():
                         value=redisUtil._current_project_name,
                         persistence=True,
                         persistence_type="session"),
-                    html.Hr(),
+                        ]),
+                    html.Hr( className="nav_div" ),
                     html.P("Select the dataset"),
                     html.Div(id="dummy_div_2", style={"display": "no"}),
                     dcc.Dropdown(
@@ -99,14 +113,23 @@ def get_sidebar():
                         options=redisUtil.get_dataset_list(),
                         value=redisUtil.get_dataset_list()[0] if len(redisUtil.get_dataset_list()) > 0 else None,
                         persistence=True),
-                    html.Hr(),
+                    html.Hr(className="nav_div"),
                     dbc.NavLink(  
                         iconify("Home", "fa-solid fa-home", "25px"),
                         href="/", active="exact"),
                     dbc.NavLink(  
                         iconify("Settings", "fa-solid fa-gear", "25px"),
                         href="/settings", active="exact"),
-                    html.Hr(),
+                    dbc.NavLink(
+                        iconify("Project Info", "fa-solid fa-circle-info", "55px"),
+                        href="/modelInfo", active="exact"),
+                    dbc.NavLink(
+                        iconify("Metrics Info", "fa-solid fa-file-lines", "50px"),
+                        href="/metricsInfo", active="exact"),
+                     dbc.NavLink( 
+                        iconify("Certificates Info", "fa-solid fa-check-double", "20px"),
+                        href="/certificateInfo", active="exact"),
+                    html.Hr( className="nav_div" ),
                     dbc.NavLink( 
                         iconify("Metrics Details", "fas fa-table fas-10x", "18px"),
                         href="/metrics_details", active="exact"),
@@ -119,20 +142,12 @@ def get_sidebar():
                     dbc.NavLink(
                         iconify("Certificates", "fa-solid fa-list-check", "45px"),
                         href="/certificates", active="exact"),
-                    html.Hr(),
-                    dbc.NavLink(
-                        iconify("Project Info", "fa-solid fa-circle-info", "55px"),
-                        href="/modelInfo", active="exact"),
-                    dbc.NavLink(
-                        iconify("Metrics Info", "fa-solid fa-file-lines", "50px"),
-                        href="/metricsInfo", active="exact"),
+                    html.Hr( className="nav_div" ),
+                    
                     dbc.NavLink(
                         iconify("Model View", "fa-solid fa-eye", "50px"),
                         href="/modelView", active="exact"),
-                    dbc.NavLink( 
-                        iconify("Certificates Info", "fa-solid fa-check-double", "20px"),
-                        href="/certificateInfo", active="exact"),
-                    dbc.NavLink( 
+                   dbc.NavLink( 
                         iconify("Data Summary", "fa-solid fa-newspaper", "20px"),
                         href="/dataSummary", active="exact"),
                     dbc.NavLink( 
