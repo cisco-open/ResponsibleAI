@@ -16,8 +16,8 @@ Note:
 3) Please first install the required packages found in requirements.txt. RAI can then be installed using "pip install --editable .".
 
 # Demos:
-    there are a few small demo projects to showcase some of the capabilities of RAI.
-    to run any of the demos please use. For instance : 
+    We have added a few demo projects to showcase some of the capabilities of RAI.
+    to run any of the demos please use 'python demo_filename'. For instance : 
     python ./demos/adult_demo_grid_search.py
 
     below is a short description of the provided demos:
