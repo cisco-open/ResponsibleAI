@@ -39,3 +39,9 @@
     /* display: block; */
     background-color: #f6f9fadb
 }
+
+
+.nav_div {
+    border: 2px solid #f8f9fa;
+    border-radius: 0px; 
+}

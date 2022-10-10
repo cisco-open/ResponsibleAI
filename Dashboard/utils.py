@@ -18,7 +18,7 @@
 import logging
 import dash
 import dash_bootstrap_components as dbc
-from dash import Input, Output
+from dash import Input, Output, State
 from dash import html
 from server import app, redisUtil
 
@@ -59,12 +59,19 @@ def to_str(v, max_len=None):
 
 @app.callback(
     Output("dummy_x", "children"),
-    Input({"type": dash.ALL, "index": dash.ALL}, "n_clicks"))
-def show_full_text(x):
-    full_text = dash.callback_context.triggered_id['type']
-    return dbc.Offcanvas(
-        html.P(full_text),
-        id="offcanvas", title="Full Content", is_open=True)
+    Input({"type": dash.ALL, "index": dash.ALL}, "n_clicks"),
+    State("dummy_x", "children") )
+    
+def show_full_text(x, c):
+    if dash.callback_context.triggered_id is None:
+        print("error: x is none ", x)
+        return c
+
+    else:
+        full_text = dash.callback_context.triggered_id['type']
+        return dbc.Offcanvas(
+            html.P(full_text),
+            id="offcanvas", title="Full Content", is_open=True)
 
 
 def process_cell(v, list_vertical=True):
