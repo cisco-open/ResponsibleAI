@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Getting Started &mdash; RAI Documentation 0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="PyTorch Integration" href="Pytorch%20Integration.html" />
+    <link rel="prev" title="Installation" href="Installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> RAI Documentation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guide:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Installation.html"><strong>Installation</strong></a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#"><strong>Getting Started</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="Pytorch%20Integration.html"><strong>PyTorch Integration</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="Tutorial%20Demo.html"><strong>Demo Cases</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="Dashboard.html"><strong>Dashboard</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="Basic%20component%20of%20RAI%20Design.html"><strong>Basic component of RAI Design:</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="Contribute%20and%20extend%20RAI.html"><strong>Contribute and Extend RAI</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="Contribute%20and%20extend%20RAI.html#contribution-of-users-to-expand-its-features"><strong>Contribution of users to expand its features</strong></a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference Class</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../rai.html">Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">RAI Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li><strong>Getting Started</strong></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/RaiModule/Getting Started.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="getting-started">
+<span id="id1"></span><h1><strong>Getting Started</strong><a class="headerlink" href="#getting-started" title="Permalink to this heading"></a></h1>
+<p>Here is a quick example of how RAI can be used without the dashboard to calculate and report on the metrics for a machine learning task</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>import os
+import sys
+import inspect
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from RAI.AISystem import AISystem, Model
+from RAI.Analysis import AnalysisManager
+from RAI.dataset import NumpyData, Dataset
+from RAI.utils import df_to_RAI
+import numpy as np
+from sklearn.ensemble import RandomForestClassifier
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>It starts by importing the necessary libraries</p></li>
+</ul>
+<p><strong>Get Dataset</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data_path</span> <span class="o">=</span> <span class="s2">&quot;../data/adult/&quot;</span>
+<span class="n">train_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_path</span> <span class="o">+</span> <span class="s2">&quot;train.csv&quot;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">skipinitialspace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">na_values</span><span class="o">=</span><span class="s2">&quot;?&quot;</span><span class="p">)</span>
+<span class="n">test_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_path</span> <span class="o">+</span> <span class="s2">&quot;test.csv&quot;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">skipinitialspace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">na_values</span><span class="o">=</span><span class="s2">&quot;?&quot;</span><span class="p">)</span>
+<span class="n">all_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">train_data</span><span class="p">,</span> <span class="n">test_data</span><span class="p">],</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>       <span class="n">age</span>         <span class="n">workclass</span>  <span class="n">fnlwgt</span>  <span class="n">education</span>  <span class="o">...</span>  <span class="n">capital</span><span class="o">-</span><span class="n">loss</span> <span class="n">hours</span><span class="o">-</span><span class="n">per</span><span class="o">-</span><span class="n">week</span> <span class="n">native</span><span class="o">-</span><span class="n">country</span> <span class="n">income</span><span class="o">-</span><span class="n">per</span><span class="o">-</span><span class="n">year</span>
+<span class="mi">0</span>       <span class="mi">39</span>         <span class="n">State</span><span class="o">-</span><span class="n">gov</span>   <span class="mi">77516</span>  <span class="n">Bachelors</span>  <span class="o">...</span>             <span class="mi">0</span>             <span class="mi">40</span>  <span class="n">United</span><span class="o">-</span><span class="n">States</span>           <span class="o">&lt;=</span><span class="mi">50</span><span class="n">K</span>
+<span class="mi">1</span>       <span class="mi">50</span>  <span class="n">Self</span><span class="o">-</span><span class="n">emp</span><span class="o">-</span><span class="ow">not</span><span class="o">-</span><span class="n">inc</span>   <span class="mi">83311</span>  <span class="n">Bachelors</span>  <span class="o">...</span>             <span class="mi">0</span>             <span class="mi">13</span>  <span class="n">United</span><span class="o">-</span><span class="n">States</span>           <span class="o">&lt;=</span><span class="mi">50</span><span class="n">K</span>
+<span class="mi">2</span>       <span class="mi">38</span>           <span class="n">Private</span>  <span class="mi">215646</span>    <span class="n">HS</span><span class="o">-</span><span class="n">grad</span>  <span class="o">...</span>             <span class="mi">0</span>             <span class="mi">40</span>  <span class="n">United</span><span class="o">-</span><span class="n">States</span>           <span class="o">&lt;=</span><span class="mi">50</span><span class="n">K</span>
+<span class="mi">3</span>       <span class="mi">53</span>           <span class="n">Private</span>  <span class="mi">234721</span>       <span class="mi">11</span><span class="n">th</span>  <span class="o">...</span>             <span class="mi">0</span>             <span class="mi">40</span>  <span class="n">United</span><span class="o">-</span><span class="n">States</span>           <span class="o">&lt;=</span><span class="mi">50</span><span class="n">K</span>
+<span class="mi">4</span>       <span class="mi">28</span>           <span class="n">Private</span>  <span class="mi">338409</span>  <span class="n">Bachelors</span>  <span class="o">...</span>             <span class="mi">0</span>             <span class="mi">40</span>           <span class="n">Cuba</span>           <span class="o">&lt;=</span><span class="mi">50</span><span class="n">K</span>
+<span class="o">...</span>    <span class="o">...</span>               <span class="o">...</span>     <span class="o">...</span>        <span class="o">...</span>  <span class="o">...</span>           <span class="o">...</span>            <span class="o">...</span>            <span class="o">...</span>             <span class="o">...</span>
+<span class="mi">48837</span>   <span class="mi">39</span>           <span class="n">Private</span>  <span class="mi">215419</span>  <span class="n">Bachelors</span>  <span class="o">...</span>             <span class="mi">0</span>             <span class="mi">36</span>  <span class="n">United</span><span class="o">-</span><span class="n">States</span>           <span class="o">&lt;=</span><span class="mi">50</span><span class="n">K</span>
+<span class="mi">48838</span>   <span class="mi">64</span>               <span class="n">NaN</span>  <span class="mi">321403</span>    <span class="n">HS</span><span class="o">-</span><span class="n">grad</span>  <span class="o">...</span>             <span class="mi">0</span>             <span class="mi">40</span>  <span class="n">United</span><span class="o">-</span><span class="n">States</span>           <span class="o">&lt;=</span><span class="mi">50</span><span class="n">K</span>
+</pre></div>
+</div>
+<p><strong>Get X and y data, as well as RAI Meta information from the Dataframe</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>rai_meta_information, X, y, <span class="nv">rai_output_feature</span> <span class="o">=</span> df_to_RAI<span class="o">(</span>all_data,
+<span class="nv">target_column</span><span class="o">=</span><span class="s2">&quot;income-per-year&quot;</span>, <span class="nv">normalize</span><span class="o">=</span><span class="s2">&quot;Scalar&quot;</span><span class="o">)</span>
+</pre></div>
+</div>
+<p><strong>Create Data Splits and pass them to RAI</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>xTrain, xTest, yTrain, <span class="nv">yTest</span> <span class="o">=</span> train_test_split<span class="o">(</span>X, y, <span class="nv">random_state</span><span class="o">=</span><span class="m">1</span>, <span class="nv">stratify</span><span class="o">=</span>y<span class="o">)</span>
+<span class="nv">dataset</span> <span class="o">=</span> Dataset<span class="o">({</span><span class="s2">&quot;train&quot;</span>: NumpyData<span class="o">(</span>xTrain, yTrain<span class="o">)</span>, <span class="s2">&quot;test&quot;</span>: NumpyData<span class="o">(</span>xTest, yTest<span class="o">)})</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>  <span class="p">[[</span><span class="o">-</span><span class="mf">0.49539098</span>  <span class="mf">4.</span>         <span class="o">-</span><span class="mf">0.65011375</span> <span class="o">...</span> <span class="o">-</span><span class="mf">0.21878026</span>  <span class="mf">1.58752287</span>
+ <span class="mf">38.</span>        <span class="p">]</span>
+<span class="p">[</span> <span class="mf">0.33682491</span>  <span class="mf">2.</span>         <span class="o">-</span><span class="mf">0.80034375</span> <span class="o">...</span> <span class="o">-</span><span class="mf">0.21878026</span> <span class="o">-</span><span class="mf">0.07812006</span>
+ <span class="mf">13.</span>        <span class="p">]</span>
+<span class="p">[</span><span class="o">-</span><span class="mf">1.25195088</span>  <span class="mf">5.</span>         <span class="o">-</span><span class="mf">1.56515356</span> <span class="o">...</span> <span class="o">-</span><span class="mf">0.21878026</span> <span class="o">-</span><span class="mf">1.74376299</span>
+ <span class="mf">38.</span>        <span class="p">]</span>
+<span class="o">...</span>
+<span class="p">[</span><span class="o">-</span><span class="mf">1.55457484</span>  <span class="mf">2.</span>          <span class="mf">0.76496379</span> <span class="o">...</span> <span class="o">-</span><span class="mf">0.21878026</span> <span class="o">-</span><span class="mf">0.91094152</span>
+ <span class="mf">38.</span>        <span class="p">]</span>
+</pre></div>
+</div>
+<p><strong>Create Model and RAIs representation of it</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">clf</span> <span class="o">=</span> RandomForestClassifier<span class="o">(</span><span class="nv">n_estimators</span><span class="o">=</span><span class="m">4</span>, <span class="nv">max_depth</span><span class="o">=</span><span class="m">6</span><span class="o">)</span>
+<span class="nv">model</span> <span class="o">=</span> Model<span class="o">(</span><span class="nv">agent</span><span class="o">=</span>clf, <span class="nv">output_features</span><span class="o">=</span>rai_output_feature,
+<span class="nv">name</span><span class="o">=</span><span class="s2">&quot;cisco_income_ai&quot;</span>, <span class="nv">predict_fun</span><span class="o">=</span>clf.predict,
+<span class="nv">predict_prob_fun</span><span class="o">=</span>clf.predict_proba,
+<span class="nv">description</span><span class="o">=</span><span class="s2">&quot;Income Prediction AI&quot;</span>, <span class="nv">model_class</span><span class="o">=</span><span class="s2">&quot;RFC&quot;</span><span class="o">)</span>
+</pre></div>
+</div>
+<p><strong>Create RAI AISystem to pass all relevant data to RAI</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">ai</span> <span class="o">=</span> AISystem<span class="o">(</span><span class="nv">name</span><span class="o">=</span><span class="s2">&quot;income_classification&quot;</span>,  <span class="nv">task</span><span class="o">=</span><span class="s1">&#39;binary_classification&#39;</span>,
+             <span class="nv">meta_database</span><span class="o">=</span>rai_meta_information,
+             <span class="nv">dataset</span><span class="o">=</span>dataset, <span class="nv">model</span><span class="o">=</span>model<span class="o">)</span>
+
+<span class="nv">configuration</span> <span class="o">=</span> <span class="o">{</span><span class="s2">&quot;fairness&quot;</span>: <span class="o">{</span><span class="s2">&quot;priv_group&quot;</span>: <span class="o">{</span><span class="s2">&quot;race&quot;</span>: <span class="o">{</span><span class="s2">&quot;privileged&quot;</span>: <span class="m">1</span>, <span class="s2">&quot;unprivileged&quot;</span>: <span class="m">0</span><span class="o">}}</span>,
+                <span class="s2">&quot;protected_attributes&quot;</span>: <span class="o">[</span><span class="s2">&quot;race&quot;</span><span class="o">]</span>, <span class="s2">&quot;positive_label&quot;</span>: <span class="m">1</span><span class="o">}</span>,
+                <span class="s2">&quot;time_complexity&quot;</span>: <span class="s2">&quot;polynomial&quot;</span><span class="o">}</span>
+ai.initialize<span class="o">(</span><span class="nv">user_config</span><span class="o">=</span>configuration<span class="o">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">RAI</span><span class="o">.</span><span class="n">AISystem</span><span class="o">.</span><span class="n">ai_system</span><span class="o">.</span><span class="n">AISystem</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x00000228E34222E0</span>
+
+<span class="p">{</span><span class="s1">&#39;fairness&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;priv_group&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;race&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;privileged&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;unprivileged&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}},</span> <span class="s1">&#39;protected_attributes&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;race&#39;</span><span class="p">],</span> <span class="s1">&#39;positive_label&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span> <span class="s1">&#39;time_complexity&#39;</span><span class="p">:</span> <span class="s1">&#39;polynomial&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Train the model, generate predictions</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>clf.fit<span class="o">(</span>xTrain, yTrain<span class="o">)</span>
+<span class="nv">test_predictions</span> <span class="o">=</span> clf.predict<span class="o">(</span>xTest<span class="o">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Analysis</span> <span class="n">created</span>
+<span class="o">====</span> <span class="n">Group</span> <span class="n">Fairness</span> <span class="n">Analysis</span> <span class="n">Results</span> <span class="o">====</span>
+<span class="mi">1</span> <span class="n">of</span> <span class="mi">4</span> <span class="n">tests</span> <span class="n">passed</span><span class="o">.</span>
+
+<span class="n">Statistical</span> <span class="n">Parity</span> <span class="n">Difference</span> <span class="n">Test</span><span class="p">:</span>
+<span class="n">This</span> <span class="n">metric</span> <span class="ow">is</span> <span class="n">The</span> <span class="n">difference</span> <span class="n">of</span> <span class="n">the</span> <span class="n">rate</span> <span class="n">of</span> <span class="n">favorable</span> <span class="n">outcomes</span> <span class="n">received</span> <span class="n">by</span> <span class="n">the</span> <span class="n">unprivileged</span> <span class="n">group</span> <span class="n">to</span> <span class="n">the</span> <span class="n">privileged</span> <span class="n">group</span><span class="o">.</span>
+<span class="n">The</span> <span class="n">idea</span> <span class="n">value</span> <span class="ow">is</span> <span class="mf">0.0</span><span class="o">.</span>
+<span class="n">It</span><span class="s1">&#39;s value of -0.11160752641979553 is not between between 0.1 and -0.1 indicating that there is unfairness.</span>
+
+<span class="n">Equal</span> <span class="n">Opportunity</span> <span class="n">Difference</span> <span class="n">Test</span><span class="p">:</span>
+<span class="n">This</span> <span class="n">metric</span> <span class="ow">is</span> <span class="n">The</span> <span class="n">difference</span> <span class="n">of</span> <span class="n">true</span> <span class="n">positive</span> <span class="n">rates</span> <span class="n">between</span> <span class="n">the</span> <span class="n">unprivileged</span> <span class="ow">and</span> <span class="n">the</span> <span class="n">privileged</span> <span class="n">groups</span><span class="o">.</span>
+<span class="n">The</span> <span class="n">true</span> <span class="n">positive</span> <span class="n">rate</span> <span class="ow">is</span> <span class="n">the</span> <span class="n">ratio</span> <span class="n">of</span> <span class="n">true</span> <span class="n">positives</span> <span class="n">to</span> <span class="n">the</span> <span class="n">total</span> <span class="n">number</span> <span class="n">of</span> <span class="n">actual</span> <span class="n">positives</span> <span class="k">for</span> <span class="n">a</span> <span class="n">given</span> <span class="n">group</span><span class="o">.</span>
+<span class="n">The</span> <span class="n">ideal</span> <span class="n">value</span> <span class="ow">is</span> <span class="mf">0.</span> <span class="n">A</span> <span class="n">value</span> <span class="n">of</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="n">implies</span> <span class="n">higher</span> <span class="n">benefit</span> <span class="k">for</span> <span class="n">the</span> <span class="n">privileged</span> <span class="n">group</span> <span class="ow">and</span> <span class="n">a</span> <span class="n">value</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="n">implies</span> <span class="n">higher</span> <span class="n">benefit</span> <span class="k">for</span> <span class="n">the</span> <span class="n">unprivileged</span> <span class="n">group</span><span class="o">.</span>
+<span class="n">It</span><span class="s1">&#39;s value of -0.12121212121212122 is not between between 0.1 and -0.1 indicating that there is unfairness.</span>
+</pre></div>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Pytorch%20Integration.html" class="btn btn-neutral float-right" title="PyTorch Integration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, sharfa.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
