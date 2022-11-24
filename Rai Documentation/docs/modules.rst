@@ -1,7 +1,6 @@
-rai
-===
+RAI Documentation
+=================
 
 .. toctree::
    :maxdepth: 4
 
-   rai

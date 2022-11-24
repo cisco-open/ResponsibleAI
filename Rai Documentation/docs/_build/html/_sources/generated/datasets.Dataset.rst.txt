@@ -1,0 +1,6 @@
+﻿datasets.Dataset
+================
+
+.. currentmodule:: datasets
+
+.. autoclass:: Dataset

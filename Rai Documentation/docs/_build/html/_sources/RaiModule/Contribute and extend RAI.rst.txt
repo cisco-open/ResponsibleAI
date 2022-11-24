@@ -7,32 +7,180 @@
 - **How to contribute and extend RAI (User Guide)**
 
 **Adding Metric Group**
+-----------------------
 
-- What are its requirements
+**What are its requirements?**
 
-- How to expand RAI using Metric group
+- To add a New metrics, we need to create 3 files inside Metrics
 
-- create subclass of class and implement the method
+ - **__init__.py file**.
+ - **json file**. 
+ - **Python file**.
+
+- In ``__init__.py`` file - we have to import the py file that we have created inside the folder
+
+
+ **Example:** 
+
+
+
+
+.. figure:: ../images/fromclass.gif
+   :align: center
+   :scale: 60 %
+
+   __init__.py file example.
+
+
+
+**How to expand RAI using Metric group**
+
+- Inside ``json file``, we need to  define parametrs as name, display_name, compatibility, dependency_list, tags, complexity_class, metrics.
+
+ 
+  :parameter: name:
+  :parameter: display_name:
+  :parameter: compatibility:
+  :parameter: dependency_list:
+  :parameter: tags:
+  :parameter: complexity_class:
+  :parameter: metrics:
+
+ 
+ 
+**Example:** 
+
+
+.. figure:: /images/json_metric.png
+   :class: with-border
+   :scale: 40 %
+   :align: center
+
+   json_metric file example.
+
+
+
+**Create subclass of class and implement the method**
+
+- We can create subclass of class and implement the methods
+
+- In ``python file`` , we need to create a class for respective metric_group and we need to define methods for update and compute inside the class.
+
+
+**Example:** 
+
+
+.. figure:: /images/metric_pyfile.png
+   :class: with-border
+   :scale: 40 %
+   :align: center
+
+   metric_python_file example.
 
 
 
 **Adding Certificates**
+-----------------------
 
-- What are is requirements
+**What are is requirements**
 
-- How to expand RAI using Metric group
+- To add a New Certificates , we need to create a json file inside a standard folder
+
+**How to expand RAI using Certificates**
+
+- For certificates there are two key value pairs , first one meta and second one conditions.
+- Inside meta we need to give diplay name, description, tags and level
+- Inside condition we need to give operator and terms.
+
+**create a certificate and implement** 
+
+- Inside certificate folder, go to standard folder and their make a ``json file`` and fill all given parameters.
+
+  :parameter: meta:
+  :parameter: condition:
+  
+
+**Example:** 
 
 
-- create subclass of class and implement the method
+.. figure:: /images/add_certficate.png
+   :class: with-border
+   :scale: 60 %
+   :align: center
+
+   sample certficate .
+
+
 
 **Adding Analysis**
-
-- What are is requirements
-
-- How to expand RAI using Metric group
+-------------------
 
 
-- create subclass of class and implement the method
+**What are is requirements?**
+
+
+- How to expand RAI using Analysis
+- To add a New Analysis, we need to create 3 files inside Analysis folder
+
+ - **__init__.py file**.
+ - **json file**. 
+ - **Python file**.
+
+- In ``__init__.py`` file - we have to import the py file that we have created inside the folder
+
+
+**Example:** 
+
+.. figure:: ../images/fromclass.gif
+   :align: center
+   :scale: 60 %
+
+   __init__.py file example.
+
+
+
+**How to expand RAI using Analysis**
+ 
+- Inside ``json file``, we need to give parametrs name, display_name, compatibility, src, dependency_list, tags, complexity_class.
+
+
+  :parameter: name:
+  :parameter: display_name:
+  :parameter: compatibility:
+  :parameter: src:
+  :parameter: dependency_list:
+  :parameter: tags:
+  :parameter: complexity_class:
+
+
+**Example:** 
+
+
+.. figure:: /images/Analysis_json_file.png
+   :class: with-border
+   :scale: 70 %
+   :align: center
+
+   Analysis_json_file example.
+
+
+**create subclass of class and implement the method**
+
+- We can create subclass of class and implement the methods
+
+- In ``python file`` , we need to create a class for respective Analysis and we need to define methods for initialize  ,compute, to_string, to_html inside the class.
+
+
+**Example:** 
+
+
+.. figure:: /images/Analysispyfile.png
+   :class: with-border
+   :scale: 60 %
+   :align: center
+
+   Analysispyfile.png example
+
 
 ================================================
 **Contribution of users to expand its features**
@@ -96,3 +244,5 @@ Please consider to include the following in a bug report:
 --------------
 
 - This document was adapted from  `here <https://gist.github.com/briandk/3d2e8b3ec8daf5a27a62>`_.
+
+

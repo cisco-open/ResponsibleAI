@@ -21,7 +21,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="testingpage" href="../testingpage.html" />
+    <link rel="next" title="Reference" href="../rai.html" />
     <link rel="prev" title="Basic component of RAI Design:" href="Basic%20component%20of%20RAI%20Design.html" /> 
 </head>
 
@@ -44,13 +44,16 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="Installation.html"><strong>Installation</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="Getting%20Started.html"><strong>Getting Started</strong></a></li>
-<li class="toctree-l1"><a class="reference internal" href="getting.html"><strong>getting</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="Pytorch%20Integration.html"><strong>PyTorch Integration</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="Tutorial%20Demo.html"><strong>Demo Cases</strong></a></li>
-<li class="toctree-l1"><a class="reference internal" href="Examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Dashboard.html"><strong>Dashboard</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="Basic%20component%20of%20RAI%20Design.html"><strong>Basic component of RAI Design:</strong></a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#"><strong>Contribute and Extend RAI</strong></a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#"><strong>Contribute and Extend RAI</strong></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#adding-metric-group"><strong>Adding Metric Group</strong></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#adding-certificates"><strong>Adding Certificates</strong></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#adding-analysis"><strong>Adding Analysis</strong></a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="#contribution-of-users-to-expand-its-features"><strong>Contribution of users to expand its features</strong></a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#contributing-to-rai"><strong>Contributing to RAI</strong></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#we-develop-with-github"><strong>We Develop with Github</strong></a></li>
@@ -60,7 +63,6 @@
 <li class="toctree-l2"><a class="reference internal" href="#references"><strong>References</strong></a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../testingpage.html"><strong>testingpage</strong></a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Reference Class</span></p>
 <ul>
@@ -96,24 +98,184 @@
 <ul class="simple">
 <li><p><strong>How to contribute and extend RAI (User Guide)</strong></p></li>
 </ul>
-<p><strong>Adding Metric Group</strong></p>
+<section id="adding-metric-group">
+<h2><strong>Adding Metric Group</strong><a class="headerlink" href="#adding-metric-group" title="Permalink to this heading"></a></h2>
+<p><strong>What are its requirements?</strong></p>
 <ul class="simple">
-<li><p>What are its requirements</p></li>
-<li><p>How to expand RAI using Metric group</p></li>
-<li><p>create subclass of class and implement the method</p></li>
+<li><p>To add a New metrics, we need to create 3 files inside Metrics</p></li>
 </ul>
-<p><strong>Adding Certificates</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>__init__.py file</strong>.</p></li>
+<li><p><strong>json file</strong>.</p></li>
+<li><p><strong>Python file</strong>.</p></li>
+</ul>
+</div></blockquote>
 <ul class="simple">
-<li><p>What are is requirements</p></li>
-<li><p>How to expand RAI using Metric group</p></li>
-<li><p>create subclass of class and implement the method</p></li>
+<li><p>In <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> file - we have to import the py file that we have created inside the folder</p></li>
 </ul>
-<p><strong>Adding Analysis</strong></p>
+<blockquote>
+<div><p><strong>Example:</strong></p>
+</div></blockquote>
+<figure class="align-center" id="id3">
+<a class="reference internal image-reference" href="../_images/fromclass.gif"><img alt="../_images/fromclass.gif" src="../_images/fromclass.gif" style="width: 300.0px; height: 182.4px;" /></a>
+<figcaption>
+<p><span class="caption-text">__init__.py file example.</span><a class="headerlink" href="#id3" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<p><strong>How to expand RAI using Metric group</strong></p>
 <ul class="simple">
-<li><p>What are is requirements</p></li>
-<li><p>How to expand RAI using Metric group</p></li>
-<li><p>create subclass of class and implement the method</p></li>
+<li><p>Inside <code class="docutils literal notranslate"><span class="pre">json</span> <span class="pre">file</span></code>, we need to  define parametrs as name, display_name, compatibility, dependency_list, tags, complexity_class, metrics.</p>
+<dl class="field-list simple">
+<dt class="field-odd">parameter<span class="colon">:</span></dt>
+<dd class="field-odd"><p>name:</p>
+</dd>
+<dt class="field-even">parameter<span class="colon">:</span></dt>
+<dd class="field-even"><p>display_name:</p>
+</dd>
+<dt class="field-odd">parameter<span class="colon">:</span></dt>
+<dd class="field-odd"><p>compatibility:</p>
+</dd>
+<dt class="field-even">parameter<span class="colon">:</span></dt>
+<dd class="field-even"><p>dependency_list:</p>
+</dd>
+<dt class="field-odd">parameter<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tags:</p>
+</dd>
+<dt class="field-even">parameter<span class="colon">:</span></dt>
+<dd class="field-even"><p>complexity_class:</p>
+</dd>
+<dt class="field-odd">parameter<span class="colon">:</span></dt>
+<dd class="field-odd"><p>metrics:</p>
+</dd>
+</dl>
+</li>
 </ul>
+<p><strong>Example:</strong></p>
+<figure class="align-center" id="id4">
+<a class="with-border reference internal image-reference" href="../_images/json_metric.png"><img alt="../_images/json_metric.png" class="with-border" src="../_images/json_metric.png" style="width: 576.8000000000001px; height: 497.20000000000005px;" /></a>
+<figcaption>
+<p><span class="caption-text">json_metric file example.</span><a class="headerlink" href="#id4" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<p><strong>Create subclass of class and implement the method</strong></p>
+<ul class="simple">
+<li><p>We can create subclass of class and implement the methods</p></li>
+<li><p>In <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">file</span></code> , we need to create a class for respective metric_group and we need to define methods for update and compute inside the class.</p></li>
+</ul>
+<p><strong>Example:</strong></p>
+<figure class="align-center" id="id5">
+<a class="with-border reference internal image-reference" href="../_images/metric_pyfile.png"><img alt="../_images/metric_pyfile.png" class="with-border" src="../_images/metric_pyfile.png" style="width: 703.6px; height: 388.40000000000003px;" /></a>
+<figcaption>
+<p><span class="caption-text">metric_python_file example.</span><a class="headerlink" href="#id5" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="adding-certificates">
+<h2><strong>Adding Certificates</strong><a class="headerlink" href="#adding-certificates" title="Permalink to this heading"></a></h2>
+<p><strong>What are is requirements</strong></p>
+<ul class="simple">
+<li><p>To add a New Certificates , we need to create a json file inside a standard folder</p></li>
+</ul>
+<p><strong>How to expand RAI using Certificates</strong></p>
+<ul class="simple">
+<li><p>For certificates there are two key value pairs , first one meta and second one conditions.</p></li>
+<li><p>Inside meta we need to give diplay name, description, tags and level</p></li>
+<li><p>Inside condition we need to give operator and terms.</p></li>
+</ul>
+<p><strong>create a certificate and implement</strong></p>
+<ul class="simple">
+<li><p>Inside certificate folder, go to standard folder and their make a <code class="docutils literal notranslate"><span class="pre">json</span> <span class="pre">file</span></code> and fill all given parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">parameter<span class="colon">:</span></dt>
+<dd class="field-odd"><p>meta:</p>
+</dd>
+<dt class="field-even">parameter<span class="colon">:</span></dt>
+<dd class="field-even"><p>condition:</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Example:</strong></p>
+<figure class="align-center" id="id6">
+<a class="with-border reference internal image-reference" href="../_images/add_certficate.png"><img alt="../_images/add_certficate.png" class="with-border" src="../_images/add_certficate.png" style="width: 543.0px; height: 249.0px;" /></a>
+<figcaption>
+<p><span class="caption-text">sample certficate .</span><a class="headerlink" href="#id6" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="adding-analysis">
+<h2><strong>Adding Analysis</strong><a class="headerlink" href="#adding-analysis" title="Permalink to this heading"></a></h2>
+<p><strong>What are is requirements?</strong></p>
+<ul class="simple">
+<li><p>How to expand RAI using Analysis</p></li>
+<li><p>To add a New Analysis, we need to create 3 files inside Analysis folder</p></li>
+</ul>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>__init__.py file</strong>.</p></li>
+<li><p><strong>json file</strong>.</p></li>
+<li><p><strong>Python file</strong>.</p></li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li><p>In <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> file - we have to import the py file that we have created inside the folder</p></li>
+</ul>
+<p><strong>Example:</strong></p>
+<figure class="align-center" id="id7">
+<a class="reference internal image-reference" href="../_images/fromclass.gif"><img alt="../_images/fromclass.gif" src="../_images/fromclass.gif" style="width: 300.0px; height: 182.4px;" /></a>
+<figcaption>
+<p><span class="caption-text">__init__.py file example.</span><a class="headerlink" href="#id7" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<p><strong>How to expand RAI using Analysis</strong></p>
+<ul class="simple">
+<li><p>Inside <code class="docutils literal notranslate"><span class="pre">json</span> <span class="pre">file</span></code>, we need to give parametrs name, display_name, compatibility, src, dependency_list, tags, complexity_class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">parameter<span class="colon">:</span></dt>
+<dd class="field-odd"><p>name:</p>
+</dd>
+<dt class="field-even">parameter<span class="colon">:</span></dt>
+<dd class="field-even"><p>display_name:</p>
+</dd>
+<dt class="field-odd">parameter<span class="colon">:</span></dt>
+<dd class="field-odd"><p>compatibility:</p>
+</dd>
+<dt class="field-even">parameter<span class="colon">:</span></dt>
+<dd class="field-even"><p>src:</p>
+</dd>
+<dt class="field-odd">parameter<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dependency_list:</p>
+</dd>
+<dt class="field-even">parameter<span class="colon">:</span></dt>
+<dd class="field-even"><p>tags:</p>
+</dd>
+<dt class="field-odd">parameter<span class="colon">:</span></dt>
+<dd class="field-odd"><p>complexity_class:</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Example:</strong></p>
+<figure class="align-center" id="id8">
+<a class="with-border reference internal image-reference" href="../_images/Analysis_json_file.png"><img alt="../_images/Analysis_json_file.png" class="with-border" src="../_images/Analysis_json_file.png" style="width: 386.4px; height: 270.9px;" /></a>
+<figcaption>
+<p><span class="caption-text">Analysis_json_file example.</span><a class="headerlink" href="#id8" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<p><strong>create subclass of class and implement the method</strong></p>
+<ul class="simple">
+<li><p>We can create subclass of class and implement the methods</p></li>
+<li><p>In <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">file</span></code> , we need to create a class for respective Analysis and we need to define methods for initialize  ,compute, to_string, to_html inside the class.</p></li>
+</ul>
+<p><strong>Example:</strong></p>
+<figure class="align-center" id="id9">
+<a class="with-border reference internal image-reference" href="../_images/Analysispyfile.png"><img alt="../_images/Analysispyfile.png" class="with-border" src="../_images/Analysispyfile.png" style="width: 570.6px; height: 406.8px;" /></a>
+<figcaption>
+<p><span class="caption-text">Analysispyfile.png example</span><a class="headerlink" href="#id9" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+</section>
 </section>
 <section id="contribution-of-users-to-expand-its-features">
 <h1><strong>Contribution of users to expand its features</strong><a class="headerlink" href="#contribution-of-users-to-expand-its-features" title="Permalink to this heading"></a></h1>
@@ -184,7 +346,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="Basic%20component%20of%20RAI%20Design.html" class="btn btn-neutral float-left" title="Basic component of RAI Design:" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../testingpage.html" class="btn btn-neutral float-right" title="testingpage" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../rai.html" class="btn btn-neutral float-right" title="Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

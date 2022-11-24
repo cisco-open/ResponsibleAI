@@ -120,6 +120,3 @@ The goal is to provides a generic framework to perform various types of analysis
 
 
 
-
-**How to contribute and extend RAI**
-====================================

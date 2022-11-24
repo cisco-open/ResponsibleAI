@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Getting Started &mdash; RAI Documentation  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> RAI Documentation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">RAI Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Tutorial%20Demo.html"><strong>Tutorial Demo</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Dashboard.html"><strong>Dashboard</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Basic%20component%20of%20RAI%20Design.html"><strong>Basic component of RAI Design:</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../testing.html"><strong>testings</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Reference%20Guide.html"><strong>Reference</strong></a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">RAI Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li><strong>Getting Started</strong></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/RaiModule.rst/Getting Started.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="getting-started">
+<span id="id1"></span><h1><strong>Getting Started</strong><a class="headerlink" href="#getting-started" title="Permalink to this heading"></a></h1>
+<p>Here is a quick example of how RAI can be used without the dashboard to calculate and report on the metrics for a machine learning task</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>import os
+import sys
+import inspect
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from RAI.AISystem import AISystem, Model
+from RAI.Analysis import AnalysisManager
+from RAI.dataset import NumpyData, Dataset
+from RAI.utils import df_to_RAI
+import numpy as np
+from sklearn.ensemble import RandomForestClassifier
+<span class="nv">current_dir</span> <span class="o">=</span> os.path.dirname<span class="o">(</span>os.path.abspath<span class="o">(</span>inspect.getfile<span class="o">(</span>inspect.currentframe<span class="o">())))</span>
+<span class="nv">parent_dir</span> <span class="o">=</span> os.path.dirname<span class="o">(</span>current_dir<span class="o">)</span>
+sys.path.insert<span class="o">(</span><span class="m">0</span>, parent_dir<span class="o">)</span>
+np.random.seed<span class="o">(</span><span class="m">50</span><span class="o">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Get Dataset</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data_path</span> <span class="o">=</span> <span class="s2">&quot;../data/adult/&quot;</span>
+<span class="n">train_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_path</span> <span class="o">+</span> <span class="s2">&quot;train.csv&quot;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">skipinitialspace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">na_values</span><span class="o">=</span><span class="s2">&quot;?&quot;</span><span class="p">)</span>
+<span class="n">test_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_path</span> <span class="o">+</span> <span class="s2">&quot;test.csv&quot;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">skipinitialspace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">na_values</span><span class="o">=</span><span class="s2">&quot;?&quot;</span><span class="p">)</span>
+<span class="n">all_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">train_data</span><span class="p">,</span> <span class="n">test_data</span><span class="p">],</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Get X and y data, as well as RAI Meta information from the Dataframe</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>rai_meta_information, X, y, <span class="nv">rai_output_feature</span> <span class="o">=</span> df_to_RAI<span class="o">(</span>all_data,
+<span class="nv">target_column</span><span class="o">=</span><span class="s2">&quot;income-per-year&quot;</span>, <span class="nv">normalize</span><span class="o">=</span><span class="s2">&quot;Scalar&quot;</span><span class="o">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Create Data Splits and pass them to RAI</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>xTrain, xTest, yTrain, <span class="nv">yTest</span> <span class="o">=</span> train_test_split<span class="o">(</span>X, y, <span class="nv">random_state</span><span class="o">=</span><span class="m">1</span>, <span class="nv">stratify</span><span class="o">=</span>y<span class="o">)</span>
+<span class="nv">dataset</span> <span class="o">=</span> Dataset<span class="o">({</span><span class="s2">&quot;train&quot;</span>: NumpyData<span class="o">(</span>xTrain, yTrain<span class="o">)</span>, <span class="s2">&quot;test&quot;</span>: NumpyData<span class="o">(</span>xTest, yTest<span class="o">)})</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Create Model and RAIs representation of it</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">clf</span> <span class="o">=</span> RandomForestClassifier<span class="o">(</span><span class="nv">n_estimators</span><span class="o">=</span><span class="m">4</span>, <span class="nv">max_depth</span><span class="o">=</span><span class="m">6</span><span class="o">)</span>
+<span class="nv">model</span> <span class="o">=</span> Model<span class="o">(</span><span class="nv">agent</span><span class="o">=</span>clf, <span class="nv">output_features</span><span class="o">=</span>rai_output_feature,
+<span class="nv">name</span><span class="o">=</span><span class="s2">&quot;cisco_income_ai&quot;</span>, <span class="nv">predict_fun</span><span class="o">=</span>clf.predict,
+<span class="nv">predict_prob_fun</span><span class="o">=</span>clf.predict_proba,
+<span class="nv">description</span><span class="o">=</span><span class="s2">&quot;Income Prediction AI&quot;</span>, <span class="nv">model_class</span><span class="o">=</span><span class="s2">&quot;RFC&quot;</span><span class="o">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Create RAI AISystem to pass all relevant data to RAI</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">ai</span> <span class="o">=</span> AISystem<span class="o">(</span><span class="nv">name</span><span class="o">=</span><span class="s2">&quot;income_classification&quot;</span>,  <span class="nv">task</span><span class="o">=</span><span class="s1">&#39;binary_classification&#39;</span>,
+             <span class="nv">meta_database</span><span class="o">=</span>rai_meta_information,
+             <span class="nv">dataset</span><span class="o">=</span>dataset, <span class="nv">model</span><span class="o">=</span>model<span class="o">)</span>
+
+<span class="nv">configuration</span> <span class="o">=</span> <span class="o">{</span><span class="s2">&quot;fairness&quot;</span>: <span class="o">{</span><span class="s2">&quot;priv_group&quot;</span>: <span class="o">{</span><span class="s2">&quot;race&quot;</span>: <span class="o">{</span><span class="s2">&quot;privileged&quot;</span>: <span class="m">1</span>, <span class="s2">&quot;unprivileged&quot;</span>: <span class="m">0</span><span class="o">}}</span>,
+                <span class="s2">&quot;protected_attributes&quot;</span>: <span class="o">[</span><span class="s2">&quot;race&quot;</span><span class="o">]</span>, <span class="s2">&quot;positive_label&quot;</span>: <span class="m">1</span><span class="o">}</span>,
+                <span class="s2">&quot;time_complexity&quot;</span>: <span class="s2">&quot;polynomial&quot;</span><span class="o">}</span>
+ai.initialize<span class="o">(</span><span class="nv">user_config</span><span class="o">=</span>configuration<span class="o">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Train the model, generate predictions</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>clf.fit<span class="o">(</span>xTrain, yTrain<span class="o">)</span>
+<span class="nv">test_predictions</span> <span class="o">=</span> clf.predict<span class="o">(</span>xTest<span class="o">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Pass predictions to RAI</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ai.compute<span class="o">({</span><span class="s2">&quot;test&quot;</span>: <span class="o">{</span><span class="s2">&quot;predict&quot;</span>: test_predictions<span class="o">}}</span>, <span class="nv">tag</span><span class="o">=</span><span class="s1">&#39;model&#39;</span><span class="o">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>View results computed by RAI</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ai.display_metric_values<span class="o">(</span><span class="nv">display_detailed</span><span class="o">=</span>True<span class="o">)</span>
+
+<span class="nv">analysis</span> <span class="o">=</span> AnalysisManager<span class="o">()</span>
+<span class="nv">result</span> <span class="o">=</span> analysis.run_analysis<span class="o">(</span>ai, <span class="s2">&quot;test&quot;</span>, <span class="s2">&quot;FairnessAnalysis&quot;</span><span class="o">)</span>
+print<span class="o">(</span>result<span class="o">[</span><span class="s2">&quot;FairnessAnalysis&quot;</span><span class="o">]</span>.to_string<span class="o">())</span>
+</pre></div>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Sharfa.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
