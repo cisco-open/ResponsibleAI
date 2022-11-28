@@ -9,6 +9,7 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath('..'))
+nbsphinx_allow_errors = True
 
 project = 'RAI Documentation'
 copyright = '2022, sharfa'
@@ -21,7 +22,7 @@ release = '0.1'
 extensions = ['sphinx.ext.autodoc','sphinx.ext.viewcode','sphinx.ext.napoleon',
     'sphinx.ext.autosummary',
     'sphinx.ext.intersphinx',
-    'sphinx_tabs.tabs']
+    'sphinx_tabs.tabs','nbsphinx',]
 
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']

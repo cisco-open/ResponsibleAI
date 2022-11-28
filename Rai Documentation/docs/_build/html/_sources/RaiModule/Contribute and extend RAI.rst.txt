@@ -6,18 +6,30 @@
 
 - **How to contribute and extend RAI (User Guide)**
 
+Here’s the short summary 
+
+- If you are a first-time contributor,
+
+- Go to `ResponsibleAI <https://github.com/cisco-open/ResponsibleAI>`_ and click the “fork” button to create your own copy of the project from `master`.
+
+- Clone the project to your local computer.
+- Develop your contribution.
+- Push your changes back to your fork on GitHub.
+
+
+
 **Adding Metric Group**
 -----------------------
 
-**What are its requirements?**
+**What are its requirements**
 
-- To add a New metrics, we need to create 3 files inside Metrics
+- To add a New metrics, we need to create 3 files inside Metrics folder.
 
  - **__init__.py file**.
  - **json file**. 
  - **Python file**.
 
-- In ``__init__.py`` file - we have to import the py file that we have created inside the folder
+- In ``__init__.py`` file  we have to import the python file that we have created inside the folder.
 
 
  **Example:** 
@@ -35,7 +47,7 @@
 
 **How to expand RAI using Metric group**
 
-- Inside ``json file``, we need to  define parametrs as name, display_name, compatibility, dependency_list, tags, complexity_class, metrics.
+- Inside ``json file``, we need to define parametrs as name, display_name, compatibility, dependency_list, tags, complexity_class, metrics.
 
  
   :parameter: name:
@@ -62,7 +74,7 @@
 
 **Create subclass of class and implement the method**
 
-- We can create subclass of class and implement the methods
+- We can create subclass of class and implement the methods.
 
 - In ``python file`` , we need to create a class for respective metric_group and we need to define methods for update and compute inside the class.
 
@@ -84,15 +96,15 @@
 
 **What are is requirements**
 
-- To add a New Certificates , we need to create a json file inside a standard folder
+- To add a New Certificates , we need to create a json file inside a standard folder.
 
 **How to expand RAI using Certificates**
 
 - For certificates there are two key value pairs , first one meta and second one conditions.
-- Inside meta we need to give diplay name, description, tags and level
+- Inside meta we need to give diplay name, description, tags and level.
 - Inside condition we need to give operator and terms.
 
-**create a certificate and implement** 
+**Create a certificate and implement** 
 
 - Inside certificate folder, go to standard folder and their make a ``json file`` and fill all given parameters.
 
@@ -116,17 +128,16 @@
 -------------------
 
 
-**What are is requirements?**
+**What are is requirements**
 
 
-- How to expand RAI using Analysis
-- To add a New Analysis, we need to create 3 files inside Analysis folder
+- To add a New Analysis, we need to create 3 files inside Analysis folder.
 
  - **__init__.py file**.
  - **json file**. 
  - **Python file**.
 
-- In ``__init__.py`` file - we have to import the py file that we have created inside the folder
+- In ``__init__.py`` file - we have to import the py file that we have created inside the folder.
 
 
 **Example:** 
@@ -166,7 +177,7 @@
 
 **create subclass of class and implement the method**
 
-- We can create subclass of class and implement the methods
+- We can create subclass of class and implement the methods.
 
 - In ``python file`` , we need to create a class for respective Analysis and we need to define methods for initialize  ,compute, to_string, to_html inside the class.
 
@@ -198,7 +209,7 @@ Thank you for taking time to start contributing! We want to make contributing to
 - Becoming a maintainer
 
 **We Develop with Github**
---------------------------
+
 
 We use github to host code, to track issues and feature requests, as well as accept pull requests.
 
@@ -212,13 +223,12 @@ Pull requests are the best way to propose changes to the codebase. We actively w
 6. Issue that pull request!
 
 **Any contributions you make will be under the Apache License, Version 2**
---------------------------------------------------------------------------
 
 - In short, when you submit code changes, your submissions are understood to be under the same `Apache License <https://github.com/cisco-open/ResponsibleAI/blob/main/LICENSE>`_ that covers the project.
 - Feel free to contact the maintainers if that's a concern.
 
 **Report bugs using Github's** `Issues <https://github.com/cisco-open/ResponsibleAI/issues>`_
----------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------
 
 - We use GitHub issues to track public bugs. Report a bug by `opening a new issue <https://github.com/cisco-open/ResponsibleAI/issues/new>`_
 
@@ -236,12 +246,10 @@ Please consider to include the following in a bug report:
 
  
 **License**
------------
 
 - By contributing, you agree that your contributions will be licensed under its `Apache License <https://github.com/cisco-open/ResponsibleAI/blob/main/LICENSE>`_, Version 2.
 
 **References**
---------------
 
 - This document was adapted from  `here <https://gist.github.com/briandk/3d2e8b3ec8daf5a27a62>`_.
 

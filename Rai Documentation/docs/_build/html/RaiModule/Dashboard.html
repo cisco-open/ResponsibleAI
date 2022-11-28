@@ -18,6 +18,7 @@
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -44,7 +45,6 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="Installation.html"><strong>Installation</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="Getting%20Started.html"><strong>Getting Started</strong></a></li>
-<li class="toctree-l1"><a class="reference internal" href="Pytorch%20Integration.html"><strong>PyTorch Integration</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="Tutorial%20Demo.html"><strong>Demo Cases</strong></a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#"><strong>Dashboard</strong></a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#rai-dashboard-features"><strong>RAI Dashboard features</strong></a></li>
@@ -85,7 +85,31 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="dashboard">
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="dashboard">
 <span id="id1"></span><h1><strong>Dashboard</strong><a class="headerlink" href="#dashboard" title="Permalink to this heading"></a></h1>
 <p>The goal is to provides a generic framework to perform various types of analysis from data quality assessment to model selection based on performance, fairness and robustness criteria.</p>
 <section id="rai-dashboard-features">
@@ -110,23 +134,14 @@
 -Dash is running on ...
 </pre></div>
 </div>
-<p><strong>Example</strong>:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt;INFO:redis_util:channel subscribed
-   INFO:redis_util:channel subscribed ai_requests
-   INFO:redis_util:changing current project from None to AdultDB_two_model
-   current project name:  AdultDB_two_model
-   Current proj name:  AdultDB_two_model
-   Dash is running on http://127.0.0.1:8050/
-</pre></div>
-</div>
+<p><strong>Example:</strong></p>
+<figure class="align-center">
+<a class="with-border reference internal image-reference" href="../_images/dash_example.png"><img alt="../_images/dash_example.png" class="with-border" src="../_images/dash_example.png" style="width: 474.59999999999997px; height: 201.0px;" /></a>
+</figure>
 </section>
 <section id="interaction-of-rai-dashboard">
 <h2><strong>Interaction of RAI Dashboard</strong><a class="headerlink" href="#interaction-of-rai-dashboard" title="Permalink to this heading"></a></h2>
 <p><strong>How it links to RAI project (via redis..)</strong></p>
-<ul class="simple">
-<li><p>host =”localhost”, port=6379, db=0</p></li>
-<li><p>We connect redis at localhost i.e 127.0.0.1 on default port 6379 at db 0</p></li>
-</ul>
 <figure class="align-center" id="id2">
 <a class="with-border reference internal image-reference" href="../_images/Dashboard_page.png"><img alt="RAI Dashboard Homepage" class="with-border" src="../_images/Dashboard_page.png" style="width: 570.0px; height: 350.0px;" /></a>
 <figcaption>

@@ -18,11 +18,12 @@
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Dashboard" href="Dashboard.html" />
-    <link rel="prev" title="PyTorch Integration" href="Pytorch%20Integration.html" /> 
+    <link rel="prev" title="Getting Started" href="Getting%20Started.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -44,7 +45,6 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="Installation.html"><strong>Installation</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="Getting%20Started.html"><strong>Getting Started</strong></a></li>
-<li class="toctree-l1"><a class="reference internal" href="Pytorch%20Integration.html"><strong>PyTorch Integration</strong></a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#"><strong>Demo Cases</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="Dashboard.html"><strong>Dashboard</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="Basic%20component%20of%20RAI%20Design.html"><strong>Basic component of RAI Design:</strong></a></li>
@@ -80,7 +80,31 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="demo-cases">
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="demo-cases">
 <span id="tutorial-demo"></span><h1><strong>Demo Cases</strong><a class="headerlink" href="#demo-cases" title="Permalink to this heading"></a></h1>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
@@ -90,7 +114,7 @@
 <li><p><strong>Run the demos by using.</strong></p></li>
 </ul>
 <hr class="docutils" />
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="sb">``</span>python demo_filename<span class="sb">``</span>.For instance
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="sb">``</span>python demo_filename<span class="sb">``</span> <span class="k">for</span> instance
 </pre></div>
 </div>
 <table class="docutils align-default">
@@ -132,7 +156,7 @@ the natural language modeling tasks.</p></td>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="Pytorch%20Integration.html" class="btn btn-neutral float-left" title="PyTorch Integration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Getting%20Started.html" class="btn btn-neutral float-left" title="Getting Started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="Dashboard.html" class="btn btn-neutral float-right" title="Dashboard" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

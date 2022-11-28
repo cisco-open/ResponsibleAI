@@ -37,28 +37,21 @@ The goal is to provides a generic framework to perform various types of analysis
 
 
 
-**Example**:
 
-.. code-block:: bash
+**Example:** 
 
-  >>>INFO:redis_util:channel subscribed
-     INFO:redis_util:channel subscribed ai_requests
-     INFO:redis_util:changing current project from None to AdultDB_two_model
-     current project name:  AdultDB_two_model
-     Current proj name:  AdultDB_two_model
-     Dash is running on http://127.0.0.1:8050/
+
+.. figure:: /images/dash_example.png
+   :class: with-border
+   :scale: 30 %
+   :align: center
+
 
 
 **Interaction of RAI Dashboard**
 ================================
 
 **How it links to RAI project (via redis..)**
-
-- host ="localhost", port=6379, db=0
-- We connect redis at localhost i.e 127.0.0.1 on default port 6379 at db 0
-
-
-
 
 
 .. figure:: /images/Dashboard_page.png

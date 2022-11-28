@@ -18,6 +18,7 @@
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -44,7 +45,6 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="Installation.html"><strong>Installation</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="Getting%20Started.html"><strong>Getting Started</strong></a></li>
-<li class="toctree-l1"><a class="reference internal" href="Pytorch%20Integration.html"><strong>PyTorch Integration</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="Tutorial%20Demo.html"><strong>Demo Cases</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="Dashboard.html"><strong>Dashboard</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="Basic%20component%20of%20RAI%20Design.html"><strong>Basic component of RAI Design:</strong></a></li>
@@ -56,11 +56,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="#contribution-of-users-to-expand-its-features"><strong>Contribution of users to expand its features</strong></a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#contributing-to-rai"><strong>Contributing to RAI</strong></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#we-develop-with-github"><strong>We Develop with Github</strong></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#any-contributions-you-make-will-be-under-the-apache-license-version-2"><strong>Any contributions you make will be under the Apache License, Version 2</strong></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#report-bugs-using-github-s-issues"><strong>Report bugs using Github’s</strong> Issues</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#license"><strong>License</strong></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#references"><strong>References</strong></a></li>
 </ul>
 </li>
 </ul>
@@ -93,16 +89,48 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="contribute-and-extend-rai">
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="contribute-and-extend-rai">
 <span id="id1"></span><h1><strong>Contribute and Extend RAI</strong><a class="headerlink" href="#contribute-and-extend-rai" title="Permalink to this heading"></a></h1>
 <ul class="simple">
 <li><p><strong>How to contribute and extend RAI (User Guide)</strong></p></li>
 </ul>
+<p>Here’s the short summary</p>
+<ul class="simple">
+<li><p>If you are a first-time contributor,</p></li>
+<li><p>Go to <a class="reference external" href="https://github.com/cisco-open/ResponsibleAI">ResponsibleAI</a> and click the “fork” button to create your own copy of the project from <cite>master</cite>.</p></li>
+<li><p>Clone the project to your local computer.</p></li>
+<li><p>Develop your contribution.</p></li>
+<li><p>Push your changes back to your fork on GitHub.</p></li>
+</ul>
 <section id="adding-metric-group">
 <h2><strong>Adding Metric Group</strong><a class="headerlink" href="#adding-metric-group" title="Permalink to this heading"></a></h2>
-<p><strong>What are its requirements?</strong></p>
+<p><strong>What are its requirements</strong></p>
 <ul class="simple">
-<li><p>To add a New metrics, we need to create 3 files inside Metrics</p></li>
+<li><p>To add a New metrics, we need to create 3 files inside Metrics folder.</p></li>
 </ul>
 <blockquote>
 <div><ul class="simple">
@@ -112,7 +140,7 @@
 </ul>
 </div></blockquote>
 <ul class="simple">
-<li><p>In <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> file - we have to import the py file that we have created inside the folder</p></li>
+<li><p>In <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> file  we have to import the python file that we have created inside the folder.</p></li>
 </ul>
 <blockquote>
 <div><p><strong>Example:</strong></p>
@@ -125,7 +153,7 @@
 </figure>
 <p><strong>How to expand RAI using Metric group</strong></p>
 <ul class="simple">
-<li><p>Inside <code class="docutils literal notranslate"><span class="pre">json</span> <span class="pre">file</span></code>, we need to  define parametrs as name, display_name, compatibility, dependency_list, tags, complexity_class, metrics.</p>
+<li><p>Inside <code class="docutils literal notranslate"><span class="pre">json</span> <span class="pre">file</span></code>, we need to define parametrs as name, display_name, compatibility, dependency_list, tags, complexity_class, metrics.</p>
 <dl class="field-list simple">
 <dt class="field-odd">parameter<span class="colon">:</span></dt>
 <dd class="field-odd"><p>name:</p>
@@ -160,7 +188,7 @@
 </figure>
 <p><strong>Create subclass of class and implement the method</strong></p>
 <ul class="simple">
-<li><p>We can create subclass of class and implement the methods</p></li>
+<li><p>We can create subclass of class and implement the methods.</p></li>
 <li><p>In <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">file</span></code> , we need to create a class for respective metric_group and we need to define methods for update and compute inside the class.</p></li>
 </ul>
 <p><strong>Example:</strong></p>
@@ -175,15 +203,15 @@
 <h2><strong>Adding Certificates</strong><a class="headerlink" href="#adding-certificates" title="Permalink to this heading"></a></h2>
 <p><strong>What are is requirements</strong></p>
 <ul class="simple">
-<li><p>To add a New Certificates , we need to create a json file inside a standard folder</p></li>
+<li><p>To add a New Certificates , we need to create a json file inside a standard folder.</p></li>
 </ul>
 <p><strong>How to expand RAI using Certificates</strong></p>
 <ul class="simple">
 <li><p>For certificates there are two key value pairs , first one meta and second one conditions.</p></li>
-<li><p>Inside meta we need to give diplay name, description, tags and level</p></li>
+<li><p>Inside meta we need to give diplay name, description, tags and level.</p></li>
 <li><p>Inside condition we need to give operator and terms.</p></li>
 </ul>
-<p><strong>create a certificate and implement</strong></p>
+<p><strong>Create a certificate and implement</strong></p>
 <ul class="simple">
 <li><p>Inside certificate folder, go to standard folder and their make a <code class="docutils literal notranslate"><span class="pre">json</span> <span class="pre">file</span></code> and fill all given parameters.</p>
 <dl class="field-list simple">
@@ -206,10 +234,9 @@
 </section>
 <section id="adding-analysis">
 <h2><strong>Adding Analysis</strong><a class="headerlink" href="#adding-analysis" title="Permalink to this heading"></a></h2>
-<p><strong>What are is requirements?</strong></p>
+<p><strong>What are is requirements</strong></p>
 <ul class="simple">
-<li><p>How to expand RAI using Analysis</p></li>
-<li><p>To add a New Analysis, we need to create 3 files inside Analysis folder</p></li>
+<li><p>To add a New Analysis, we need to create 3 files inside Analysis folder.</p></li>
 </ul>
 <blockquote>
 <div><ul class="simple">
@@ -219,7 +246,7 @@
 </ul>
 </div></blockquote>
 <ul class="simple">
-<li><p>In <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> file - we have to import the py file that we have created inside the folder</p></li>
+<li><p>In <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> file - we have to import the py file that we have created inside the folder.</p></li>
 </ul>
 <p><strong>Example:</strong></p>
 <figure class="align-center" id="id7">
@@ -265,7 +292,7 @@
 </figure>
 <p><strong>create subclass of class and implement the method</strong></p>
 <ul class="simple">
-<li><p>We can create subclass of class and implement the methods</p></li>
+<li><p>We can create subclass of class and implement the methods.</p></li>
 <li><p>In <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">file</span></code> , we need to create a class for respective Analysis and we need to define methods for initialize  ,compute, to_string, to_html inside the class.</p></li>
 </ul>
 <p><strong>Example:</strong></p>
@@ -289,9 +316,7 @@
 <li><p>Proposing new features</p></li>
 <li><p>Becoming a maintainer</p></li>
 </ul>
-</section>
-<section id="we-develop-with-github">
-<h2><strong>We Develop with Github</strong><a class="headerlink" href="#we-develop-with-github" title="Permalink to this heading"></a></h2>
+<p><strong>We Develop with Github</strong></p>
 <p>We use github to host code, to track issues and feature requests, as well as accept pull requests.</p>
 <p>Pull requests are the best way to propose changes to the codebase. We actively welcome your pull requests:</p>
 <ol class="arabic simple">
@@ -302,9 +327,7 @@
 <li><p>Make sure your code lints.</p></li>
 <li><p>Issue that pull request!</p></li>
 </ol>
-</section>
-<section id="any-contributions-you-make-will-be-under-the-apache-license-version-2">
-<h2><strong>Any contributions you make will be under the Apache License, Version 2</strong><a class="headerlink" href="#any-contributions-you-make-will-be-under-the-apache-license-version-2" title="Permalink to this heading"></a></h2>
+<p><strong>Any contributions you make will be under the Apache License, Version 2</strong></p>
 <ul class="simple">
 <li><p>In short, when you submit code changes, your submissions are understood to be under the same <a class="reference external" href="https://github.com/cisco-open/ResponsibleAI/blob/main/LICENSE">Apache License</a> that covers the project.</p></li>
 <li><p>Feel free to contact the maintainers if that’s a concern.</p></li>
@@ -326,15 +349,11 @@
 <li><p>What actually happened</p></li>
 <li><p>Notes (possibly including why you think this might be happening, or stuff you tried that didn’t work)</p></li>
 </ul>
-</section>
-<section id="license">
-<h2><strong>License</strong><a class="headerlink" href="#license" title="Permalink to this heading"></a></h2>
+<p><strong>License</strong></p>
 <ul class="simple">
 <li><p>By contributing, you agree that your contributions will be licensed under its <a class="reference external" href="https://github.com/cisco-open/ResponsibleAI/blob/main/LICENSE">Apache License</a>, Version 2.</p></li>
 </ul>
-</section>
-<section id="references">
-<h2><strong>References</strong><a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
+<p><strong>References</strong></p>
 <ul class="simple">
 <li><p>This document was adapted from  <a class="reference external" href="https://gist.github.com/briandk/3d2e8b3ec8daf5a27a62">here</a>.</p></li>
 </ul>

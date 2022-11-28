@@ -19,6 +19,7 @@
         <script src="../_static/doctools.js"></script>
         <script src="../_static/sphinx_highlight.js"></script>
         <script src="../_static/tabs.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -49,7 +50,6 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="Getting%20Started.html"><strong>Getting Started</strong></a></li>
-<li class="toctree-l1"><a class="reference internal" href="Pytorch%20Integration.html"><strong>PyTorch Integration</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="Tutorial%20Demo.html"><strong>Demo Cases</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="Dashboard.html"><strong>Dashboard</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="Basic%20component%20of%20RAI%20Design.html"><strong>Basic component of RAI Design:</strong></a></li>
@@ -85,7 +85,31 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="installation">
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="installation">
 <span id="id1"></span><h1><strong>Installation</strong><a class="headerlink" href="#installation" title="Permalink to this heading"></a></h1>
 <section id="windows-10">
 <h2><strong>Windows 10</strong><a class="headerlink" href="#windows-10" title="Permalink to this heading"></a></h2>
@@ -99,7 +123,7 @@
 </div><div aria-labelledby="tab-0-UHl0aG9uIFZlcnNpb24=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-UHl0aG9uIFZlcnNpb24=" name="UHl0aG9uIFZlcnNpb24=" role="tabpanel" tabindex="0"><p>3.9.13- <a class="reference external" href="https://www.python.org/downloads/windows/">https://www.python.org/downloads/windows/</a></p>
 </div><div aria-labelledby="tab-0-UGlwIFZlcnNpb24=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-UGlwIFZlcnNpb24=" name="UGlwIFZlcnNpb24=" role="tabpanel" tabindex="0"><p>22.3</p>
 </div><div aria-labelledby="tab-0-Q2xvbmUgR2l0LVJlcG8=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-Q2xvbmUgR2l0LVJlcG8=" name="Q2xvbmUgR2l0LVJlcG8=" role="tabpanel" tabindex="0"><p><a class="reference external" href="https://github.com/cisco-open/ResponsibleAI.git">https://github.com/cisco-open/ResponsibleAI.git</a></p>
-</div><div aria-labelledby="tab-0-UmVkaXM=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-UmVkaXM=" name="UmVkaXM=" role="tabpanel" tabindex="0"><p>downloaded using the .msi file at <a class="reference external" href="https://github.com/microsoftarchive/redis/releases/tag/win-3.2.100">https://github.com/microsoftarchive/redis/releases/tag/win-3.2.100</a></p>
+</div><div aria-labelledby="tab-0-UmVkaXM=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-UmVkaXM=" name="UmVkaXM=" role="tabpanel" tabindex="0"><p>Downloaded using the .msi file at <a class="reference external" href="https://github.com/microsoftarchive/redis/releases/tag/win-3.2.100">https://github.com/microsoftarchive/redis/releases/tag/win-3.2.100</a></p>
 </div></div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -117,7 +141,7 @@
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>If you run any Error.
+<p>If you run into any Error.
 For instance:Package could not install <code class="docutils literal notranslate"><span class="pre">plotly</span></code>.
 Install <code class="docutils literal notranslate"><span class="pre">plotly</span></code> separately with the following command
 <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">'plotly'</span> <span class="pre">--user</span></code>.</p>

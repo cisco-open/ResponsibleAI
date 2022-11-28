@@ -34,7 +34,7 @@ Some packages uses Visual C++ 14.0 BuildTools. You can also install the build to
 
    .. group-tab:: Redis
 
-     downloaded using the .msi file at https://github.com/microsoftarchive/redis/releases/tag/win-3.2.100
+     Downloaded using the .msi file at https://github.com/microsoftarchive/redis/releases/tag/win-3.2.100
 
 
  
@@ -57,7 +57,7 @@ Here is a quick demo of how to install a package locally and run in the environm
 
 
 
-.. warning:: If you run any Error.
+.. warning:: If you run into any Error.
    For instance:Package could not install ``plotly``.
    Install ``plotly`` separately with the following command 
    ``python pip install 'plotly' --user``.

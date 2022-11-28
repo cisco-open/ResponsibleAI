@@ -16,7 +16,7 @@
 
 .. code-block:: bash
 
-   ``python demo_filename``.For instance
+   ``python demo_filename`` for instance
 
  
 

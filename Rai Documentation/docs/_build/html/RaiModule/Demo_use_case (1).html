@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RAI Dashboard Tutorial - Getting Started &mdash; RAI Documentation 0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> RAI Documentation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guide:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Installation.html"><strong>Installation</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="Getting%20Started.html"><strong>Getting Started</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="Tutorial%20Demo.html"><strong>Demo Cases</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="Dashboard.html"><strong>Dashboard</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="Basic%20component%20of%20RAI%20Design.html"><strong>Basic component of RAI Design:</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="Contribute%20and%20extend%20RAI.html"><strong>Contribute and Extend RAI</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="Contribute%20and%20extend%20RAI.html#contribution-of-users-to-expand-its-features"><strong>Contribution of users to expand its features</strong></a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference Class</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../rai.html">Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">RAI Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>RAI Dashboard Tutorial - Getting Started</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/RaiModule/Demo_use_case (1).ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars and line breaks on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+    white-space: pre;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt .copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+.jp-RenderedHTMLCommon table,
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+.jp-RenderedHTMLCommon thead,
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+.jp-RenderedHTMLCommon tr,
+.jp-RenderedHTMLCommon th,
+.jp-RenderedHTMLCommon td,
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+.jp-RenderedHTMLCommon th,
+div.rendered_html th {
+  font-weight: bold;
+}
+.jp-RenderedHTMLCommon tbody tr:nth-child(odd),
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+.jp-RenderedHTMLCommon tbody tr:hover,
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="RAI-Dashboard-Tutorial---Getting-Started">
+<h1>RAI Dashboard Tutorial - Getting Started<a class="headerlink" href="#RAI-Dashboard-Tutorial---Getting-Started" title="Permalink to this heading"></a></h1>
+<p>Github repo: <a class="reference external" href="https://github.com/cisco-open/ResponsibleAI.git">https://github.com/cisco-open/ResponsibleAI.git</a></p>
+<section id="Introduction">
+<h2>Introduction<a class="headerlink" href="#Introduction" title="Permalink to this heading"></a></h2>
+<p>In this notebook, you will learn the simple Demo How RAI can be used without the dashboard to calculate and report on the metrics for a machine learning task.</p>
+</section>
+<section id="Install-Dependencies-and-RAI-Using-Pip">
+<h2>Install Dependencies and RAI Using Pip<a class="headerlink" href="#Install-Dependencies-and-RAI-Using-Pip" title="Permalink to this heading"></a></h2>
+<p>List of full dependencies can be found in the <a class="reference external" href="https://github.com/cisco-open/ResponsibleAI/blob/main/requirements.txt">README.md</a>.</p>
+<p>Project Requires Redis. Redis can be downloaded using the .msi file at:https://github.com/microsoftarchive/redis/releases/tag/win-3.2.100.</p>
+<p>Please also run<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-r</span> <span class="pre">requirements.txt</span></code></p>
+<p>Please first install the required packages found in requirements.txt. RAI can then be installed using <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">--editable</span></code></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">inspect</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">from</span> <span class="nn">RAI.AISystem</span> <span class="kn">import</span> <span class="n">AISystem</span><span class="p">,</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">RAI.Analysis</span> <span class="kn">import</span> <span class="n">AnalysisManager</span>
+<span class="kn">from</span> <span class="nn">RAI.dataset</span> <span class="kn">import</span> <span class="n">NumpyData</span><span class="p">,</span> <span class="n">Dataset</span>
+<span class="kn">from</span> <span class="nn">RAI.utils</span> <span class="kn">import</span> <span class="n">df_to_RAI</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">RandomForestClassifier</span>
+<span class="n">current_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getfile</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">currentframe</span><span class="p">())))</span>
+<span class="n">parent_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">current_dir</span><span class="p">)</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">parent_dir</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>It starts by importing the necessary libraries</p>
+</section>
+<section id="Get-Dataset">
+<h2>Get Dataset<a class="headerlink" href="#Get-Dataset" title="Permalink to this heading"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_path</span> <span class="o">=</span> <span class="s2">&quot;../data/adult/&quot;</span>
+<span class="n">train_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_path</span> <span class="o">+</span> <span class="s2">&quot;train.csv&quot;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">skipinitialspace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">na_values</span><span class="o">=</span><span class="s2">&quot;?&quot;</span><span class="p">)</span>
+<span class="n">test_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_path</span> <span class="o">+</span> <span class="s2">&quot;test.csv&quot;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">skipinitialspace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">na_values</span><span class="o">=</span><span class="s2">&quot;?&quot;</span><span class="p">)</span>
+<span class="n">all_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">train_data</span><span class="p">,</span> <span class="n">test_data</span><span class="p">],</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">FileNotFoundError</span>                         Traceback (most recent call last)
+Input <span class="ansi-green-intense-fg ansi-bold">In [2]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 2&gt;</span><span class="ansi-blue-intense-fg ansi-bold">()</span>
+<span class="ansi-green-fg">      1</span> data_path <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">../data/adult/</span><span style="color: rgb(175,0,0)">&#34;</span>
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 2</span> train_data <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">pd</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">read_csv</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">data_path</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">+</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">train.csv</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">header</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">0</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">skipinitialspace</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg ansi-bold" style="color: rgb(0,135,0)">True</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">na_values</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">?</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg">      3</span> test_data <span style="color: rgb(98,98,98)">=</span> pd<span style="color: rgb(98,98,98)">.</span>read_csv(data_path <span style="color: rgb(98,98,98)">+</span> <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">test.csv</span><span style="color: rgb(175,0,0)">&#34;</span>, header<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(98,98,98)">0</span>, skipinitialspace<span style="color: rgb(98,98,98)">=</span><span class="ansi-bold" style="color: rgb(0,135,0)">True</span>, na_values<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">?</span><span style="color: rgb(175,0,0)">&#34;</span>)
+<span class="ansi-green-fg">      4</span> all_data <span style="color: rgb(98,98,98)">=</span> pd<span style="color: rgb(98,98,98)">.</span>concat([train_data, test_data], ignore_index<span style="color: rgb(98,98,98)">=</span><span class="ansi-bold" style="color: rgb(0,135,0)">True</span>)
+
+File <span class="ansi-green-intense-fg ansi-bold">~\AppData\Roaming\Python\Python39\site-packages\pandas\util\_decorators.py:311</span>, in <span class="ansi-cyan-fg">deprecate_nonkeyword_arguments.&lt;locals&gt;.decorate.&lt;locals&gt;.wrapper</span><span class="ansi-blue-intense-fg ansi-bold">(*args, **kwargs)</span>
+<span class="ansi-green-fg">    305</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span style="color: rgb(0,135,0)">len</span>(args) <span style="color: rgb(98,98,98)">&gt;</span> num_allow_args:
+<span class="ansi-green-fg">    306</span>     warnings<span style="color: rgb(98,98,98)">.</span>warn(
+<span class="ansi-green-fg">    307</span>         msg<span style="color: rgb(98,98,98)">.</span>format(arguments<span style="color: rgb(98,98,98)">=</span>arguments),
+<span class="ansi-green-fg">    308</span>         <span class="ansi-bold" style="color: rgb(215,95,95)">FutureWarning</span>,
+<span class="ansi-green-fg">    309</span>         stacklevel<span style="color: rgb(98,98,98)">=</span>stacklevel,
+<span class="ansi-green-fg">    310</span>     )
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 311</span> <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> func(<span style="color: rgb(98,98,98)">*</span>args, <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>kwargs)
+
+File <span class="ansi-green-intense-fg ansi-bold">~\AppData\Roaming\Python\Python39\site-packages\pandas\io\parsers\readers.py:586</span>, in <span class="ansi-cyan-fg">read_csv</span><span class="ansi-blue-intense-fg ansi-bold">(filepath_or_buffer, sep, delimiter, header, names, index_col, usecols, squeeze, prefix, mangle_dupe_cols, dtype, engine, converters, true_values, false_values, skipinitialspace, skiprows, skipfooter, nrows, na_values, keep_default_na, na_filter, verbose, skip_blank_lines, parse_dates, infer_datetime_format, keep_date_col, date_parser, dayfirst, cache_dates, iterator, chunksize, compression, thousands, decimal, lineterminator, quotechar, quoting, doublequote, escapechar, comment, encoding, encoding_errors, dialect, error_bad_lines, warn_bad_lines, on_bad_lines, delim_whitespace, low_memory, memory_map, float_precision, storage_options)</span>
+<span class="ansi-green-fg">    571</span> kwds_defaults <span style="color: rgb(98,98,98)">=</span> _refine_defaults_read(
+<span class="ansi-green-fg">    572</span>     dialect,
+<span class="ansi-green-fg">    573</span>     delimiter,
+<span class="ansi-green-intense-fg ansi-bold">   (...)</span>
+<span class="ansi-green-fg">    582</span>     defaults<span style="color: rgb(98,98,98)">=</span>{<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">delimiter</span><span style="color: rgb(175,0,0)">&#34;</span>: <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">,</span><span style="color: rgb(175,0,0)">&#34;</span>},
+<span class="ansi-green-fg">    583</span> )
+<span class="ansi-green-fg">    584</span> kwds<span style="color: rgb(98,98,98)">.</span>update(kwds_defaults)
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 586</span> <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> <span class="ansi-yellow-bg">_read</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">filepath_or_buffer</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">kwds</span><span class="ansi-yellow-bg">)</span>
+
+File <span class="ansi-green-intense-fg ansi-bold">~\AppData\Roaming\Python\Python39\site-packages\pandas\io\parsers\readers.py:482</span>, in <span class="ansi-cyan-fg">_read</span><span class="ansi-blue-intense-fg ansi-bold">(filepath_or_buffer, kwds)</span>
+<span class="ansi-green-fg">    479</span> _validate_names(kwds<span style="color: rgb(98,98,98)">.</span>get(<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">names</span><span style="color: rgb(175,0,0)">&#34;</span>, <span class="ansi-bold" style="color: rgb(0,135,0)">None</span>))
+<span class="ansi-green-fg">    481</span> <span style="color: rgb(95,135,135)"># Create the parser.</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 482</span> parser <span style="color: rgb(98,98,98)">=</span> TextFileReader(filepath_or_buffer, <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>kwds)
+<span class="ansi-green-fg">    484</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> chunksize <span class="ansi-bold" style="color: rgb(175,0,255)">or</span> iterator:
+<span class="ansi-green-fg">    485</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> parser
+
+File <span class="ansi-green-intense-fg ansi-bold">~\AppData\Roaming\Python\Python39\site-packages\pandas\io\parsers\readers.py:811</span>, in <span class="ansi-cyan-fg">TextFileReader.__init__</span><span class="ansi-blue-intense-fg ansi-bold">(self, f, engine, **kwds)</span>
+<span class="ansi-green-fg">    808</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">has_index_names</span><span style="color: rgb(175,0,0)">&#34;</span> <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> kwds:
+<span class="ansi-green-fg">    809</span>     <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>options[<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">has_index_names</span><span style="color: rgb(175,0,0)">&#34;</span>] <span style="color: rgb(98,98,98)">=</span> kwds[<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">has_index_names</span><span style="color: rgb(175,0,0)">&#34;</span>]
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 811</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_engine <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">_make_engine</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">engine</span><span class="ansi-yellow-bg">)</span>
+
+File <span class="ansi-green-intense-fg ansi-bold">~\AppData\Roaming\Python\Python39\site-packages\pandas\io\parsers\readers.py:1040</span>, in <span class="ansi-cyan-fg">TextFileReader._make_engine</span><span class="ansi-blue-intense-fg ansi-bold">(self, engine)</span>
+<span class="ansi-green-fg">   1036</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> <span class="ansi-bold" style="color: rgb(215,95,95)">ValueError</span>(
+<span class="ansi-green-fg">   1037</span>         <span style="color: rgb(175,0,0)">f</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">Unknown engine: </span><span class="ansi-bold" style="color: rgb(175,95,135)">{</span>engine<span class="ansi-bold" style="color: rgb(175,95,135)">}</span><span style="color: rgb(175,0,0)"> (valid options are </span><span class="ansi-bold" style="color: rgb(175,95,135)">{</span>mapping<span style="color: rgb(98,98,98)">.</span>keys()<span class="ansi-bold" style="color: rgb(175,95,135)">}</span><span style="color: rgb(175,0,0)">)</span><span style="color: rgb(175,0,0)">&#34;</span>
+<span class="ansi-green-fg">   1038</span>     )
+<span class="ansi-green-fg">   1039</span> <span style="color: rgb(95,135,135)"># error: Too many arguments for &#34;ParserBase&#34;</span>
+<span class="ansi-green-intense-fg ansi-bold">-&gt; 1040</span> <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> mapping[engine](<span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>f, <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span><span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>options)
+
+File <span class="ansi-green-intense-fg ansi-bold">~\AppData\Roaming\Python\Python39\site-packages\pandas\io\parsers\c_parser_wrapper.py:51</span>, in <span class="ansi-cyan-fg">CParserWrapper.__init__</span><span class="ansi-blue-intense-fg ansi-bold">(self, src, **kwds)</span>
+<span class="ansi-green-fg">     48</span> kwds[<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">usecols</span><span style="color: rgb(175,0,0)">&#34;</span>] <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>usecols
+<span class="ansi-green-fg">     50</span> <span style="color: rgb(95,135,135)"># open handles</span>
+<span class="ansi-green-intense-fg ansi-bold">---&gt; 51</span> <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">_open_handles</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">src</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">kwds</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg">     52</span> <span class="ansi-bold" style="color: rgb(0,135,0)">assert</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>handles <span class="ansi-bold" style="color: rgb(175,0,255)">is</span> <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> <span class="ansi-bold" style="color: rgb(0,135,0)">None</span>
+<span class="ansi-green-fg">     54</span> <span style="color: rgb(95,135,135)"># Have to pass int, would break tests using TextReader directly otherwise :(</span>
+
+File <span class="ansi-green-intense-fg ansi-bold">~\AppData\Roaming\Python\Python39\site-packages\pandas\io\parsers\base_parser.py:222</span>, in <span class="ansi-cyan-fg">ParserBase._open_handles</span><span class="ansi-blue-intense-fg ansi-bold">(self, src, kwds)</span>
+<span class="ansi-green-fg">    218</span> <span class="ansi-bold" style="color: rgb(0,135,0)">def</span> <span style="color: rgb(0,0,255)">_open_handles</span>(<span style="color: rgb(0,135,0)">self</span>, src: FilePathOrBuffer, kwds: <span style="color: rgb(0,135,0)">dict</span>[<span style="color: rgb(0,135,0)">str</span>, Any]) <span style="color: rgb(98,98,98)">-</span><span style="color: rgb(98,98,98)">&gt;</span> <span class="ansi-bold" style="color: rgb(0,135,0)">None</span>:
+<span class="ansi-green-fg">    219</span>     <span style="color: rgb(175,0,0)">&#34;&#34;&#34;</span>
+<span class="ansi-green-fg">    220</span> <span style="color: rgb(175,0,0)">    Let the readers open IOHandles after they are done with their potential raises.</span>
+<span class="ansi-green-fg">    221</span> <span style="color: rgb(175,0,0)">    &#34;&#34;&#34;</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 222</span>     <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>handles <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">get_handle</span><span class="ansi-yellow-bg">(</span>
+<span class="ansi-green-fg">    223</span> <span class="ansi-yellow-bg">        </span><span class="ansi-yellow-bg">src</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg">    224</span> <span class="ansi-yellow-bg">        </span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">r</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg">    225</span> <span class="ansi-yellow-bg">        </span><span class="ansi-yellow-bg">encoding</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">kwds</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">get</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">encoding</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg ansi-bold" style="color: rgb(0,135,0)">None</span><span class="ansi-yellow-bg">)</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg">    226</span> <span class="ansi-yellow-bg">        </span><span class="ansi-yellow-bg">compression</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">kwds</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">get</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">compression</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg ansi-bold" style="color: rgb(0,135,0)">None</span><span class="ansi-yellow-bg">)</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg">    227</span> <span class="ansi-yellow-bg">        </span><span class="ansi-yellow-bg">memory_map</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">kwds</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">get</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">memory_map</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg ansi-bold" style="color: rgb(0,135,0)">False</span><span class="ansi-yellow-bg">)</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg">    228</span> <span class="ansi-yellow-bg">        </span><span class="ansi-yellow-bg">storage_options</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">kwds</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">get</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">storage_options</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg ansi-bold" style="color: rgb(0,135,0)">None</span><span class="ansi-yellow-bg">)</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg">    229</span> <span class="ansi-yellow-bg">        </span><span class="ansi-yellow-bg">errors</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">kwds</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">get</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">encoding_errors</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">strict</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg">)</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg">    230</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">)</span>
+
+File <span class="ansi-green-intense-fg ansi-bold">~\AppData\Roaming\Python\Python39\site-packages\pandas\io\common.py:702</span>, in <span class="ansi-cyan-fg">get_handle</span><span class="ansi-blue-intense-fg ansi-bold">(path_or_buf, mode, encoding, compression, memory_map, is_text, errors, storage_options)</span>
+<span class="ansi-green-fg">    697</span> <span class="ansi-bold" style="color: rgb(0,135,0)">elif</span> <span style="color: rgb(0,135,0)">isinstance</span>(handle, <span style="color: rgb(0,135,0)">str</span>):
+<span class="ansi-green-fg">    698</span>     <span style="color: rgb(95,135,135)"># Check whether the filename is to be opened in binary mode.</span>
+<span class="ansi-green-fg">    699</span>     <span style="color: rgb(95,135,135)"># Binary mode does not support &#39;encoding&#39; and &#39;newline&#39;.</span>
+<span class="ansi-green-fg">    700</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> ioargs<span style="color: rgb(98,98,98)">.</span>encoding <span class="ansi-bold" style="color: rgb(175,0,255)">and</span> <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">b</span><span style="color: rgb(175,0,0)">&#34;</span> <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> ioargs<span style="color: rgb(98,98,98)">.</span>mode:
+<span class="ansi-green-fg">    701</span>         <span style="color: rgb(95,135,135)"># Encoding</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 702</span>         handle <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">open</span><span class="ansi-yellow-bg">(</span>
+<span class="ansi-green-fg">    703</span> <span class="ansi-yellow-bg">            </span><span class="ansi-yellow-bg">handle</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg">    704</span> <span class="ansi-yellow-bg">            </span><span class="ansi-yellow-bg">ioargs</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">mode</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg">    705</span> <span class="ansi-yellow-bg">            </span><span class="ansi-yellow-bg">encoding</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">ioargs</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">encoding</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg">    706</span> <span class="ansi-yellow-bg">            </span><span class="ansi-yellow-bg">errors</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">errors</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg">    707</span> <span class="ansi-yellow-bg">            </span><span class="ansi-yellow-bg">newline</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg">    708</span> <span class="ansi-yellow-bg">        </span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg">    709</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">else</span>:
+<span class="ansi-green-fg">    710</span>         <span style="color: rgb(95,135,135)"># Binary mode</span>
+<span class="ansi-green-fg">    711</span>         handle <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(0,135,0)">open</span>(handle, ioargs<span style="color: rgb(98,98,98)">.</span>mode)
+
+<span class="ansi-red-intense-fg ansi-bold">FileNotFoundError</span>: [Errno 2] No such file or directory: &#39;../data/adult/train.csv&#39;
+</pre></div></div>
+</div>
+<p>It read the data from the file train.csv and test.csv into a pandas DataFrame object named all_data.</p>
+<p>Next,it create another Dataframe with just test data called xTest and yTest.</p>
+<p>Finally, it create an instance of Dataset that has both train and test datasets inside of it.</p>
+</section>
+<section id="Get-X-and-y-data,-as-well-as-RAI-Meta-information-from-the-Dataframe">
+<h2>Get X and y data, as well as RAI Meta information from the Dataframe<a class="headerlink" href="#Get-X-and-y-data,-as-well-as-RAI-Meta-information-from-the-Dataframe" title="Permalink to this heading"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rai_meta_information</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">rai_output_feature</span> <span class="o">=</span> <span class="n">df_to_RAI</span><span class="p">(</span><span class="n">all_data</span><span class="p">,</span>
+<span class="n">target_column</span><span class="o">=</span><span class="s2">&quot;income-per-year&quot;</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="s2">&quot;Scalar&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>                                 Traceback (most recent call last)
+Input <span class="ansi-green-intense-fg ansi-bold">In [3]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 1&gt;</span><span class="ansi-blue-intense-fg ansi-bold">()</span>
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 1</span> rai_meta_information, X, y, rai_output_feature <span style="color: rgb(98,98,98)">=</span> df_to_RAI(<span class="ansi-yellow-bg">all_data</span>,
+<span class="ansi-green-fg">      2</span> target_column<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">income-per-year</span><span style="color: rgb(175,0,0)">&#34;</span>, normalize<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">Scalar</span><span style="color: rgb(175,0,0)">&#34;</span>)
+
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>: name &#39;all_data&#39; is not defined
+</pre></div></div>
+</div>
+<p>It will create a Dataframe with two columns: X and y.</p>
+<p>The first column, X, is the input data for the model.</p>
+<p>The second column, y, is the output of the model and then creates a new Dataframe called rai_output_feature that contains all of the features from RAI’s output feature set.</p>
+</section>
+<section id="Create-Data-Splits-and-pass-them-to-RAI">
+<h2>Create Data Splits and pass them to RAI<a class="headerlink" href="#Create-Data-Splits-and-pass-them-to-RAI" title="Permalink to this heading"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xTrain</span><span class="p">,</span> <span class="n">xTest</span><span class="p">,</span> <span class="n">yTrain</span><span class="p">,</span> <span class="n">yTest</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">stratify</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">({</span><span class="s2">&quot;train&quot;</span><span class="p">:</span> <span class="n">NumpyData</span><span class="p">(</span><span class="n">xTrain</span><span class="p">,</span> <span class="n">yTrain</span><span class="p">),</span> <span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="n">NumpyData</span><span class="p">(</span><span class="n">xTest</span><span class="p">,</span> <span class="n">yTest</span><span class="p">)})</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>                                 Traceback (most recent call last)
+Input <span class="ansi-green-intense-fg ansi-bold">In [4]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 1&gt;</span><span class="ansi-blue-intense-fg ansi-bold">()</span>
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 1</span> xTrain, xTest, yTrain, yTest <span style="color: rgb(98,98,98)">=</span> train_test_split(<span class="ansi-yellow-bg">X</span>, y, random_state<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(98,98,98)">1</span>, stratify<span style="color: rgb(98,98,98)">=</span>y)
+<span class="ansi-green-fg">      2</span> dataset <span style="color: rgb(98,98,98)">=</span> Dataset({<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">train</span><span style="color: rgb(175,0,0)">&#34;</span>: NumpyData(xTrain, yTrain), <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">test</span><span style="color: rgb(175,0,0)">&#34;</span>: NumpyData(xTest, yTest)})
+
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>: name &#39;X&#39; is not defined
+</pre></div></div>
+</div>
+<p>It splits the training set into two parts: xTrain and yTrain.</p>
+<p>Next it create another Dataframe with just test data called xTest and yTest.</p>
+<p>Finally,it create an instance of Dataset that has both train and test datasets inside of it.</p>
+</section>
+<section id="Create-Model-and-RAIs-representation-of-it">
+<h2>Create Model and RAIs representation of it<a class="headerlink" href="#Create-Model-and-RAIs-representation-of-it" title="Permalink to this heading"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">clf</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">agent</span><span class="o">=</span><span class="n">clf</span><span class="p">,</span> <span class="n">output_features</span><span class="o">=</span><span class="n">rai_output_feature</span><span class="p">,</span>
+<span class="n">name</span><span class="o">=</span><span class="s2">&quot;cisco_income_ai&quot;</span><span class="p">,</span> <span class="n">predict_fun</span><span class="o">=</span><span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">,</span>
+<span class="n">predict_prob_fun</span><span class="o">=</span><span class="n">clf</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">,</span>
+<span class="n">description</span><span class="o">=</span><span class="s2">&quot;Income Prediction AI&quot;</span><span class="p">,</span> <span class="n">model_class</span><span class="o">=</span><span class="s2">&quot;RFC&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>                                 Traceback (most recent call last)
+Input <span class="ansi-green-intense-fg ansi-bold">In [5]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 2&gt;</span><span class="ansi-blue-intense-fg ansi-bold">()</span>
+<span class="ansi-green-fg">      1</span> clf <span style="color: rgb(98,98,98)">=</span> RandomForestClassifier(n_estimators<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(98,98,98)">4</span>, max_depth<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(98,98,98)">6</span>)
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 2</span> model <span style="color: rgb(98,98,98)">=</span> Model(agent<span style="color: rgb(98,98,98)">=</span>clf, output_features<span style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">rai_output_feature</span>,
+<span class="ansi-green-fg">      3</span> name<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">cisco_income_ai</span><span style="color: rgb(175,0,0)">&#34;</span>, predict_fun<span style="color: rgb(98,98,98)">=</span>clf<span style="color: rgb(98,98,98)">.</span>predict,
+<span class="ansi-green-fg">      4</span> predict_prob_fun<span style="color: rgb(98,98,98)">=</span>clf<span style="color: rgb(98,98,98)">.</span>predict_proba,
+<span class="ansi-green-fg">      5</span> description<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">Income Prediction AI</span><span style="color: rgb(175,0,0)">&#34;</span>, model_class<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">RFC</span><span style="color: rgb(175,0,0)">&#34;</span>)
+
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>: name &#39;rai_output_feature&#39; is not defined
+</pre></div></div>
+</div>
+<p>It Create a Random Forest Classifier object with 4 estimators and 6 trees.</p>
+<p>The model is then created, which has the attribute set to clf, output_features set to rai_output_feature, name “cisco_income_ai”, predict function set to clf.predict, predict probability function set to clf.predict_proba, description “Income Prediction AI”, and model classed as RFC (Random Forest Classifier).</p>
+<p>It creates a Random Forest Classifier model and then uses it to predict the income of an individual.</p>
+</section>
+<section id="Create-RAI-AISystem-to-pass-all-relevant-data-to-RAI">
+<h2>Create RAI AISystem to pass all relevant data to RAI<a class="headerlink" href="#Create-RAI-AISystem-to-pass-all-relevant-data-to-RAI" title="Permalink to this heading"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ai</span> <span class="o">=</span> <span class="n">AISystem</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;income_classification&quot;</span><span class="p">,</span>  <span class="n">task</span><span class="o">=</span><span class="s1">&#39;binary_classification&#39;</span><span class="p">,</span>
+             <span class="n">meta_database</span><span class="o">=</span><span class="n">rai_meta_information</span><span class="p">,</span>
+             <span class="n">dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
+
+<span class="n">configuration</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;fairness&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;priv_group&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;race&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;privileged&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;unprivileged&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}},</span>
+                <span class="s2">&quot;protected_attributes&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;race&quot;</span><span class="p">],</span> <span class="s2">&quot;positive_label&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
+                <span class="s2">&quot;time_complexity&quot;</span><span class="p">:</span> <span class="s2">&quot;polynomial&quot;</span><span class="p">}</span>
+<span class="n">ai</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="n">user_config</span><span class="o">=</span><span class="n">configuration</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>                                 Traceback (most recent call last)
+Input <span class="ansi-green-intense-fg ansi-bold">In [6]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 1&gt;</span><span class="ansi-blue-intense-fg ansi-bold">()</span>
+<span class="ansi-green-fg">      1</span> ai <span style="color: rgb(98,98,98)">=</span> AISystem(name<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">income_classification</span><span style="color: rgb(175,0,0)">&#34;</span>,  task<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">binary_classification</span><span style="color: rgb(175,0,0)">&#39;</span>,
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 2</span>              meta_database<span style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">rai_meta_information</span>,
+<span class="ansi-green-fg">      3</span>              dataset<span style="color: rgb(98,98,98)">=</span>dataset, model<span style="color: rgb(98,98,98)">=</span>model)
+<span class="ansi-green-fg">      5</span> configuration <span style="color: rgb(98,98,98)">=</span> {<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">fairness</span><span style="color: rgb(175,0,0)">&#34;</span>: {<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">priv_group</span><span style="color: rgb(175,0,0)">&#34;</span>: {<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">race</span><span style="color: rgb(175,0,0)">&#34;</span>: {<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">privileged</span><span style="color: rgb(175,0,0)">&#34;</span>: <span style="color: rgb(98,98,98)">1</span>, <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">unprivileged</span><span style="color: rgb(175,0,0)">&#34;</span>: <span style="color: rgb(98,98,98)">0</span>}},
+<span class="ansi-green-fg">      6</span>                 <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">protected_attributes</span><span style="color: rgb(175,0,0)">&#34;</span>: [<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">race</span><span style="color: rgb(175,0,0)">&#34;</span>], <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">positive_label</span><span style="color: rgb(175,0,0)">&#34;</span>: <span style="color: rgb(98,98,98)">1</span>},
+<span class="ansi-green-fg">      7</span>                 <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">time_complexity</span><span style="color: rgb(175,0,0)">&#34;</span>: <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">polynomial</span><span style="color: rgb(175,0,0)">&#34;</span>}
+<span class="ansi-green-fg">      8</span> ai<span style="color: rgb(98,98,98)">.</span>initialize(user_config<span style="color: rgb(98,98,98)">=</span>configuration)
+
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>: name &#39;rai_meta_information&#39; is not defined
+</pre></div></div>
+</div>
+<p>It creates a new AISystem called “income_classification” with the name of income_classification.</p>
+<p>The task is set to binary classification, and the meta-database is set to rai_meta information. The dataset is then passed in as well as model.</p>
+<p>Next, it create a configuration object that has fairness. In fairness, there are three groups: privileged (priv), unprivileged (unpriv), and race.The configuration section contains information about what data will be used for this AISystem.</p>
+<p>In this case, it has two values that are relevant: priv_group which defines how privileged or unprivileged people are in terms of race, and fairness which defines how much fairness there should be in terms of privilege groups.</p>
+</section>
+<section id="Train-the-model,-generate-predictions">
+<h2>Train the model, generate predictions<a class="headerlink" href="#Train-the-model,-generate-predictions" title="Permalink to this heading"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">xTrain</span><span class="p">,</span> <span class="n">yTrain</span><span class="p">)</span>
+<span class="n">test_predictions</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">xTest</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>                                 Traceback (most recent call last)
+Input <span class="ansi-green-intense-fg ansi-bold">In [7]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 1&gt;</span><span class="ansi-blue-intense-fg ansi-bold">()</span>
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 1</span> clf<span style="color: rgb(98,98,98)">.</span>fit(<span class="ansi-yellow-bg">xTrain</span>, yTrain)
+<span class="ansi-green-fg">      2</span> test_predictions <span style="color: rgb(98,98,98)">=</span> clf<span style="color: rgb(98,98,98)">.</span>predict(xTest)
+
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>: name &#39;xTrain&#39; is not defined
+</pre></div></div>
+</div>
+<p>It then trains the model on a training set of data, and generates predictions for a test set of data.</p>
+</section>
+<section id="Pass-predictions-to-RAI">
+<h2>Pass predictions to RAI<a class="headerlink" href="#Pass-predictions-to-RAI" title="Permalink to this heading"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ai</span><span class="o">.</span><span class="n">compute</span><span class="p">({</span><span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;predict&quot;</span><span class="p">:</span> <span class="n">test_predictions</span><span class="p">}},</span> <span class="n">tag</span><span class="o">=</span><span class="s1">&#39;model&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>                                 Traceback (most recent call last)
+Input <span class="ansi-green-intense-fg ansi-bold">In [8]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 1&gt;</span><span class="ansi-blue-intense-fg ansi-bold">()</span>
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 1</span> <span class="ansi-yellow-bg">ai</span><span style="color: rgb(98,98,98)">.</span>compute({<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">test</span><span style="color: rgb(175,0,0)">&#34;</span>: {<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">predict</span><span style="color: rgb(175,0,0)">&#34;</span>: test_predictions}}, tag<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">model</span><span style="color: rgb(175,0,0)">&#39;</span>)
+
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>: name &#39;ai&#39; is not defined
+</pre></div></div>
+</div>
+<p>Generated Predictions for a test set of data passes these predictions to RAI, which returns an object with two fields: test and predict.</p>
+<p>The first field is called test, and it contains an array of objects that represent the prediction results for each row in xTest.</p>
+<p>The second field is called predict, and it contains one object that represents the predicted value for each row in xTrain.</p>
+</section>
+<section id="View-results-computed-by-RAI">
+<h2>View results computed by RAI<a class="headerlink" href="#View-results-computed-by-RAI" title="Permalink to this heading"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ai</span><span class="o">.</span><span class="n">display_metric_values</span><span class="p">(</span><span class="n">display_detailed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">analysis</span> <span class="o">=</span> <span class="n">AnalysisManager</span><span class="p">()</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">analysis</span><span class="o">.</span><span class="n">run_analysis</span><span class="p">(</span><span class="n">ai</span><span class="p">,</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="s2">&quot;FairnessAnalysis&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;FairnessAnalysis&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_string</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>                                 Traceback (most recent call last)
+Input <span class="ansi-green-intense-fg ansi-bold">In [9]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 1&gt;</span><span class="ansi-blue-intense-fg ansi-bold">()</span>
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 1</span> <span class="ansi-yellow-bg">ai</span><span style="color: rgb(98,98,98)">.</span>display_metric_values(display_detailed<span style="color: rgb(98,98,98)">=</span><span class="ansi-bold" style="color: rgb(0,135,0)">True</span>)
+<span class="ansi-green-fg">      3</span> analysis <span style="color: rgb(98,98,98)">=</span> AnalysisManager()
+<span class="ansi-green-fg">      4</span> result <span style="color: rgb(98,98,98)">=</span> analysis<span style="color: rgb(98,98,98)">.</span>run_analysis(ai, <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">test</span><span style="color: rgb(175,0,0)">&#34;</span>, <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">FairnessAnalysis</span><span style="color: rgb(175,0,0)">&#34;</span>)
+
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>: name &#39;ai&#39; is not defined
+</pre></div></div>
+</div>
+<p>Analysis created ==== Group Fairness Analysis Results ==== 1 of 4 tests passed.</p>
+<p>Statistical Parity Difference Test: This metric is The difference of the rate of favorable outcomes received by the unprivileged group to the privileged group. The idea value is 0.0. It’s value of -0.11160752641979553 is not between between 0.1 and -0.1 indicating that there is unfairness.</p>
+<p>Equal Opportunity Difference Test: This metric is The difference of true positive rates between the unprivileged and the privileged groups. The true positive rate is the ratio of true positives to the total number of actual positives for a given group. The ideal value is 0. A value of &lt; 0 implies higher benefit for the privileged group and a value &gt; 0 implies higher benefit for the unprivileged group. It’s value of -0.12121212121212122 is not between between 0.1 and -0.1 indicating that there is
+unfairness.</p>
+<p>Average Odds Difference Test: This metric is The average difference of false positive rate (false positives / negatives) and true positive rate (true positives / positives) between unprivileged and privileged groups. The ideal value is 0. A value of &lt; 0 implies higher benefit for the privileged group and a value &gt; 0 implies higher benefit for the unprivileged group.. It’s value of -0.08017127799736495 is between between 0.1 and -0.1 indicating that there is fairness.</p>
+<p>Disparate Impact Ratio Test: This metric is The ratio of rate of favorable outcome for the unprivileged group to that of the privileged group. The ideal value of this metric is 1.0 A value &lt; 1 implies higher benefit for the privileged group and a value &gt; 1 implies a higher benefit for the unprivileged group. It’s value of 0.2581382067390062 is not between between 1.25 and 0.8 indicating that there is unfairness.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, sharfa.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -7,13 +7,13 @@
 **AISystem**
 ============
 
-- **Representation.**
+- **Representation**
 
  - It represents the main class users interact with in RAI.
  - When constructed, AISystems are passed a name, a task type, a MetaDatabase, a Dataset and a Model.
 
 
-- **Interaction.**
+- **Interaction**
 
  - Single compute accepts predictions and the name of a dataset, and then calculates metrics for that dataset.
  - Compute will tell RAI to compute metric values across each dataset which predictions were made on.
@@ -44,13 +44,13 @@
 **Certificates**
 ================
 
-- **Representation.**
+- **Representation**
 
  - It represents a class automatically created by AISystems.
  - This class loads a file containing information on which certificates to use, before creating associated Certificate Objects, as well as prompting their associated evaluations.
 
 
-- **Interaction.**
+- **Interaction**
 
  - Loads all certificates found in the stock certificate file..
  - Loads all certificates found in a custom filepath.
@@ -88,17 +88,14 @@
 **Metric**
 ==========
 
-- **Representation.**
+- **Representation**
 
  - It represents to create and Manage various MetricGroups which are compatible with the AISystem. 
  - It is created by the AISystem, and will load in all available MetricGroups compatible with the AISystem. 
  - It also provides functions to run computes for all metric groups, get metadata about metric groups, and get metric values.
 
-- **Interaction.** 
+- **Interaction** 
 
- - Stores compatible metrics.
- - Stores a metrics dependencies.
- - Maps metrics to metrics dependent on it.
  - Find all compatible metric groups.
  - Remove metrics with missing dependencies.
  - Check for circular dependencies.
@@ -110,6 +107,7 @@
 **Example**:
 
 - Find all compatible metric groups
+
 
 .. code-block:: bash
 
@@ -136,9 +134,25 @@
 
 **Analysis**
 ============
-It is a method of data analysis that automates analytical model building
 
-RAI automates report generation and makes data easy to understand.
-It streamlines processes, allowing for insights to be generated faster.
-It analyzes data using machine learning algorithms to predict future outcomes and reveal trends and patterns.
-to combine and analyze massive datasets
+- **Representation**
+
+ - It is a method of data analysis that automates analytical model building
+ - It analyzes data using machine learning algorithms to predict future outcomes and reveal trends and patterns.
+
+- **Interaction** 
+
+**Example**:
+
+.. code-block:: bash
+
+ def progress_percent(self, percentage_complete):
+        percentage_complete = int(percentage_complete)
+        if self.conncetion is not None:
+            self.connection(str(percentage_complete))
+
+
+
+.. important:: **Rai utilization:**
+   RAI will carry out detailed analyses and automates report generation and makes data easy to understand.
+

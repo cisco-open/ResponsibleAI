@@ -18,6 +18,7 @@
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -44,7 +45,6 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="Installation.html"><strong>Installation</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="Getting%20Started.html"><strong>Getting Started</strong></a></li>
-<li class="toctree-l1"><a class="reference internal" href="Pytorch%20Integration.html"><strong>PyTorch Integration</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="Tutorial%20Demo.html"><strong>Demo Cases</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="Dashboard.html"><strong>Dashboard</strong></a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#"><strong>Basic component of RAI Design:</strong></a><ul>
@@ -86,12 +86,36 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="basic-component-of-rai-design">
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="basic-component-of-rai-design">
 <span id="id1"></span><h1><strong>Basic component of RAI Design:</strong><a class="headerlink" href="#basic-component-of-rai-design" title="Permalink to this heading"></a></h1>
 <section id="aisystem">
 <h2><strong>AISystem</strong><a class="headerlink" href="#aisystem" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p><strong>Representation.</strong></p></li>
+<li><p><strong>Representation</strong></p></li>
 </ul>
 <blockquote>
 <div><ul class="simple">
@@ -100,7 +124,7 @@
 </ul>
 </div></blockquote>
 <ul class="simple">
-<li><p><strong>Interaction.</strong></p></li>
+<li><p><strong>Interaction</strong></p></li>
 </ul>
 <blockquote>
 <div><ul class="simple">
@@ -132,7 +156,7 @@ RAI will utilize AISystem to compute and determine which metrics are relevant (e
 <section id="certificates">
 <h2><strong>Certificates</strong><a class="headerlink" href="#certificates" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p><strong>Representation.</strong></p></li>
+<li><p><strong>Representation</strong></p></li>
 </ul>
 <blockquote>
 <div><ul class="simple">
@@ -141,7 +165,7 @@ RAI will utilize AISystem to compute and determine which metrics are relevant (e
 </ul>
 </div></blockquote>
 <ul class="simple">
-<li><p><strong>Interaction.</strong></p></li>
+<li><p><strong>Interaction</strong></p></li>
 </ul>
 <blockquote>
 <div><ul class="simple">
@@ -180,7 +204,7 @@ RAI will carry out detailed analyses (e.g. of the chosen model design) and tests
 <section id="metric">
 <h2><strong>Metric</strong><a class="headerlink" href="#metric" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p><strong>Representation.</strong></p></li>
+<li><p><strong>Representation</strong></p></li>
 </ul>
 <blockquote>
 <div><ul class="simple">
@@ -190,13 +214,10 @@ RAI will carry out detailed analyses (e.g. of the chosen model design) and tests
 </ul>
 </div></blockquote>
 <ul class="simple">
-<li><p><strong>Interaction.</strong></p></li>
+<li><p><strong>Interaction</strong></p></li>
 </ul>
 <blockquote>
 <div><ul class="simple">
-<li><p>Stores compatible metrics.</p></li>
-<li><p>Stores a metrics dependencies.</p></li>
-<li><p>Maps metrics to metrics dependent on it.</p></li>
 <li><p>Find all compatible metric groups.</p></li>
 <li><p>Remove metrics with missing dependencies.</p></li>
 <li><p>Check for circular dependencies.</p></li>
@@ -232,11 +253,30 @@ RAI will utilize Metrics to monitor and measures the performance of a model (dur
 </section>
 <section id="analysis">
 <h2><strong>Analysis</strong><a class="headerlink" href="#analysis" title="Permalink to this heading"></a></h2>
-<p>It is a method of data analysis that automates analytical model building</p>
-<p>RAI automates report generation and makes data easy to understand.
-It streamlines processes, allowing for insights to be generated faster.
-It analyzes data using machine learning algorithms to predict future outcomes and reveal trends and patterns.
-to combine and analyze massive datasets</p>
+<ul class="simple">
+<li><p><strong>Representation</strong></p></li>
+</ul>
+<blockquote>
+<div><ul class="simple">
+<li><p>It is a method of data analysis that automates analytical model building</p></li>
+<li><p>It analyzes data using machine learning algorithms to predict future outcomes and reveal trends and patterns.</p></li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li><p><strong>Interaction</strong></p></li>
+</ul>
+<p><strong>Example</strong>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>def progress_percent<span class="o">(</span>self, percentage_complete<span class="o">)</span>:
+       <span class="nv">percentage_complete</span> <span class="o">=</span> int<span class="o">(</span>percentage_complete<span class="o">)</span>
+       <span class="k">if</span> self.conncetion is not None:
+           self.connection<span class="o">(</span>str<span class="o">(</span>percentage_complete<span class="o">))</span>
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p><strong>Rai utilization:</strong>
+RAI will carry out detailed analyses and automates report generation and makes data easy to understand.</p>
+</div>
 </section>
 </section>
 

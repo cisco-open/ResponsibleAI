@@ -25,16 +25,17 @@ The dashboard GUI is currently designed around 1920x1080 displays
 
   RaiModule/Installation.rst
   RaiModule/Getting Started.rst
-  RaiModule/Pytorch Integration.rst
   RaiModule/Tutorial Demo.rst
   RaiModule/Dashboard.rst
   RaiModule/Basic component of RAI Design.rst
   RaiModule/Contribute and extend RAI.rst
+
+
+
+
   
   
     
-
-
 .. toctree::
   :maxdepth: 2
   :caption: Reference Class
