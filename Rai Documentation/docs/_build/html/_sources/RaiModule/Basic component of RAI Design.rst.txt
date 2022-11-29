@@ -9,7 +9,7 @@
 
 - **Representation**
 
- - It represents the main class users interact with in RAI.
+ - It represents the main class, users interact with in RAI.
  - When constructed, AISystems are passed a name, a task type, a MetaDatabase, a Dataset and a Model.
 
 

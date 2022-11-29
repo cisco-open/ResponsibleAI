@@ -31,9 +31,9 @@ demos> python .\image_class_training.py            This demo uses Cifar10 datase
                                                    monitor image processing tasks during training.  
 demos> python .\tabular_class_console.py           This demo shows how RAI can be used without the dashboard to calculate and 
                                                    report on the metrics for a machine learning task.
-demos> python .\text.py                            This demos show how RAI and its dashboard can be used for evaluating 
+demos> python .\text.py                            This demo show how RAI and its dashboard can be used for evaluating 
                                                    the natural language modeling tasks.    
-demos> python .\text_output.py                     This demos show how RAI and its dashboard can be used for evaluating 
+demos> python .\text_output.py                     This demo show how RAI and its dashboard can be used for evaluating 
                                                    the natural language modeling tasks.                           
 =================================================  =================================================================================
 

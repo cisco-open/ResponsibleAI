@@ -1,21 +1,10 @@
 {
-  "nbformat": 4,
-  "nbformat_minor": 0,
-  "metadata": {
-    "colab": {
-      "provenance": []
-    },
-    "kernelspec": {
-      "name": "python3",
-      "display_name": "Python 3"
-    },
-    "language_info": {
-      "name": "python"
-    }
-  },
   "cells": [
     {
       "cell_type": "markdown",
+      "metadata": {
+        "id": "zAU4xmf_pqeo"
+      },
       "source": [
         "# RAI Dashboard Tutorial - Getting Started\n",
         "\n",
@@ -23,7 +12,7 @@
         "\n",
         "## Introduction\n",
         "\n",
-        "In this notebook, you will learn the simple Demo How RAI can be used without the dashboard to calculate and report on the metrics for a machine learning task.\n",
+        "In this notebook, you will learn the simple Demo how RAI can be used without the dashboard to calculate and report on the metrics for a machine learning task.\n",
         "\n",
         "## Install Dependencies and RAI Using Pip\n",
         "\n",
@@ -35,13 +24,15 @@
         "\n",
         "Please first install the required packages found in requirements.txt. \n",
         "RAI can then be installed using ```pip install --editable```\n"
-      ],
-      "metadata": {
-        "id": "zAU4xmf_pqeo"
-      }
+      ]
     },
     {
       "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "HWNWn2N0uC25"
+      },
+      "outputs": [],
       "source": [
         "import os\n",
         "import sys\n",
@@ -58,174 +49,174 @@
         "parent_dir = os.path.dirname(current_dir)\n",
         "sys.path.insert(0, parent_dir)\n",
         "np.random.seed(50)"
-      ],
-      "metadata": {
-        "id": "HWNWn2N0uC25"
-      },
-      "execution_count": null,
-      "outputs": []
+      ]
     },
     {
       "cell_type": "markdown",
-      "source": [
-        "It starts by importing the necessary libraries"
-      ],
       "metadata": {
         "id": "qY-lE6t4uEsB"
-      }
+      },
+      "source": [
+        "It starts by importing the necessary libraries"
+      ]
     },
     {
       "cell_type": "markdown",
-      "source": [
-        "## Get Dataset"
-      ],
       "metadata": {
         "id": "u7GPo2wsuSd1"
-      }
+      },
+      "source": [
+        "## Get Dataset"
+      ]
     },
     {
       "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "l19Mqzv4ud2G"
+      },
+      "outputs": [],
       "source": [
         "data_path = \"../data/adult/\"\n",
         "train_data = pd.read_csv(data_path + \"train.csv\", header=0, skipinitialspace=True, na_values=\"?\")\n",
         "test_data = pd.read_csv(data_path + \"test.csv\", header=0, skipinitialspace=True, na_values=\"?\")\n",
         "all_data = pd.concat([train_data, test_data], ignore_index=True)"
-      ],
-      "metadata": {
-        "id": "l19Mqzv4ud2G"
-      },
-      "execution_count": null,
-      "outputs": []
+      ]
     },
     {
       "cell_type": "markdown",
+      "metadata": {
+        "id": "tauDGxxSuimF"
+      },
       "source": [
         "It read the data from the file train.csv and test.csv into a pandas DataFrame object named all_data.\n",
         "\n",
         "Next,it create another Dataframe with just test data called xTest and yTest.\n",
         "\n",
         "Finally, it create an instance of Dataset that has both train and test datasets inside of it."
-      ],
-      "metadata": {
-        "id": "tauDGxxSuimF"
-      }
+      ]
     },
     {
       "cell_type": "markdown",
-      "source": [
-        "## Get X and y data, as well as RAI Meta information from the Dataframe"
-      ],
       "metadata": {
         "id": "sC-XSgaWu2IW"
-      }
+      },
+      "source": [
+        "## Get X and y data, as well as RAI Meta information from the Dataframe"
+      ]
     },
     {
       "cell_type": "code",
-      "source": [
-        "rai_meta_information, X, y, rai_output_feature = df_to_RAI(all_data,\n",
-        "target_column=\"income-per-year\", normalize=\"Scalar\")"
-      ],
+      "execution_count": null,
       "metadata": {
         "id": "Fhv7R_bMu_iG"
       },
-      "execution_count": null,
-      "outputs": []
+      "outputs": [],
+      "source": [
+        "rai_meta_information, X, y, rai_output_feature = df_to_RAI(all_data,\n",
+        "target_column=\"income-per-year\", normalize=\"Scalar\")"
+      ]
     },
     {
       "cell_type": "markdown",
+      "metadata": {
+        "id": "hUn73e0EvC-K"
+      },
       "source": [
         "It will create a Dataframe with two columns: X and y.\n",
         "\n",
         "The first column, X, is the input data for the model.\n",
         "\n",
         "The second column, y, is the output of the model and then creates a new Dataframe called rai_output_feature that contains all of the features from RAI’s output feature set."
-      ],
-      "metadata": {
-        "id": "hUn73e0EvC-K"
-      }
+      ]
     },
     {
       "cell_type": "markdown",
-      "source": [
-        "## Create Data Splits and pass them to RAI"
-      ],
       "metadata": {
         "id": "uCsbKwLcvKpm"
-      }
+      },
+      "source": [
+        "## Create Data Splits and pass them to RAI"
+      ]
     },
     {
       "cell_type": "code",
-      "source": [
-        "xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=1, stratify=y)\n",
-        "dataset = Dataset({\"train\": NumpyData(xTrain, yTrain), \"test\": NumpyData(xTest, yTest)})"
-      ],
+      "execution_count": null,
       "metadata": {
         "id": "X70eG7gYvTmP"
       },
-      "execution_count": null,
-      "outputs": []
+      "outputs": [],
+      "source": [
+        "xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=1, stratify=y)\n",
+        "dataset = Dataset({\"train\": NumpyData(xTrain, yTrain), \"test\": NumpyData(xTest, yTest)})"
+      ]
     },
     {
       "cell_type": "markdown",
+      "metadata": {
+        "id": "S48gEmmUvWh4"
+      },
       "source": [
         "It splits the training set into two parts: xTrain and yTrain.\n",
         "\n",
         "Next it create another Dataframe with just test data called xTest and yTest.\n",
         "\n",
         "Finally,it create an instance of Dataset that has both train and test datasets inside of it."
-      ],
-      "metadata": {
-        "id": "S48gEmmUvWh4"
-      }
+      ]
     },
     {
       "cell_type": "markdown",
-      "source": [
-        "## Create Model and RAIs representation of it"
-      ],
       "metadata": {
         "id": "N_1-L-UCvaK1"
-      }
+      },
+      "source": [
+        "## Create Model and RAIs representation of it"
+      ]
     },
     {
       "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "J2DZQhRIpuWb"
+      },
+      "outputs": [],
       "source": [
         "clf = RandomForestClassifier(n_estimators=4, max_depth=6)\n",
         "model = Model(agent=clf, output_features=rai_output_feature,\n",
         "name=\"cisco_income_ai\", predict_fun=clf.predict,\n",
         "predict_prob_fun=clf.predict_proba,\n",
         "description=\"Income Prediction AI\", model_class=\"RFC\")"
-      ],
-      "metadata": {
-        "id": "J2DZQhRIpuWb"
-      },
-      "execution_count": null,
-      "outputs": []
+      ]
     },
     {
       "cell_type": "markdown",
+      "metadata": {
+        "id": "VEGpC2XuvjAJ"
+      },
       "source": [
         "It Create a Random Forest Classifier object with 4 estimators and 6 trees.\n",
         "\n",
         "The model is then created, which has the attribute set to clf, output_features set to rai_output_feature, name “cisco_income_ai”, predict function set to clf.predict, predict probability function set to clf.predict_proba, description “Income Prediction AI”, and model classed as RFC (Random Forest Classifier).\n",
         "\n",
         "It creates a Random Forest Classifier model and then uses it to predict the income of an individual."
-      ],
-      "metadata": {
-        "id": "VEGpC2XuvjAJ"
-      }
+      ]
     },
     {
       "cell_type": "markdown",
-      "source": [
-        "## Create RAI AISystem to pass all relevant data to RAI"
-      ],
       "metadata": {
         "id": "OzxeJZ4HvoB4"
-      }
+      },
+      "source": [
+        "## Create RAI AISystem to pass all relevant data to RAI"
+      ]
     },
     {
       "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "etXz4YyEvx4J"
+      },
+      "outputs": [],
       "source": [
         "ai = AISystem(name=\"income_classification\",  task='binary_classification',\n",
         "             meta_database=rai_meta_information,\n",
@@ -235,15 +226,13 @@
         "                \"protected_attributes\": [\"race\"], \"positive_label\": 1},\n",
         "                \"time_complexity\": \"polynomial\"}\n",
         "ai.initialize(user_config=configuration)\n"
-      ],
-      "metadata": {
-        "id": "etXz4YyEvx4J"
-      },
-      "execution_count": null,
-      "outputs": []
+      ]
     },
     {
       "cell_type": "markdown",
+      "metadata": {
+        "id": "BfccMbduvyq-"
+      },
       "source": [
         "It creates a new AISystem called “income_classification” with the name of income_classification.\n",
         "\n",
@@ -252,100 +241,100 @@
         "Next, it create a configuration object that has fairness. In fairness, there are three groups: privileged (priv), unprivileged (unpriv), and race.The configuration section contains information about what data will be used for this AISystem.\n",
         "\n",
         "In this case, it has two values that are relevant: priv_group which defines how privileged or unprivileged people are in terms of race, and fairness which defines how much fairness there should be in terms of privilege groups."
-      ],
-      "metadata": {
-        "id": "BfccMbduvyq-"
-      }
+      ]
     },
     {
       "cell_type": "markdown",
-      "source": [
-        "## Train the model, generate predictions"
-      ],
       "metadata": {
         "id": "UuwKagjev3NA"
-      }
+      },
+      "source": [
+        "## Train the model, generate predictions"
+      ]
     },
     {
       "cell_type": "code",
-      "source": [
-        "clf.fit(xTrain, yTrain)\n",
-        "test_predictions = clf.predict(xTest)"
-      ],
+      "execution_count": null,
       "metadata": {
         "id": "WG2W7BQzv-G5"
       },
-      "execution_count": null,
-      "outputs": []
+      "outputs": [],
+      "source": [
+        "clf.fit(xTrain, yTrain)\n",
+        "test_predictions = clf.predict(xTest)"
+      ]
     },
     {
       "cell_type": "markdown",
-      "source": [
-        "It then trains the model on a training set of data, and generates predictions for a test set of data."
-      ],
       "metadata": {
         "id": "f9FSkOccv_R7"
-      }
+      },
+      "source": [
+        "It then trains the model on a training set of data, and generates predictions for a test set of data."
+      ]
     },
     {
       "cell_type": "markdown",
-      "source": [
-        "## Pass predictions to RAI"
-      ],
       "metadata": {
         "id": "Za3lckVpwBzZ"
-      }
+      },
+      "source": [
+        "## Pass predictions to RAI"
+      ]
     },
     {
       "cell_type": "code",
-      "source": [
-        "ai.compute({\"test\": {\"predict\": test_predictions}}, tag='model')"
-      ],
+      "execution_count": null,
       "metadata": {
         "id": "No3YMQqfwIRK"
       },
-      "execution_count": null,
-      "outputs": []
+      "outputs": [],
+      "source": [
+        "ai.compute({\"test\": {\"predict\": test_predictions}}, tag='model')"
+      ]
     },
     {
       "cell_type": "markdown",
+      "metadata": {
+        "id": "GQdqwaVRwI-a"
+      },
       "source": [
         "Generated Predictions for a test set of data passes these predictions to RAI, which returns an object with two fields: test and predict.\n",
         "\n",
         "The first field is called test, and it contains an array of objects that represent the prediction results for each row in xTest.\n",
         "\n",
         "The second field is called predict, and it contains one object that represents the predicted value for each row in xTrain."
-      ],
-      "metadata": {
-        "id": "GQdqwaVRwI-a"
-      }
+      ]
     },
     {
       "cell_type": "markdown",
-      "source": [
-        "## View results computed by RAI"
-      ],
       "metadata": {
         "id": "G66ug_O-wNPo"
-      }
+      },
+      "source": [
+        "## View results computed by RAI"
+      ]
     },
     {
       "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "nUgpTaNQwU0M"
+      },
+      "outputs": [],
       "source": [
         "ai.display_metric_values(display_detailed=True)\n",
         "\n",
         "analysis = AnalysisManager()\n",
         "result = analysis.run_analysis(ai, \"test\", \"FairnessAnalysis\")\n",
         "print(result[\"FairnessAnalysis\"].to_string())"
-      ],
-      "metadata": {
-        "id": "nUgpTaNQwU0M"
-      },
-      "execution_count": null,
-      "outputs": []
+      ]
     },
     {
       "cell_type": "markdown",
+      "metadata": {
+        "id": "ZUHAlGgFwWQ5"
+      },
       "source": [
         "Analysis created\n",
         "==== Group Fairness Analysis Results ====\n",
@@ -374,10 +363,28 @@
         "This metric is The ratio of rate of favorable outcome for the unprivileged group to that of the privileged group.\n",
         "The ideal value of this metric is 1.0 A value < 1 implies higher benefit for the privileged group and a value > 1 implies a higher benefit for the unprivileged group.\n",
         "It's value of 0.2581382067390062 is not between between 1.25 and 0.8 indicating that there is unfairness."
-      ],
-      "metadata": {
-        "id": "ZUHAlGgFwWQ5"
+      ]
+    }
+  ],
+  "metadata": {
+    "colab": {
+      "provenance": []
+    },
+    "kernelspec": {
+      "display_name": "Python 3.9.13 64-bit",
+      "language": "python",
+      "name": "python3"
+    },
+    "language_info": {
+      "name": "python",
+      "version": "3.9.13"
+    },
+    "vscode": {
+      "interpreter": {
+        "hash": "c347c8f9a7ef94e4c9e03b4513be7835ed18f45b99a2a817fb579f408b867b16"
       }
     }
-  ]
+  },
+  "nbformat": 4,
+  "nbformat_minor": 0
 }
