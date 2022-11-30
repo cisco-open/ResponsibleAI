@@ -33,5 +33,3 @@ Here is a quick example of how RAI can be used without the dashboard to calculat
 
 
 
-
-A Brief Demo Notebook how RAI can be used without the dashboard can be found `here <https://github.com/cisco-open/ResponsibleAI/blob/doc/Rai%20Documentation/docs/RaiModule/Demo_use_case%20(1).ipynb>`_

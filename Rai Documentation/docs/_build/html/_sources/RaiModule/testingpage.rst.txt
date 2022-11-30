@@ -1,0 +1,86 @@
+.. _testingpage:
+
+
+===============
+**testingpage**
+===============
+
+
+
+Here is a quick example of how RAI can be used without the dashboard to calculate and report on the metrics for a machine learning task
+
+.. code-block:: python
+ 
+ import
+
+ from sklearn.model_selection import train_test_split
+ from RAI.AISystem import AISystem, Model
+ from RAI.Analysis import AnalysisManager
+ from RAI.dataset import NumpyData, Dataset
+ from RAI.utils import df_to_RAI
+ import numpy as np
+ from sklearn.ensemble import RandomForestClassifier
+
+ train_data = pd.read_csv(data_path + "train.csv", header=0, skipinitialspace=True, na_values="?")
+ test_data = pd.read_csv(data_path + "test.csv", header=0, skipinitialspace=True, na_values="?")
+ all_data = pd.concat([train_data, test_data], ignore_index=True)
+
+ rai_meta_information, X, y, rai_output_feature = df_to_RAI(all_data, target_column="income-per-year", normalize="Scalar")
+
+
+ xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=1, stratify=y)
+ dataset = Dataset({"train": NumpyData(xTrain, yTrain), "test": NumpyData(xTest, yTest)})
+
+ clf = RandomForestClassifier(n_estimators=4, max_depth=6)
+ model = Model(agent=clf, output_features=rai_output_feature, name="cisco_income_ai", predict_fun=clf.predict,
+              predict_prob_fun=clf.predict_proba, description="Income Prediction AI", model_class="RFC")
+
+ ai = AISystem(name="income_classification",  task='binary_classification', meta_database=rai_meta_information,
+              dataset=dataset, model=model)
+
+ configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}},
+                              "protected_attributes": ["race"], "positive_label": 1},
+                 "time_complexity": "polynomial"}
+ ai.initialize(user_config=configuration)
+
+ clf.fit(xTrain, yTrain)
+ test_predictions = clf.predict(xTest)
+
+ ai.compute({"test": {"predict": test_predictions}}, tag='model')
+
+ ai.display_metric_values(display_detailed=True)
+ analysis = AnalysisManager()
+ result = analysis.run_analysis(ai, "test", "FairnessAnalysis")
+ print(result["FairnessAnalysis"].to_string())
+
+
+ Result
+ 
+
+ Analysis created
+ ==== Group Fairness Analysis Results ====
+ 1 of 4 tests passed.
+
+ Statistical Parity Difference Test:
+ This metric is The difference of the rate of favorable outcomes received by the unprivileged group to the privileged group.
+ The idea value is 0.0.
+ It's value of -0.11160752641979553 is not between between 0.1 and -0.1 indicating that there is unfairness.
+
+ Equal Opportunity Difference Test:
+ This metric is The difference of true positive rates between the unprivileged and the privileged groups.
+ The true positive rate is the ratio of true positives to the total number of actual positives for a given group.        
+ The ideal value is 0. A value of < 0 implies higher benefit for the privileged group and a value > 0 implies higher benefit for the unprivileged group.
+ It's value of -0.12121212121212122 is not between between 0.1 and -0.1 indicating that there is unfairness.
+
+ Average Odds Difference Test:
+ This metric is The average difference of false positive rate (false positives / negatives) and true positive rate (true 
+ positives / positives) between unprivileged and privileged groups.
+ The ideal value is 0.  A value of < 0 implies higher benefit for the privileged group and a value > 0 implies higher benefit for the unprivileged group..
+ It's value of -0.08017127799736495 is between between 0.1 and -0.1 indicating that there is fairnes
+
+
+
+
+
+.. image:: ../images/NewGifDemo.gif
+   :align: center

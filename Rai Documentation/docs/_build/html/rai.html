@@ -110,6 +110,32 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#module-src.rai.Analysis">Analysis</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#src.rai.Analysis.Analysis"><code class="docutils literal notranslate"><span class="pre">Analysis</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#src.rai.Analysis.Analysis.initialize"><code class="docutils literal notranslate"><span class="pre">Analysis.initialize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.rai.Analysis.Analysis.is_compatible"><code class="docutils literal notranslate"><span class="pre">Analysis.is_compatible()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.rai.Analysis.Analysis.progress_percent"><code class="docutils literal notranslate"><span class="pre">Analysis.progress_percent()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.rai.Analysis.Analysis.progress_tick"><code class="docutils literal notranslate"><span class="pre">Analysis.progress_tick()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.rai.Analysis.Analysis.set_connection"><code class="docutils literal notranslate"><span class="pre">Analysis.set_connection()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.rai.Analysis.Analysis.to_html"><code class="docutils literal notranslate"><span class="pre">Analysis.to_html()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.rai.Analysis.Analysis.to_string"><code class="docutils literal notranslate"><span class="pre">Analysis.to_string()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-src.rai.Analysis_manager">Analysis_manager</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#src.rai.Analysis_manager.AnalysisManager"><code class="docutils literal notranslate"><span class="pre">AnalysisManager</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#src.rai.Analysis_manager.AnalysisManager.get_available_analysis"><code class="docutils literal notranslate"><span class="pre">AnalysisManager.get_available_analysis()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.rai.Analysis_manager.AnalysisManager.run_all"><code class="docutils literal notranslate"><span class="pre">AnalysisManager.run_all()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.rai.Analysis_manager.AnalysisManager.run_analysis"><code class="docutils literal notranslate"><span class="pre">AnalysisManager.run_analysis()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-src.rai.Analysis_registry">Analysis_registry</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#src.rai.Analysis_registry.register_class"><code class="docutils literal notranslate"><span class="pre">register_class()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -617,6 +643,156 @@ get metadata about metric groups, and get metric values.</p>
 </dl>
 </dd></dl>
 
+</dd></dl>
+
+</section>
+<section id="module-src.rai.Analysis">
+<span id="analysis"></span><h2>Analysis<a class="headerlink" href="#module-src.rai.Analysis" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.rai.Analysis.Analysis">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.rai.Analysis.</span></span><span class="sig-name descname"><span class="pre">Analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ai_system</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AISystem</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/rai/Analysis.html#Analysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.rai.Analysis.Analysis" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.rai.Analysis.Analysis.initialize">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">initialize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/rai/Analysis.html#Analysis.initialize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.rai.Analysis.Analysis.initialize" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.rai.Analysis.Analysis.is_compatible">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_compatible</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ai_system</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/rai/Analysis.html#Analysis.is_compatible"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.rai.Analysis.Analysis.is_compatible" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ai_system</strong> – input the ai_system object</p></li>
+<li><p><strong>dataset</strong> – input the dataset</p></li>
+</ul>
+</dd>
+</dl>
+<p>Return :class object</p>
+<p>Returns the classifier and sklearn object data</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.rai.Analysis.Analysis.progress_percent">
+<span class="sig-name descname"><span class="pre">progress_percent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">percentage_complete</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/rai/Analysis.html#Analysis.progress_percent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.rai.Analysis.Analysis.progress_percent" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameter<span class="colon">:</span></dt>
+<dd class="field-odd"><p>percentage_complete</p>
+</dd>
+</dl>
+<p>Return : None</p>
+<p>Shows the progress percent value</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.rai.Analysis.Analysis.progress_tick">
+<span class="sig-name descname"><span class="pre">progress_tick</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/rai/Analysis.html#Analysis.progress_tick"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.rai.Analysis.Analysis.progress_tick" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameter<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+<p>Return : None</p>
+<p>On every compute it changes the current_tick value</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.rai.Analysis.Analysis.set_connection">
+<span class="sig-name descname"><span class="pre">set_connection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/rai/Analysis.html#Analysis.set_connection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.rai.Analysis.Analysis.set_connection" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>connection</strong> – inputs connection data</p>
+</dd>
+</dl>
+<p>Return : None</p>
+<p>Connection is a function that accepts progress, and pings the dashboard</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.rai.Analysis.Analysis.to_html">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">to_html</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/rai/Analysis.html#Analysis.to_html"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.rai.Analysis.Analysis.to_html" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.rai.Analysis.Analysis.to_string">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">to_string</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/rai/Analysis.html#Analysis.to_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.rai.Analysis.Analysis.to_string" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.rai.Analysis_manager">
+<span id="analysis-manager"></span><h2>Analysis_manager<a class="headerlink" href="#module-src.rai.Analysis_manager" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.rai.Analysis_manager.AnalysisManager">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.rai.Analysis_manager.</span></span><span class="sig-name descname"><span class="pre">AnalysisManager</span></span><a class="reference internal" href="_modules/src/rai/Analysis_manager.html#AnalysisManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.rai.Analysis_manager.AnalysisManager" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.rai.Analysis_manager.AnalysisManager.get_available_analysis">
+<span class="sig-name descname"><span class="pre">get_available_analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ai_system</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AISystem</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/rai/Analysis_manager.html#AnalysisManager.get_available_analysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.rai.Analysis_manager.AnalysisManager.get_available_analysis" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>AISystem</strong> – input the ai_system obj</p></li>
+<li><p><strong>dataset</strong> – input the dataset</p></li>
+</ul>
+</dd>
+</dl>
+<p>Return :list</p>
+<p>Returns the lists of analysis data</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.rai.Analysis_manager.AnalysisManager.run_all">
+<span class="sig-name descname"><span class="pre">run_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ai_system</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AISystem</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/rai/Analysis_manager.html#AnalysisManager.run_all"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.rai.Analysis_manager.AnalysisManager.run_all" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>AISystem</strong> – input the ai_system obj</p></li>
+<li><p><strong>dataset</strong> – input the dataset</p></li>
+<li><p><strong>tag</strong> – By default None else given tag Name</p></li>
+</ul>
+</dd>
+</dl>
+<p>Return : None
+Returns the analysis data result analysis</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.rai.Analysis_manager.AnalysisManager.run_analysis">
+<span class="sig-name descname"><span class="pre">run_analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ai_system</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AISystem</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">analysis_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/rai/Analysis_manager.html#AnalysisManager.run_analysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.rai.Analysis_manager.AnalysisManager.run_analysis" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>AISystem</strong> – input the ai_system obj</p></li>
+<li><p><strong>dataset</strong> – input the dataset</p></li>
+<li><p><strong>tag</strong> – By default None else given tag Name</p></li>
+<li><p><strong>analysis_names</strong> – analysis_names data set</p></li>
+<li><p><strong>connection</strong> – By default None</p></li>
+</ul>
+</dd>
+</dl>
+<p>Return : Dict</p>
+<p>Returns the analysis data result analysis</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.rai.Analysis_registry">
+<span id="analysis-registry"></span><h2>Analysis_registry<a class="headerlink" href="#module-src.rai.Analysis_registry" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.rai.Analysis_registry.register_class">
+<span class="sig-prename descclassname"><span class="pre">src.rai.Analysis_registry.</span></span><span class="sig-name descname"><span class="pre">register_class</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">class_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">class_object</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/rai/Analysis_registry.html#register_class"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.rai.Analysis_registry.register_class" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>class_name</strong> – inputs the name for the class and that should be unique</p></li>
+<li><p><strong>class_object</strong> – class object is given as the input</p></li>
+</ul>
+</dd>
+</dl>
+<p>Return : registered data in the form of dictionary containing class name as the key and class object as the value</p>
 </dd></dl>
 
 </section>
