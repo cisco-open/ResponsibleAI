@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Contribute and Extend RAI &mdash; RAI Documentation 0.1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/togglebutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
       <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
@@ -18,6 +20,13 @@
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
+        <script>let toggleHintShow = 'Click to show';</script>
+        <script>let toggleHintHide = 'Click to hide';</script>
+        <script>let toggleOpenOnPrint = 'true';</script>
+        <script src="../_static/togglebutton.js"></script>
+        <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -43,6 +52,10 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">User Guide:</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="RAI%20in%20Responsible%20AI.html"><strong>RAI Responsible in AI</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="RAI%20Bias%20and%20Fairness.html"><strong>RAI - Bias and Fairness</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="Robustness%20of%20AI.html"><strong>Robustness of AI</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="RAI%20in%20Model%20Selection.html"><strong>Model Selection</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="Installation.html"><strong>Installation</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="Getting%20Started.html"><strong>Getting Started</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="Tutorial%20Demo.html"><strong>Demo Cases</strong></a></li>
@@ -145,59 +158,65 @@
 <blockquote>
 <div><p><strong>Example:</strong></p>
 </div></blockquote>
-<figure class="align-center" id="id3">
+<div class="toggle toggle-hidden docutils container">
+<div class="admonition-init-py-file-example admonition">
+<p class="admonition-title">__init__.py file example</p>
+<figure class="align-center">
 <a class="reference internal image-reference" href="../_images/fromclass.gif"><img alt="../_images/fromclass.gif" src="../_images/fromclass.gif" style="width: 300.0px; height: 182.4px;" /></a>
-<figcaption>
-<p><span class="caption-text">__init__.py file example.</span><a class="headerlink" href="#id3" title="Permalink to this image"></a></p>
-</figcaption>
 </figure>
+</div>
+</div>
 <p><strong>How to expand RAI using Metric group</strong></p>
 <ul class="simple">
 <li><p>Inside <code class="docutils literal notranslate"><span class="pre">json</span> <span class="pre">file</span></code>, we need to define parametrs as name, display_name, compatibility, dependency_list, tags, complexity_class, metrics.</p>
 <dl class="field-list simple">
-<dt class="field-odd">parameter<span class="colon">:</span></dt>
+<dt class="field-odd">parameter</dt>
 <dd class="field-odd"><p>name:</p>
 </dd>
-<dt class="field-even">parameter<span class="colon">:</span></dt>
+<dt class="field-even">parameter</dt>
 <dd class="field-even"><p>display_name:</p>
 </dd>
-<dt class="field-odd">parameter<span class="colon">:</span></dt>
+<dt class="field-odd">parameter</dt>
 <dd class="field-odd"><p>compatibility:</p>
 </dd>
-<dt class="field-even">parameter<span class="colon">:</span></dt>
+<dt class="field-even">parameter</dt>
 <dd class="field-even"><p>dependency_list:</p>
 </dd>
-<dt class="field-odd">parameter<span class="colon">:</span></dt>
+<dt class="field-odd">parameter</dt>
 <dd class="field-odd"><p>tags:</p>
 </dd>
-<dt class="field-even">parameter<span class="colon">:</span></dt>
+<dt class="field-even">parameter</dt>
 <dd class="field-even"><p>complexity_class:</p>
 </dd>
-<dt class="field-odd">parameter<span class="colon">:</span></dt>
+<dt class="field-odd">parameter</dt>
 <dd class="field-odd"><p>metrics:</p>
 </dd>
 </dl>
 </li>
 </ul>
 <p><strong>Example:</strong></p>
-<figure class="align-center" id="id4">
-<a class="with-border reference internal image-reference" href="../_images/json_metric.png"><img alt="../_images/json_metric.png" class="with-border" src="../_images/json_metric.png" style="width: 576.8000000000001px; height: 497.20000000000005px;" /></a>
-<figcaption>
-<p><span class="caption-text">json_metric file example.</span><a class="headerlink" href="#id4" title="Permalink to this image"></a></p>
-</figcaption>
+<div class="toggle toggle-hidden docutils container">
+<div class="admonition-json-metric-file-example admonition">
+<p class="admonition-title">json_metric file example</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/json_metric.png"><img alt="../_images/json_metric.png" src="../_images/json_metric.png" style="width: 576.8000000000001px; height: 497.20000000000005px;" /></a>
 </figure>
+</div>
+</div>
 <p><strong>Create subclass of class and implement the method</strong></p>
 <ul class="simple">
 <li><p>We can create subclass of class and implement the methods.</p></li>
 <li><p>In <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">file</span></code> , we need to create a class for respective metric_group and we need to define methods for update and compute inside the class.</p></li>
 </ul>
 <p><strong>Example:</strong></p>
-<figure class="align-center" id="id5">
-<a class="with-border reference internal image-reference" href="../_images/metric_pyfile.png"><img alt="../_images/metric_pyfile.png" class="with-border" src="../_images/metric_pyfile.png" style="width: 703.6px; height: 388.40000000000003px;" /></a>
-<figcaption>
-<p><span class="caption-text">metric_python_file example.</span><a class="headerlink" href="#id5" title="Permalink to this image"></a></p>
-</figcaption>
+<div class="toggle toggle-hidden docutils container">
+<div class="admonition-metric-python-file-example admonition">
+<p class="admonition-title">metric_python_file example</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/metric_pyfile.png"><img alt="../_images/metric_pyfile.png" src="../_images/metric_pyfile.png" style="width: 703.6px; height: 388.40000000000003px;" /></a>
 </figure>
+</div>
+</div>
 </section>
 <section id="adding-certificates">
 <h2><strong>Adding Certificates</strong><a class="headerlink" href="#adding-certificates" title="Permalink to this heading"></a></h2>
@@ -215,22 +234,24 @@
 <ul class="simple">
 <li><p>Inside certificate folder, go to standard folder and their make a <code class="docutils literal notranslate"><span class="pre">json</span> <span class="pre">file</span></code> and fill all given parameters.</p>
 <dl class="field-list simple">
-<dt class="field-odd">parameter<span class="colon">:</span></dt>
+<dt class="field-odd">parameter</dt>
 <dd class="field-odd"><p>meta:</p>
 </dd>
-<dt class="field-even">parameter<span class="colon">:</span></dt>
+<dt class="field-even">parameter</dt>
 <dd class="field-even"><p>condition:</p>
 </dd>
 </dl>
 </li>
 </ul>
 <p><strong>Example:</strong></p>
-<figure class="align-center" id="id6">
-<a class="with-border reference internal image-reference" href="../_images/add_certficate.png"><img alt="../_images/add_certficate.png" class="with-border" src="../_images/add_certficate.png" style="width: 543.0px; height: 249.0px;" /></a>
-<figcaption>
-<p><span class="caption-text">sample certficate .</span><a class="headerlink" href="#id6" title="Permalink to this image"></a></p>
-</figcaption>
+<div class="toggle toggle-hidden docutils container">
+<div class="admonition-sample-certficate admonition">
+<p class="admonition-title">sample certficate</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/add_certficate.png"><img alt="../_images/add_certficate.png" src="../_images/add_certficate.png" style="width: 543.0px; height: 249.0px;" /></a>
 </figure>
+</div>
+</div>
 </section>
 <section id="adding-analysis">
 <h2><strong>Adding Analysis</strong><a class="headerlink" href="#adding-analysis" title="Permalink to this heading"></a></h2>
@@ -249,59 +270,65 @@
 <li><p>In <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> file - we have to import the py file that we have created inside the folder.</p></li>
 </ul>
 <p><strong>Example:</strong></p>
-<figure class="align-center" id="id7">
+<div class="toggle toggle-hidden docutils container">
+<div class="admonition-init-py-file-example admonition">
+<p class="admonition-title">__init__.py file example</p>
+<figure class="align-center">
 <a class="reference internal image-reference" href="../_images/fromclass.gif"><img alt="../_images/fromclass.gif" src="../_images/fromclass.gif" style="width: 300.0px; height: 182.4px;" /></a>
-<figcaption>
-<p><span class="caption-text">__init__.py file example.</span><a class="headerlink" href="#id7" title="Permalink to this image"></a></p>
-</figcaption>
 </figure>
+</div>
+</div>
 <p><strong>How to expand RAI using Analysis</strong></p>
 <ul class="simple">
 <li><p>Inside <code class="docutils literal notranslate"><span class="pre">json</span> <span class="pre">file</span></code>, we need to give parametrs name, display_name, compatibility, src, dependency_list, tags, complexity_class.</p>
 <dl class="field-list simple">
-<dt class="field-odd">parameter<span class="colon">:</span></dt>
+<dt class="field-odd">parameter</dt>
 <dd class="field-odd"><p>name:</p>
 </dd>
-<dt class="field-even">parameter<span class="colon">:</span></dt>
+<dt class="field-even">parameter</dt>
 <dd class="field-even"><p>display_name:</p>
 </dd>
-<dt class="field-odd">parameter<span class="colon">:</span></dt>
+<dt class="field-odd">parameter</dt>
 <dd class="field-odd"><p>compatibility:</p>
 </dd>
-<dt class="field-even">parameter<span class="colon">:</span></dt>
+<dt class="field-even">parameter</dt>
 <dd class="field-even"><p>src:</p>
 </dd>
-<dt class="field-odd">parameter<span class="colon">:</span></dt>
+<dt class="field-odd">parameter</dt>
 <dd class="field-odd"><p>dependency_list:</p>
 </dd>
-<dt class="field-even">parameter<span class="colon">:</span></dt>
+<dt class="field-even">parameter</dt>
 <dd class="field-even"><p>tags:</p>
 </dd>
-<dt class="field-odd">parameter<span class="colon">:</span></dt>
+<dt class="field-odd">parameter</dt>
 <dd class="field-odd"><p>complexity_class:</p>
 </dd>
 </dl>
 </li>
 </ul>
 <p><strong>Example:</strong></p>
-<figure class="align-center" id="id8">
-<a class="with-border reference internal image-reference" href="../_images/Analysis_json_file.png"><img alt="../_images/Analysis_json_file.png" class="with-border" src="../_images/Analysis_json_file.png" style="width: 386.4px; height: 270.9px;" /></a>
-<figcaption>
-<p><span class="caption-text">Analysis_json_file example.</span><a class="headerlink" href="#id8" title="Permalink to this image"></a></p>
-</figcaption>
+<div class="toggle toggle-hidden docutils container">
+<div class="admonition-analysis-json-file-example admonition">
+<p class="admonition-title">Analysis_json_file example</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/Analysis_json_file.png"><img alt="../_images/Analysis_json_file.png" src="../_images/Analysis_json_file.png" style="width: 386.4px; height: 270.9px;" /></a>
 </figure>
-<p><strong>create subclass of class and implement the method</strong></p>
+</div>
+</div>
+<p><strong>Create subclass of class and implement the method</strong></p>
 <ul class="simple">
 <li><p>We can create subclass of class and implement the methods.</p></li>
 <li><p>In <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">file</span></code> , we need to create a class for respective Analysis and we need to define methods for initialize  ,compute, to_string, to_html inside the class.</p></li>
 </ul>
 <p><strong>Example:</strong></p>
-<figure class="align-center" id="id9">
-<a class="with-border reference internal image-reference" href="../_images/Analysispyfile.png"><img alt="../_images/Analysispyfile.png" class="with-border" src="../_images/Analysispyfile.png" style="width: 570.6px; height: 406.8px;" /></a>
-<figcaption>
-<p><span class="caption-text">Analysispyfile.png example</span><a class="headerlink" href="#id9" title="Permalink to this image"></a></p>
-</figcaption>
+<div class="toggle toggle-hidden docutils container">
+<div class="admonition-analysispyfile-png-example admonition">
+<p class="admonition-title">Analysispyfile.png example</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/Analysispyfile.png"><img alt="../_images/Analysispyfile.png" src="../_images/Analysispyfile.png" style="width: 570.6px; height: 406.8px;" /></a>
 </figure>
+</div>
+</div>
 </section>
 </section>
 <section id="contribution-of-users-to-expand-its-features">

@@ -22,7 +22,11 @@ The dashboard GUI is currently designed around 1920x1080 displays
 .. toctree::
   :maxdepth: 2
   :caption:  User Guide:
-
+  
+  RaiModule/RAI in Responsible AI.rst
+  RaiModule/RAI Bias and Fairness.rst
+  RaiModule/Robustness of AI.rst
+  RaiModule/RAI in Model Selection.rst
   RaiModule/Installation.rst
   RaiModule/Getting Started.rst
   RaiModule/Tutorial Demo.rst

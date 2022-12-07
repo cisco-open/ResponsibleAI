@@ -35,13 +35,14 @@ Here’s the short summary
  **Example:** 
 
 
+.. container:: toggle, toggle-hidden
 
+    .. admonition:: __init__.py file example
 
-.. figure:: ../images/fromclass.gif
-   :align: center
-   :scale: 60 %
+        .. figure:: ../images/fromclass.gif
+           :align: center
+           :scale: 60 %
 
-   __init__.py file example.
 
 
 
@@ -62,13 +63,13 @@ Here’s the short summary
  
 **Example:** 
 
+.. container:: toggle, toggle-hidden
 
-.. figure:: /images/json_metric.png
-   :class: with-border
-   :scale: 40 %
-   :align: center
+    .. admonition:: json_metric file example
 
-   json_metric file example.
+        .. figure:: ../images/json_metric.png
+           :scale: 40 %
+
 
 
 
@@ -81,13 +82,12 @@ Here’s the short summary
 
 **Example:** 
 
+.. container:: toggle, toggle-hidden
 
-.. figure:: /images/metric_pyfile.png
-   :class: with-border
-   :scale: 40 %
-   :align: center
+    .. admonition:: metric_python_file example
 
-   metric_python_file example.
+        .. figure:: ../images/metric_pyfile.png
+           :scale: 40 %
 
 
 
@@ -114,13 +114,13 @@ Here’s the short summary
 
 **Example:** 
 
+.. container:: toggle, toggle-hidden
 
-.. figure:: /images/add_certficate.png
-   :class: with-border
-   :scale: 60 %
-   :align: center
+    .. admonition:: sample certficate
 
-   sample certficate .
+        .. figure:: ../images/add_certficate.png
+           :scale: 60 %
+           :align: center
 
 
 
@@ -142,11 +142,13 @@ Here’s the short summary
 
 **Example:** 
 
-.. figure:: ../images/fromclass.gif
-   :align: center
-   :scale: 60 %
+.. container:: toggle, toggle-hidden
 
-   __init__.py file example.
+    .. admonition:: __init__.py file example
+
+        .. figure:: ../images/fromclass.gif
+           :scale: 60 %
+           :align: center
 
 
 
@@ -166,16 +168,17 @@ Here’s the short summary
 
 **Example:** 
 
+.. container:: toggle, toggle-hidden
 
-.. figure:: /images/Analysis_json_file.png
-   :class: with-border
-   :scale: 70 %
-   :align: center
+    .. admonition:: Analysis_json_file example
 
-   Analysis_json_file example.
+        .. figure:: ../images/Analysis_json_file.png
+           :scale: 70 %
+           :align: center
 
 
-**create subclass of class and implement the method**
+
+**Create subclass of class and implement the method**
 
 - We can create subclass of class and implement the methods.
 
@@ -185,12 +188,14 @@ Here’s the short summary
 **Example:** 
 
 
-.. figure:: /images/Analysispyfile.png
-   :class: with-border
-   :scale: 60 %
-   :align: center
+.. container:: toggle, toggle-hidden
 
-   Analysispyfile.png example
+    .. admonition::  Analysispyfile.png example
+
+        .. figure:: ../images/Analysispyfile.png
+           :scale: 60 %
+           :align: center
+
 
 
 ================================================

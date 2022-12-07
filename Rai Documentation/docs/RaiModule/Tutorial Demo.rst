@@ -4,7 +4,7 @@
 **Demo Cases**
 ==============
 
-
+   
 .. important::
    Demo projects will show some of the capabilities of RAI.
 
@@ -12,7 +12,7 @@
 
 
 - **Run the demos by using.**
------------------------------
+
 
 .. code-block:: bash
 

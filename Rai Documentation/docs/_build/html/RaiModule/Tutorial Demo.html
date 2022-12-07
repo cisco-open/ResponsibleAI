@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Demo Cases &mdash; RAI Documentation 0.1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/togglebutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
       <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
@@ -18,6 +20,13 @@
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
+        <script>let toggleHintShow = 'Click to show';</script>
+        <script>let toggleHintHide = 'Click to hide';</script>
+        <script>let toggleOpenOnPrint = 'true';</script>
+        <script src="../_static/togglebutton.js"></script>
+        <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -43,6 +52,10 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">User Guide:</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="RAI%20in%20Responsible%20AI.html"><strong>RAI Responsible in AI</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="RAI%20Bias%20and%20Fairness.html"><strong>RAI - Bias and Fairness</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="Robustness%20of%20AI.html"><strong>Robustness of AI</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="RAI%20in%20Model%20Selection.html"><strong>Model Selection</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="Installation.html"><strong>Installation</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="Getting%20Started.html"><strong>Getting Started</strong></a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#"><strong>Demo Cases</strong></a></li>
@@ -113,11 +126,14 @@
 <ul class="simple">
 <li><p><strong>Run the demos by using.</strong></p></li>
 </ul>
-<hr class="docutils" />
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="sb">``</span>python demo_filename<span class="sb">``</span> <span class="k">for</span> instance
 </pre></div>
 </div>
 <table class="docutils align-default">
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 62%" />
+</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>FileName</p></th>
 <th class="head"><p>Description</p></th>
