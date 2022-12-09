@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RAI - Bias and Fairness &mdash; RAI Documentation 0.1 documentation</title>
+  <title>RAI - Fairness &mdash; RAI Documentation 0.1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/togglebutton.css" type="text/css" />
@@ -53,9 +53,8 @@
               <p class="caption" role="heading"><span class="caption-text">User Guide:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="RAI%20in%20Responsible%20AI.html"><strong>RAI Responsible in AI</strong></a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#"><strong>RAI - Bias and Fairness</strong></a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#how-to-use-rai-for-bias"><strong>How to use RAI for Bias</strong></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#how-to-use-rai-for-fairness"><strong>How to use RAI for Fairness</strong></a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#"><strong>RAI - Fairness</strong></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#fairness-metrics"><strong>Fairness Metrics</strong></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="Robustness%20of%20AI.html"><strong>Robustness of AI</strong></a></li>
@@ -87,9 +86,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-      <li><strong>RAI - Bias and Fairness</strong></li>
+      <li><strong>RAI - Fairness</strong></li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/RaiModule/RAI Bias and Fairness.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/RaiModule/RAI Fairness.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -121,28 +120,172 @@
     text-align: unset;
 }
 </style>
-<section id="rai-bias-and-fairness">
-<span id="id1"></span><h1><strong>RAI - Bias and Fairness</strong><a class="headerlink" href="#rai-bias-and-fairness" title="Permalink to this heading"></a></h1>
+<section id="rai-fairness">
+<span id="id1"></span><h1><strong>RAI - Fairness</strong><a class="headerlink" href="#rai-fairness" title="Permalink to this heading"></a></h1>
 <p>The RAI goal is not to make the data unbiased or the ML model fair but to make the overall system and outcomes fair.</p>
-<section id="how-to-use-rai-for-bias">
-<h2><strong>How to use RAI for Bias</strong><a class="headerlink" href="#how-to-use-rai-for-bias" title="Permalink to this heading"></a></h2>
-<ul class="simple">
-<li><p>Bias in ML is an sort of mistake in which some aspects of a dataset are given more weight and/or representation than others. A skewed outcome, low accuracy levels, and analytical errors result from a dataset that is biased that does not represent a model’s use case accurately.</p></li>
-<li><p>RAI will use bias as the process of collecting the data to build the models. It can come with testing the outputs of the models to verify their validity. Bias can even be applied when interpreting valid or invalid results from an approved data model.</p></li>
-</ul>
-</section>
-<section id="how-to-use-rai-for-fairness">
-<h2><strong>How to use RAI for Fairness</strong><a class="headerlink" href="#how-to-use-rai-for-fairness" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>Fairness in machine learning refers to the various attempts at correcting algorithmic bias in automated decision processes based on machine learning models. Decisions made by computers after a machine-learning process may be considered unfair if they were based on variables considered sensitive.</p></li>
 <li><p>RAI will use fairness as the process of correcting and eliminating algorithmic bias (of race and ethnicity, gender, sexual orientation, disability, and class) from machine learning models.</p></li>
 <li><p>If a model is trained using an unbalanced dataset, such as one that contains far more people with lighter skin than people with darker skin, there is serious risk the model’s predictions will be unfair when it is deployed.</p></li>
-<li><p>Here RAI enables fairness directly into the model internal representation itself to produce fair outputs even if it is trained on unfair data, which is important because there are very few well-balanced datasets for machine learning.</p></li>
+<li><p>Here RAI enables fairness directly into the model internal representation itself to produce fair outputs even if it is trained on unfair data.</p></li>
 </ul>
-<div class="dropdown admonition important">
-<p class="admonition-title">Important</p>
-<p>Through RAI we can detect it before it becomes a problem or respond to it when it arises by putting the right systems in place early and staying on top of data collection, labeling, and implementation.</p>
+<section id="fairness-metrics">
+<h2><strong>Fairness Metrics</strong><a class="headerlink" href="#fairness-metrics" title="Permalink to this heading"></a></h2>
+<p>Fairness measures allow us to assess and audit for possible biases in a trained model. There are several types of metrics that are used in RAI in order to assess a model’s fairness. They can be classified into groups as follows:</p>
+<p><strong>Individual Fairness</strong></p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 62%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>display_name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>generalized_entropy_index</p></td>
+<td><p>A measure of information theoretic redundancy in data.
+Describes how unequally the outcomes of an algorithm benefit
+different individuals or groups in a population</p></td>
+</tr>
+<tr class="row-odd"><td><p>theil_index</p></td>
+<td><p>The generalized entropy of benefit for all individuals in the dataset,
+with alpha = 1.nMeasures the inequality in benefit allocation for individuals.
+nA value of 0 implies perfect fairness</p></td>
+</tr>
+<tr class="row-even"><td><p>coefficient_of_variation</p></td>
+<td><p>The square root of twice the generalized entropy index with alpha = 2.
+nThe ideal value is 0.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="toggle toggle-hidden docutils container">
+<div class="admonition-individual-fairness admonition">
+<p class="admonition-title">Individual Fairness</p>
+<img alt="../_images/Individual_fairness.png" src="../_images/Individual_fairness.png" />
 </div>
+</div>
+<p><strong>Group Fairness</strong></p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 70%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>display_name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>disparate_impact_ratio</p></td>
+<td><p>The ratio of rate of favorable outcome for the unprivileged group to that of the privileged group.
+nThe ideal value of this metric is 1.0 A value &lt; 1 implies higher benefit for the privileged group
+and a value &gt; 1 implies a higher benefit for the unprivileged group.</p></td>
+</tr>
+<tr class="row-odd"><td><p>statistical_parity_difference</p></td>
+<td><p>The difference of the rate of favorable outcomes received by the unprivileged group to the privileged group.
+nThe idea value is 0.0</p></td>
+</tr>
+<tr class="row-even"><td><p>between_group_generalized_entropy_error</p></td>
+<td><p>The between group decomposition for generalized entropy error</p></td>
+</tr>
+<tr class="row-odd"><td><p>equal_opportunity_difference</p></td>
+<td><p>The difference of true positive rates between the unprivileged and the privileged groups.
+nThe true positive rate is the ratio of true positives to the total number of actual positives for a given group.
+nThe ideal value is 0. A value of &lt; 0 implies higher benefit for the privileged group and a value &gt; 0 implies
+higher benefit for the unprivileged group</p></td>
+</tr>
+</tbody>
+</table>
+<div class="toggle toggle-hidden docutils container">
+<div class="admonition-group-fairness admonition">
+<p class="admonition-title">Group fairness</p>
+<img alt="../_images/Group_fairness.png" src="../_images/Group_fairness.png" />
+</div>
+</div>
+<p><strong>General Fairness</strong></p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 36%" />
+<col style="width: 64%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>display_name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>average_odds_difference</p></td>
+<td><p>The average difference of false positive rate (false positives / negatives) and
+true positive rate (true positives / positives)
+between unprivileged and privileged groups.
+nThe ideal value is 0.  A value of &lt; 0 implies higher benefit for the privileged group
+and a value &gt; 0 implies higher benefit for the unprivileged group</p></td>
+</tr>
+<tr class="row-odd"><td><p>between_all_groups_coefficient_of_variation</p></td>
+<td><p>The square root of twice the pairwise entropy between every pair of privileged and
+underprivileged groups with alpha = 2.nThe ideal value is 0</p></td>
+</tr>
+<tr class="row-even"><td><p>between_all_groups_generalized_entropy_index</p></td>
+<td><p>The pairwise entropy between every pair of privileged and underprivileged groups.
+nThe ideal value is 0.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>between_all_groups_theil_index</p></td>
+<td><p>The pairwise entropy between every pair of privileged and underprivileged groups with
+alpha = 1.nThe ideal value is 0.0</p></td>
+</tr>
+</tbody>
+</table>
+<div class="toggle toggle-hidden docutils container">
+<div class="admonition-general-fairness admonition">
+<p class="admonition-title">General Fairness</p>
+<img alt="../_images/general_fairness.png" src="../_images/general_fairness.png" />
+</div>
+</div>
+<p><strong>Dataset Fairness</strong></p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 36%" />
+<col style="width: 64%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>display_name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>base_rate</p></td>
+<td><p>Base Rate is the rate at which a positive outcome occurs in Data.
+In formula it is, Pr(Y=pos_label) = P/(P+N)</p></td>
+</tr>
+<tr class="row-odd"><td><p>num_instances</p></td>
+<td><p>Num Instances counts the number of examples in Data</p></td>
+</tr>
+<tr class="row-even"><td><p>num_negatives</p></td>
+<td><p>Num Negatives counts the number of negative labels in Data</p></td>
+</tr>
+<tr class="row-odd"><td><p>num_positives</p></td>
+<td><p>Num Positives calculates the number of positive labels in Data</p></td>
+</tr>
+</tbody>
+</table>
+<div class="toggle toggle-hidden docutils container">
+<div class="admonition-dataset-fairness admonition">
+<p class="admonition-title">Dataset Fairness</p>
+<img alt="../_images/Dataset_fairness.png" src="../_images/Dataset_fairness.png" />
+</div>
+</div>
+<p>For Instance:</p>
+<ul class="simple">
+<li><p>User can obtain to compute specialized metrics like Disparate Impact Ratio to show the fairness of the models classification across sensitive characteristics</p></li>
+</ul>
+<figure class="align-center" id="id2">
+<a class="reference internal image-reference" href="../_images/fairness.gif"><img alt="../_images/fairness.gif" src="../_images/fairness.gif" style="width: 768.0px; height: 432.0px;" /></a>
+<figcaption>
+<p><span class="caption-text">fairness_of_the_model</span><a class="headerlink" href="#id2" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
 <p>You can see quick Demo here - How RAi can be used for detecting and <a class="reference internal" href="Robustness%20of%20AI.html#robustness-of-ai"><span class="std std-ref">resolving bias and fairness</span></a> in AI models.</p>
 </section>
 </section>

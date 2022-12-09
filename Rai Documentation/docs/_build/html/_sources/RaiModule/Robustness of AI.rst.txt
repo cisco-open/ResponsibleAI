@@ -5,6 +5,9 @@
 **Robustness of AI**
 ====================
 
+In this Demo case we can see how RAi can be used for detecting and resolving bias and fairness in AI models.
+
+
 - To demonstrate how RAI works let’s consider a simple data science project to predict income level of participants.
 - In this dataset there is imbalance between white and black participants.
 - Here rai will show how to identify and mitigate the problem.
@@ -40,9 +43,9 @@
         .. image::  /images/rai_demo_3_Moment.png
 
 
-- To mitigate this imbalance problem, we can go back to data science project and perform some form of mitigation strategy 
-- Here we are using Reweighing algorithm and after fitting the model once again
-- we can ask RAI to compute the metrics once again and evaluate our model
+- To mitigate this imbalance problem, we can go back to data science project and perform some form of mitigation strategy. 
+- Here we are using Reweighing algorithm and after fitting the model once again.
+- we can ask RAI to compute the metrics once again and evaluate our model.
 
 .. container:: toggle, toggle-hidden
 
@@ -50,8 +53,8 @@
 
         .. image::  /images/rai_demo_4_Moment.png
 
-- Now we can go back to the dashboard 
-- At the homepage of dashboard we can take a look how system have performed after this mitigation which shows that all the fairness tests have passed this time
+- Now we can go back to the dashboard. 
+- At the homepage of dashboard we can take a look how system have performed after this mitigation which shows that all the fairness tests have passed this time.
 
 
 .. container:: toggle, toggle-hidden

@@ -53,7 +53,7 @@
               <p class="caption" role="heading"><span class="caption-text">User Guide:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="RAI%20in%20Responsible%20AI.html"><strong>RAI Responsible in AI</strong></a></li>
-<li class="toctree-l1"><a class="reference internal" href="RAI%20Bias%20and%20Fairness.html"><strong>RAI - Bias and Fairness</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="RAI%20Fairness.html"><strong>RAI - Fairness</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="Robustness%20of%20AI.html"><strong>Robustness of AI</strong></a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#"><strong>Model Selection</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="Installation.html"><strong>Installation</strong></a></li>
@@ -134,33 +134,60 @@
 <ul class="simple">
 <li><p>This way, we can determine the model with the lowest generalization error.It refers to the performance of the model on unseen data, i.e. data that the model hasn’t been trained on.</p></li>
 </ul>
-<p><strong>When constructed:</strong></p>
-<blockquote>
-<div><ul class="simple">
-<li><p>Models are optionally passed the name, the models functions for
-inferences, its name, the model, its optimizer, its loss function, its class and a
-description. Attributes of the model are used to determine which metrics are relevant.</p></li>
-<li><p>We need to give inputs like output_features,predict_fun,predict_prob_fun,generate_text_fun,
-generate_image_fun,name,display_name,agent,loss_function,optimizer,model_class,description.</p></li>
-<li><p>Here name is the mandatory parameter if not provided it will throw error.</p></li>
-<li><p>output_features if not provided will throw error like “output_features must be a Feature or array of Features”.</p></li>
-</ul>
-</div></blockquote>
 <div class="dropdown admonition">
 <p class="admonition-title">Example</p>
-<p>We may have a dataset for which we are interested in developing a classification or regression predictive model. We do not know beforehand as to which model will perform best on this problem, as it is unknowable. Therefore, we fit and evaluate a suite of different models on the problem.</p>
+<p>We may have a dataset for which we are interested in visualizing performance of individual case. We do not know beforehand as to which model will perform best on this problem, as it is unknowable. Therefore, we fit and evaluate a suite of different models on the problem.</p>
 </div>
-<p>For instance</p>
 <ul class="simple">
-<li><p>It will create an empty list and populate it with the pair (model_name, model)</p></li>
-<li><p>It will define the parameters for splitting the data through the Scikit-Learn KFold cross-validation</p></li>
-<li><p>It will create a for loop where it will cross-validate each model and save its performance</p></li>
-<li><p>It will view the performance of each model in order to choose the one that performed best</p></li>
-<li><p>It will define a list and insert the models we want to test.</p></li>
-<li><p>If it is a regression problem, it will use the mean squared error (MSE) metric.</p></li>
-<li><p>It will cross-validate, tests, and its performance saved in the results for each model</p></li>
-<li><p>The visualization is very simple and will be done through a boxplot.</p></li>
+<li><p>Rai can help us in Model selection</p></li>
+<li><p>We can select a Project here</p></li>
 </ul>
+<div class="toggle toggle-hidden docutils container">
+<div class="admonition-select-project admonition">
+<p class="admonition-title">Select project</p>
+<img alt="../_images/Select_project.png" src="../_images/Select_project.png" />
+</div>
+</div>
+<ul class="simple">
+<li><p>We can go to Metric Graphs</p></li>
+<li><p>Metric Graphs shows here how individual parameters and metrics have changed during model development</p></li>
+</ul>
+<div class="toggle toggle-hidden docutils container">
+<div class="admonition-metric-graph admonition">
+<p class="admonition-title">Metric graph</p>
+<img alt="../_images/metric_graph.png" src="../_images/metric_graph.png" />
+</div>
+</div>
+<ul class="simple">
+<li><p>Here for instance, we have performed some Grid search to select the best model for task</p></li>
+<li><p>We can show individual metrics of interest</p></li>
+</ul>
+<div class="toggle toggle-hidden docutils container">
+<div class="admonition-metric-performance admonition">
+<p class="admonition-title">Metric performance</p>
+<img alt="../_images/metric_performance.png" src="../_images/metric_performance.png" />
+</div>
+</div>
+<ul class="simple">
+<li><p>Monitor how system is performing in each individual case</p></li>
+<li><p>This helps us to select best model that fits our desire characteristics</p></li>
+</ul>
+<div class="toggle toggle-hidden docutils container">
+<div class="admonition-individual-case admonition">
+<p class="admonition-title">Individual case</p>
+<img alt="../_images/each_case.png" src="../_images/each_case.png" />
+</div>
+</div>
+<figure class="align-center" id="id1">
+<a class="reference internal image-reference" href="../_images/Model_selection.gif"><img alt="../_images/Model_selection.gif" src="../_images/Model_selection.gif" style="width: 768.0px; height: 432.0px;" /></a>
+<figcaption>
+<p><span class="caption-text">Model_selection</span><a class="headerlink" href="#id1" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<div class="dropdown admonition important">
+<p class="admonition-title">Important</p>
+<p>Through RAI we can detect it before it becomes a problem or respond to it when it arises by putting the right systems in place early and staying on top of data collection, labeling, and implementation.</p>
+</div>
 </section>
 
 

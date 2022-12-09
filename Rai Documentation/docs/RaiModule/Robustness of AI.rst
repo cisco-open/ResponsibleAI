@@ -5,6 +5,9 @@
 **Robustness of AI**
 ====================
 
+In this Demo case we can see how RAi can be used for detecting and resolving bias and fairness in AI models.
+
+
 - To demonstrate how RAI works let’s consider a simple data science project to predict income level of participants.
 - In this dataset there is imbalance between white and black participants.
 - Here rai will show how to identify and mitigate the problem.

@@ -48,5 +48,5 @@
  - Visualization can help in understanding of the models so that we can have the idea of where it is failing and where it is succeeding. 
  - It can use Grad-cam to help in highlighting the important regions in the images by bound boxing. 
  - After fitting the model RAI will help the show the results to the dashboard and we can see from all the category Explanability, Robustness, Performance and Fairness how the model is working on these categories and we can analyse how to make it better. 
- - we can check how many tests are passed in the categories and perform the changes accordingly. 
+ - We can check how many tests are passed in the categories and perform the changes accordingly. 
  - We can also make use of metric graphs and get to know how individual parameters and metric changes during the model development.

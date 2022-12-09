@@ -53,7 +53,7 @@
               <p class="caption" role="heading"><span class="caption-text">User Guide:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="RAI%20in%20Responsible%20AI.html"><strong>RAI Responsible in AI</strong></a></li>
-<li class="toctree-l1"><a class="reference internal" href="RAI%20Bias%20and%20Fairness.html"><strong>RAI - Bias and Fairness</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="RAI%20Fairness.html"><strong>RAI - Fairness</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="Robustness%20of%20AI.html"><strong>Robustness of AI</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="RAI%20in%20Model%20Selection.html"><strong>Model Selection</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="Installation.html"><strong>Installation</strong></a></li>
@@ -120,19 +120,6 @@
 <section id="getting-started">
 <span id="id1"></span><h1><strong>Getting Started</strong><a class="headerlink" href="#getting-started" title="Permalink to this heading"></a></h1>
 <p>Here is a quick example of how RAI can be used without the dashboard to calculate and report on the metrics for a machine learning task.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>import os
-import sys
-import inspect
-import pandas as pd
-from sklearn.model_selection import train_test_split
-from RAI.AISystem import AISystem, Model
-from RAI.Analysis import AnalysisManager
-from RAI.dataset import NumpyData, Dataset
-from RAI.utils import df_to_RAI
-import numpy as np
-from sklearn.ensemble import RandomForestClassifier
-</pre></div>
-</div>
 <ul class="simple">
 <li><p>It starts by importing the necessary libraries</p></li>
 </ul>
