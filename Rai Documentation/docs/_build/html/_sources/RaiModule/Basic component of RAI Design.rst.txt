@@ -1,8 +1,8 @@
 .. _Basic component of RAI Design:
 
-==================================
-**Basic component of RAI Design:**
-==================================
+=================================
+**Basic component of RAI Design**
+=================================
 
 **AISystem**
 ============
