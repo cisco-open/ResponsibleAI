@@ -8,9 +8,11 @@ Model selection is the process of selecting one of the models as the final ML-mo
 
 - To figure this out, RAI will usually come up with some kind of evaluation metric. 
 - Then it will divide the training dataset into 3 parts: Training set, Validation set(sometimes called development), and a Test dataset. 
+
  - **The Training** - It is used to fit the models, 
  - **The Validation** - It is used to estimate prediction error for model selection, 
  - **The Test set** - It is used to do a final evaluation and assessment of the generalization error of the chosen model on the test dataset. 
+ 
 - This way, we can determine the model with the lowest generalization error.It refers to the performance of the model on unseen data, i.e. data that the model hasn’t been trained on.
 
 
