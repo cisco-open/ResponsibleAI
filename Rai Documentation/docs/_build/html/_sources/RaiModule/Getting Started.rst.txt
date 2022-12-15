@@ -5,25 +5,22 @@
 **Introduction**
 ================
 
-- RAI is an easy-to-use framework for Responsible AI development. We can provide the prediction input in RAI and it handles all metric computation and perform live visualization on its dashboard. 
-- Users can also opt for console to see the RAI calculation. 
-- Through RAI we can handle large variety of models like text, images, tabular data, etc. 
-- RAI automatically determines what metrics are relevant by examining the type of model, data and task provided by the user. 
-- Through RAI Visualization help we can get the idea of the models and based on the visualization we can do the analysis and can optimize it also. 
-- In RAI we are having access to various metrics that measures aspects of the AI system including Performance, Robustness, Explainability and Fairness. Based on these parameters, we can get the idea of the model and based on these we can make changes in the model.
 
-
+- RAI is an easy-to-use framework for Responsible AI development. We can provide the prediction input in RAI, which handles all metric computation and performs live visualization on its dashboard.
+- To see the calculation of RAI, users can also opt for the console.
+- Through RAI we can handle large variety of models like text, images, tabular data, etc.
+- Based on the type of model, data, and task provided by the user, RAI automatically determines what metrics are relevant.
+- Through RAI Visualization help, we can get an idea of the models, and based on the visualization; we can analyze and optimize them.
+- RAI provides metrics that measure various aspects of AI systems, including performance, robustness, explainability, and fairness. Based on these parameters, we can get an idea of the model, and based on these, we can make changes to the model.
 
 
 ===================
 **Getting Started**
 ===================
 
-Here is a quick example of how RAI can be used without the dashboard to calculate and report on the metrics for a machine learning task.
+Here's a quick example of using RAI without a dashboard for calculating and reporting on machine learning metrics.
 
-
-
-- It starts by importing the necessary libraries
+- It starts by importing the necessary libraries 
 
 
 

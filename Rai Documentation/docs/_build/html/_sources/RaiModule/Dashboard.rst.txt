@@ -5,18 +5,18 @@
 =============
 
 
-The goal is to provides a generic framework to perform various types of analysis from data quality assessment to model selection based on performance, fairness and robustness criteria.
+The goal is to provide a generic framework to perform various types of analysis, from data quality assessment to model selection based on performance, fairness, and robustness criteria.
+
 
 **RAI Dashboard features**
 ==========================
 
-- A Rai dashboard is a data visualization tool that tracks, analyzes, and display metrics, and critical data.
-- Rai dashboard handles all metric computation and perform live visualizations of currently running code on its dashboard. 
-- Rai dashboard can handle variety of model and store information of each model from text based models to image based models.
-- Rai dashboard automatically determine what metrics are relevant by examining the type of model, data and task provided by the user.
-- Rai allows users to quickly scan from dashboard like input and output visualization, obtaining a high-level view of data.
 
-
+- Rai dashboards display metrics and critical data and give the user a visual representation of them.
+- The Rai dashboard computes all metrics and visualizes the current running code in real time.
+- Rai dashboard can handle a wide variety of models and store information for each model, from text-based models to image-based models.
+- Rai dashboard automatically determines what metrics are relevant by examining the type of model, data, and task provided by the user.
+- With RAI, users can view data at a high level by scanning dashboards like input and output visualizations.
 
 
 **How To Run RAI Dashboard**

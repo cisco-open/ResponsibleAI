@@ -4,20 +4,20 @@
 **RAI - Fairness**
 ==================
 
-
 The RAI goal is not to make the data unbiased or the ML model fair but to make the overall system and outcomes fair.
 
-
-- Fairness in machine learning refers to the various attempts at correcting algorithmic bias in automated decision processes based on machine learning models. Decisions made by computers after a machine-learning process may be considered unfair if they were based on variables considered sensitive.
-- RAI will use fairness as the process of correcting and eliminating algorithmic bias (of race and ethnicity, gender, sexual orientation, disability, and class) from machine learning models.
+- Fairness in machine learning refers to the various attempts at correcting algorithmic bias in automated decision processes based on machine learning models. Decisions made by computers after a machine-learning process may be considered unfair if they were based on sensitive variables.
+- RAI will use fairness to correct and eliminate algorithmic bias (of race and ethnicity, gender, sexual orientation, disability, and class) from machine learning models.
 - If a model is trained using an unbalanced dataset, such as one that contains far more people with lighter skin than people with darker skin, there is serious risk the model’s predictions will be unfair when it is deployed.
-- Here RAI enables fairness directly into the model internal representation itself to produce fair outputs even if it is trained on unfair data.
+- Here RAI enables fairness directly into the model internal representation to produce fair outputs even if it is trained on unfair data.
+
 
 
 **Fairness Metrics**
 ====================
 
-Fairness measures allow us to assess and audit for possible biases in a trained model. There are several types of metrics that are used in RAI in order to assess a model’s fairness. They can be classified into groups as follows:
+
+Fairness measures allow us to assess and audit for possible biases in a trained model. There are several types of metrics that are used in RAI to assess a model’s fairness. They can be classified as follows:
 
 
 **Individual Fairness**
@@ -135,4 +135,4 @@ For Instance:
 
 
 
-You can see quick Demo here - How RAi can be used for detecting and :ref:`resolving bias and fairness <Robustness of AI>` in AI models.
+A case study of how RAI can be applied to detect and resolve biases in AI models can be found :ref:`here <Robustness of AI>`.
