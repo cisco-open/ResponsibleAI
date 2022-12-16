@@ -26,7 +26,6 @@ The dashboard GUI is currently designed around 1920x1080 displays
   RaiModule/Getting Started.rst
   RaiModule/Installation.rst
   RaiModule/RAI in Responsible AI.rst
-  RaiModule/RAI Fairness.rst
   RaiModule/Robustness of AI.rst
   RaiModule/RAI in Model Selection.rst
   RaiModule/Tutorial Demo.rst
