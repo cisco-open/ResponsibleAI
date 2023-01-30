@@ -7,6 +7,9 @@ repository:
   # A short description of the repository that will show up on GitHub
   description: RAI is a python library that is written to help AI developers in various aspects of responsible AI development.
 
+  # Either `true` to make the repository private, or `false` to make it public.
+  private: false
+
   # A URL with more information about the repository
   homepage: ''
 
@@ -23,16 +26,24 @@ repository:
 
 # See https://docs.github.com/en/rest/reference/teams#add-or-update-team-repository-permissions for available options
 teams:
-  - name: ResponsibleAI-admins
     # The permission to grant the team. Can be one of:
     # * `pull` - can pull, but not push to or administer this repository.
     # * `push` - can pull and push, but not administer this repository.
     # * `admin` - can pull, push and administer this repository.
     # * `maintain` - Recommended for project managers who need to manage the repository without access to sensitive or destructive actions.
+    # * `triage` - Recommended for contributors who need to proactively manage issues and pull requests without write access.
+
+  - name: ResponsibleAI-admins
+    permission: admin
+
+  - name: org-admins
     permission: admin
 
   - name: ResponsibleAI-maintainers
     permission: maintain
+
+  - name: ResponsibleAI
+    permission: triage
 
 # Collaborators: give specific users access to this repository.
 # See https://docs.github.com/en/rest/reference/collaborators for available options
