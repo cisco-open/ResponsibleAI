@@ -52,9 +52,6 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">User Guide:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="Getting%20Started.html"><strong>Introduction</strong></a></li>
-<li class="toctree-l1"><a class="reference internal" href="Getting%20Started.html#id1"><strong>Getting Started</strong></a></li>
-<li class="toctree-l1"><a class="reference internal" href="Installation.html"><strong>Installation</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="RAI%20in%20Responsible%20AI.html"><strong>RAI Responsible in AI</strong></a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#"><strong>RAI - Fairness</strong></a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#fairness-metrics"><strong>Fairness Metrics</strong></a></li>
@@ -62,9 +59,11 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="Robustness%20of%20AI.html"><strong>Robustness of AI</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="RAI%20in%20Model%20Selection.html"><strong>Model Selection</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation.html"><strong>Installation</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="Getting%20Started.html"><strong>Getting Started</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="Tutorial%20Demo.html"><strong>Demo Cases</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="Dashboard.html"><strong>Dashboard</strong></a></li>
-<li class="toctree-l1"><a class="reference internal" href="Basic%20component%20of%20RAI%20Design.html"><strong>Basic component of RAI Design</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="Basic%20component%20of%20RAI%20Design.html"><strong>Basic component of RAI Design:</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="Contribute%20and%20extend%20RAI.html"><strong>Contribute and Extend RAI</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="Contribute%20and%20extend%20RAI.html#contribution-of-users-to-expand-its-features"><strong>Contribution of users to expand its features</strong></a></li>
 </ul>
@@ -123,16 +122,15 @@
 </style>
 <section id="rai-fairness">
 <span id="id1"></span><h1><strong>RAI - Fairness</strong><a class="headerlink" href="#rai-fairness" title="Permalink to this heading"></a></h1>
-<p>The RAI goal is not to make the data unbiased or the ML model fair but to make the overall system and outcomes fair.</p>
+<p>Measuring bias in AI and studying AI fairness are important for a number of reasons.</p>
 <ul class="simple">
-<li><p>Fairness in machine learning refers to the various attempts at correcting algorithmic bias in automated decision processes based on machine learning models. Decisions made by computers after a machine-learning process may be considered unfair if they were based on sensitive variables.</p></li>
-<li><p>RAI will use fairness to correct and eliminate algorithmic bias (of race and ethnicity, gender, sexual orientation, disability, and class) from machine learning models.</p></li>
-<li><p>If a model is trained using an unbalanced dataset, such as one that contains far more people with lighter skin than people with darker skin, there is serious risk the model’s predictions will be unfair when it is deployed.</p></li>
-<li><p>Here RAI enables fairness directly into the model internal representation to produce fair outputs even if it is trained on unfair data.</p></li>
+<li><p>AI systems are increasingly being used in important decision-making contexts, such as hiring, lending, and criminal justice. If these systems are biased, it can lead to unfair outcomes for certain groups of people, such as those who are discriminated against based on their race, gender, or other characteristics. This can have serious consequences, including economic and social harm, and may even violate laws and regulations that prohibit discrimination.</p></li>
+<li><p>AI systems that are biased or unfair may not be reliable or accurate. For example, if an AI system used for hiring is biased against certain groups of people, it may overlook qualified candidates and instead select less qualified candidates based on their group membership. This can lead to inefficient and ineffective decision-making, and may even harm the business or organization that is using the AI system.</p></li>
+<li><p>Measuring bias and studying fairness in AI is important for building trust in these systems. If people do not believe that AI systems are fair and unbiased, they may be less likely to trust and use them, which could limit the potential benefits of AI. By ensuring that AI systems are fair and unbiased, organizations can help to build trust and confidence in these systems and increase their adoption and impact.</p></li>
 </ul>
 <section id="fairness-metrics">
 <h2><strong>Fairness Metrics</strong><a class="headerlink" href="#fairness-metrics" title="Permalink to this heading"></a></h2>
-<p>Fairness measures allow us to assess and audit for possible biases in a trained model. There are several types of metrics that are used in RAI to assess a model’s fairness. They can be classified as follows:</p>
+<p>Fairness measures allow us to assess and audit for possible biases in a trained model. There are several types of metrics that are used in RAI in order to assess a model’s fairness. They can be classified into groups as follows:</p>
 <p><strong>Individual Fairness</strong></p>
 <table class="docutils align-default">
 <colgroup>
@@ -287,7 +285,7 @@ In formula it is, Pr(Y=pos_label) = P/(P+N)</p></td>
 <p><span class="caption-text">fairness_of_the_model</span><a class="headerlink" href="#id2" title="Permalink to this image"></a></p>
 </figcaption>
 </figure>
-<p>A case study of how RAI can be applied to detect and resolve biases in AI models can be found <a class="reference internal" href="Robustness%20of%20AI.html#robustness-of-ai"><span class="std std-ref">here</span></a>.</p>
+<p>You can see quick Demo here - How RAi can be used for detecting and <a class="reference internal" href="Robustness%20of%20AI.html#robustness-of-ai"><span class="std std-ref">resolving bias and fairness</span></a> in AI models.</p>
 </section>
 </section>
 
