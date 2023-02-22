@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard &mdash; RAI Documentation 0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/togglebutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
+        <script>let toggleHintShow = 'Click to show';</script>
+        <script>let toggleHintHide = 'Click to hide';</script>
+        <script>let toggleOpenOnPrint = 'true';</script>
+        <script src="../_static/togglebutton.js"></script>
+        <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Basic component of RAI Design" href="Basic%20component%20of%20RAI%20Design.html" />
+    <link rel="prev" title="Demo Cases" href="Tutorial%20Demo.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> RAI Documentation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guide:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Getting%20Started.html"><strong>Introduction</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="Getting%20Started.html#id1"><strong>Getting Started</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation.html"><strong>Installation</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="RAI%20in%20Responsible%20AI.html"><strong>RAI Responsible in AI</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="RAI%20Fairness.html"><strong>RAI - Fairness</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="Robustness%20of%20AI.html"><strong>Robustness of AI</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="RAI%20in%20Model%20Selection.html"><strong>Model Selection</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="Tutorial%20Demo.html"><strong>Demo Cases</strong></a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#"><strong>Dashboard</strong></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#rai-dashboard-features"><strong>RAI Dashboard features</strong></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-run-rai-dashboard"><strong>How To Run RAI Dashboard</strong></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#interaction-of-rai-dashboard"><strong>Interaction of RAI Dashboard</strong></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Basic%20component%20of%20RAI%20Design.html"><strong>Basic component of RAI Design</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="Contribute%20and%20extend%20RAI.html"><strong>Contribute and Extend RAI</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="Contribute%20and%20extend%20RAI.html#contribution-of-users-to-expand-its-features"><strong>Contribution of users to expand its features</strong></a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference Class</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../rai.html">Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">RAI Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li><strong>Dashboard</strong></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/RaiModule/Dashboard.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="dashboard">
+<span id="id1"></span><h1><strong>Dashboard</strong><a class="headerlink" href="#dashboard" title="Permalink to this heading"></a></h1>
+<p>The goal is to provide a generic framework to perform various types of analysis, from data quality assessment to model selection based on performance, fairness, and robustness criteria.</p>
+<section id="rai-dashboard-features">
+<h2><strong>RAI Dashboard features</strong><a class="headerlink" href="#rai-dashboard-features" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p>Rai dashboards display metrics and critical data and give the user a visual representation of them.</p></li>
+<li><p>The Rai dashboard computes all metrics and visualizes the current running code in real time.</p></li>
+<li><p>Rai dashboard can handle a wide variety of models and store information for each model, from text-based models to image-based models.</p></li>
+<li><p>Rai dashboard automatically determines what metrics are relevant by examining the type of model, data, and task provided by the user.</p></li>
+<li><p>With RAI, users can view data at a high level by scanning dashboards like input and output visualizations.</p></li>
+</ul>
+</section>
+<section id="how-to-run-rai-dashboard">
+<h2><strong>How To Run RAI Dashboard</strong><a class="headerlink" href="#how-to-run-rai-dashboard" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p>when the python file <code class="docutils literal notranslate"><span class="pre">main.py</span></code> is triggered, Dash is running on server i.e the IP of 127.0.0.1 and the port is 8050, if we follow and click on the URL or copy the URL and paste in the browser, you can access the dashboard.</p></li>
+</ul>
+<p><strong>Description</strong>: Run the main.py by</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span> Dashboard&gt; python .<span class="se">\m</span>ain.py
+
+-Click the following link to access Dashboard.
+-Dash is running on ...
+</pre></div>
+</div>
+<p><strong>Example:</strong></p>
+<figure class="align-center">
+<a class="with-border reference internal image-reference" href="../_images/dash_example.png"><img alt="../_images/dash_example.png" class="with-border" src="../_images/dash_example.png" style="width: 411.3px; height: 145.2px;" /></a>
+</figure>
+</section>
+<section id="interaction-of-rai-dashboard">
+<h2><strong>Interaction of RAI Dashboard</strong><a class="headerlink" href="#interaction-of-rai-dashboard" title="Permalink to this heading"></a></h2>
+<p><strong>How it links to RAI project (via redis..)</strong></p>
+<figure class="align-center" id="id2">
+<a class="with-border reference internal image-reference" href="../_images/Dashboard_page.png"><img alt="RAI Dashboard Homepage" class="with-border" src="../_images/Dashboard_page.png" style="width: 570.0px; height: 350.0px;" /></a>
+<figcaption>
+<p><span class="caption-text">RAI Dashboard Homepage.</span><a class="headerlink" href="#id2" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<p><strong>How it shows the Metrics, Certificates and Analysis page</strong></p>
+<ul class="simple">
+<li><p><strong>Metrics:</strong></p></li>
+</ul>
+<figure class="align-center" id="id3">
+<a class="with-border reference internal image-reference" href="../_images/Metricpage.png"><img alt="Metric Details Page" class="with-border" src="../_images/Metricpage.png" style="width: 711.6px; height: 352.40000000000003px;" /></a>
+<figcaption>
+<p><span class="caption-text">Metric Details Page.</span><a class="headerlink" href="#id3" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<ul class="simple">
+<li><p><strong>Certificates:</strong></p></li>
+</ul>
+<figure class="align-center" id="id4">
+<a class="with-border reference internal image-reference" href="../_images/certificate.png"><img alt="Certificate Page" class="with-border" src="../_images/certificate.png" style="width: 747.6px; height: 321.20000000000005px;" /></a>
+<figcaption>
+<p><span class="caption-text">Certificate Page.</span><a class="headerlink" href="#id4" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<ul class="simple">
+<li><p><strong>Analysis:</strong></p></li>
+</ul>
+<figure class="align-center" id="id5">
+<a class="with-border reference internal image-reference" href="../_images/Analysispage.png"><img alt="Analysis Page" class="with-border" src="../_images/Analysispage.png" style="width: 706.0px; height: 364.40000000000003px;" /></a>
+<figcaption>
+<p><span class="caption-text">Analysis Page.</span><a class="headerlink" href="#id5" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Tutorial%20Demo.html" class="btn btn-neutral float-left" title="Demo Cases" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Basic%20component%20of%20RAI%20Design.html" class="btn btn-neutral float-right" title="Basic component of RAI Design" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, sharfa.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
