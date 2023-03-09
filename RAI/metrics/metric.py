@@ -40,6 +40,14 @@ class Metric:
         self.load_config(config)
 
     def load_config(self, config):
+        """
+        loads the config details consisting of tags, has_range, range, explanation, type and display_name
+
+        :param config: Config details
+
+        :return: None 
+
+        """
         if "tags" in config:
             self.tags = config["tags"]
         else:

@@ -22,19 +22,14 @@
 
 **Example**:
 
-.. code-block:: bash
+.. container:: toggle, toggle-hidden
 
- def initialize(self, user_config: dict = {}, custom_certificate_location: str = None, **kw_args):
-        self.user_config = user_config
-        masks = {"scalar": self.meta_database.scalar_mask, "categorical": self.meta_database.categorical_mask,
-                 "image": self.meta_database.image_mask, "text": self.meta_database.text_mask}
-        self.dataset.separate_data(masks)
-        self.meta_database.initialize_requirements(self.dataset, "fairness" in user_config)
-        self.metric_manager = MetricManager(self)
-        self.certificate_manager = CertificateManager()
-        self.certificate_manager.load_stock_certificates()
-        if custom_certificate_location is not None:
-            self.certificate_manager.load_custom_certificates(custom_certificate_location)
+    .. admonition:: AI_sys file example
+
+        .. figure:: ../images/aisys.png
+           :align: center
+           :scale: 40 %
+
 
 
 .. important:: **Rai utilization:**
@@ -62,23 +57,15 @@
 - **description**: Certifies whether or not the agent is robust against adversarial attacks.
 
 
-.. code-block:: bash
+.. container:: toggle, toggle-hidden
 
- {
-    "meta":{
-        "display_name": "Adversarial Bound Bronze Certification",
-        "description": "Certifies whether or not the agent is robust against adversarial attacks.",
-        "tags": ["robustness"],
-        "level":["1"]
-    },
+    .. admonition:: Certi file example
 
-    "condition": {
-            "op":"or" ,
-            "terms": [              
-                [ "&adversarial_validation_tree > adversarial-tree-verification-bound" , ">" , 0.1 ]
-            ]
-        }
- }     
+        .. figure:: ../images/certi.png
+           :align: center
+           :scale: 30 %
+
+
 
 
 .. important:: **Rai utilization:**
@@ -106,25 +93,14 @@
 
 **Example**:
 
-- Find all compatible metric groups
 
+.. container:: toggle, toggle-hidden
 
-.. code-block:: bash
+    .. admonition:: Metric file example
 
-
- for metric_group_name in registry:
-            if metric_groups is not None and metric_group_name not in metric_groups:
-                continue
-            metric_class = registry[metric_group_name]
-            self._validate_config(metric_class.config)
-            if metric_class.is_compatible(
-                    self.ai_system) and metric_group_name in whitelist and metric_group_name not in blacklist:
-                compatible_metrics.append(metric_class)
-                dependencies[metric_class.config["name"]] = metric_class.config["dependency_list"]
-                for dependency in metric_class.config["dependency_list"]:
-                    if dependent.get(dependency) is None:
-                        dependent[dependency] = []
-                    dependent[dependency].append(metric_class.config["name"])
+        .. figure:: ../images/metri.png
+           :align: center
+           :scale: 40 %
 
 
 .. important:: **Rai utilization:**
@@ -144,13 +120,14 @@
 
 **Example**:
 
-.. code-block:: bash
 
- def progress_percent(self, percentage_complete):
-        percentage_complete = int(percentage_complete)
-        if self.conncetion is not None:
-            self.connection(str(percentage_complete))
+.. container:: toggle, toggle-hidden
 
+    .. admonition:: Analysis file example
+
+        .. figure:: ../images/ana.png
+           :align: center
+           :scale: 40 %
 
 
 .. important:: **Rai utilization:**

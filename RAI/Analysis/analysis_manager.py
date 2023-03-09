@@ -32,9 +32,28 @@ class AnalysisManager:
         return compatible_groups
 
     def get_available_analysis(self, ai_system: AISystem, dataset: str):
+        """
+        :param AISystem: input the ai_system obj
+        :param dataset: input the dataset
+
+        :Returns: list.
+
+        Returns the lists of analysis data
+        """
         return [name for name in self._get_available_analysis(ai_system, dataset)]
 
     def run_analysis(self, ai_system: AISystem, dataset: str, analysis_names, tag=None, connection=None):
+        """
+        :param AISystem: input the ai_system obj
+        :param dataset: input the dataset
+        :param tag: By default None else given tag Name
+        :param analysis_names: analysis_names data set 
+        :param connection: By default None
+    
+        :Returns: Dict.
+
+        Returns the analysis data result analysis
+        """
         available_analysis = self._get_available_analysis(ai_system, dataset)
         result = {}
         if isinstance(analysis_names, str):
@@ -46,6 +65,19 @@ class AnalysisManager:
                 analysis_result.initialize()
                 result[analysis_name] = analysis_result
         return result
-
+        
+        
+   
     def run_all(self, ai_system: AISystem, dataset: str, tag: str):
+        """
+        :param AISystem: input the ai_system obj
+        :param dataset: input the dataset
+        :param tag: By default None else given tag Name
+
+        :Returns: None.
+
+        Returns the analysis data result analysis
+
+        """
         return self.run_analysis(ai_system, dataset, self.get_available_analysis(ai_system, dataset), tag)
+    

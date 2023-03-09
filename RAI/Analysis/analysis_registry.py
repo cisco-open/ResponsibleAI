@@ -19,6 +19,15 @@ registry = {}
 
 
 def register_class(class_name, class_object):
+
+    """
+    :param class_name: inputs the name for the class and that should be unique
+    :param class_object: class object is given as the input
+
+    :return: registered data in the form of dictionary containing class name as the key and class object as the value
+
+
+    """
     if class_name != "":
         if class_name in registry:
             raise NameError("Class Name: " + class_name + " already exists. Please enter a unique class name.")

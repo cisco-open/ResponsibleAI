@@ -51,6 +51,12 @@ class MetricManager(object):
                             "time_complexity": "exponential"}
 
     def standardize_user_config(self, user_config: dict):
+        """
+        Accepts user config values and make in standard group
+
+        :param user_config(dict): user config data
+        :return: None 
+        """
         if "fairness" in user_config:
             protected_classes = []
             if "priv_group" in user_config["fairness"]:
@@ -62,6 +68,15 @@ class MetricManager(object):
                 user_config["fairness"]["protected_attributes"] = protected_classes
 
     def initialize(self, user_config: dict = None, metric_groups: list[str] = None, max_complexity: str = "linear"):
+        """
+        Find all compatible metric groups and Remove metrics with missing dependencies and Check for circular dependencies
+
+        :param user_config(dict): user config data
+        :param metric_groups: metric groups data as a list
+        :param max_complexity: default linear
+    
+        :return: None 
+        """
         if user_config:
             self.standardize_user_config(user_config)
             for key in user_config:
@@ -119,6 +134,15 @@ class MetricManager(object):
                 raise AttributeError("Circular dependency detected in ", [val.name for val in compatible_metrics])
 
     def reset_measurements(self) -> None:
+        """
+        Reset all the certificate, metric, sample and time_stamp values
+
+        :param self: None
+        
+        :return: None
+        
+
+        """
         for metric_group_name in self.metric_groups:
             self.metric_groups[metric_group_name].reset()
 
@@ -128,6 +152,14 @@ class MetricManager(object):
         self._time_stamp = None
 
     def get_metadata(self) -> dict:
+        """
+        Return the metric group metadata information
+
+        :param self: None
+        
+        :return: dict-Metadata
+
+        """
         result = {}
         for group in self.metric_groups:
             result[group] = {}
@@ -143,6 +175,13 @@ class MetricManager(object):
         return result
 
     def get_metric_info_flat(self) -> dict:
+        """
+        Returns the metric info
+
+        :param self: None
+        
+        :return: Returns the metric info data in dict
+        """
         result = {}
         for group in self.metric_groups:
 
@@ -153,6 +192,13 @@ class MetricManager(object):
         return result
 
     def compute(self, data_dict) -> dict:
+        """
+        Perform computation on metric objects and returns the value as a metric group in dict format
+
+        :param data_dict: Accepts the data dict metric object
+        
+        :return: returns the value as a metric group
+        """
         for metric_group_name in self.metric_groups:
             self.metric_groups[metric_group_name].compute(data_dict)
         result = {}
@@ -164,6 +210,13 @@ class MetricManager(object):
         return result
 
     def iterator_compute(self, data_dict, preds: dict) -> dict:
+        """
+        Accepts data_dict and preds as a input and returns the metric objects from a batch of metric group
+
+        :param data_dict: Accepts the data dict metric object
+        :param  preds: prediction value from the detection
+        :return: returns the metric objects from a batch of metric group
+        """
         data = data_dict["data"]
         data.reset()
         cur_idx = 0
@@ -204,6 +257,14 @@ class MetricManager(object):
 
     # Searches all metrics. Queries based on Metric Name, Metric Group Name, Category, and Tags.
     def search(self, query: str) -> dict:
+        """
+        Searches all metrics.Queries based on Metric Name, Metric Group Name, Category, and Tags 
+
+        :param query: query(str) group data information as input
+        
+        :return:  Returns the search results based on the query
+        
+        """
         query = query.lower()
         results = {}
         for group in self.metric_groups:
