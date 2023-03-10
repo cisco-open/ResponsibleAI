@@ -43,5 +43,5 @@ The dashboard GUI is currently designed around 1920x1080 displays
   :maxdepth: 2
   :caption: Reference Class
 
-  rai.rst
+  RAI.rst
 
