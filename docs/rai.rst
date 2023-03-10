@@ -15,7 +15,6 @@ AI\_system
 
 
 
-
 Certificate 
 -----------
 
@@ -25,7 +24,6 @@ Certificate
    :show-inheritance:
 
 .. currentmodule:: RAI.certificates.certificate
-
 
 
 
@@ -42,7 +40,6 @@ Certificate\_manager
 
 
 
-
 Metric
 ------
 
@@ -50,9 +47,8 @@ Metric
    :members:
    :undoc-members:
    :show-inheritance:
-   
-.. currentmodule:: RAI.metrics.metric
 
+.. currentmodule:: RAI.metrics.metric
 
 
 
@@ -61,13 +57,11 @@ Metric\_manager
 ----------------
 
 .. automodule:: RAI.metrics.metric_manager
-
    :members:
    :undoc-members:
    :show-inheritance:
 
 .. currentmodule:: RAI.metrics.metric_manager
-
 
 
 Analysis
@@ -78,9 +72,7 @@ Analysis
    :undoc-members:
    :show-inheritance:
 
-
 .. currentmodule:: RAI.Analysis.analysis
-
 
 
 Analysis\_manager 
@@ -95,7 +87,6 @@ Analysis\_manager
 
 
 
-
 Analysis\_registry
 ------------------
 
@@ -105,4 +96,3 @@ Analysis\_registry
    :show-inheritance:
 
 .. currentmodule:: RAI.Analysis.analysis_registry
-
