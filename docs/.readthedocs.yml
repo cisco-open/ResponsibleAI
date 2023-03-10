@@ -16,5 +16,10 @@ formats: all
 
 # Optionally declare the Python requirements required to build your docs
 python:
+ version: 3.9.13
    install:
-   - requirements: docs/requirements.txt
+    - method: pip
+      path: .
+      requirements: 
+      - sphinx
+      - sphinx-tabs
