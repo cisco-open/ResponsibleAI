@@ -44,6 +44,13 @@ class CertificateManager(object):
 
     # Loads all certificates found in the stock certificate file
     def load_stock_certificates(self):
+        """
+        Loads all certificates found in the stock certificate file
+
+        :param self: None  
+        
+        :return: None 
+        """
         f = open(cert_list_file_name, "r")
         data = json.load(f)
         for item in data["certs"]:
@@ -56,6 +63,14 @@ class CertificateManager(object):
 
     # Loads all certificates found in a custom filepath
     def load_custom_certificates(self, filename):
+        """
+        Loads all certificates found in a custom filepath
+ 
+        :param filename: where we need to get the details
+
+        :return: None
+        
+        """
         f = open(filename, "r")
         data = json.load(f)
         for item in data["certs"]:
@@ -67,9 +82,23 @@ class CertificateManager(object):
             self.certificates[name] = c
 
     def get_metadata(self) -> dict:
+        """
+        return the certificate metadata information
+
+        :param self: None
+
+        :return: metadata(dict)
+        """
         return self.metadata
 
     def compute(self, metric_values):
+        """
+        Accepts the metric values and returns the value as per the name of the certificate
+
+        :parameters: metric_values(dict)
+
+        :return: metric results(list)
+        """
         self.results = {}
         self.results = {}
         for cert_name in self.certificates:

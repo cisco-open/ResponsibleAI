@@ -41,6 +41,14 @@ class Analysis(ABC):
 
     @classmethod
     def is_compatible(cls, ai_system, dataset: str):
+        """
+        :param ai_system: input the ai_system object
+        :param dataset: input the dataset
+
+        :return: class object
+
+        Returns the classifier and sklearn object data
+        """
         compatible = cls.config["compatibility"]["task_type"] is None or cls.config["compatibility"]["task_type"] == [] \
                      or ai_system.task in cls.config["compatibility"]["task_type"] \
                      or ("classification" in cls.config["compatibility"]["task_type"]
@@ -64,11 +72,28 @@ class Analysis(ABC):
         return compatible
 
     def progress_percent(self, percentage_complete):
+        """
+        :parameter: percentage_complete
+
+
+        :return: None
+
+        Shows the progress percent value
+        """
         percentage_complete = int(percentage_complete)
         if self.conncetion is not None:
             self.connection(str(percentage_complete))
 
     def progress_tick(self):
+        """
+        :parameter: None
+
+
+        :return: None
+
+        On every compute it changes the current_tick value
+        
+        """
         self.current_tick += 1
         percentage_complete = min(100, int(100*self.current_tick/self.max_progress_tick))
         if self.connection is not None:
@@ -76,6 +101,15 @@ class Analysis(ABC):
 
     # connection is a function that accepts progress, and pings the dashboard
     def set_connection(self, connection):
+        """
+        :param connection: inputs connection data
+
+
+        :return: None
+
+        Connection is a function that accepts progress, and pings the dashboard
+
+        """
         self.connection = connection
 
     @abstractmethod

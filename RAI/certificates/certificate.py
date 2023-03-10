@@ -36,10 +36,26 @@ class Certificate(object):
 
     # Loads certificate information from a json file
     def load_from_json(self, json_file):
+        """
+        opens the certificate json file and load all the information
+
+        :param json_file: json_file file path of the certificate json file is shared
+
+        :return: None
+        """
         f = open(json_file, "r")
         self.cert_spec = json.load(f)
 
     def evaluate(self, metrics, certs):
+        """
+        From the certificate json file condition key is selected and based on that evalutions will happen
+        
+        
+        :param metrics: metrics data is provided based on that evaluation will happen
+        :param certs: certificate data is provided based on that evaluation will happen
+
+        :return:  Returns the evaluation result based on the input data
+        """
         cond = self.cert_spec["condition"]
         return self._do_eval(cond, metrics, certificates)
 

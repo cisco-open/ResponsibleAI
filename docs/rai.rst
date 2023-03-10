@@ -5,12 +5,12 @@ Reference
 AI\_system 
 ----------
 
-.. automodule:: src.rai.AI_system
+.. automodule:: RAI.AISystem.ai_system
    :members:
    :undoc-members:
    :show-inheritance:
 
-.. currentmodule:: src.rai.AI_system
+.. currentmodule:: RAI.AISystem.ai_system
 
 
 
@@ -18,12 +18,12 @@ AI\_system
 Certificate 
 -----------
 
-.. automodule:: src.rai.Certificate
+.. automodule:: RAI.certificates.certificate
    :members:
    :undoc-members:
    :show-inheritance:
 
-.. currentmodule:: src.rai.Certificate
+.. currentmodule:: RAI.certificates.certificate
 
 
 
@@ -31,24 +31,24 @@ Certificate
 Certificate\_manager
 --------------------
 
-.. automodule:: src.rai.Certificate_manager
+.. automodule:: RAI.certificates.certificate_manager
    :members:
    :undoc-members:
    :show-inheritance:
 
-.. currentmodule:: src.rai.Certificate_manager
+.. currentmodule:: RAI.certificates.certificate_manager
 
 
 
 Metric
 ------
 
-.. automodule:: src.rai.Metric
+.. automodule:: RAI.metrics.metric
    :members:
    :undoc-members:
    :show-inheritance:
 
-.. currentmodule:: src.rai.Metric
+.. currentmodule:: RAI.metrics.metric
 
 
 
@@ -56,44 +56,43 @@ Metric
 Metric\_manager 
 ----------------
 
-.. automodule:: src.rai.Metric_manager
+.. automodule:: RAI.metrics.metric_manager
    :members:
    :undoc-members:
    :show-inheritance:
 
-.. currentmodule:: src.rai.Metric_manager
+.. currentmodule:: RAI.metrics.metric_manager
 
 
 Analysis
 --------
 
-.. automodule:: src.rai.Analysis
+.. automodule:: RAI.Analysis.analysis
    :members:
    :undoc-members:
    :show-inheritance:
 
-.. currentmodule:: src.rai.Analysis
-
+.. currentmodule:: RAI.Analysis.analysis
 
 
 Analysis\_manager 
 -----------------
 
-.. automodule:: src.rai.Analysis_manager
+.. automodule:: RAI.Analysis.analysis_manager
    :members:
    :undoc-members:
    :show-inheritance:
 
-.. currentmodule:: src.rai.Analysis_manager
+.. currentmodule:: RAI.Analysis.analysis_manager
 
 
 
 Analysis\_registry
 ------------------
 
-.. automodule:: src.rai.Analysis_registry
+.. automodule:: RAI.Analysis.analysis_registry
    :members:
    :undoc-members:
    :show-inheritance:
 
-.. currentmodule:: src.rai.Analysis_registry
+.. currentmodule:: RAI.Analysis.analysis_registry
