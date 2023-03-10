@@ -22,6 +22,7 @@
 
 **Example**:
 
+
 .. container:: toggle, toggle-hidden
 
     .. admonition:: AI_sys file example
@@ -29,7 +30,6 @@
         .. figure:: ../images/aisys.png
            :align: center
            :scale: 40 %
-
 
 
 .. important:: **Rai utilization:**
@@ -94,6 +94,7 @@
 **Example**:
 
 
+
 .. container:: toggle, toggle-hidden
 
     .. admonition:: Metric file example
@@ -101,6 +102,7 @@
         .. figure:: ../images/metri.png
            :align: center
            :scale: 40 %
+
 
 
 .. important:: **Rai utilization:**
@@ -121,6 +123,7 @@
 **Example**:
 
 
+
 .. container:: toggle, toggle-hidden
 
     .. admonition:: Analysis file example
@@ -128,6 +131,7 @@
         .. figure:: ../images/ana.png
            :align: center
            :scale: 40 %
+
 
 
 .. important:: **Rai utilization:**
