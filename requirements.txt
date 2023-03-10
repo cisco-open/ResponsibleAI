@@ -7,7 +7,7 @@ dash-daq~=0.5.0
 datasets~=2.2.2
 fairlearn~=0.7.0
 graphviz~=0.20
-ipython
+ipython~=8.4.0
 matplotlib~=3.5.2
 nltk~=3.7
 numpy~=1.20.3
