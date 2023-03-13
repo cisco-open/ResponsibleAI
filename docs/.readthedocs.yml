@@ -23,3 +23,8 @@ python:
       requirements: 
       - sphinx
       - sphinx-tabs
+      extra_requirements:
+        - docs
+    - method: pip
+      path: another/package
+  system_packages: true

@@ -33,10 +33,13 @@ The dashboard GUI is currently designed around 1920x1080 displays
   RaiModule/Basic component of RAI Design.rst
   RaiModule/Contribute and extend RAI.rst
 
-    
 .. toctree::
   :maxdepth: 2
-  :caption: Reference Class
+  :caption: testing
 
-  rai.rst
+  Modules/AI_system
+
+
+
+
 
