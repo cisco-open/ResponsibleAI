@@ -22,4 +22,4 @@ python:
       path: .
       requirements: 
       - sphinx
-      - sphinx-tabs
+      - sphinx_tabs
