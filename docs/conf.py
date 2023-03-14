@@ -9,6 +9,7 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath('..'))
+import RAI
 nbsphinx_allow_errors = True
 
 project = 'RAI Documentation'
@@ -30,6 +31,11 @@ sys.path.append(os.path.abspath('exts'))
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
+# The suffix(es) of source filenames.
+# You can specify multiple suffix as a list of string:
+#
+# source_suffix = ['.rst', '.md']
+source_suffix = '.rst'
 
 
 # -- Options for HTML output -------------------------------------------------
