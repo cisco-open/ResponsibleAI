@@ -9,7 +9,6 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath('..'))
-sys.path.append(os.path.abspath('exts'))
 nbsphinx_allow_errors = True
 import src.rai
 
@@ -26,6 +25,8 @@ extensions = ['sphinx.ext.autodoc','sphinx.ext.viewcode','sphinx.ext.napoleon',
     'sphinx.ext.intersphinx',
     'sphinx_tabs.tabs','sphinx_togglebutton','sphinx_copybutton']
 
+sys.path.append(os.path.abspath('exts'))
+extensions = ['RaiModule']
 sphinx_tabs_valid_builders = ['linkcheck']
 
 templates_path = ['_templates']
