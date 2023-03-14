@@ -1,0 +1,8 @@
+sphinx!=5.3.0    
+sphinx_rtd_theme
+sphinx_copybutton
+sphinx_tabs
+sphinx_togglebutton>=0.2.0
+
+
+
