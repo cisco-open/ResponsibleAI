@@ -25,7 +25,7 @@ extensions = ['sphinx.ext.autodoc','sphinx.ext.viewcode','sphinx.ext.napoleon',
     'sphinx_tabs.tabs','sphinx_togglebutton','sphinx_copybutton']
 
 sys.path.append(os.path.abspath('exts'))
-extensions = ['ResponsibleAI\docs\RaiModule']
+
 
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
