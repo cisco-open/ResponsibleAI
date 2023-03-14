@@ -1,5 +1,5 @@
 .. RAI Documentation documentation master file, created by
-   sphinx-quickstart on Mon Mar 13 17:27:35 2023.
+   sphinx-quickstart on Sun Nov 20 16:34:28 2022.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
@@ -38,11 +38,5 @@ The dashboard GUI is currently designed around 1920x1080 displays
   :maxdepth: 2
   :caption: Reference Class
 
-  RAI.Module/RAI.AISystem.rst
-  RAI.Module/RAI.certificates.rst
-  RAI.Module/RAI.metrics
-  RAI.Module/RAI.Analysis.rst
-
-  
-
+  rai.rst
 
