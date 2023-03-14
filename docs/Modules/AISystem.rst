@@ -1,3 +1,6 @@
+.. _AISystem.rst:
+
+
 :mod:`RAI.AISystem.`
 ====================
 
