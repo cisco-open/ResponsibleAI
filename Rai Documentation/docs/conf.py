@@ -23,10 +23,9 @@ release = '0.1'
 extensions = ['sphinx.ext.autodoc','sphinx.ext.viewcode','sphinx.ext.napoleon',
     'sphinx.ext.autosummary',
     'sphinx.ext.intersphinx',
-    'sphinx_togglebutton','sphinx_copybutton']
+    'sphinx_tabs.tabs','sphinx_togglebutton','sphinx_copybutton']
 
-
-    
+sphinx_tabs_valid_builders = ['linkcheck']
 
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
