@@ -25,7 +25,10 @@ extensions = ['sphinx.ext.autodoc','sphinx.ext.viewcode','sphinx.ext.napoleon',
     'sphinx.ext.intersphinx',
     'sphinx_togglebutton','sphinx_copybutton']
 
-extensions = [sphinx_tabs.tabs]
+extensions = ['sphinx_tabs.tabs']
+sphinx_tabs_valid_builders = ['linkcheck']
+sphinx_tabs_disable_tab_closing = True
+
     
 
 templates_path = ['_templates']
