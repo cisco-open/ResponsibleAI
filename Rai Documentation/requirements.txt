@@ -3,7 +3,6 @@ sphinx_rtd_theme
 sphinx_copybutton
 sphinx-tabs
 sphinx_togglebutton>=0.2.0
-sphinx_tabs
 
 
 
