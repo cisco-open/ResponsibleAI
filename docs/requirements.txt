@@ -6,4 +6,3 @@ sphinx_togglebutton>=0.2.0
 
 
 
-

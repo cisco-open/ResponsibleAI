@@ -8,12 +8,8 @@
 
 import os
 import sys
-#sys.path.insert(0, os.path.abspath('../'))
+sys.path.insert(0, os.path.abspath('..'))
 nbsphinx_allow_errors = True
-
-#so we can import RAI
-sys.path.append(os.path.join(os.path.dirname(__name__), ".."))
-
 
 project = 'RAI Documentation'
 copyright = '2022, sharfa'
@@ -27,18 +23,11 @@ extensions = ['sphinx.ext.autodoc','sphinx.ext.viewcode','sphinx.ext.napoleon',
     'sphinx.ext.autosummary',
     'sphinx.ext.intersphinx',
     'sphinx_tabs.tabs','sphinx_togglebutton','sphinx_copybutton']
-
-sys.path.append(os.path.abspath('exts'))
-
+    
 
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
-# The suffix(es) of source filenames.
-# You can specify multiple suffix as a list of string:
-#
-# source_suffix = ['.rst', '.md']
-source_suffix = '.rst'
 
 
 # -- Options for HTML output -------------------------------------------------
