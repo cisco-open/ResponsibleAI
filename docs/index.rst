@@ -39,4 +39,8 @@ The dashboard GUI is currently designed around 1920x1080 displays
   :caption: Reference Class
 
   RAIModules/AISystem.rst
+  RAIModules/certificates.rst
+  RAIModules/Analysis.rst
+  RAIModules/metrics.rst
+
 
