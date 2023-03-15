@@ -23,19 +23,19 @@ The dashboard GUI is currently designed around 1920x1080 displays
   :maxdepth: 2
   :caption:  User Guide:
   
-  RaiModule/Getting Started.rst
-  RaiModule/Installation.rst
-  RaiModule/RAI in Responsible AI.rst
-  RaiModule/Robustness of AI.rst
-  RaiModule/RAI in Model Selection.rst
-  RaiModule/Tutorial Demo.rst
-  RaiModule/Dashboard.rst
-  RaiModule/Basic component of RAI Design.rst
-  RaiModule/Contribute and extend RAI.rst
+  RaiModule/Getting Started
+  RaiModule/Installation
+  RaiModule/RAI in Responsible AI
+  RaiModule/Robustness of AI
+  RaiModule/RAI in Model Selection
+  RaiModule/Tutorial Demo
+  RaiModule/Dashboard
+  RaiModule/Basic component of RAI Design
+  RaiModule/Contribute and extend RAI
 
     
 .. toctree::
   :maxdepth: 2
   :caption: Reference Class
 
-  source/modules.rst
+  source/modules
