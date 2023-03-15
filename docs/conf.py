@@ -69,7 +69,7 @@ if on_rtd:
 else:
     html_theme = 'sphinx_rtd_theme'
 
-html_logo = '_static/img/rai_logo_blue3.png'
+html_logo = '_static/img/RAIlogoE.png'
 
 def setup(app):
     app.add_css_file("css/RAI_theme.css")
