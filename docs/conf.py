@@ -59,6 +59,13 @@ extensions = ['sphinx.ext.autodoc','sphinx.ext.viewcode','sphinx.ext.napoleon',
     'sphinx.ext.intersphinx',
     'sphinx_tabs.tabs','sphinx_togglebutton','sphinx_copybutton']
 
+
+
+napoleon_include_init_with_doc = True
+napoleon_use_ivar = True
+napoleon_use_rtype = False
+
+autoclass_content = 'both'
 sphinx_tabs_valid_builders = ['linkcheck']
     
 
