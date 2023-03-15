@@ -16,6 +16,7 @@ formats: all
 
 # Optionally declare the Python requirements required to build your docs
 python:
+
  version: 3.9.13
    install:
     - method: pip
