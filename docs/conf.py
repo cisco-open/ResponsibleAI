@@ -16,10 +16,13 @@ import sys
 #sys.path.insert(0, os.path.abspath('../..'))
 
 
-#so we can import ple
+#so we can import RAI
 #sys.path.append(os.path.join(os.path.dirname(__name__), ".."))
 #sys.path.insert(0, os.path.abspath('../..'))
 #import RAI
+
+# source code directory, relative to this file, for sphinx-autobuild
+#sys.path.insert(0, os.path.abspath('..'))
 
 sys.path.insert(0, os.path.abspath('../'))
 

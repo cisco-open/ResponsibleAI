@@ -2,7 +2,7 @@
 
 # Set the version of Python and other tools you might need
 build:
-  os: windows
+  os: ubuntu
   tools:
     python: "3.9.13"
     
