@@ -61,11 +61,6 @@ extensions = ['sphinx.ext.autodoc','sphinx.ext.viewcode','sphinx.ext.napoleon',
     'sphinx.ext.intersphinx',
     'sphinx_tabs.tabs','sphinx_togglebutton','sphinx_copybutton']
 
-intersphinx_mapping = {
-    'python': ('https://docs.python.org/3/', None),
-    'sphinx': ('https://www.sphinx-doc.org/en/master/', None),
-}
-#intersphinx_disabled_domains = ['std']
 
 
 napoleon_include_init_with_doc = True
@@ -73,7 +68,7 @@ napoleon_use_ivar = True
 napoleon_use_rtype = False
 
 autoclass_content = 'both'
-sphinx_tabs_valid_builders = ['linkcheck']
+#sphinx_tabs_valid_builders = ['linkcheck']
     
 
 # Fix for read the docs
@@ -102,7 +97,6 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 pygments_style = 'sphinx'
 
 
-todo_include_todos = False
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
