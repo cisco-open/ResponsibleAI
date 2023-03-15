@@ -9,7 +9,12 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath('..'))
-nbsphinx_allow_errors = True
+
+#sys.path.insert(0, os.path.abspath('../../RAI'))
+
+
+#sys.path.insert(0, os.path.abspath('../..'))
+
 
 project = 'RAI Documentation'
 copyright = '2022, sharfa'
@@ -23,6 +28,8 @@ extensions = ['sphinx.ext.autodoc','sphinx.ext.viewcode','sphinx.ext.napoleon',
     'sphinx.ext.autosummary',
     'sphinx.ext.intersphinx',
     'sphinx_tabs.tabs','sphinx_togglebutton','sphinx_copybutton']
+
+sphinx_tabs_valid_builders = ['linkcheck']
     
 
 templates_path = ['_templates']
