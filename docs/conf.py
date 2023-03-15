@@ -10,6 +10,7 @@ import os
 import sys
 # source code directory, relative to this file, for sphinx-autobuild
 sys.path.insert(0, os.path.abspath('..'))
+sys.path.append('../RAI/')
 
 #sys.path.insert(0, os.path.abspath('../../RAI'))
 #sys.path.insert(0, os.path.abspath('../..'))
@@ -25,6 +26,7 @@ project = 'RAI Documentation'
 copyright = '2023, sharfa@Cisco'
 author = 'RAI Contributers'
 release = '0.1'
+version = 'testing'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -59,6 +61,11 @@ extensions = ['sphinx.ext.autodoc','sphinx.ext.viewcode','sphinx.ext.napoleon',
     'sphinx.ext.intersphinx',
     'sphinx_tabs.tabs','sphinx_togglebutton','sphinx_copybutton']
 
+intersphinx_mapping = {
+    'python': ('https://docs.python.org/3/', None),
+    'sphinx': ('https://www.sphinx-doc.org/en/master/', None),
+}
+intersphinx_disabled_domains = ['std']
 
 
 napoleon_include_init_with_doc = True
