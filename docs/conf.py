@@ -11,7 +11,6 @@ import sys
 # source code directory, relative to this file, for sphinx-autobuild
 sys.path.insert(0, os.path.abspath('..'))
 sys.path.append('../RAI/')
-
 #sys.path.insert(0, os.path.abspath('../../RAI'))
 #sys.path.insert(0, os.path.abspath('../..'))
 #so we can import RAI
@@ -63,11 +62,11 @@ extensions = ['sphinx.ext.autodoc','sphinx.ext.viewcode','sphinx.ext.napoleon',
 
 
 
-napoleon_include_init_with_doc = True
+#napoleon_include_init_with_doc = True
 napoleon_use_ivar = True
-napoleon_use_rtype = False
+#napoleon_use_rtype = False
 
-autoclass_content = 'both'
+#autoclass_content = 'both'
 #sphinx_tabs_valid_builders = ['linkcheck']
     
 

@@ -24,6 +24,7 @@ python:
       path: .
       requirements:  docs/requirements.txt
           - requirements: requirements.txt
+      system_packages: true
 
 
 submodules:
