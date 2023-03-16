@@ -1,5 +1,5 @@
 .. RAI Documentation documentation master file, created by
-   sphinx-quickstart on Sun Nov 20 16:34:28 2022.
+   sphinx-quickstart on Tue Mar 14 19:01:05 2023.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
@@ -23,20 +23,19 @@ The dashboard GUI is currently designed around 1920x1080 displays
   :maxdepth: 2
   :caption:  User Guide:
   
-  RaiModule/Getting Started.rst
-  RaiModule/Installation.rst
-  RaiModule/RAI in Responsible AI.rst
-  RaiModule/Robustness of AI.rst
-  RaiModule/RAI in Model Selection.rst
-  RaiModule/Tutorial Demo.rst
-  RaiModule/Dashboard.rst
-  RaiModule/Basic component of RAI Design.rst
-  RaiModule/Contribute and extend RAI.rst
+  RaiModule/Getting Started
+  RaiModule/Installation
+  RaiModule/RAI in Responsible AI
+  RaiModule/Robustness of AI
+  RaiModule/RAI in Model Selection
+  RaiModule/Tutorial Demo
+  RaiModule/Dashboard
+  RaiModule/Basic component of RAI Design
+  RaiModule/Contribute and extend RAI
 
     
 .. toctree::
   :maxdepth: 2
   :caption: Reference Class
 
-  rai.rst
-
+  source/modules

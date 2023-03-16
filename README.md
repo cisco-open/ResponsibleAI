@@ -8,6 +8,12 @@ RAI is a python library that is written to help AI developers in various aspects
 Note: 
  - The dashboard GUI is currently designed around 1920x1080 displays 
 
+
+
+## Documentation
+
+Documentation is available online: [https://responsibleai.readthedocs.io/en/latest/](https://responsibleai.readthedocs.io/en/latest/)
+
 # To Install
 1) Project Requires Redis. Redis can be downloaded using the .msi file at: https://github.com/microsoftarchive/redis/releases/tag/win-3.2.100  
 
