@@ -21,6 +21,7 @@ sys.path.append('../RAI/')
 #sys.path.insert(0, os.path.abspath('../'))
 #sys.path.insert(0, os.path.abspath('../..'))
 
+
 project = 'RAI Documentation'
 copyright = '2023, sharfa@Cisco'
 author = 'RAI Contributers'
@@ -62,12 +63,14 @@ extensions = ['sphinx.ext.autodoc','sphinx.ext.viewcode','sphinx.ext.napoleon',
 
 
 
+
 #napoleon_include_init_with_doc = True
 napoleon_use_ivar = True
 #napoleon_use_rtype = False
 
 #autoclass_content = 'both'
 #sphinx_tabs_valid_builders = ['linkcheck']
+
     
 
 # Fix for read the docs
