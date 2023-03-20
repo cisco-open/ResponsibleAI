@@ -113,3 +113,5 @@ pygments_style = 'sphinx'
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 html_theme = 'sphinx_rtd_theme'
+
+autoclass_content = 'both'
