@@ -25,6 +25,7 @@ tensorflow~=2.9.1
 torch-fidelity~=0.3.0
 torchmetrics~=0.9.3
 transformers~=4.19.3
+site-packages
 
 # PyTorch
 --find-links https://download.pytorch.org/whl/torch_stable.html
