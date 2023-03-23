@@ -25,10 +25,10 @@ from RAI.metrics.metric_registry import registry
 __all__ = ['MetricManager']
 
 # choose the first site packages folder
-site_pkgs_path = site.getsitepackages()[0]
-rai_pkg_path = os.path.join(site_pkgs_path, "RAI")
-if not os.path.isdir(rai_pkg_path):
-    rai_pkg_path = "RAI"
+# site_pkgs_path = site.getsitepackages()[0]
+# rai_pkg_path = os.path.join(site_pkgs_path, "RAI")
+# if not os.path.isdir(rai_pkg_path):
+rai_pkg_path = "RAI"
 
 
 class MetricManager(object):
