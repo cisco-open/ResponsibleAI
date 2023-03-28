@@ -14,12 +14,9 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-
+#importing modules
 import sys
 import inspect
-from RAI.AISystem import AISystem, Model
-from RAI.redis import RaiRedis
-from RAI.dataset import Dataset, Feature, MetaDatabase, NumpyData
 import random
 import os
 import numpy as np
@@ -31,7 +28,15 @@ import torch.utils.data
 import torch.optim as optim
 from torchvision import datasets, transforms
 # https://colab.research.google.com/drive/1Ozin9zX89xfoyn63o5B7l5bR5W_E1oy0#scrollTo=7hAFf5Ue4VP_
+
+
+#importing RAI modules
+from RAI.AISystem import AISystem, Model
+from RAI.redis import RaiRedis
+from RAI.dataset import Dataset, Feature, MetaDatabase, NumpyData
 from RAI.utils import torch_to_RAI
+
+#setup path
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
@@ -236,9 +241,11 @@ def main():
     testloader = torch.utils.data.DataLoader(testset, batch_size=config.batch_size, shuffle=True, num_workers=config.workers)
     xTestData, yTestData, raw = torch_to_RAI(testloader)
 
+    #setup the dataset
     dataset = Dataset({"cifar": NumpyData(None, xTestData, raw)})
     meta = MetaDatabase([])
-
+    
+    # initialize RAI 
     ai = AISystem(name="cifar_gan_x_y", task='generate', meta_database=meta, dataset=dataset, model=model)
     ai.initialize(user_config=configuration)
     ai.compute({"cifar": {"generate_image": generated}}, tag='epoch_1_generations')

@@ -14,12 +14,9 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-
+#importing modules
 import sys
 import inspect
-from RAI.AISystem import AISystem, Model
-from RAI.redis import RaiRedis
-from RAI.dataset import MetaDatabase, Feature, Dataset, IteratorData
 import torch
 import torchvision
 import torchvision.transforms as transforms
@@ -29,6 +26,12 @@ import os
 import random
 import numpy as np
 
+# importing RAI modules
+from RAI.AISystem import AISystem, Model
+from RAI.redis import RaiRedis
+from RAI.dataset import MetaDatabase, Feature, Dataset, IteratorData
+
+#setup path
 current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir)

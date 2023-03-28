@@ -14,21 +14,27 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-
+#importing modules
 import os
 import sys
 import inspect
-from RAI.AISystem import AISystem, Model
-from RAI.redis import RaiRedis
-from RAI.dataset import Dataset, Feature, NumpyData
 import nltk
 from nltk.sentiment import SentimentIntensityAnalyzer
-from RAI.utils import df_to_RAI
 from sklearn.model_selection import train_test_split
 from datasets import load_dataset
 import random
 import numpy as np
 import pandas as pd
+
+
+# importing RAI modules
+from RAI.AISystem import AISystem, Model
+from RAI.redis import RaiRedis
+from RAI.dataset import Dataset, Feature, NumpyData
+from RAI.utils import df_to_RAI
+
+
+#setup path
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)

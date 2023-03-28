@@ -14,7 +14,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-
+#importing modules
 import os
 import sys
 import inspect
@@ -22,20 +22,25 @@ import numpy as np
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
+
+
+# importing RAI modules
 from RAI.AISystem import AISystem, Model
 from RAI.dataset import NumpyData, Dataset
 from RAI.redis import RaiRedis
 from RAI.utils import df_to_RAI
+
+#setup path
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
 use_dashboard = True
 np.random.seed(21)
 
-
-clf = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=0, min_samples_leaf=5, max_depth=2)
-
+# Configuration
 data_path = "data/adult/"
+
+#loading train and test data
 train_data = pd.read_csv(data_path + "train.csv", header=0,
                          skipinitialspace=True, na_values="?")
 test_data = pd.read_csv(data_path + "test.csv", header=0,
@@ -56,11 +61,15 @@ configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivil
                               "protected_attributes": ["race"], "positive_label": 1},
                  "time_complexity": "polynomial"}
 
+# setup the dataset
 dataset = Dataset({"train": NumpyData(xTrain, yTrain), "test": NumpyData(xTest, yTest)})
+
+# initialize RAI 
 ai = AISystem("AdultDB_two_model", task='binary_classification', meta_database=meta, dataset=dataset, model=model)
 ai.initialize(user_config=configuration)
 
-
+# create and train the base model
+clf = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=0, min_samples_leaf=5, max_depth=2)
 clf.fit(xTrain, yTrain)
 predictions = clf.predict(xTest)
 predictions_train = clf.predict(xTrain)

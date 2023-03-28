@@ -14,26 +14,32 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-
+#importing modules
 import os
 import sys
 import inspect
 import pandas as pd
 from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+
+# importing RAI modules
 from RAI.AISystem import AISystem, Model
 from RAI.dataset import NumpyData, Dataset
 from RAI.redis import RaiRedis
 from RAI.utils import df_to_RAI
-from sklearn.ensemble import RandomForestClassifier
+
+
+#setup path
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+# Configuration
 use_dashboard = True
-
-# Get Dataset
 data_path = "../data/adult/"
+
+#loading train and test data
 train_data = pd.read_csv(data_path + "train.csv", header=0,
                          skipinitialspace=True, na_values="?")
 test_data = pd.read_csv(data_path + "test.csv", header=0,
@@ -50,7 +56,12 @@ model = Model(agent=reg, output_features=output, name="cisco_income_ai", predict
               description="Income Prediction Model", model_class="Random Forest Classifier")
 configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}},
                               "protected_attributes": ["race"], "positive_label": 1}, "time_complexity": "polynomial"}
+
+# setup the dataset
 dataset = Dataset({"train": NumpyData(xTrain, yTrain), "test": NumpyData(xTest, yTest)})
+
+
+# initialize RAI 
 ai = AISystem("Adult_rfc_selection", task='binary_classification', meta_database=meta, dataset=dataset, model=model)
 ai.initialize(user_config=configuration)
 
@@ -59,7 +70,7 @@ if use_dashboard:
     r.connect()
     r.reset_redis()
 
-
+#  function to evaluate each model  
 def test_model(mdl, name):
     mdl.fit(xTrain, yTrain)
     ai.model.agent = mdl

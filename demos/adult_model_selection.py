@@ -14,25 +14,32 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-
+#importing modules
 import os
 import sys
 import inspect
 import pandas as pd
 from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
+
+
+# importing RAI modules
 from RAI.AISystem import AISystem, Model
 from RAI.dataset import NumpyData, Dataset
 from RAI.redis import RaiRedis
 from RAI.utils import df_to_RAI
-from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
+
+#setup path
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
 
+
+# Configuration
 use_dashboard = True
+data_path = "../data/adult/"
 
 # Get Dataset
-data_path = "../data/adult/"
 train_data = pd.read_csv(data_path + "train.csv", header=0,
                          skipinitialspace=True, na_values="?")
 test_data = pd.read_csv(data_path + "test.csv", header=0,
@@ -51,7 +58,11 @@ configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivil
                               "protected_attributes": ["race"], "positive_label": 1},
                  "time_complexity": "polynomial"}
 
+
+# setup the dataset
 dataset = Dataset({"train": NumpyData(xTrain, yTrain, xTrain), "test": NumpyData(xTest, yTest, xTest)})
+
+# initialize RAI 
 ai = AISystem(name="Adult_model_selection",  task='binary_classification', meta_database=meta, dataset=dataset, model=model)
 ai.initialize(user_config=configuration)
 

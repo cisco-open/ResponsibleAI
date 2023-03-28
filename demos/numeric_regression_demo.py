@@ -14,18 +14,25 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-
+#importing modules
 import os
 import sys
 import inspect
-from RAI.dataset import NumpyData, Dataset
-from RAI.AISystem import AISystem, Model
 import numpy as np
-from RAI.redis import RaiRedis
-from RAI.utils import df_to_RAI
 from sklearn.datasets import fetch_california_housing
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
+
+
+
+# importing RAI modules
+from RAI.dataset import NumpyData, Dataset
+from RAI.AISystem import AISystem, Model
+from RAI.redis import RaiRedis
+from RAI.utils import df_to_RAI
+
+
+#setup path
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
@@ -45,7 +52,11 @@ model = Model(agent=reg, output_features=output, name="cisco_income_ai", predict
               description="Income Prediction AI", model_class="Random Forest Regressor", )
 configuration = {"time_complexity": "polynomial"}
 
+
+# setup the dataset
 dataset = Dataset({"train": NumpyData(xTrain, yTrain), "test": NumpyData(xTest, yTest)})
+
+# initialize RAI 
 ai = AISystem(name="tabular_regression",  task='regression', meta_database=meta, dataset=dataset, model=model)
 ai.initialize(user_config=configuration)
 

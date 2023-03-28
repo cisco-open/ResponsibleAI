@@ -14,20 +14,23 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-
+#importing modules
 import os
 import sys
 import inspect
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from RAI.AISystem import AISystem, Model
-from RAI.dataset import NumpyData, Dataset
-from RAI.redis import RaiRedis
-from RAI.utils import df_to_RAI
 from sklearn.ensemble import RandomForestClassifier
 import numpy as np
 
 
+# importing RAI modules
+from RAI.AISystem import AISystem, Model
+from RAI.dataset import NumpyData, Dataset
+from RAI.redis import RaiRedis
+from RAI.utils import df_to_RAI
+
+#setup path
 current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir)

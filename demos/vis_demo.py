@@ -14,19 +14,32 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-
+#importing modules
 import os
 import sys
 import inspect
-currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parentdir = os.path.dirname(currentdir)
-sys.path.insert(0, parentdir)
+
+
+
+# importing RAI modules
 from RAI.AISystem import AISystem
 from RAI.dataset import NumpyData, Dataset
 from RAI.redis import RaiRedis
 
 from tensorflow.keras.datasets import cifar10
 
+
+#setup path
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0, parentdir)
+
+# importing RAI modules
+from RAI.AISystem import AISystem
+from RAI.dataset import NumpyData, Dataset
+from RAI.redis import RaiRedis
+
+# Configuration
 use_dashboard = True 
 
 # Get Dataset

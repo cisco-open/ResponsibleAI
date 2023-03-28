@@ -16,20 +16,24 @@
 
 
 # This code requires the sentencepiece package
+#importing modules
 import os
 import sys
 import inspect
 import pandas as pd
-from RAI.AISystem import AISystem, Model
-from RAI.redis import RaiRedis
-from RAI.dataset import Dataset, NumpyData
-from RAI.utils import df_to_RAI
 from sklearn.model_selection import train_test_split
 import random
 import numpy as np
 from datasets import load_dataset
 from transformers import T5Tokenizer, T5ForConditionalGeneration
 
+# importing RAI modules
+from RAI.AISystem import AISystem, Model
+from RAI.redis import RaiRedis
+from RAI.dataset import Dataset, NumpyData
+from RAI.utils import df_to_RAI
+
+#setup path
 current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir)
