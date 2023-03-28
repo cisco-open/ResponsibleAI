@@ -25,6 +25,8 @@ import numpy as np
 from json import JSONEncoder
 import logging
 from RAI.Analysis import AnalysisManager
+import time
+
 logger = logging.getLogger(__name__)
 
 
@@ -86,6 +88,22 @@ class RaiRedis:
             self._threads.append(self._ai_request_pub.run_in_thread(sleep_time=.1))
         except:
             logger.warning("unable to subscribe to redis pub/sub")
+
+    # def __del__(self):
+    #     print("inside del")
+    #     self.Disconnect()
+    #     print("inside del: after disconnect")
+        
+    def Disconnect(self):
+        
+        self._ai_request_pub.unsubscribe("ai_requests")
+        for thread in self._threads:
+            thread.stop()
+            
+        
+        time.sleep(.5)
+        self._ai_request_pub.close()
+        self.redis_connection.connection_pool.disconnect()
 
     def _run_analysis_thread(self, dataset, analysis, connection):
         result = self.analysis_manager.run_analysis(self.ai_system, dataset, analysis, connection=connection)
