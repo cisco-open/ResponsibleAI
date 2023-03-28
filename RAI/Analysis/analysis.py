@@ -23,7 +23,7 @@ import json
 
 
 class Analysis(ABC):
-    def __init__(self, ai_system: AISystem, dataset: str, tag: str=None):
+    def __init__(self, ai_system, dataset, tag):
         self.ai_system = ai_system
         self.analysis = {}
         self.dataset = dataset
@@ -40,7 +40,7 @@ class Analysis(ABC):
         register_class(cls.__name__, cls)
 
     @classmethod
-    def is_compatible(cls, ai_system, dataset: str):
+    def is_compatible(cls, ai_system, dataset):
         """
         :param ai_system: input the ai_system object
         :param dataset: input the dataset
