@@ -14,6 +14,10 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
+#Description 
+#This demo uses the Adults dataset (https://archive.ics.uci.edu/ml/datasets/adult) to show how RAI can be used in model selection
+
+
 #importing modules
 import os
 import sys
@@ -66,6 +70,7 @@ dataset = Dataset({"train": NumpyData(xTrain, yTrain, xTrain), "test": NumpyData
 ai = AISystem(name="Adult_model_selection",  task='binary_classification', meta_database=meta, dataset=dataset, model=model)
 ai.initialize(user_config=configuration)
 
+# test and train data
 reg.fit(xTrain, yTrain)
 
 print("\n\nTESTING PREDICTING METRICS:")

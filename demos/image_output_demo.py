@@ -14,11 +14,15 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
+#Description 
+#This demo uses Cifar10 dataset and shows how RAI can be used to evaluate image classification tasks
+
+
 #importing modules
+import os
 import sys
 import inspect
 import random
-import os
 import numpy as np
 import torch
 import torch.nn as nn

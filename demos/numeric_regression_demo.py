@@ -14,6 +14,10 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
+#Description 
+#This demo uses California housing dataset and shows how RAI can be used for numeric regression tasks during training
+
+
 #importing modules
 import os
 import sys
@@ -44,9 +48,11 @@ target = result.target
 df = result.data
 df[target.name] = target
 
+# Preprocess data and split into train and test sets
 meta, X, y, output = df_to_RAI(df, target_column="MedHouseVal")
 xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=1)
 
+# create and train the base model
 reg = RandomForestRegressor(n_estimators=15, max_depth=20)
 model = Model(agent=reg, output_features=output, name="cisco_income_ai", predict_fun=reg.predict,
               description="Income Prediction AI", model_class="Random Forest Regressor", )

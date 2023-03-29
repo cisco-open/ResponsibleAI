@@ -14,7 +14,12 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
+#Description 
+#This demo uses oxford pet dataset and shows how RAI can be used to evaluate image processing tasks during training
+
+
 #importing modules
+import os
 import sys
 import inspect
 from torch.optim.lr_scheduler import StepLR
@@ -23,7 +28,6 @@ import torchvision
 import torchvision.transforms as transforms
 import torch.nn as nn
 import torch.optim as optim
-import os
 import random
 import numpy as np
 from torchvision.models import regnet_y_800mf

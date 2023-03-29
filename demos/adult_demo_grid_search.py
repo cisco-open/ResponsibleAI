@@ -14,6 +14,10 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
+
+#Description 
+#This demo uses the Adults dataset (https://archive.ics.uci.edu/ml/datasets/adult) to show how RAI can be used in model selection.
+
 #importing modules
 import os
 import sys
@@ -32,8 +36,8 @@ from RAI.utils import df_to_RAI
 
 # Configuration
 use_dashboard = True
-data_path = "./data/adult/"
-
+#data_path = "./data/adult/"
+data_path ="\\Users\\shfarhee\\Desktop\\Analysis branch\\ResponsibleAI\\data\\adult\\"
 
 #setup path
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))

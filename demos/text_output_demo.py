@@ -15,6 +15,10 @@
 # SPDX-License-Identifier: Apache-2.0
 
 
+#Description 
+#This demos show how RAI and its dashboard can be used for evaluating the natural language modeling tasks
+
+
 # This code requires the sentencepiece package
 #importing modules
 import os

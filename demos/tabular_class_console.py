@@ -14,6 +14,11 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
+#Description 
+#This demo shows how RAI can be used without the dashboard to calculate and report on the metrics for a machine learning task
+
+
+
 #importing modules
 import os
 import sys
