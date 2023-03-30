@@ -10,21 +10,13 @@ import os
 import sys
 # source code directory, relative to this file, for sphinx-autobuild
 sys.path.insert(0, os.path.abspath('..'))
-#sys.path.insert(0, os.path.abspath('../../RAI'))
-#sys.path.insert(0, os.path.abspath('../..'))
-#so we can import RAI
-#sys.path.append(os.path.join(os.path.dirname(__name__), ".."))
-#sys.path.insert(0, os.path.abspath('../..'))
-#import RAI
-#sys.path.insert(0, os.path.abspath('..'))
-#sys.path.insert(0, os.path.abspath('../'))
-#sys.path.insert(0, os.path.abspath('../..'))
+
 
 project = 'RAI Documentation'
 copyright = '2023, sharfa@Cisco'
 author = 'RAI Contributers'
 release = '0.1'
-version = 'testing'
+version = 'latest'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
