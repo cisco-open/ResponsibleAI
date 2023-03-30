@@ -12,17 +12,17 @@ The goal is to provide a generic framework to perform various types of analysis,
 ==========================
 
 
-- Rai dashboards display metrics and critical data and give the user a visual representation of them.
-- The Rai dashboard computes all metrics and visualizes the current running code in real time.
-- Rai dashboard can handle a wide variety of models and store information for each model, from text-based models to image-based models.
-- Rai dashboard automatically determines what metrics are relevant by examining the type of model, data, and task provided by the user.
+- RAI dashboards display metrics and critical data and give the user a visual representation of them.
+- The RAI dashboard computes all metrics and visualizes the current running code in real time.
+- RAI dashboard can handle a wide variety of models and store information for each model, from text-based models to image-based models.
+- RAI dashboard automatically determines what metrics are relevant by examining the type of model, data, and task provided by the user.
 - With RAI, users can view data at a high level by scanning dashboards like input and output visualizations.
 
 
 **How To Run RAI Dashboard**
 ============================
 
-- when the python file ``main.py`` is triggered, Dash is running on server i.e the IP of 127.0.0.1 and the port is 8050, if we follow and click on the URL or copy the URL and paste in the browser, you can access the dashboard.
+- When the python file ``main.py`` is ran, Dash is running on localhost and the port is 8050, if we follow and click on the URL or copy the URL and paste in the browser, you can access the dashboard.
 
 
 **Description**: Run the main.py by

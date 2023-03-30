@@ -76,22 +76,23 @@
    RAI will carry out detailed analyses (e.g. of the chosen model design) and tests (e.g. robustness, bias, explainability) and define a certification that have Accuracy features.
 
 
-**MetricManager**
+**Metrics**
 ==========
 
 - **Representation**
 
- - MetricManagers are responsible for determining finding well defined metrics relevant to an AISystem.  
- - They operate on groups of MetricGroups which are collections of Metrics with similar compatibility and functionality.  
+ - Each Metric comes with metadata, including its name and description, as well as a function to compute the metric.
+ - Metrics are grouped into MetricGroups, which are collections of Metrics with similar compatibility and functionality.
+ - AISystems access metrics through MetricManagers which are responsible for checking compatibility between MetricGroups and AISystems, as well as computing and retrieving specific Metric values.
  - MetricManagers are automatically created and managed by AISystems and are the key to running Metrics and retrieving their values. 
- - They provide this functionality through functions to check the compatbility of Metrics with AISystems, as well as compute and retrieve specific Metric values. 
 
 - **Interaction** 
 
- - Find all MetricGroups compatible with an AISystem. 
- - Ensures that dependencies between Metrics are satisfied with no circular dependency issues.  
- - Provides functionality to search for specific Metrics based on Metric Name, Metric Group Name, Category, and Tags.
- - Handles Metric computation for whole and batched data. 
+ - Interaction with Metrics are done through MetricManagers. 
+ - MetricManagers are capable of quickly finding all MetricGroups compatible with an AISystem. 
+ - RAI ensures that dependencies between Metrics are satisfied with no circular dependency issues.  
+ - Functionality is provided to search for specific Metrics based on Metric Name, Metric Group Name, Category, and Tags.
+ - Metrics are compatible with both whole and batched data. 
 
 
 **Example**:

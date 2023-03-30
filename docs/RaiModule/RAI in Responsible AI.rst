@@ -11,9 +11,9 @@
 - Ethical AI Utilization
 
  - RAI practices and adheres to well-defined ethical guidelines regarding fundamental values, including individual rights, privacy, non-discrimination, and non-manipulation.
- - It places fundamental importance on ethical considerations in determining legitimate and illegitimate uses of AI.
- - It believes integrity and ethical behavior are fundamental to a succesful AI applications.
- - It help them to dramatically improve their operations and products for humankind's betterment.
+ - RAI places a fundamental importance on ethical considerations in determining legitimate and illegitimate uses of AI.
+ - RAI encodes the belief that integrity and ethical behavior are fundamental to a succesful AI applications.
+ - RAI helps users to dramatically improve their operations and products for the betterment of humankind.
 
 
 **Robustness and the Adversarial AI**
