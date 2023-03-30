@@ -77,6 +77,7 @@ class MetricManager(object):
     
         :return: None 
         """
+        print('*'*1000)
         if user_config:
             self.standardize_user_config(user_config)
             for key in user_config:
