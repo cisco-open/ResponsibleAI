@@ -10,23 +10,13 @@ import os
 import sys
 # source code directory, relative to this file, for sphinx-autobuild
 sys.path.insert(0, os.path.abspath('..'))
-sys.path.append('../RAI/')
-#sys.path.insert(0, os.path.abspath('../../RAI'))
-#sys.path.insert(0, os.path.abspath('../..'))
-#so we can import RAI
-#sys.path.append(os.path.join(os.path.dirname(__name__), ".."))
-#sys.path.insert(0, os.path.abspath('../..'))
-#import RAI
-#sys.path.insert(0, os.path.abspath('..'))
-#sys.path.insert(0, os.path.abspath('../'))
-#sys.path.insert(0, os.path.abspath('../..'))
 
 
 project = 'RAI Documentation'
 copyright = '2023, sharfa@Cisco'
 author = 'RAI Contributers'
 release = '0.1'
-version = 'testing'
+version = 'latest'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -63,14 +53,12 @@ extensions = ['sphinx.ext.autodoc','sphinx.ext.viewcode','sphinx.ext.napoleon',
 
 
 
-
 #napoleon_include_init_with_doc = True
 napoleon_use_ivar = True
 #napoleon_use_rtype = False
 
 #autoclass_content = 'both'
 #sphinx_tabs_valid_builders = ['linkcheck']
-
     
 
 # Fix for read the docs
@@ -116,3 +104,5 @@ pygments_style = 'sphinx'
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 html_theme = 'sphinx_rtd_theme'
+
+autoclass_content = 'both'

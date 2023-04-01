@@ -38,6 +38,19 @@ class MetricGroup(ABC):
     # Checks if the group is compatible with the provided AiSystem
     @classmethod
     def is_compatible(cls, ai_system):
+
+        """
+        Checks if the group is compatible with the provided AiSystem
+
+
+        :param: ai_system
+
+        :return: Compatible object
+    
+    
+      
+        """
+        
         compatible = cls.config["compatibility"]["task_type"] == [] \
                      or any(i == ai_system.task for i in cls.config["compatibility"]["task_type"]) \
                      or (any(i == "classification" for i in cls.config["compatibility"]["task_type"])
@@ -84,6 +97,19 @@ class MetricGroup(ABC):
             self.status = "BAD"
 
     def reset(self):
+
+        
+        """
+        Reset the status
+
+
+        :param: None
+
+        :return: None
+    
+    
+      
+        """
         if self.status == "BAD":
             return
         self.persistent_data = {}
@@ -92,6 +118,18 @@ class MetricGroup(ABC):
         self.status = "OK"
 
     def load_config(self, config):
+
+        """
+        Fetch the metric data from config
+
+
+        :param: config
+
+        :return: Boolean
+    
+    
+      
+        """ 
         if "tags" in config:
             self.tags = config["tags"]
         if "dependency_list" in config:
@@ -109,12 +147,34 @@ class MetricGroup(ABC):
         return True
 
     def create_metrics(self, metrics_config):
+        """
+        Create the metric and assign name and tags to it
+
+
+        :param: metrics_config
+
+        :return: None
+    
+    
+      
+        """ 
         for metric_name in metrics_config:
             self.metrics[metric_name] = Metric(metric_name, metrics_config[metric_name])
             self.metrics[metric_name].unique_name = self.name + " > " + metric_name
             self.metrics[metric_name].tags = self.tags
 
     def get_metric_values(self):
+        """
+        Returns the metric with the name and its corresponding value
+
+
+        :param: None
+
+        :return: dict
+    
+    
+      
+        """ 
         results = {}
         for metric_name in self.metrics:
             if self.metrics[metric_name].type == 'vector':
@@ -133,6 +193,17 @@ class MetricGroup(ABC):
         return results
 
     def export_metric_values(self):
+        """
+        Returns the metric with the name and its corresponding value
+
+
+        :param: None
+
+        :return: dict
+    
+    
+      
+        """ 
         results = {}
         for metric_name in self.metrics:
             if self.metrics[metric_name].type == 'vector':
