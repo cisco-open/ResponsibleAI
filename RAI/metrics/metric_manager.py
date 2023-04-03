@@ -17,6 +17,7 @@
 
 import os.path
 import site
+from typing import List
 from RAI import utils
 from RAI.all_types import all_output_requirements, all_complexity_classes, all_dataset_requirements, \
     all_data_types, all_task_types
@@ -27,10 +28,10 @@ logger = logging.getLogger(__name__)
 __all__ = ['MetricManager']
 
 # choose the first site packages folder
-site_pkgs_path = site.getsitepackages()[0]
-rai_pkg_path = os.path.join(site_pkgs_path, "RAI")
-if not os.path.isdir(rai_pkg_path):
-    rai_pkg_path = "RAI"
+# site_pkgs_path = site.getsitepackages()[0]
+# rai_pkg_path = os.path.join(site_pkgs_path, "RAI")
+# if not os.path.isdir(rai_pkg_path):
+rai_pkg_path = "RAI"
 
 
 class MetricManager(object):
@@ -69,7 +70,7 @@ class MetricManager(object):
                 assert "positive_label" in user_config["fairness"]
                 user_config["fairness"]["protected_attributes"] = protected_classes
 
-    def initialize(self, user_config: dict = None, metric_groups: list[str] = None, max_complexity: str = "linear"):
+    def initialize(self, user_config: dict = None, metric_groups: List[str] = None, max_complexity: str = "linear"):
         """
         Find all compatible metric groups and Remove metrics with missing dependencies and Check for circular dependencies
 
@@ -79,6 +80,7 @@ class MetricManager(object):
     
         :return: None 
         """
+    
         if user_config:
             self.standardize_user_config(user_config)
             for key in user_config:
