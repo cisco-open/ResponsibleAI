@@ -13,7 +13,7 @@ The goal is to provide a generic framework to perform various types of analysis,
 
 
 - RAI dashboards display metrics and critical data and give the user a visual representation of them.
-- The RAI dashboard computes all metrics and visualizes the current running code in real time.
+- The RAI dashboard computes all metrics and visualizes the currently running code in real time.
 - RAI dashboard can handle a wide variety of models and store information for each model, from text-based models to image-based models.
 - RAI dashboard automatically determines what metrics are relevant by examining the type of model, data, and task provided by the user.
 - With RAI, users can view data at a high level by scanning dashboards like input and output visualizations.

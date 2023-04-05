@@ -10,16 +10,16 @@
 - **Representation**
 
  - AISystems are the main class users interact with in RAI, they capture key information about an AI. 
- - This information is passed during construction, and includes a name, a task type, a MetaDatabase, a Dataset and a Model.
+ - This information is passed during construction and includes a name, a task type, a MetaDatabase, a Dataset and a Model.
 
 
 - **Interaction**
 
- - AISystems make it simple to run computations and get metric values and are needed to run an Analysis and run Certifications.
- - After making an AISystem, users can use the compute function, to generate all relevant metrics related to their model and dataset.
- - The Model, Task Type and MetaDatabase are RAI classes which provide critical information to the AISystem and allows it to determine which metrics are relevant. 
+ - AISystems make it simple to run computations and get metric values, and are needed to run an Analysis and run Certifications.
+ - After making an AISystem, users can use the compute function to generate all relevant metrics related to their model and dataset.
+ - The Model, Task Type and MetaDatabase are RAI classes which provide critical information to the AISystem, allowing it to determine which metrics and analyses are relevant. 
  - After computing metrics, users can get retrieve metric values using the get_metric_values function.
- - By providing the function that a model uses, the AISystem can automatically generate outputs from the model using the run_compute function.
+ - When provided a network's functions to generate predictions or values, AISystems can use models and run evaluations without requiring user involvement.  
 
 
 **Example**:
@@ -43,8 +43,8 @@
 
 - **Representation**
 
- - Certificates allow professionals to quickly and easily define standards for AISystems in different domains and tasks.
- - Once a certificate has been added to an AISystem, the AISystem can quickly and easily be evaluate whether or not it meets the standards of the certificate allowing for quick yet robust evaluation. 
+ - Certificates allow users to quickly and easily define and communicate standards for AISystems in different domains and tasks.
+ - Once a certificate has been added to an AISystem, the AISystem can quickly and easily evaluate whether or not it meets the standards of the certificate allowing for quick yet robust evaluation. 
  - Certificates are written in JSON and can contain logical and relational operators, with the ability to retrieve any metric associated with an AISystem.
 
 
@@ -119,7 +119,7 @@
 
  - While metrics are typically general and simple to calculate, Analyses are finegrained evaluations to run on specific AISystems. 
  - Analyses provide a way for users to quickly and easily run complex experiments compatible with their model, with built in visualizations.
- - Analyses are easy to create allowing users to quickly and easily create custom Analyses for their specific needs using elements of the AISystem.  
+ - Analyses are easy to create allowing users to quickly and easily make their own custom Analyses for their specific needs using any attribute of the AISystem.  
 
 - **Interaction** 
  - Analyses are managed by the AnalysisManger and are given access to the AISystem and Dataset through the RAIRedis class. 
