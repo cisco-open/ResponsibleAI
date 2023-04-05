@@ -11,9 +11,9 @@
 - Ethical AI Utilization
 
  - RAI practices and adheres to well-defined ethical guidelines regarding fundamental values, including individual rights, privacy, non-discrimination, and non-manipulation.
- - It places fundamental importance on ethical considerations in determining legitimate and illegitimate uses of AI.
- - It believes integrity and ethical behavior are fundamental to a succesful AI applications.
- - It help them to dramatically improve their operations and products for humankind's betterment.
+ - RAI places a fundamental importance on ethical considerations in determining legitimate and illegitimate uses of AI.
+ - RAI encodes the belief that integrity and ethical behavior are fundamental to succesful AI applications.
+ - RAI helps users to dramatically improve their operations and products for the betterment of humankind.
 
 
 **Robustness and the Adversarial AI**
@@ -25,7 +25,7 @@
  - Both can mislead a model into delivering incorrect predictions or results. 
  - Adversarial robustness refers to a model’s ability to resist being fooled.
  - RAI helps to improve the adversarial robustness of AI models, making them more impervious to irregularities and attacks.
- - RAI also focuses on the threats of Evasion (change the model behavior with input modifications), Trojaning (can access to the model and its parameters and retrain this model), Poisoning (control a model with training data modifications), Extraction (steal a model through queries) and Inference (attack the privacy of the training data). 
+ - RAI also focuses on the threats of Evasion (change the model behavior with input modifications), Trojaning (can access the model and its parameters and retrain this model), Poisoning (control a model with training data modifications), Extraction (steal a model through queries) and Inference (attack the privacy of the training data). 
  - RAI aims to support tasks, and data types in continuous development by defending AI against adversarial attacks and making AI systems more secure.
 
 .. admonition:: Example

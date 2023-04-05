@@ -6,12 +6,13 @@
 ================
 
 
-- RAI is an easy-to-use framework for Responsible AI development. We can provide the prediction input in RAI, which handles all metric computation and performs live visualization on its dashboard.
-- To see the calculation of RAI, users can also opt for the console.
-- Through RAI we can handle large variety of models like text, images, tabular data, etc.
+- RAI is an easy-to-use framework for Responsible AI development. By providing models and their generations, RAI can handle all metric computation and perform live visualization on its dashboard.
+- RAI can also be used entirely from the console, allowing users working through command line to take advantage of its tools.
+- RAI is built to handle a large variety of models and datatypes like text, images, tabular data, etc.
 - Based on the type of model, data, and task provided by the user, RAI automatically determines what metrics are relevant.
-- Through RAI Visualization help, we can get an idea of the models, and based on the visualization; we can analyze and optimize them.
-- RAI provides metrics that measure various aspects of AI systems, including performance, robustness, explainability, and fairness. Based on these parameters, we can get an idea of the model, and based on these, we can make changes to the model.
+- Visualization tools built into RAI give users a strong sense of how their model performs and allows for in depth analysis and optimization. 
+- RAI provides metrics that measure various aspects of AI systems, including performance, robustness, explainability, and fairness. 
+- Emphasis was placed on making each metric simple to understand and visualize, allowing anyone to get a strong idea of their model's strengths and weaknesses and understand what needs to change.
 
 
 ===================
