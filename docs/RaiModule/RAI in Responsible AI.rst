@@ -24,7 +24,7 @@
 
 
 **Robust**
-==========
+----------
 
 - Robustness refers to the degree that a model’s performance changes when using new data versus training data. Ideally, performance should not deviate significantly.
 
@@ -72,7 +72,7 @@ Normalized Features Standard	                   Whether of not each training fea
 
 
 **Basic Explainability**
-========================
+------------------------
 
 
 - Basic Explainability will assist in providing details on or causes of fairness metrics.
@@ -95,7 +95,7 @@ explainable model                                  Placeholder method for if a m
 
 
 **Performance**
-===============
+---------------
 
 - Performance metrics are a part of every machine learning pipeline. They tell you if you’re making progress, and put a number on it. All machine learning models, whether it’s linear regression, or a SOTA technique like BERT, need a metric to judge performance.
 
@@ -121,8 +121,8 @@ False Positive Rate                                Describes the percentage of n
 
 
 
-**Fairness Metrics**
-====================
+**Fairness**
+------------
 
 
 - Fairness measures allow us to assess and audit for possible biases in a trained model. There are several types of metrics that are used in RAI to assess a model’s fairness. They can be classified as follows:
