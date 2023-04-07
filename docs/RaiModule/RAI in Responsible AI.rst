@@ -255,4 +255,3 @@ For Instance:
 
 A case study of how RAI can be applied to detect and resolve biases in AI models can be found :ref:`here <Robustness of AI>`.
 
-
