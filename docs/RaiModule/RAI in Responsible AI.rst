@@ -26,13 +26,13 @@
 **Robust**
 ==========
 
-- Model robustness refers to the degree that a model’s performance changes when using new data versus training data. Ideally, performance should not deviate significantly.
+- Robustness refers to the degree that a model’s performance changes when using new data versus training data. Ideally, performance should not deviate significantly.
 
 - To implement Robust metrics, we used the Sklearn library.
 
 **Adversarial Robustness**
 
-- Adversarial robustness refers to a model's ability to resist being fooled
+- Adversarial robustness refers to a model's ability to resist being fooled.
 
 =================================================  ===================================================================================
 display_name                                       Description
@@ -186,7 +186,7 @@ equal_opportunity_difference                       The difference of true positi
 
 **General Prediction Fairness**
 
-- It is used to compute various fairness metrics for the classification model
+- It is used to compute various fairness metrics for the classification model.
 
 =================================================  =======================================================================================
 display_name                                       Description
@@ -217,7 +217,7 @@ between_all_groups_theil_index                     The pairwise entropy between 
 
 **Dataset Fairness**
 
-- It is used to compute fairness metrics for the Binary dataset
+- It is used to compute fairness metrics for the Binary dataset.
 
 
 
@@ -243,7 +243,7 @@ num_positives                                      Num Positives calculates the 
 
 For Instance:
 
-- User can obtain to compute specialized metrics like Disparate Impact Ratio to show the fairness of the models classification across sensitive characteristics
+- User can obtain to compute specialized metrics like Disparate Impact Ratio to show the fairness of the models classification across sensitive characteristics.
 
 .. figure:: ../images/fairness.gif
    :align: center
