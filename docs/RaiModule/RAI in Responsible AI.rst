@@ -19,7 +19,7 @@
 **New findings in the Responsible AI Research**
 ===============================================
 
-- In AI models, bias and fairness are measured and assessed using a variety of metrics, such as
+- Different metrics can be used to measure and assess bias and fairness in AI models, some of which are shown in the following examples:
 
 
 **Robust**
@@ -27,7 +27,7 @@
 
 - Robustness refers to the degree that a model’s performance changes when using new data versus training data. Ideally, performance should not deviate significantly.
 
-- To implement Robust metrics, we used the Sklearn library.
+- The Sklearn library was used for the implementation of Robust metrics.
 
 **Adversarial Robustness**
 
@@ -98,7 +98,7 @@ explainable model                                  Placeholder method for if a m
 
 - Performance metrics are a part of every machine learning pipeline. They tell you if you’re making progress, and put a number on it. All machine learning models, whether it’s linear regression, or a SOTA technique like BERT, need a metric to judge performance.
 
-- In order to implement performance metrics, we used some of the features of the Torch library.
+- The Torch library is used in our implementation of performance metrics in order to take advantage of some of its features.
 
 **Performance Metrics**
 
@@ -156,7 +156,7 @@ coefficient_of_variation                           The square root of twice the 
 
 **Group Fairness**
 
-- The goal of groups defined by protected attributes receiving similar treatments or outcomes.
+- It is the goal of groups defined by protected attributes to receive similar treatment or outcomes regardless of their protected attributes.
 
 =================================================  ====================================================================================================================
 display_name                                       Description
@@ -185,7 +185,7 @@ equal_opportunity_difference                       The difference of true positi
 
 **General Prediction Fairness**
 
-- It is used to compute various fairness metrics for the classification model.
+- For the classification model to be fair, various fairness metrics need to be computed..
 
 =================================================  =======================================================================================
 display_name                                       Description
