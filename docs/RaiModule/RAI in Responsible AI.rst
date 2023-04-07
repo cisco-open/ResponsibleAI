@@ -11,43 +11,248 @@
 - Ethical AI Utilization
 
  - RAI practices and adheres to well-defined ethical guidelines regarding fundamental values, including individual rights, privacy, non-discrimination, and non-manipulation.
- - It places fundamental importance on ethical considerations in determining legitimate and illegitimate uses of AI.
- - It believes integrity and ethical behavior are fundamental to a succesful AI applications.
- - It help them to dramatically improve their operations and products for humankind's betterment.
+ - RAI places a fundamental importance on ethical considerations in determining legitimate and illegitimate uses of AI.
+ - RAI encodes the belief that integrity and ethical behavior are fundamental to successful AI applications.
+ - RAI helps users to dramatically improve their operations and products for the betterment of humankind.
 
 
-**Robustness and the Adversarial AI**
-=====================================
 
-- Robustness and the Adversarial AI Utilization
-
- - In the real world, AI models can encounter incidental adversity, such as when data becomes corrupted, and intentional adversity, such as when hackers actively sabotage them.
- - Both can mislead a model into delivering incorrect predictions or results. 
- - Adversarial robustness refers to a model’s ability to resist being fooled.
- - RAI helps to improve the adversarial robustness of AI models, making them more impervious to irregularities and attacks.
- - RAI also focuses on the threats of Evasion (change the model behavior with input modifications), Trojaning (can access to the model and its parameters and retrain this model), Poisoning (control a model with training data modifications), Extraction (steal a model through queries) and Inference (attack the privacy of the training data). 
- - RAI aims to support tasks, and data types in continuous development by defending AI against adversarial attacks and making AI systems more secure.
-
-.. admonition:: Example
-    :class: dropdown
-
-    If i give you a dataset of cat and dog photos, in which cats always wear bright red bow ties, your model may learn to associate bow ties with cats. If I give it a picture of a dog with a bow tie, your model may label it as a cat. 
-    Adversarial machine learning also often includes identifying specific noise that can be added to inputs to confound a model. Therefore, if a model is robust, it means that it is difficult to find adversarial examples for the model. 
-    Usually this is because the model has learned some desirable correlations (e.g. cats have a different muzzle shape than dogs), rather than undesirable ones (cats have bow ties; pictures containing cats are 0.025% more blue than those containing dogs; dog pictures have humans in them more often; etc.). 
-    So here RAI try to directly exploit this idea, by training the model on both true data and data designed by an adversary to resemble the true data.
-
-.. _Contribution to principle of AI:
-
-
-**Explainable AI aspects of model development**
+**New findings in the Responsible AI Research**
 ===============================================
 
-- Dashboard tools Utilization
+- In AI models, bias and fairness are measured and assessed using a variety of metrics, such as
 
- - RAI can handle large varieties of models like text, images and tabular data.
- - It can show Analysis of the models in the dashboard.
- - Visualization can help in understanding the models so that we can have the idea of where it is failing and succeeding.
- - It can use Grad-cam to help in highlighting the important regions in the images by bound boxing.
- - RAI will show the results on the dashboard after fitting the model, allowing us to see how the model performs on Explanability, Robustness, Performance and Fairness and help us analyze how we can improve the model
- - In each category, we can check how many tests have passed and make the changes as necessary
- - Additionally, metric graphs can assist in understanding how parameter and metric changes during model development
+
+**Robust**
+==========
+
+- Model robustness refers to the degree that a model’s performance changes when using new data versus training data. Ideally, performance should not deviate significantly.
+
+- To implement Robust metrics, we used the Sklearn library.
+
+**Adversarial Robustness**
+
+- Adversarial robustness refers to a model's ability to resist being fooled
+
+=================================================  ===================================================================================
+display_name                                       Description
+=================================================  ===================================================================================
+Accuracy                                           Distortion metrics scale linearly with the log of inaccuracy. 
+                                                   Inaccuracy is calculated by taking sqrt(1 - accuracy).
+                                                         
+=================================================  ===================================================================================
+
+
+.. container:: toggle, toggle-hidden
+
+    .. admonition:: Adversarial Robustness
+
+        .. image::  /images/adversarialrobustnessmetrics.png
+
+
+
+**Basic Robustness**
+
+- Model robustness refers to the degree that a model's performance changes when using new data versus training data.
+
+=================================================  ===================================================================================
+display_name                                       Description
+=================================================  ===================================================================================
+Normalized Features 0-1                            Whether of not each training feature is normalized to 0/1. 
+                                                   
+Normalized Features Standard	                   Whether of not each training feature is normalized to standard.                                      
+=================================================  ===================================================================================
+
+.. container:: toggle, toggle-hidden
+
+    .. admonition:: Basic Robustness
+
+        .. image::  /images/basicrobustness.png
+
+
+
+**Basic Explainability**
+========================
+
+
+- Basic Explainability will assist in providing details on or causes of fairness metrics.
+
+
+
+=================================================  =================================================================================
+display_name                                       Description
+=================================================  =================================================================================
+explainable model                                  Placeholder method for if a method is explainable.
+                                 
+=================================================  =================================================================================
+
+
+.. container:: toggle, toggle-hidden
+
+    .. admonition:: basic Explainability
+
+        .. image::  /images/basicexplainability.png
+
+
+**Performance**
+===============
+
+- Performance metrics are a part of every machine learning pipeline. They tell you if you’re making progress, and put a number on it. All machine learning models, whether it’s linear regression, or a SOTA technique like BERT, need a metric to judge performance.
+
+- In order to implement performance metrics, we used some of the features of the Torch library.
+
+**Performance Metrics**
+
+=================================================  ===================================================================================
+display_name                                       Description
+=================================================  ===================================================================================
+Accuracy                                           The proportion of correct predictions among the total number of cases processed.
+                                                   
+Balanced Accuracy                                  Describes the proportion of correct predictions averaged across each label.
+
+False Positive Rate                                Describes the percentage of negative examples incorrectly predicted to be positive.        
+=================================================  ===================================================================================
+
+.. container:: toggle, toggle-hidden
+
+    .. admonition:: Classification Performance Metrics
+
+        .. image::  /images/performancemetrics.png
+
+
+
+**Fairness Metrics**
+====================
+
+
+- Fairness measures allow us to assess and audit for possible biases in a trained model. There are several types of metrics that are used in RAI to assess a model’s fairness. They can be classified as follows:
+
+
+**Individual Fairness**
+
+- The goal of similar individuals receiving similar treatments or outcomes.It is used to compute metrics related to individual fairness in AI system.
+
+=================================================  =================================================================================
+display_name                                       Description
+=================================================  =================================================================================
+generalized_entropy_index                          A measure of information theoretic redundancy in data. 
+                                                   Describes how unequally the outcomes of an algorithm benefit 
+                                                   different individuals or groups in a population
+                                                   
+theil_index                                        The generalized entropy of benefit for all individuals in the dataset, 
+                                                   with alpha = 1.\nMeasures the inequality in benefit allocation for individuals.
+                                                   \nA value of 0 implies perfect fairness
+                                                                                        
+coefficient_of_variation                           The square root of twice the generalized entropy index with alpha = 2.
+                                                   \nThe ideal value is 0.           
+=================================================  =================================================================================
+
+
+.. container:: toggle, toggle-hidden
+
+    .. admonition:: Individual Fairness
+
+        .. image::  /images/Individual_fairness.png
+
+
+**Group Fairness**
+
+- The goal of groups defined by protected attributes receiving similar treatments or outcomes.
+
+=================================================  ====================================================================================================================
+display_name                                       Description
+=================================================  ====================================================================================================================
+disparate_impact_ratio                             The ratio of rate of favorable outcome for the unprivileged group to that of the privileged group.
+                                                   \nThe ideal value of this metric is 1.0 A value < 1 implies higher benefit for the privileged group 
+                                                   and a value > 1 implies a higher benefit for the unprivileged group.
+                                                                                      
+statistical_parity_difference                      The difference of the rate of favorable outcomes received by the unprivileged group to the privileged group.
+                                                   \nThe idea value is 0.0  
+
+between_group_generalized_entropy_error            The between group decomposition for generalized entropy error
+
+equal_opportunity_difference                       The difference of true positive rates between the unprivileged and the privileged groups.
+                                                   \nThe true positive rate is the ratio of true positives to the total number of actual positives for a given group.
+                                                   \nThe ideal value is 0. A value of < 0 implies higher benefit for the privileged group and a value > 0 implies 
+                                                   higher benefit for the unprivileged group
+=================================================  ====================================================================================================================
+
+.. container:: toggle, toggle-hidden
+
+    .. admonition:: Group fairness
+
+        .. image::  /images/Group_fairness.png
+
+
+**General Prediction Fairness**
+
+- It is used to compute various fairness metrics for the classification model
+
+=================================================  =======================================================================================
+display_name                                       Description
+=================================================  =======================================================================================
+average_odds_difference                            The average difference of false positive rate (false positives / negatives) and 
+                                                   true positive rate (true positives / positives)
+                                                   between unprivileged and privileged groups.
+                                                   \nThe ideal value is 0.  A value of < 0 implies higher benefit for the privileged group 
+                                                   and a value > 0 implies higher benefit for the unprivileged group
+                                                                                      
+between_all_groups_coefficient_of_variation        The square root of twice the pairwise entropy between every pair of privileged and 
+                                                   underprivileged groups with alpha = 2.\nThe ideal value is 0  
+
+between_all_groups_generalized_entropy_index       The pairwise entropy between every pair of privileged and underprivileged groups.
+                                                   \nThe ideal value is 0.0
+
+between_all_groups_theil_index                     The pairwise entropy between every pair of privileged and underprivileged groups with
+                                                   alpha = 1.\nThe ideal value is 0.0
+=================================================  =======================================================================================
+
+
+.. container:: toggle, toggle-hidden
+
+    .. admonition:: General prediction Fairness
+
+        .. image::  /images/general_fairness.png
+
+
+**Dataset Fairness**
+
+- It is used to compute fairness metrics for the Binary dataset
+
+
+
+=================================================  =======================================================================================
+display_name                                       Description
+=================================================  =======================================================================================
+base_rate                                          Base Rate is the rate at which a positive outcome occurs in Data. 
+                                                   In formula it is, Pr(Y=pos_label) = P/(P+N)
+                                                                                      
+num_instances                                      Num Instances counts the number of examples in Data 
+
+num_negatives                                      Num Negatives counts the number of negative labels in Data 
+
+num_positives                                      Num Positives calculates the number of positive labels in Data
+=================================================  =======================================================================================
+
+.. container:: toggle, toggle-hidden
+
+    .. admonition:: Dataset Fairness
+
+        .. image::  /images/Dataset_fairness.png
+
+
+For Instance:
+
+- User can obtain to compute specialized metrics like Disparate Impact Ratio to show the fairness of the models classification across sensitive characteristics
+
+.. figure:: ../images/fairness.gif
+   :align: center
+   :scale: 40 %
+
+   fairness_of_the_model
+
+
+
+A case study of how RAI can be applied to detect and resolve biases in AI models can be found :ref:`here <Robustness of AI>`.
+
+

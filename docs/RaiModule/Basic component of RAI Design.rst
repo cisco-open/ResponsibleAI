@@ -9,15 +9,17 @@
 
 - **Representation**
 
- - It represents the main class, users interact with in RAI.
- - When constructed, AISystems are passed a name, a task type, a MetaDatabase, a Dataset and a Model.
+ - AISystems are the main class users interact with in RAI, they capture key information about an AI. 
+ - This information is passed during construction and includes a name, a task type, a MetaDatabase, a Dataset and a Model.
 
 
 - **Interaction**
 
- - Single compute accepts predictions and the name of a dataset, and then calculates metrics for that dataset.
- - Compute will tell RAI to compute metric values across each dataset which predictions were made on.
- - Run Compute automatically generates outputs from the model, and compute metrics based on those outputs.
+ - AISystems make it simple to run computations and get metric values, and are needed to run an Analysis and run Certifications.
+ - After making an AISystem, users can use the compute function to generate all relevant metrics related to their model and dataset.
+ - The Model, Task Type and MetaDatabase are RAI classes which provide critical information to the AISystem, allowing it to determine which metrics and analyses are relevant. 
+ - After computing metrics, users can get retrieve metric values using the get_metric_values function.
+ - When provided a network's functions to generate predictions or values, AISystems can use models and run evaluations without requiring user involvement.  
 
 
 **Example**:
@@ -41,14 +43,16 @@
 
 - **Representation**
 
- - It represents a class automatically created by AISystems.
- - This class loads a file containing information on which certificates to use, before creating associated Certificate Objects, as well as prompting their associated evaluations.
+ - Certificates allow users to quickly and easily define and communicate standards for AISystems in different domains and tasks.
+ - Once a certificate has been added to an AISystem, the AISystem can quickly and easily evaluate whether or not it meets the standards of the certificate allowing for quick yet robust evaluation. 
+ - Certificates are written in JSON and can contain logical and relational operators, with the ability to retrieve any metric associated with an AISystem.
 
 
 - **Interaction**
 
- - Loads all certificates found in the stock certificate file..
- - Loads all certificates found in a custom filepath.
+ - Custom Certificates can be added to an AISystem by passing in a filepath to the certificate file while initializing the AISystem.
+ - Certificates will be evaluated when the AISystem calls its compute function. 
+ - Certificates can be retrieved by calling the get_certificate_values function on the AISystem.
 
 
 **Example**:
@@ -72,23 +76,23 @@
    RAI will carry out detailed analyses (e.g. of the chosen model design) and tests (e.g. robustness, bias, explainability) and define a certification that have Accuracy features.
 
 
-**Metric**
-==========
+**Metrics**
+===========
 
 - **Representation**
 
- - It represents to create and Manage various MetricGroups which are compatible with the AISystem. 
- - It is created by the AISystem, and will load in all available MetricGroups compatible with the AISystem. 
- - It also provides functions to run computes for all metric groups, get metadata about metric groups, and get metric values.
+ - Each Metric comes with metadata, including its name and description, as well as a function to compute the metric.
+ - Metrics are grouped into MetricGroups, which are collections of Metrics with similar compatibility and functionality.
+ - AISystems access metrics through MetricManagers which are responsible for checking compatibility between MetricGroups and AISystems, as well as computing and retrieving specific Metric values.
+ - MetricManagers are automatically created and managed by AISystems and are the key to running Metrics and retrieving their values. 
 
 - **Interaction** 
 
- - Find all compatible metric groups.
- - Remove metrics with missing dependencies.
- - Check for circular dependencies.
- - batched_compute check.
- - If data instance of IteratorData, iterate through batches,
- - Searches all metrics. Queries based on Metric Name, Metric Group Name, Category, and Tags.
+ - Interaction with Metrics are done through MetricManagers. 
+ - MetricManagers are capable of quickly finding all MetricGroups compatible with an AISystem. 
+ - RAI ensures that dependencies between Metrics are satisfied with no circular dependency issues.  
+ - Functionality is provided to search for specific Metrics based on Metric Name, Metric Group Name, Category, and Tags.
+ - Metrics are compatible with both whole and batched data. 
 
 
 **Example**:
@@ -113,10 +117,15 @@
 
 - **Representation**
 
- - It is a method of data analysis that automates analytical model building
- - It analyzes data using machine learning algorithms to predict future outcomes and reveal trends and patterns.
+ - While metrics are typically general and simple to calculate, Analyses are finegrained evaluations to run on specific AISystems. 
+ - Analyses provide a way for users to quickly and easily run complex experiments compatible with their model, with built in visualizations.
+ - Analyses are easy to create allowing users to quickly and easily make their own custom Analyses for their specific needs using any attribute of the AISystem.  
 
 - **Interaction** 
+
+ - Analyses are managed by the AnalysisManger and are given access to the AISystem and Dataset through the RAIRedis class. 
+ - Similar to MetricManagers, AnalysisManagers check compatibility between Analyses and AISystems and handle the computation of Analyses.
+ - Running specific analyses is done through the run_analysis function. 
 
 **Example**:
 

@@ -5,13 +5,13 @@
 **Robustness of AI**
 ====================
 
-In this Demo case, we can see how RAi can detect and resolve bias and fairness in AI models.
+In this Demo case, we can see how RAI can detect and resolve bias and fairness in AI models.
 
 
 - To demonstrate how RAI works, let's consider a simple data science project to predict the income level of participants.
 - In this dataset, there is an imbalance between white and black participants.
-- Here rai will show how to identify and mitigate the problem.
-- After fitting the model, we can ask rai to send the measurements back to the dashboard.
+- Here RAI will show how to identify and mitigate the problem.
+- After fitting the model, we can ask RAI to send the measurements back to the dashboard.
 
 
 .. container:: toggle, toggle-hidden

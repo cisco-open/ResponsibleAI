@@ -136,3 +136,109 @@ For Instance:
 
 
 A case study of how RAI can be applied to detect and resolve biases in AI models can be found :ref:`here <Robustness of AI>`.
+
+**MetaData**
+=============
+
+**Measurement MetaData**
+
+=================================================  =======================================================================================
+display_name                                       Description
+=================================================  =======================================================================================
+Date                                               The Date in which a measurement was taken. 
+                                                                                      
+Measurement Description                            The user description of collected metric data.
+
+Number of Samples                                  Number of samples. 
+
+Model Description                                  The user description of the model.
+=================================================  =======================================================================================
+
+
+.. container:: toggle, toggle-hidden
+
+    .. admonition:: Measurement Meta Data
+
+        .. image::  /images/metadata.png
+
+
+**Tree metadata**
+
+
+=================================================  =================================================================================
+display_name                                       Description
+=================================================  =================================================================================
+Estimator Count                                    The number of estimators in the tree.
+                                                   
+Estimator Parameters                               The parameters of the estimators.
+
+Feature Names                                      The names of the features in data.        
+=================================================  =================================================================================
+
+
+.. container:: toggle, toggle-hidden
+
+    .. admonition:: Tree metadata
+
+        .. image::  /images/Treemetadata.png
+
+
+**Stats**
+=========
+
+- For this implementation of stats metrics, we used the scipy library.
+
+**Correlation for BinaryClassification**
+
+=================================================  ===================================================================================
+display_name                                       Description
+=================================================  ===================================================================================
+Point Biserial Coefficient                         The point biserial correlation is used to measure the relationship 
+                                                   between a binary variable, x, and a continuous variable, y
+                                                                                         
+=================================================  ===================================================================================
+
+.. container:: toggle, toggle-hidden
+
+    .. admonition:: Correlation for BinaryClassification
+
+        .. image::  /images/CorrelationforBinaryClassification.png
+
+
+**Frequency Statistic**
+
+=================================================  ===================================================================================
+display_name                                       Description
+=================================================  ===================================================================================
+Relative Frequency                                 Indicates the relative count of each subclass.
+
+Cumulative Frequency                               Indicates the cumulative count of each subclass.
+                                                                                         
+=================================================  ===================================================================================
+
+.. container:: toggle, toggle-hidden
+
+    .. admonition:: Frequency Statistic
+
+        .. image::  /images/Frequencystats.png
+
+
+**Summary Statistics**
+
+
+=================================================  ===================================================================================
+display_name                                       Description
+=================================================  ===================================================================================
+Mean                                               Mean is the expected value for each feature in data.
+
+Geometric Mean                                     The Geometric Mean shows the central tendency of a set of numbers. 
+                                                   It is calculated by taking the n-th root of the product of n numbers.
+                                                                                         
+=================================================  ===================================================================================
+
+
+.. container:: toggle, toggle-hidden
+
+    .. admonition:: Summary Statistics
+
+        .. image::  /images/summarystats.png
