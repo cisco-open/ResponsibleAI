@@ -2,53 +2,20 @@
 
 
 =========================
-**RAI Responsible in AI**
+**RAI: A Responsible AI Framework**
 =========================
 
-**Ethical AI**
-==============
+As the use of AI in various segments of the industry is rapidly growing, responsible AI is gaining an increasing attention, 
+both by the AI research community and industry. In fact, the need for establishing a reliable, fair, transparent, and robust set of standards and practices for AI development has been pointed out by many of the AI pioneers and well-known advocates of AI. 
+RAI has been designed to make it easier for AI developers and datascientists to evaluate AI models from various perspectives of a responsible AI developement.
+RAI provides a unified framework to evaluat the AI model not just based on the performance, but also with regards to the bias and fairness, robustness and trustworithness of AI models. 
+In doing so, it collects various types of metrics from many different open source libraries in an easy to use and interactive manner. In the following, some of categories of metrics related to the responsible AI development are listed.
 
-- Ethical AI Utilization
-
- - We practice and adhere to well-defined ethical guidelines that include individual rights, privacy, non-discrimination, and non-manipulation.
- - The RAI philosophy says that integrity and ethical behavior are essential to AI success.
- - With RAI, you can improve your operations and products for the betterment of humanity.
-
-
-
-**New findings in the Responsible AI Research**
-===============================================
-
-- In AI models, bias and fairness are measured and assessed using a variety of metrics, such as
-
-
-**Robust**
-----------
-
-- Robustness refers to the degree that a model’s performance changes when using new data versus training data. Ideally, performance should not deviate significantly.
-
-- To implement Robust metrics, we used the Sklearn library.
-
-**Adversarial Robustness**
-
-- Adversarial robustness refers to a model's ability to resist being fooled.
-
-=================================================  ===================================================================================
-display_name                                       Description
-=================================================  ===================================================================================
-Accuracy                                           Distortion metrics scale linearly with the log of inaccuracy. 
-                                                   Inaccuracy is calculated by taking sqrt(1 - accuracy).
-                                                         
-=================================================  ===================================================================================
-
-
-.. container:: toggle, toggle-hidden
-
-    .. admonition:: Adversarial Robustness
-
-        .. image::  /images/adversarialrobustnessmetrics.png
-
-
+As the use of AI in various segments of the industry rapidly grows, responsible AI is garnering increased attention from both the AI research community and the industry. 
+In fact, many AI pioneers and well-known advocates have emphasized the need for establishing a reliable, fair, transparent, and robust set of standards and practices for AI development. Responsible AI (RAI) has been designed to simplify the evaluation of AI models for developers and data scientists from various perspectives of responsible AI development.
+RAI offers a unified framework for evaluating AI models not only based on performance but also considering bias and fairness, robustness, and trustworthiness of AI models. 
+To do this, it gathers various types of metrics from multiple open-source libraries in an easy-to-use and interactive manner. 
+Below, we outline some of the metric categories related to responsible AI development.
 
 **Basic Robustness**
 
@@ -67,6 +34,29 @@ Normalized Features Standard	                   Whether of not each training fea
     .. admonition:: Basic Robustness
 
         .. image::  /images/basicrobustness.png
+
+
+**Adversarial Robustness**
+
+- Adversarial robustness is the ability of an AI model to resist being fooled by a series of carefully crafted changes to its input data.
+
+=================================================  ===================================================================================
+display_name                                       Description
+=================================================  ===================================================================================
+Accuracy                                           Distortion metrics scale linearly with the log of inaccuracy. 
+                                                   Inaccuracy is calculated by taking sqrt(1 - accuracy).
+                                                         
+=================================================  ===================================================================================
+
+
+.. container:: toggle, toggle-hidden
+
+    .. admonition:: Adversarial Robustness
+
+        .. image::  /images/adversarialrobustnessmetrics.png
+
+
+
 
 
 
