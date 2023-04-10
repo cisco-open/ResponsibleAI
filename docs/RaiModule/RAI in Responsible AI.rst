@@ -5,6 +5,12 @@
 **RAI: A Responsible AI Framework**
 =========================
 
+As the use of AI in various segments of the industry rapidly grows, responsible AI is garnering increased attention from both the AI research community and the industry. 
+In fact, many AI pioneers and well-known advocates have emphasized the need for establishing a reliable, fair, transparent, and robust set of standards and practices for AI development. Responsible AI (RAI) has been designed to simplify the evaluation of AI models for developers and data scientists from various perspectives of responsible AI development.
+RAI offers a unified framework for evaluating AI models not only based on performance but also considering bias and fairness, robustness, and trustworthiness of AI models. 
+To do this, it gathers various types of metrics from multiple open-source libraries in an easy-to-use and interactive manner. 
+Below, we outline some of the metric categories related to responsible AI development.
+
 **Basic Robustness**
 
 - Model robustness refers to the degree that a model's performance changes when using new data versus training data.
@@ -220,7 +226,7 @@ num_positives                                      Num Positives calculates the 
 
 For Instance:
 
-- User can obtain to compute specialized metrics like Disparate Impact Ratio to show the fairness of the models classification across sensitive characteristics.
+- Using RAI to measure group fairness:
 
 .. figure:: ../images/fairness.gif
    :align: center
@@ -230,5 +236,5 @@ For Instance:
 
 
 
-A case study of how RAI can be applied to detect and resolve biases in AI models can be found :ref:`here <Robustness of AI>`.
+A case study of how RAI can be used to detect and resolve biases in AI models can be found :ref:`here <Robustness of AI>`.
 
