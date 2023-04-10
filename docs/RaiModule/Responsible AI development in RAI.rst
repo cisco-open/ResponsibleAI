@@ -1,9 +1,9 @@
-.. _RAI in Responsible AI:
+.. _Responsible AI development in RAI:
 
 
-=========================
-**RAI: A Responsible AI Framework**
-=========================
+=====================================
+**Responsible AI development in RAI**
+=====================================
 
 As the use of AI in various segments of the industry rapidly grows, responsible AI is garnering increased attention from both the AI research community and the industry. 
 In fact, many AI pioneers and well-known advocates have emphasized the need for establishing a reliable, fair, transparent, and robust set of standards and practices for AI development. Responsible AI (RAI) has been designed to simplify the evaluation of AI models for developers and data scientists from various perspectives of responsible AI development.
@@ -27,7 +27,7 @@ Normalized Features Standard	                   Whether of not each training fea
 
     .. admonition:: Basic Robustness
 
-        .. image::  /images/basicrobustness.png
+        .. image::  /images/basicRobustness.png
 
 
 **Adversarial Robustness**
@@ -47,8 +47,7 @@ Accuracy                                           Distortion metrics scale line
 
     .. admonition:: Adversarial Robustness
 
-        .. image::  /images/adversarialrobustnessmetrics.png
-
+        .. image::  /images/AdversarialRobustness.png
 
 
 
@@ -74,7 +73,7 @@ explainable model                                  Placeholder method for if a m
 
     .. admonition:: basic Explainability
 
-        .. image::  /images/basicexplainability.png
+        .. image::  /images/basicexplainablility.png
 
 
 **Performance**
