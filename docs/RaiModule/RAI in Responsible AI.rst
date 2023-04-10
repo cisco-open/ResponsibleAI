@@ -5,18 +5,6 @@
 **RAI: A Responsible AI Framework**
 =========================
 
-As the use of AI in various segments of the industry is rapidly growing, responsible AI is gaining an increasing attention, 
-both by the AI research community and industry. In fact, the need for establishing a reliable, fair, transparent, and robust set of standards and practices for AI development has been pointed out by many of the AI pioneers and well-known advocates of AI. 
-RAI has been designed to make it easier for AI developers and datascientists to evaluate AI models from various perspectives of a responsible AI developement.
-RAI provides a unified framework to evaluat the AI model not just based on the performance, but also with regards to the bias and fairness, robustness and trustworithness of AI models. 
-In doing so, it collects various types of metrics from many different open source libraries in an easy to use and interactive manner. In the following, some of categories of metrics related to the responsible AI development are listed.
-
-As the use of AI in various segments of the industry rapidly grows, responsible AI is garnering increased attention from both the AI research community and the industry. 
-In fact, many AI pioneers and well-known advocates have emphasized the need for establishing a reliable, fair, transparent, and robust set of standards and practices for AI development. Responsible AI (RAI) has been designed to simplify the evaluation of AI models for developers and data scientists from various perspectives of responsible AI development.
-RAI offers a unified framework for evaluating AI models not only based on performance but also considering bias and fairness, robustness, and trustworthiness of AI models. 
-To do this, it gathers various types of metrics from multiple open-source libraries in an easy-to-use and interactive manner. 
-Below, we outline some of the metric categories related to responsible AI development.
-
 **Basic Robustness**
 
 - Model robustness refers to the degree that a model's performance changes when using new data versus training data.
@@ -88,7 +76,7 @@ explainable model                                  Placeholder method for if a m
 
 - Performance metrics are a part of every machine learning pipeline. They tell you if you’re making progress, and put a number on it. All machine learning models, whether it’s linear regression, or a SOTA technique like BERT, need a metric to judge performance.
 
-- In order to implement performance metrics, we used some of the features of the Torch library.
+- The Torch library is used in our implementation of performance metrics in order to take advantage of some of its features.
 
 **Performance Metrics**
 
@@ -146,7 +134,7 @@ coefficient_of_variation                           The square root of twice the 
 
 **Group Fairness**
 
-- The goal of groups defined by protected attributes receiving similar treatments or outcomes.
+- It is the goal of groups defined by protected attributes to receive similar treatment or outcomes regardless of their protected attributes.
 
 =================================================  ====================================================================================================================
 display_name                                       Description
@@ -175,7 +163,7 @@ equal_opportunity_difference                       The difference of true positi
 
 **General Prediction Fairness**
 
-- It is used to compute various fairness metrics for the classification model.
+- For the classification model to be fair, various fairness metrics need to be computed..
 
 =================================================  =======================================================================================
 display_name                                       Description
