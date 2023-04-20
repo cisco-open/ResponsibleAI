@@ -65,8 +65,8 @@ def generate_cert_table(id, show_explanation=True):
     return dbc.Table(
         children=[
             html.Thead(
-                html.Tr([html.Th("Cetrificate"), html.Th("Explanation"), html.Th("Status")] if show_explanation else
-                        [html.Th("Cetrificate"), html.Th("Status")])
+                html.Tr([html.Th("Certificate"), html.Th("Explanation"), html.Th("Status")] if show_explanation else
+                        [html.Th("Certificate"), html.Th("Status")])
             ),
             html.Tbody(rows)
         ], striped=True

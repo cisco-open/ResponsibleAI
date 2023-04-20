@@ -36,8 +36,8 @@ from RAI.utils import df_to_RAI
 
 # Configuration
 use_dashboard = True
-#data_path = "./data/adult/"
-data_path ="\\Users\\shfarhee\\Desktop\\Analysis branch\\ResponsibleAI\\data\\adult\\"
+data_path = "../data/adult/"
+
 
 #setup path
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))

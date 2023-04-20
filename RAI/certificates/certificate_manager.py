@@ -26,7 +26,8 @@ __all__ = ['CertificateManager']
 # if not os.path.isdir(rai_pkg_path):
 rai_pkg_path = "RAI"
 cert_file_folder = os.path.join(os.path.dirname(__file__), "standard")
-cert_list_file_name = os.path.join(os.path.dirname(__file__), 'standard/empty_cert_list.json')
+# cert_list_file_name = os.path.join(os.path.dirname(__file__), 'standard/empty_cert_list.json')
+cert_list_file_name = os.path.join(os.path.dirname(__file__), 'standard/cert_list.json')
 
 
 class CertificateManager(object):

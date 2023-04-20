@@ -43,7 +43,7 @@ use_dashboard = True
 np.random.seed(21)
 
 # Configuration
-data_path = "data/adult/"
+data_path = "../data/adult/"
 
 #loading train and test data
 train_data = pd.read_csv(data_path + "train.csv", header=0,
@@ -60,6 +60,7 @@ meta, X, y, output = df_to_RAI(all_data, target_column=target_column, normalize=
 xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=1, stratify=y)
 
 # Create a model to make predictions
+clf = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=0, min_samples_leaf=5, max_depth=2)
 model = Model(agent=clf, output_features=output, name="cisco_income_ai", predict_fun=clf.predict, predict_prob_fun=clf.predict_proba,
               description="Income Prediction", model_class="Random Forest Classifier")
 configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivileged": 0}},
@@ -74,7 +75,6 @@ ai = AISystem("AdultDB_two_model", task='binary_classification', meta_database=m
 ai.initialize(user_config=configuration)
 
 # create and train the base model
-clf = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=0, min_samples_leaf=5, max_depth=2)
 clf.fit(xTrain, yTrain)
 predictions = clf.predict(xTest)
 predictions_train = clf.predict(xTrain)

@@ -35,5 +35,5 @@ def is_compatible(metric_type: str, requirements: list):
     metric_type += "Element"
     result = metric_type.lower() in registry
     if result and 'Traceable' in requirements:
-        result = issubclass(registry[metric_type], TraceableElement)
+        result = issubclass(registry[metric_type.lower()], TraceableElement)
     return result
