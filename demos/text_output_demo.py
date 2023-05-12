@@ -15,12 +15,12 @@
 # SPDX-License-Identifier: Apache-2.0
 
 
-#Description 
-#This demos show how RAI and its dashboard can be used for evaluating the natural language modeling tasks
+# Description
+# This demos show how RAI and its dashboard can be used for evaluating the natural language modeling tasks
 
 
 # This code requires the sentencepiece package
-#importing modules
+# importing modules
 import os
 import sys
 import inspect
@@ -31,17 +31,17 @@ import numpy as np
 from datasets import load_dataset
 from transformers import T5Tokenizer, T5ForConditionalGeneration
 
+
 # importing RAI modules
 from RAI.AISystem import AISystem, Model
 from RAI.redis import RaiRedis
 from RAI.dataset import Dataset, NumpyData
 from RAI.utils import df_to_RAI
 
-#setup path
-current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parent_dir = os.path.dirname(current_dir)
-sys.path.insert(0, parent_dir)
-
+# setup path
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0, parentdir)
 
 # Get Model
 t5 = T5ForConditionalGeneration.from_pretrained('t5-small')

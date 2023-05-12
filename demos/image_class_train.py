@@ -14,11 +14,11 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-#Description 
-#This demo uses Cifar10 dataset and shows how RAI can be used monitor image processing tasks during training
+# Description
+# This demo uses Cifar10 dataset and shows how RAI can be used monitor image processing tasks during training
 
 
-#importing modules
+# importing modules
 import os
 import sys
 import inspect
@@ -30,17 +30,16 @@ import torch.optim as optim
 import random
 import numpy as np
 
-#importing RAI modules
+# importing RAI modules
 from RAI.AISystem import AISystem, Model
 from RAI.redis import RaiRedis
 from RAI.utils import torch_to_RAI
 from RAI.dataset import MetaDatabase, Feature, Dataset, NumpyData
 
-#setup path
-current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parent_dir = os.path.dirname(current_dir)
-sys.path.insert(0, parent_dir)
-
+# setup path
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0, parentdir)
 
 def main():
     os.environ["CUDA_VISIBLE_DEVICES"] = "cpu"

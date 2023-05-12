@@ -30,7 +30,7 @@ Model selection is the process of selecting one of the models as the final ML mo
 
     .. admonition:: Select project
 
-        .. image::  /images/Select_project.png
+        .. image::  ../images/Select_project.png
 
 
 - We can go to Metric Graphs
@@ -41,7 +41,7 @@ Model selection is the process of selecting one of the models as the final ML mo
 
     .. admonition:: Metric graph
 
-        .. image::  /images/metric_graph.png
+        .. image::  ../images/metric_graph.png
 
 
 - Here, for instance, we have performed some Grid searches to select the best model for the task
@@ -52,7 +52,7 @@ Model selection is the process of selecting one of the models as the final ML mo
 
     .. admonition:: Metric performance
 
-        .. image::  /images/metric_performance.png
+        .. image::  ../images/metric_performance.png
 
 
 - Monitor how the system is performing in each individual case
@@ -63,7 +63,7 @@ Model selection is the process of selecting one of the models as the final ML mo
 
     .. admonition:: Individual case
 
-        .. image::  /images/each_case.png
+        .. image::  ../images/each_case.png
 
 
 .. figure:: ../images/Model_selection.gif
