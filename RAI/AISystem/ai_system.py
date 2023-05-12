@@ -188,14 +188,15 @@ class AISystem:
         data_dict["tag"] = tag
         self.data_dict = data_dict
         self.metric_manager.initialize(self.user_config)
+        key = data_type if data_type is not None else "No Dataset"
         if isinstance(data_dict["data"], NumpyData):
-            self._last_metric_values[data_type if data_type is not None else "No Dataset"] = \
+            self._last_metric_values[key] = \
                 self.metric_manager.compute(data_dict)
         elif isinstance(data_dict["data"], IteratorData):
-            self._last_metric_values[data_type if data_type is not None else "No Dataset"] = \
+            self._last_metric_values[key] = \
                 self.metric_manager.iterator_compute(data_dict, predictions)
         if self.enable_certificates:
-            self._last_certificate_values = self.certificate_manager.compute(self._last_metric_values)
+            self._last_certificate_values = self.certificate_manager.compute(self._last_metric_values.get(key))
 
     # Compute will tell RAI to compute metric values across each dataset which predictions were made on.
     def compute(self, predictions: dict, tag=None) -> None:
