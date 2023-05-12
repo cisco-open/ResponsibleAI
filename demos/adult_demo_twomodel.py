@@ -71,9 +71,12 @@ configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivil
 # setup the dataset
 dataset = Dataset({"train": NumpyData(xTrain, yTrain), "test": NumpyData(xTest, yTest)})
 
+# certificates
+cert_location = f"{currentdir}/../RAI/certificates/standard/cert_list.json"
+
 # initialize RAI 
 ai = AISystem("AdultDB_two_model", task='binary_classification', meta_database=meta, dataset=dataset, model=model)
-ai.initialize(user_config=configuration)
+ai.initialize(user_config=configuration, custom_certificate_location=cert_location)
 
 clf.fit(xTrain, yTrain)
 predictions = clf.predict(xTest)

@@ -6,8 +6,7 @@
         {"name":"c", "filename":"fairness_statistical_parity.json"},
         {"name":"d", "filename":"fairness_disparate_impact.json"},
         {"name":"e", "filename":"explainable_model.json"},
-        {"name":"f", "filename":"fairness_average_odds.json"},
-        {"name":"g", "filename":"performance_tp.json"}
+        {"name":"f", "filename":"fairness_average_odds.json"}
 
     ]
 
