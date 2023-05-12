@@ -33,7 +33,7 @@ def get_mdl_image(nM, nD):
     vs = redisUtil.get_metric_values()
     rf = pickle.loads(vs[nM][dataset]['tree_model_metadata']['estimator_params'][nD].encode('ISO-8859-1'))
     feat_names = vs[nM][dataset]['tree_model_metadata']['feature_names']
-
+    plt.switch_backend('Agg')
     fig = plt.figure(figsize=[6, 4])
     sklearn.tree.plot_tree(rf, filled=True, fontsize=8, feature_names=feat_names)
     fig.set_size_inches(8, 5)
