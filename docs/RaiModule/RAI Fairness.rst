@@ -42,7 +42,7 @@ coefficient_of_variation                           The square root of twice the 
 
     .. admonition:: Individual Fairness
 
-        .. image::  /images/Individual_fairness.png
+        .. image::  ../images/Individual_fairness.png
 
 
 **Group Fairness**
@@ -69,7 +69,7 @@ equal_opportunity_difference                       The difference of true positi
 
     .. admonition:: Group fairness
 
-        .. image::  /images/Group_fairness.png
+        .. image::  ../images/Group_fairness.png
 
 
 **General Fairness**
@@ -98,7 +98,7 @@ between_all_groups_theil_index                     The pairwise entropy between 
 
     .. admonition:: General Fairness
 
-        .. image::  /images/general_fairness.png
+        .. image::  ../images/general_fairness.png
 
 
 **Dataset Fairness**
@@ -120,7 +120,7 @@ num_positives                                      Num Positives calculates the 
 
     .. admonition:: Dataset Fairness
 
-        .. image::  /images/Dataset_fairness.png
+        .. image::  ../images/Dataset_fairness.png
 
 
 For Instance:

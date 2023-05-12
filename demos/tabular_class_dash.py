@@ -14,12 +14,12 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-#Description 
-#This demo shows how RAI can be used without the dashboard to calculate and report on the metrics for a machine learning task
+# Description
+# This demo shows how RAI can be used without the dashboard to calculate and
+# report on the metrics for a machine learning task
 
 
-
-#importing modules
+# importing modules
 import os
 import sys
 import inspect
@@ -35,10 +35,11 @@ from RAI.dataset import NumpyData, Dataset
 from RAI.redis import RaiRedis
 from RAI.utils import df_to_RAI
 
-#setup path
-current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parent_dir = os.path.dirname(current_dir)
-sys.path.insert(0, parent_dir)
+# setup path
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0, parentdir)
+
 use_dashboard = True
 np.random.seed(50)
 
