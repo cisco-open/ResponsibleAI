@@ -18,7 +18,7 @@ In this Demo case, we can see how RAI can detect and resolve bias and fairness i
 
     .. admonition:: fitting the model
 
-        .. image::  /images/rai_demo_2_Moment.png
+        .. image::  ../images/rai_demo_2_Moment.png
 
 
 
@@ -29,7 +29,7 @@ In this Demo case, we can see how RAI can detect and resolve bias and fairness i
 
     .. admonition:: significant problem in fairness
 
-        .. image::  /images/rai_demo_2.2_Moment.png
+        .. image::  ../images/rai_demo_2.2_Moment.png
 
 
 - Now we can investigate this problem by looking at the individual metrics.
@@ -41,7 +41,7 @@ In this Demo case, we can see how RAI can detect and resolve bias and fairness i
 
     .. admonition:: race parameter
 
-        .. image::  /images/rai_demo_3_Moment.png
+        .. image::  ../images/rai_demo_3_Moment.png
 
 
 - To mitigate this imbalance problem, we can go back to the data science project and perform some mitigation strategies.
@@ -53,7 +53,7 @@ In this Demo case, we can see how RAI can detect and resolve bias and fairness i
 
     .. admonition:: Reweighing algorithm
 
-        .. image::  /images/rai_demo_4_Moment.png
+        .. image::  ../images/rai_demo_4_Moment.png
 
 
 - Now we can go back to the dashboard.
@@ -64,4 +64,4 @@ In this Demo case, we can see how RAI can detect and resolve bias and fairness i
 
     .. admonition:: fairness tests have passed
 
-        .. image::  /images/rai_demo_5_Moment.png
+        .. image::  ../images/rai_demo_5_Moment.png

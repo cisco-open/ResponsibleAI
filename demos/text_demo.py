@@ -14,11 +14,11 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-#Description 
-#This demos show how RAI and its dashboard can be used for evaluating the natural language modeling tasks
+# Description
+# This demos show how RAI and its dashboard can be used for evaluating the natural language modeling tasks
 
 
-#importing modules
+# importing modules
 import os
 import sys
 import inspect
@@ -37,12 +37,10 @@ from RAI.redis import RaiRedis
 from RAI.dataset import Dataset, Feature, NumpyData
 from RAI.utils import df_to_RAI
 
-
-#setup path
+# setup path
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
-
 
 def main():
     random.seed(0)
@@ -92,6 +90,7 @@ def main():
     r.export_metadata()
     r.export_visualizations("test", "test")
     ai.display_metric_values()
+
 
 if __name__ == '__main__':
     main()

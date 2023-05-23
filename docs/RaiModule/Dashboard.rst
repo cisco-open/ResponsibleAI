@@ -41,7 +41,7 @@ The goal is to provide a generic framework to perform various types of analysis,
 **Example:** 
 
 
-.. figure:: /images/dash_example.png
+.. figure:: ../images/dash_example.png
    :class: with-border
    :scale: 30 %
    :align: center
@@ -54,7 +54,7 @@ The goal is to provide a generic framework to perform various types of analysis,
 **How it links to RAI project (via redis..)**
 
 
-.. figure:: /images/Dashboard_page.png
+.. figure:: ../images/Dashboard_page.png
    :class: with-border
    :alt: RAI Dashboard Homepage
    :scale: 40 %
@@ -74,7 +74,7 @@ The goal is to provide a generic framework to perform various types of analysis,
 - **Metrics:**
 
 
-.. figure:: /images/Metricpage.png
+.. figure:: ../images/Metricpage.png
    :class: with-border
    :alt: Metric Details Page
    :scale: 40 %
@@ -90,7 +90,7 @@ The goal is to provide a generic framework to perform various types of analysis,
 
 
 
-.. figure:: /images/certificate.png
+.. figure:: ../images/certificate.png
    :class: with-border
    :alt: Certificate Page
    :scale: 40 %
@@ -102,7 +102,7 @@ The goal is to provide a generic framework to perform various types of analysis,
 - **Analysis:**
 
 
-.. figure:: /images/Analysispage.png
+.. figure:: ../images/Analysispage.png
    :class: with-border
    :alt: Analysis Page
    :scale: 40 %

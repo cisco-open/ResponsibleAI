@@ -14,11 +14,11 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-#Description 
-#This demo uses California housing dataset and shows how RAI can be used for numeric regression tasks during training
+# Description
+# This demo uses California housing dataset and shows how RAI can be used for numeric regression tasks during training
 
 
-#importing modules
+# importing modules
 import os
 import sys
 import inspect
@@ -28,15 +28,13 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 
 
-
 # importing RAI modules
 from RAI.dataset import NumpyData, Dataset
 from RAI.AISystem import AISystem, Model
 from RAI.redis import RaiRedis
 from RAI.utils import df_to_RAI
 
-
-#setup path
+# setup path
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)

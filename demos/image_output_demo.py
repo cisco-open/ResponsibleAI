@@ -14,11 +14,11 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-#Description 
-#This demo uses Cifar10 dataset and shows how RAI can be used to evaluate image classification tasks
+# Description
+# This demo uses Cifar10 dataset and shows how RAI can be used to evaluate image classification tasks
 
 
-#importing modules
+# importing modules
 import os
 import sys
 import inspect
@@ -33,8 +33,7 @@ import torch.optim as optim
 from torchvision import datasets, transforms
 # https://colab.research.google.com/drive/1Ozin9zX89xfoyn63o5B7l5bR5W_E1oy0#scrollTo=7hAFf5Ue4VP_
 
-
-#importing RAI modules
+# importing RAI modules
 from RAI.AISystem import AISystem, Model
 from RAI.redis import RaiRedis
 from RAI.dataset import Dataset, Feature, MetaDatabase, NumpyData
@@ -49,8 +48,10 @@ manualSeed = 42
 random.seed(manualSeed)
 torch.manual_seed(manualSeed)
 
+
 class Object(object):
     pass
+
 
 config = Object()
 config.batch_size = 128
@@ -272,6 +273,7 @@ def main():
         print("Analysis: " + analysis)
         print(result[analysis].to_string())
     '''
+
 
 if __name__ == '__main__':
     main()

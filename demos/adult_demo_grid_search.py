@@ -15,10 +15,11 @@
 # SPDX-License-Identifier: Apache-2.0
 
 
-#Description 
-#This demo uses the Adults dataset (https://archive.ics.uci.edu/ml/datasets/adult) to show how RAI can be used in model selection.
+#  Description
+#  This demo uses the Adults dataset (https://archive.ics.uci.edu/ml/datasets/adult) to show
+#  how RAI can be used in model selection.
 
-#importing modules
+#  importing modules
 import os
 import sys
 import inspect
@@ -26,26 +27,24 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 
+
 # importing RAI modules
-parent = os.path.abspath('.')
-sys.path.insert(1, parent)
 from RAI.AISystem import AISystem, Model
 from RAI.dataset import NumpyData, Dataset
 from RAI.redis import RaiRedis
 from RAI.utils import df_to_RAI
 
-# Configuration
-use_dashboard = True
-#data_path = "./data/adult/"
-data_path ="\\Users\\shfarhee\\Desktop\\Analysis branch\\ResponsibleAI\\data\\adult\\"
-
-#setup path
+#  setup path
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-#loading train and test data
+# Configuration
+use_dashboard = True
+data_path = f"{currentdir}/../data/adult/"
+
+#  loading train and test data
 train_data = pd.read_csv(data_path + "train.csv", header=0, skipinitialspace=True, na_values="?")
 test_data = pd.read_csv(data_path + "test.csv", header=0, skipinitialspace=True, na_values="?")
 all_data = pd.concat([train_data, test_data], ignore_index=True)
@@ -77,7 +76,8 @@ if use_dashboard:
     r = RaiRedis(ai)
     r.connect()
     r.reset_redis()
-    
+
+
 #  function to evaluate each model     
 def test_model(mdl, name):
     mdl.fit(xTrain, yTrain)
@@ -104,7 +104,6 @@ def main():
     if use_dashboard:
         r.export_visualizations("test", "test")
 
- 
 
 if __name__ == "__main__":
     
@@ -114,10 +113,3 @@ if __name__ == "__main__":
         print("\nShutting down...")
         if use_dashboard:
             r.Disconnect()
-
-
-        
-    
-
-
-

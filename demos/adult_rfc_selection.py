@@ -14,11 +14,12 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-#Description 
-#This demo uses the Adults dataset (https://archive.ics.uci.edu/ml/datasets/adult) to show how RAI can be used in model selection
+# Description
+# This demo uses the Adults dataset (https://archive.ics.uci.edu/ml/datasets/adult) to show
+# how RAI can be used in model selection
 
 
-#importing modules
+# importing modules
 import os
 import sys
 import inspect
@@ -32,8 +33,7 @@ from RAI.dataset import NumpyData, Dataset
 from RAI.redis import RaiRedis
 from RAI.utils import df_to_RAI
 
-
-#setup path
+# setup path
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
@@ -43,7 +43,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 use_dashboard = True
 data_path = "../data/adult/"
 
-#loading train and test data
+# loading train and test data
 train_data = pd.read_csv(data_path + "train.csv", header=0,
                          skipinitialspace=True, na_values="?")
 test_data = pd.read_csv(data_path + "test.csv", header=0,
@@ -73,6 +73,7 @@ if use_dashboard:
     r = RaiRedis(ai)
     r.connect()
     r.reset_redis()
+
 
 #  function to evaluate each model  
 def test_model(mdl, name):

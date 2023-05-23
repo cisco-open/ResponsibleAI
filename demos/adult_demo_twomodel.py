@@ -14,12 +14,11 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-#Description 
-#This demo uses the Adults dataset (https://archive.ics.uci.edu/ml/datasets/adult) to show how RAI can be used in model selection
+# Description
+# This demo uses the Adults dataset (https://archive.ics.uci.edu/ml/datasets/adult) to show
+# how RAI can be used in model selection
 
-
-
-#importing modules
+# importing modules
 import os
 import sys
 import inspect
@@ -28,24 +27,24 @@ import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 
-
 # importing RAI modules
 from RAI.AISystem import AISystem, Model
 from RAI.dataset import NumpyData, Dataset
 from RAI.redis import RaiRedis
 from RAI.utils import df_to_RAI
 
-#setup path
+# setup path
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
+
 use_dashboard = True
 np.random.seed(21)
 
 # Configuration
-data_path = "data/adult/"
+data_path = f"{currentdir}/../data/adult/"
 
-#loading train and test data
+# loading train and test data
 train_data = pd.read_csv(data_path + "train.csv", header=0,
                          skipinitialspace=True, na_values="?")
 test_data = pd.read_csv(data_path + "test.csv", header=0,
@@ -59,6 +58,9 @@ target_column = "income-per-year"
 meta, X, y, output = df_to_RAI(all_data, target_column=target_column, normalize="Scalar", max_categorical_threshold=5)
 xTrain, xTest, yTrain, yTest = train_test_split(X, y, random_state=1, stratify=y)
 
+# create and train the base model
+clf = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=0, min_samples_leaf=5, max_depth=2)
+
 # Create a model to make predictions
 model = Model(agent=clf, output_features=output, name="cisco_income_ai", predict_fun=clf.predict, predict_prob_fun=clf.predict_proba,
               description="Income Prediction", model_class="Random Forest Classifier")
@@ -69,12 +71,13 @@ configuration = {"fairness": {"priv_group": {"race": {"privileged": 1, "unprivil
 # setup the dataset
 dataset = Dataset({"train": NumpyData(xTrain, yTrain), "test": NumpyData(xTest, yTest)})
 
+# certificates
+cert_location = f"{currentdir}/../RAI/certificates/standard/cert_list.json"
+
 # initialize RAI 
 ai = AISystem("AdultDB_two_model", task='binary_classification', meta_database=meta, dataset=dataset, model=model)
-ai.initialize(user_config=configuration)
+ai.initialize(user_config=configuration, custom_certificate_location=cert_location)
 
-# create and train the base model
-clf = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=0, min_samples_leaf=5, max_depth=2)
 clf.fit(xTrain, yTrain)
 predictions = clf.predict(xTest)
 predictions_train = clf.predict(xTrain)
