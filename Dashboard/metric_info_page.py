@@ -18,7 +18,7 @@
 import logging
 import dash_bootstrap_components as dbc
 from dash import html
-from server import redisUtil
+from server import dbUtils
 from utils import process_cell
 logger = logging.getLogger(__name__)
 
@@ -62,7 +62,7 @@ def get_metric_table(group_name, group):
 def get_accordion():
     items = []
 
-    for group_name, group in redisUtil.get_metric_info().items():
+    for group_name, group in dbUtils.get_metric_info().items():
         detail = html.Div([
             get_header_table(group_name, group),
             html.Br(),

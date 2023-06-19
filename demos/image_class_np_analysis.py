@@ -30,9 +30,11 @@ import torch.optim as optim
 import random
 import numpy as np
 
+from dotenv import load_dotenv
+
 # importing RAI modules
 from RAI.AISystem import AISystem, Model
-from RAI.redis import RaiRedis
+from RAI.db.service import RaiDB
 from RAI.utils import torch_to_RAI
 from RAI.dataset import MetaDatabase, Feature, Dataset, NumpyData
 
@@ -40,6 +42,8 @@ from RAI.dataset import MetaDatabase, Feature, Dataset, NumpyData
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
+load_dotenv(f'{currentdir}/../.env')
+
 
 def main():
     os.environ["CUDA_VISIBLE_DEVICES"] = "cpu"
@@ -155,9 +159,8 @@ def main():
     ai.compute({"test": {"predict": preds}}, tag='model 1')
 
     # View the dashboard
-    r = RaiRedis(ai)
-    r.connect()
-    r.reset_redis()
+    r = RaiDB(ai)
+    r.reset_data()
     r.add_measurement()
     r.export_metadata()
     r.export_visualizations("test", "test")

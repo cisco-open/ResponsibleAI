@@ -20,7 +20,7 @@ import dash
 import dash_bootstrap_components as dbc
 from dash import Input, Output, State
 from dash import html
-from server import app, redisUtil
+from server import app, dbUtils
 
 logger = logging.getLogger(__name__)
 unique_id = [1]
@@ -43,7 +43,7 @@ def dict_to_table(d, list_vertical=True):
 
 def to_str(v, max_len=None):
     if max_len is None:
-        max_len = redisUtil._maxlen
+        max_len = dbUtils._maxlen
     s = str(v)
     if len(s) > max_len:
         unique_id[0] += 1
@@ -60,8 +60,7 @@ def to_str(v, max_len=None):
 @app.callback(
     Output("dummy_x", "children"),
     Input({"type": dash.ALL, "index": dash.ALL}, "n_clicks"),
-    State("dummy_x", "children") )
-    
+    State("dummy_x", "children"))
 def show_full_text(x, c):
     if dash.callback_context.triggered_id is None:
         print("error: x is none ", x)

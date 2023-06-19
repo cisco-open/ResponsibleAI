@@ -18,7 +18,7 @@
 import logging
 import dash_bootstrap_components as dbc
 from dash import Input, Output, html
-from server import app, redisUtil
+from server import app, dbUtils
 import urllib
 logger = logging.getLogger(__name__)
 
@@ -31,11 +31,11 @@ def get_setting_page():
             html.Div(id="dummy_setting"),
             html.Hr(),
             html.Div([dbc.FormText("Precision for floating points data"),
-                      dbc.Input(id="input_precision", type="number", min=0, max=6, step=1, value=redisUtil._precision),
+                      dbc.Input(id="input_precision", type="number", min=0, max=6, step=1, value=dbUtils._precision),
                       ], id="styled-numeric-input", className="d-grid gap-2"),
             html.Div(
                 [dbc.FormText("Maximum text length", style={"margin-top": "20px"}),
-                 dbc.Input(id="input_maxlen", type="number", min=1, max=500, step=1, value=redisUtil._maxlen)],
+                 dbc.Input(id="input_maxlen", type="number", min=1, max=500, step=1, value=dbUtils._maxlen)],
                 className="d-grid gap-2", id="styled-numeric-input"),
             html.Div(
                 dbc.Button("Apply", id="apply_setting", href="/single_metric_info/?" + qs, style={"margin-top": "30px"},
@@ -56,7 +56,7 @@ def get_setting_page():
 )
 def on_form_change(maxlen, precision):
     if maxlen is not None:
-        redisUtil._maxlen = maxlen
+        dbUtils._maxlen = maxlen
     if precision:
-        redisUtil.reformat(precision)
+        dbUtils.reformat(precision)
     return []

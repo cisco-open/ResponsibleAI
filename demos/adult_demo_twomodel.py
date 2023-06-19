@@ -24,13 +24,15 @@ import sys
 import inspect
 import numpy as np
 import pandas as pd
+from dotenv import load_dotenv
+
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 
 # importing RAI modules
 from RAI.AISystem import AISystem, Model
 from RAI.dataset import NumpyData, Dataset
-from RAI.redis import RaiRedis
+from RAI.db.service import RaiDB
 from RAI.utils import df_to_RAI
 
 # setup path
@@ -38,12 +40,14 @@ currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentfram
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
 
+# setup database location
+load_dotenv(f'{currentdir}/../.env')
+
 use_dashboard = True
 np.random.seed(21)
 
 # Configuration
 data_path = f"{currentdir}/../data/adult/"
-
 # loading train and test data
 train_data = pd.read_csv(data_path + "train.csv", header=0,
                          skipinitialspace=True, na_values="?")
@@ -84,9 +88,8 @@ predictions_train = clf.predict(xTrain)
 ai.compute({"test": {"predict": predictions}, "train": {"predict": predictions_train}}, tag="Random Forest 5 Estimator")
 
 if use_dashboard:
-    r = RaiRedis(ai)
-    r.connect()
-    r.reset_redis()
+    r = RaiDB(ai)
+    r.reset_data()
     r.add_measurement()
     r.export_metadata()
 

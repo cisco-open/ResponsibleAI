@@ -18,7 +18,7 @@
 import logging
 import dash_bootstrap_components as dbc
 from dash import html
-from server import redisUtil
+from server import dbUtils
 from utils import process_cell
 
 logger = logging.getLogger(__name__)
@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 
 def get_accordion():
     items = []
-    certs = redisUtil.get_certificate_info().values()
+    certs = dbUtils.get_certificate_info().values()
 
     for c in certs:
         detail = dbc.Table(
@@ -61,12 +61,12 @@ def get_accordion():
 
 def generate_table():
     rows = []
-    for k, v in redisUtil.get_certificate_info().items():
+    for k, v in dbUtils.get_certificate_info().items():
         rows.append(html.Tr([html.Td([process_cell(x)]) for x in v.values()]))
 
     return dbc.Table(
         children=[
-            html.Thead(html.Tr([html.Th(x) for x in next(iter(redisUtil.get_certificate_info().values()))])),
+            html.Thead(html.Tr([html.Th(x) for x in next(iter(dbUtils.get_certificate_info().values()))])),
             html.Tbody(rows)
         ],
         bordered=True,

@@ -15,13 +15,12 @@
 # SPDX-License-Identifier: Apache-2.0
 
 
-
 import logging
 import numpy as np
 import dash
 import dash_bootstrap_components as dbc
 from dash import Input, Output, dcc, html, State
-from server import app, redisUtil
+from server import app, dbUtils
 from home_page import get_home_page
 from model_info_page import get_model_info_page
 from certificate_page import get_certificate_page
@@ -42,9 +41,11 @@ import urllib
 import sys
 from dash.exceptions import PreventUpdate
 import signal
+
+
 def handler(signum, frame):
     print("before closing")
-    redisUtil.close()
+    dbUtils.close()
     print("after closing")
     exit()
 signal.signal(signal.SIGINT, handler)
@@ -79,18 +80,14 @@ CONTENT_STYLE = {
 
 
 def get_project_list():
-    projs = redisUtil.get_projects_list()
+    projs = dbUtils.get_projects_list()
     logger.info("projects list acquired : %s" % projs)
 
 
 def get_sidebar():
+    dbUtils._update_projects()
     sidebar = html.Div(
         [
-            
-            
-            # html.P("A framework for Responsible AI development" ),
-            # html.P("A framework for Responsible AI development", className="small"),
-            
             dbc.Nav(
                 [   html.Img(src="./assets/img/rai_logo_blue3.png", style={  "margin-left":"40px",   "width": "100px","height": "60px" }),
                     html.Div([
@@ -100,8 +97,8 @@ def get_sidebar():
                     html.Div(id="dummy_div", style={"display": "no"}),
                     dcc.Dropdown(
                         id="project_selector",
-                        options=redisUtil.get_projects_list(),
-                        value=redisUtil._current_project_name,
+                        options=dbUtils.get_projects_list(),
+                        value=dbUtils._current_project_name,
                         persistence=True,
                         persistence_type="session"),
                         ]),
@@ -110,8 +107,8 @@ def get_sidebar():
                     html.Div(id="dummy_div_2", style={"display": "no"}),
                     dcc.Dropdown(
                         id="dataset_selector",
-                        options=redisUtil.get_dataset_list(),
-                        value=redisUtil.get_dataset_list()[0] if len(redisUtil.get_dataset_list()) > 0 else None,
+                        options=dbUtils.get_dataset_list(),
+                        value=dbUtils.get_dataset_list()[0] if len(dbUtils.get_dataset_list()) > 0 else None,
                         persistence=True),
                     html.Hr(className="nav_div"),
                     dbc.NavLink(  
@@ -188,34 +185,35 @@ def render_page_content(value, dataset_value, interval, dataset_options, project
     ctx = dash.callback_context
     reload_required = False
 
-    if project_options == [] and len(redisUtil.get_projects_list()) > 0:
+    if project_options == [] and len(dbUtils.get_projects_list()) > 0:
         reload_required = True
 
-    project_options = redisUtil.get_projects_list()
+    dbUtils._update_projects()
+    project_options = dbUtils.get_projects_list()
 
-    if dataset_options == [] and len(redisUtil.get_dataset_list()) > 0:
-        dataset_options = redisUtil.get_dataset_list()
+    if dataset_options == [] and len(dbUtils.get_dataset_list()) > 0:
+        dataset_options = dbUtils.get_dataset_list()
         dataset_value = dataset_options[0]
-        redisUtil.set_current_dataset(dataset_value)
+        dbUtils.set_current_dataset(dataset_value)
         reload_required = True
 
     if any("project_selector.value" in i["prop_id"] for i in ctx.triggered):
-        redisUtil.set_current_project(value)
-        print("Current project: ", redisUtil._current_project_name)
-        dataset_options = redisUtil.get_dataset_list()
+        dbUtils.set_current_project(value)
+        print("Current project: ", dbUtils._current_project_name)
+        dataset_options = dbUtils.get_dataset_list()
         dataset_value = dataset_options[0] if len(dataset_options) > 0 else None
-        redisUtil.set_current_dataset(dataset_value)
+        dbUtils.set_current_dataset(dataset_value)
         reload_required = True
 
     elif any("dataset_selector.value" in i["prop_id"] for i in ctx.triggered):
-        redisUtil.set_current_dataset(dataset_value)
+        dbUtils.set_current_dataset(dataset_value)
         reload_required = True
 
     if reload_required:
         r_reminder = 1
 
     if not any("project_selector.value" in i["prop_id"] for i in ctx.triggered):
-        project_val = redisUtil._current_project_name
+        project_val = dbUtils._current_project_name
 
     return dataset_options, dataset_value, project_options, project_val, r_reminder
 
@@ -277,14 +275,13 @@ def change_page(pathname, search, reminder):
 if __name__ == "__main__":
     if len(sys.argv) == 2:
         model_name = sys.argv[1]
-    redisUtil.initialize(subscribers={"metric_detail", "metric_graph", "certificate", "analysis_update"}) 
-    project_list = redisUtil.get_projects_list()
-    redisUtil.set_current_project(project_list[0]) if len(project_list) > 0 else None
-    if len(redisUtil.get_dataset_list()) > 0:
-        redisUtil.set_current_dataset(redisUtil.get_dataset_list()[0])
+    project_list = dbUtils.get_projects_list()
+    print(project_list)
+    dbUtils.set_current_project(project_list[0]) if len(project_list) > 0 else None
+    if len(dbUtils.get_dataset_list()) > 0:
+        dbUtils.set_current_dataset(dbUtils.get_dataset_list()[0])
     app.layout = html.Div([dcc.Location(id="url"), dcc.Interval(
-                id='main-page-interval-component', interval=1 * 2500, n_intervals=0),
+                id='main-page-interval-component', interval=2500),
                 dbc.Button(id='main_refresh_reminder', style={"display": "None"}), get_sidebar(), content])
-
     app.run_server(debug=True)
-    redisUtil.close()
+    dbUtils.close()

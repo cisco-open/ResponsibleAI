@@ -30,9 +30,11 @@ import torch.optim as optim
 import random
 import numpy as np
 
+from dotenv import load_dotenv
+
 # importing RAI modules
 from RAI.AISystem import AISystem, Model
-from RAI.redis import RaiRedis
+from RAI.db.service import RaiDB
 from RAI.utils import torch_to_RAI
 from RAI.dataset import MetaDatabase, Feature, Dataset, NumpyData
 
@@ -40,6 +42,9 @@ from RAI.dataset import MetaDatabase, Feature, Dataset, NumpyData
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
+
+load_dotenv(f'{currentdir}/../.env')
+
 
 def main():
     os.environ["CUDA_VISIBLE_DEVICES"] = "cpu"
@@ -109,7 +114,7 @@ def main():
                 print(f'[Epoch: {epoch + 1}, Mini-Batch: {i + 1:5d}] Loss: {running_loss / 2000:.3f}')
                 running_loss = 0.0
 
-    def test(epoch: int, ai, rai_redis):
+    def test(epoch: int, ai, rai):
         print("Testing Model")
         preds = []
         for i, vals in enumerate(test_loader, 0):
@@ -118,14 +123,14 @@ def main():
             preds += predicted
         # Pass test set predictions to RAI
         ai.compute({"test": {"predict": preds}}, tag='Epoch: ' + str(epoch))
-        rai_redis.add_measurement()
-        rai_redis.export_metadata()
+        rai.add_measurement()
+        rai.export_metadata()
 
     # Train and test loop
-    def train_test(conv_net, rai_redis):
+    def train_test(conv_net, rai):
         for epoch in range(20):
             train(epoch)
-            test(epoch, conv_net, rai_redis)
+            test(epoch, conv_net, rai)
 
     # The predict function to pass to RAI
     def predict(input_image):
@@ -151,9 +156,8 @@ def main():
     ai.initialize(user_config=configuration)
 
     # Turn on the dashboard
-    r = RaiRedis(ai)
-    r.connect()
-    r.reset_redis()
+    r = RaiDB(ai)
+    r.reset_data()
 
     # Run the training and test loop
     train_test(ai, r)

@@ -30,12 +30,12 @@ class VectorElement(DisplayElement):
     def append(self, metric_data, tag):
         if len(self._data["header"]) == 0:
             print("Setting header")
-            self._data["header"] = [{"name": ["Measurement Tag"], "id": 0}]
+            self._data["header"] = [{"name": ["Measurement Tag"], "id": '0'}]
             for i in range(len(metric_data)):
-                self._data["header"].append({"name": [''], "id": i+1})
-        dict_result = {0: tag}
+                self._data["header"].append({"name": [''], "id": str(i+1)})
+        dict_result = {'0': tag}
         for i in range(len(metric_data)):
-            dict_result[i + 1] = metric_data[i]
+            dict_result[str(i + 1)] = metric_data[i]
         self._data["row"].append(dict_result)
 
     def to_string(self):

@@ -23,22 +23,25 @@
 import os
 import sys
 import inspect
+import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
-import numpy as np
 
+from dotenv import load_dotenv
 
 # importing RAI modules
 from RAI.AISystem import AISystem, Model
 from RAI.dataset import NumpyData, Dataset
-from RAI.redis import RaiRedis
+from RAI.db.service import RaiDB
 from RAI.utils import df_to_RAI
 
 # setup path
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
+
+load_dotenv(f'{currentdir}/../.env')
 
 use_dashboard = True
 np.random.seed(50)
@@ -86,9 +89,8 @@ ai.compute({"test": {"predict": test_predictions}, "train": {"predict": train_pr
 ai.display_metric_values()
 
 # Connect to the Dashboard
-r = RaiRedis(ai)
-r.connect()
-r.reset_redis()
+r = RaiDB(ai)
+r.reset_data()
 r.add_measurement()
 r.export_metadata()
 r.export_visualizations("test", "test")

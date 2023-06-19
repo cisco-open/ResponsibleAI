@@ -30,9 +30,11 @@ import torch.optim as optim
 import random
 import numpy as np
 
+from dotenv import load_dotenv
+
 # importing RAI modules
 from RAI.AISystem import AISystem, Model
-from RAI.redis import RaiRedis
+from RAI.db.service import RaiDB
 from RAI.dataset import MetaDatabase, Feature, Dataset, IteratorData
 
 # setup path
@@ -41,6 +43,8 @@ parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
 
 image = Feature(name='Input Image', dtype='image', description='The 32x32 input image')
+
+load_dotenv(f'{currentdir}/../.env')
 
 
 def main():
@@ -156,9 +160,8 @@ def main():
     ai.compute({"test": {"predict": preds}}, tag='Resnet')
 
     # View the dashboard
-    r = RaiRedis(ai)
-    r.connect()
-    r.reset_redis()
+    r = RaiDB(ai)
+    r.reset_data()
     r.add_measurement()
     r.export_metadata()
     r.export_visualizations("test", "test")

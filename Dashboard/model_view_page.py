@@ -18,7 +18,7 @@
 import logging
 import dash_bootstrap_components as dbc
 from dash import Input, Output, dcc, html
-from server import app, redisUtil
+from server import app, dbUtils
 import sklearn
 import pickle
 from sklearn.tree import plot_tree
@@ -29,8 +29,8 @@ logger = logging.getLogger(__name__)
 
 
 def get_mdl_image(nM, nD):
-    dataset = redisUtil.get_current_dataset()
-    vs = redisUtil.get_metric_values()
+    dataset = dbUtils.get_current_dataset()
+    vs = dbUtils.get_metric_values()
     rf = pickle.loads(vs[nM][dataset]['tree_model_metadata']['estimator_params'][nD].encode('ISO-8859-1'))
     feat_names = vs[nM][dataset]['tree_model_metadata']['feature_names']
     plt.switch_backend('Agg')
@@ -40,13 +40,14 @@ def get_mdl_image(nM, nD):
     buf = io.BytesIO()  # in-memory files
 
     fig.savefig(buf, format="png")  # save to the above file object
+
     data = base64.b64encode(buf.getbuffer()).decode("utf8")  # encode to html elements
     return html.Img(id='example1', src="data:image/png;base64,{}".format(data))
 
 
 def get_mdl_text(nM, nD):
-    dataset = redisUtil.get_current_dataset()
-    vs = redisUtil.get_metric_values()
+    dataset = dbUtils.get_current_dataset()
+    vs = dbUtils.get_metric_values()
     rf = pickle.loads(vs[nM][dataset]['tree_model_metadata']['estimator_params'][nD].encode('ISO-8859-1'))
     feat_names = vs[nM][dataset]['tree_model_metadata']['feature_names']
     text_representation = sklearn.tree.export_text(rf, feature_names=feat_names)
@@ -59,8 +60,8 @@ def get_mdl_text(nM, nD):
 
 def get_form():
     ops = []
-    dataset = redisUtil.get_current_dataset()
-    values = redisUtil.get_metric_values()
+    dataset = dbUtils.get_current_dataset()
+    values = dbUtils.get_metric_values()
     for i, m in enumerate(values):
         ops.append({"label": m[dataset]["metadata"]["date"] + " - " + m[dataset]["metadata"]["tag"], "value": i})
 
@@ -72,13 +73,13 @@ def get_form():
         className="mb-3",
     )
 
-    vs = redisUtil.get_metric_values()
+    vs = dbUtils.get_metric_values()
     dropdown_tree = html.Div(
         [
             dbc.Label("Select Decision Tree", html_for="dropdown"),
             dcc.Dropdown(
                 id="tree_selector",
-                options=list(range(len(vs[-1][dataset]['tree_model_metadata']['estimator_params']))),
+                options=list(range(len(vs[-1][dataset].get('tree_model_metadata', {}).get('estimator_params', [])))),
                 value=0
             ),
         ],

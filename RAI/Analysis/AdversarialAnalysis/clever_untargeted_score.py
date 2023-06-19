@@ -163,9 +163,10 @@ class CleverUntargetedScore(Analysis, class_location=os.path.abspath(__file__)):
         return res
 
     def get_fancy_figure(self, data_dict):
-        avgs = [sum(data_dict[i])/len(data_dict[i]) for i in data_dict]
-        maxs = [max(data_dict[i]) for i in data_dict]
-        mins = [min(data_dict[i]) for i in data_dict]
+
+        avgs = [sum(data_dict[i])/len(data_dict[i]) if data_dict[i] else 0 for i in data_dict]
+        maxs = [max(data_dict[i]) if data_dict[i] else 0 for i in data_dict]
+        mins = [min(data_dict[i]) if data_dict[i] else 0 for i in data_dict]
         layout = go.Layout(margin=go.layout.Margin(l=0, r=0, b=0, t=0))
         fig = go.Figure([go.Bar(x=[self.output_features[i] for i in self.output_features],
                                 y=avgs,

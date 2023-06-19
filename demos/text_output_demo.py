@@ -29,12 +29,14 @@ from sklearn.model_selection import train_test_split
 import random
 import numpy as np
 from datasets import load_dataset
+from dotenv import load_dotenv
+
 from transformers import T5Tokenizer, T5ForConditionalGeneration
 
 
 # importing RAI modules
 from RAI.AISystem import AISystem, Model
-from RAI.redis import RaiRedis
+from RAI.db.service import RaiDB
 from RAI.dataset import Dataset, NumpyData
 from RAI.utils import df_to_RAI
 
@@ -42,6 +44,8 @@ from RAI.utils import df_to_RAI
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
+
+load_dotenv(f'{currentdir}/../.env')
 
 # Get Model
 t5 = T5ForConditionalGeneration.from_pretrained('t5-small')
@@ -93,9 +97,8 @@ def main():
     # Compute metrics on the summarization
     ai.compute({"test": {"generate_text": summaries}}, tag='t5_small')
 
-    r = RaiRedis(ai)
-    r.connect()
-    r.reset_redis()
+    r = RaiDB(ai)
+    r.reset_data()
     r.add_measurement()
     r.export_metadata()
     r.export_visualizations("test", "test")

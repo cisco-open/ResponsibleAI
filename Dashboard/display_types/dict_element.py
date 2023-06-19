@@ -52,19 +52,19 @@ class DictElement(DisplayElement):
             for val in features:
                 res = res[val]
             new_dict[i] = res
-            i+=1
+            i += 1
         self._data["row"].append(new_dict)
 
     def to_string(self):
         print(self._data)
 
     def to_display(self):
-        header = [{"name": i, "id": num} for num, i in enumerate(self._data["features"])]
+        header = [{"name": i, "id": str(num)} for num, i in enumerate(self._data["features"])]
 
-        header.insert(0, {"name": ["RAI Tag"], "id": -1})
-        tagged_data = self._data["row"].copy()
+        header.insert(0, {"name": ["RAI Tag"], "id": '-1'})
+        tagged_data = [{str(k): v for k, v in val.items()} for val in self._data["row"].copy()]
         for i, row in enumerate(tagged_data):
-            row[-1] = self._data["tag"][i]
+            row['-1'] = self._data["tag"][i]
 
         print("Columns: ", header)
         print("data: ", tagged_data)

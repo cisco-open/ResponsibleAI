@@ -30,12 +30,14 @@ import torch.nn.parallel
 import torch.backends.cudnn as cudnn
 import torch.utils.data
 import torch.optim as optim
+
+from dotenv import load_dotenv
 from torchvision import datasets, transforms
 # https://colab.research.google.com/drive/1Ozin9zX89xfoyn63o5B7l5bR5W_E1oy0#scrollTo=7hAFf5Ue4VP_
 
 # importing RAI modules
 from RAI.AISystem import AISystem, Model
-from RAI.redis import RaiRedis
+from RAI.db.service import RaiDB
 from RAI.dataset import Dataset, Feature, MetaDatabase, NumpyData
 from RAI.utils import torch_to_RAI
 
@@ -43,6 +45,8 @@ from RAI.utils import torch_to_RAI
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
+
+load_dotenv(f'{currentdir}/../.env')
 
 manualSeed = 42
 random.seed(manualSeed)
@@ -256,9 +260,9 @@ def main():
     ai.compute({"cifar": {"generate_image": generated}}, tag='epoch_1_generations')
 
     if use_dashboard:
-        r = RaiRedis(ai)
-        r.connect()
-        r.reset_redis()
+        r = RaiDB(ai)
+        r.reset_data()
+        r.export_metadata()
         r.add_measurement()
         r.export_visualizations("cifar", "cifar")
 

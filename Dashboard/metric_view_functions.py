@@ -18,7 +18,7 @@
 import logging
 import pandas as pd
 from dash import html
-from server import redisUtil
+from server import dbUtils
 from dash import dcc
 import plotly.express as px
 import dash_bootstrap_components as dbc
@@ -31,7 +31,7 @@ __all__ = ['get_nonempty_groups', 'get_valid_metrics', 'get_search_options', 'ge
 
 
 def get_nonempty_groups(requirements):
-    metric_info = redisUtil.get_metric_info()
+    metric_info = dbUtils.get_metric_info()
     valid_groups = []
     for group in metric_info:
         for metric in metric_info[group]:
@@ -42,7 +42,7 @@ def get_nonempty_groups(requirements):
 
 
 def get_valid_metrics(group, requirements):
-    metric_info = redisUtil.get_metric_info()
+    metric_info = dbUtils.get_metric_info()
     valid_metrics = []
     for metric in metric_info[group]:
         if "type" in metric_info[group][metric] and is_compatible(metric_info[group][metric]["type"], requirements):
@@ -51,7 +51,7 @@ def get_valid_metrics(group, requirements):
 
 
 def get_search_options(requirements):
-    metric_info = redisUtil.get_metric_info()
+    metric_info = dbUtils.get_metric_info()
     valid_searches = []
     for group in metric_info:
         for metric in metric_info[group]:

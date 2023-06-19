@@ -18,7 +18,7 @@
 import logging
 import dash_bootstrap_components as dbc
 from dash import Input, Output, html
-from server import app, redisUtil
+from server import app, dbUtils
 import urllib
 from dash import dcc
 from utils import process_cell
@@ -27,9 +27,9 @@ logger = logging.getLogger(__name__)
 
 def get_accordion(id):
     items = []
-    dataset = redisUtil.get_current_dataset()
-    values = redisUtil.get_metric_values()[id][dataset]
-    metric_info = redisUtil.get_metric_info()
+    dataset = dbUtils.get_current_dataset()
+    values = dbUtils.get_metric_values()[id][dataset]
+    metric_info = dbUtils.get_metric_info()
 
     for group in values:
         rows = []
@@ -61,8 +61,8 @@ def get_accordion(id):
 
 def get_form():
     ops = []
-    dataset = redisUtil.get_current_dataset()
-    values = redisUtil.get_metric_values()
+    dataset = dbUtils.get_current_dataset()
+    values = dbUtils.get_metric_values()
     for i, m in enumerate(values):
         m = m[dataset]
         ops.append({"label": m["metadata"]["date"] + " - " + m["metadata"]["tag"], "value": i})

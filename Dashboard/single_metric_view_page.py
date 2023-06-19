@@ -19,7 +19,7 @@ import logging
 import dash
 import dash_bootstrap_components as dbc
 from dash import Input, Output, html, State
-from server import app, redisUtil
+from server import app, dbUtils
 from dash import dcc, ALL
 from display_types import get_display
 import metric_view_functions as mvf
@@ -32,13 +32,12 @@ selector_height = "350px"
 
 
 def populate_display_obj(group, metric):
-    print("populate display object: ", metric)
     d = {"x": [], "y": [], "tag": [], "metric": [], "text": []}
-    dataset = redisUtil.get_current_dataset()
-    metric_values = redisUtil.get_metric_values()
-    metric_type = redisUtil.get_metric_info()
+    dataset = dbUtils.get_current_dataset()
+    metric_values = dbUtils.get_metric_values()
+    metric_type = dbUtils.get_metric_info()
     type = metric_type[group][metric]["type"]
-    display_obj = get_display(metric, type, redisUtil)
+    display_obj = get_display(metric, type, dbUtils)
     for i, data in enumerate(metric_values):
         data = data[dataset]
         display_obj.append(data[group][metric], data["metadata"]["tag"])
@@ -47,7 +46,13 @@ def populate_display_obj(group, metric):
 
 def get_grouped_radio_buttons():
     groups = mvf.get_nonempty_groups(requirements)
-    metric_info = redisUtil.get_metric_info()
+    metric_info = dbUtils.get_metric_info()
+
+    def radio_items(group, req):
+        return [
+            {"label": metric_info[group][i]['display_name'], "value": i}
+            for i in mvf.get_valid_metrics(group, req)
+        ]
 
     return html.Div([
             html.Details([
@@ -55,10 +60,7 @@ def get_grouped_radio_buttons():
                                      style={"display": "inline-block", "margin-bottom": "0px"})]),
                 dcc.RadioItems(
                     id={"type": prefix+"child-checkbox", "group": group},
-                    options=[
-                        {"label": metric_info[group][i]['display_name'], "value": i} for i in mvf.get_valid_metrics(group, requirements)
-                    ],
-                    value=[],
+                    options=radio_items(group, requirements),
                     labelStyle={"display": "block"},
                     inputStyle={"margin-right": "5px"},
                     style={"padding-left": "40px"}
@@ -67,7 +69,7 @@ def get_grouped_radio_buttons():
 
 def get_search_and_selection_interface():
     groups = []
-    for g in redisUtil.get_metric_info():
+    for g in dbUtils.get_metric_info():
         groups.append(g)
 
     return html.Div(
@@ -132,11 +134,11 @@ def get_metric_info_display(group, metric, metric_info):
     prevent_initial_call=True
 )
 def update_metric_choice(c_selected, reset_button, metric_search, c_options, c_val, c_ids, options):
+    c_val = [val if not isinstance(val, list) else False for val in c_val]
     ctx = dash.callback_context.triggered
-    print("CONTEXT: ", ctx)
     ids = [c_ids[i]['group'] for i in range(len(c_ids))]
     if any(prefix+'reset_graph.n_clicks' in i['prop_id'] for i in ctx):
-        to_c_val = [[] for _ in range(len(c_val))]
+        to_c_val = [False for _ in range(len(c_val))]
         return "", to_c_val, None
     if any(prefix + 'metric_search.value' in i['prop_id'] for i in ctx):
         if metric_search is None:
@@ -147,7 +149,6 @@ def update_metric_choice(c_selected, reset_button, metric_search, c_options, c_v
             metric = vals[0]
             group = vals[1]
             parent_index = ids.index(group)
-            print("metric_name: ", metric_name)
             if metric_name != options:
                 options = metric_name
                 c_val = [[] for _ in range(len(c_val))]
@@ -157,8 +158,9 @@ def update_metric_choice(c_selected, reset_button, metric_search, c_options, c_v
     parent_index = ids.index(group)
     if any("\"type\":\"" + prefix +"child-checkbox" in i['prop_id'] for i in ctx):
         metric = c_val[parent_index]
-        options = group + "," + c_val[parent_index]
-        c_val = [[] for _ in range(len(c_val))]
+        print('metric', metric)
+        options = group + "," + c_val[parent_index] if c_val[parent_index] else group + ','
+        c_val = [False for _ in range(len(c_val))]
         c_val[parent_index] = metric
         return options, c_val, None
     return options, c_val, None
@@ -183,12 +185,12 @@ def update_display(n, options, tag_selection, old_graph, old_style, old_children
     ctx = dash.callback_context
     is_new_data, is_time_update, is_new_tag = mvf.get_graph_update_purpose(ctx, prefix)
     style = {"display": 'none'}
-    metric_info = redisUtil.get_metric_info()
+    metric_info = dbUtils.get_metric_info()
 
     if is_time_update:
-        if redisUtil.has_update("metric_graph", reset=True):
+        if dbUtils.has_update("metric_graph", reset=True):
             logger.info("new data")
-            redisUtil._subscribers["metric_graph"] = False
+            dbUtils._subscribers["metric_graph"] = False
             is_new_data = True
 
     if is_new_data:
@@ -196,7 +198,6 @@ def update_display(n, options, tag_selection, old_graph, old_style, old_children
         if options == "" or options is None:
             return [], style, old_children, old_tag_selection, []
         k, v = options.split(',')
-        print(k, v)
         print('---------------------------')
         display_obj, needs_chooser = populate_display_obj(k, v)
         children = []
@@ -213,4 +214,4 @@ def update_display(n, options, tag_selection, old_graph, old_style, old_children
         display_obj, _ = populate_display_obj(k, v)
         tags = display_obj.get_tags()
         return display_obj.display_tag_num(tags.index(tag_selection)), old_style, old_children, tag_selection, old_info
-    raise PreventUpdate()
+    raise PreventUpdate

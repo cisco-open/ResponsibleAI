@@ -19,7 +19,7 @@ import logging
 import dash
 import dash_bootstrap_components as dbc
 from dash import Input, Output, html, State
-from server import app, redisUtil
+from server import app, dbUtils
 from dash import dcc, ALL
 import plotly.graph_objs as go
 from display_types import get_display
@@ -34,11 +34,11 @@ selector_height = "350px"
 
 def add_trace_to_fig(fig, group, metric):
     d = {"x": [], "y": [], "tag": [], "metric": [], "text": []}
-    dataset = redisUtil.get_current_dataset()
-    metric_values = redisUtil.get_metric_values()
-    metric_type = redisUtil.get_metric_info()
+    dataset = dbUtils.get_current_dataset()
+    metric_values = dbUtils.get_metric_values()
+    metric_type = dbUtils.get_metric_info()
     type = metric_type[group][metric]["type"]
-    display_obj = get_display(metric, type, redisUtil)
+    display_obj = get_display(metric, type, dbUtils)
     if display_obj is not None:
         for i, data in enumerate(metric_values):
             data = data[dataset]
@@ -57,13 +57,12 @@ def update_metric_selections(group: str, selected: list, options: list):
 
 def get_grouped_checklist():
     groups = mvf.get_nonempty_groups(requirements)
-    metric_info = redisUtil.get_metric_info()
+    metric_info = dbUtils.get_metric_info()
     return html.Div([
             html.Details([
                 html.Summary([dcc.Checklist(
                     id={"type": prefix+"group-checkbox", "group": group},
                     options=[{"label": metric_info[group]['meta']['display_name'], "value": group}],
-                    value=[],
                     labelStyle={"display": "inline-block"},
                     style={"display": "inline-block"},
                     inputStyle={"margin-right": "5px"}
@@ -71,7 +70,6 @@ def get_grouped_checklist():
                 dcc.Checklist(
                     id={"type": prefix+"child-checkbox", "group": group},
                     options=[{"label": metric_info[group][i]['display_name'], "value": i} for i in mvf.get_valid_metrics(group, requirements)],
-                    value=[],
                     labelStyle={"display": "block"},
                     inputStyle={"margin-right": "5px"},
                     style={"padding-left": "40px"}
@@ -79,10 +77,6 @@ def get_grouped_checklist():
 
 
 def get_search_and_selection_interface():
-    groups = []
-    for g in redisUtil.get_metric_info():
-        groups.append(g)
-
     return html.Div(
         dbc.Form([
             dcc.Tabs([
@@ -135,8 +129,10 @@ def get_metric_page_graph():
     prevent_initial_call=True
 )
 def update_metric_choices(p_selected, c_selected, reset_button, metric_search, p_options, c_options, p_val, c_val, options):
+    c_val = [el if el is not None else [] for el in c_val]
+    p_val = [el if el is not None else [] for el in p_val]
     ctx = dash.callback_context.triggered
-    metric_info = redisUtil.get_metric_info()
+    metric_info = dbUtils.get_metric_info()
     options = [] if options is None else options
     if any(prefix+'reset_graph.n_clicks' in i["prop_id"] for i in ctx):
         to_p_val = [[] for _ in range(len(p_val))]
@@ -184,9 +180,9 @@ def update_graph(n, options, old_container):
     ctx = dash.callback_context
     is_new_data, is_time_update, _ = mvf.get_graph_update_purpose(ctx, prefix)
     if is_time_update:
-        if redisUtil.has_update("metric_graph", reset=True):
+        if dbUtils.has_update("metric_graph", reset=True):
             logger.info("new data")
-            redisUtil._subscribers["metric_graph"] = False
+            dbUtils._subscribers["metric_graph"] = False
             is_new_data = True
 
     if is_new_data:
@@ -196,9 +192,8 @@ def update_graph(n, options, old_container):
         if len(options) == 0:
             return []
         for item in options:
-            print(item)
             k, v = item.split(',')
             add_trace_to_fig(fig, k, v)
         return [dcc.Graph(figure=fig)]
 
-    raise PreventUpdate()
+    raise PreventUpdate
