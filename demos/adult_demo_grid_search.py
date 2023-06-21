@@ -43,7 +43,9 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Configuration
 use_dashboard = True
+
 load_dotenv(f'{currentdir}/../.env')
+
 data_path = f"{currentdir}/../data/adult/"
 
 #  loading train and test data
