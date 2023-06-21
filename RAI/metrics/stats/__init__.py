@@ -15,10 +15,9 @@
 # SPDX-License-Identifier: Apache-2.0
 
 
-from .summary_stats import StatMetricGroup
-from .moments import StatMomentGroup
-from .correlation_stats_regression import CorrelationStatRegression
-from .frequency_stats import FrequencyStatMetricGroup
-# from .correlation_stats_regression_slow import CorrelationStatRegressionSlow  # Runs like butter without these ones.
-from .correlation_stats_binary import BinaryCorrelationStats
-from .image_stats import ImageStatsGroup
+from .summary_stats import StatMetricGroup  # noqa : F401
+from .moments import StatMomentGroup  # noqa : F401
+from .correlation_stats_regression import CorrelationStatRegression  # noqa : F401
+from .frequency_stats import FrequencyStatMetricGroup  # noqa : F401
+from .correlation_stats_binary import BinaryCorrelationStats  # noqa : F401
+from .image_stats import ImageStatsGroup  # noqa : F401

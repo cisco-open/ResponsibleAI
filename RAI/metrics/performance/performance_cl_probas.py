@@ -23,7 +23,7 @@ import os
 class PerformanceClassificationProbasMetricGroup(MetricGroup, class_location=os.path.abspath(__file__)):
     def __init__(self, ai_system) -> None:
         super().__init__(ai_system)
-        
+
     def update(self, data):
         pass
 
@@ -34,4 +34,3 @@ class PerformanceClassificationProbasMetricGroup(MetricGroup, class_location=os.
         data = data_dict["data"]
         probs = data_dict["predict_proba"]
         self.metrics["roc_auc"].value = sklearn.metrics.roc_auc_score(data.y, probs[:, 1])
-

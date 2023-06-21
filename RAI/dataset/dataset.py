@@ -17,7 +17,7 @@
 
 import numpy as np
 from RAI.all_types import all_data_types
-from abc import ABC, abstractmethod
+from abc import ABC
 
 __all__ = ['Feature', 'MetaDatabase', 'Data', 'NumpyData', 'IteratorData', 'Dataset']
 
@@ -154,7 +154,7 @@ class NumpyData(Data):
             if key != 0:
                 raise IndexError()
             if self.get_index:
-                return self.X, self.Y, key 
+                return self.X, self.Y, key
             return self.X, self.Y
         if self.get_index:
             if self.y is None:
@@ -257,4 +257,4 @@ class MetaDatabase:
         if sensitive:
             self.stored_data.add("sensitive_features")
         for feature in self.features:
-                self.data_format.add(feature.dtype)
+            self.data_format.add(feature.dtype)

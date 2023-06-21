@@ -104,10 +104,14 @@ class FairnessAnalysis(Analysis, class_location=os.path.abspath(__file__)):
             result.append(fig_graph)
             result.append(html.Br())
             if self.result[names[i]]:
-                result.append(html.B("It's value of " + str(self.values[names[i]]) +
-                                     " is between " + conditions[i] + " indicating that there is fairness.", style=text_style))
+                result.append(html.B(
+                    "It's value of " + str(
+                        self.values[names[i]]
+                    ) + " is between " + conditions[i] + " indicating that there is fairness.", style=text_style))
             else:
-                result.append(html.B("Its value of " + str(self.values[names[i]]) +
-                                     " is not between " + conditions[i] + " indicating that there is unfairness.", style=text_style))
+                result.append(html.B(
+                    "Its value of " + str(
+                        self.values[names[i]]
+                    ) + " is not between " + conditions[i] + " indicating that there is unfairness.", style=text_style))
             result.append(html.P('This metric is ' + metric_info[names[i]]['explanation'], style=text_style))
         return html.Div(result)

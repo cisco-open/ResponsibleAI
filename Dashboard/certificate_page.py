@@ -17,15 +17,15 @@
 import logging
 import dash_bootstrap_components as dbc
 from dash import Input, Output, dcc, html
-from server import app, redisUtil
+from server import app, dbUtils
 
 logger = logging.getLogger(__name__)
 
 
 def get_form():
     ops = []
-    dataset = redisUtil.get_current_dataset()
-    values = redisUtil.get_metric_values()
+    dataset = dbUtils.get_current_dataset()
+    values = dbUtils.get_metric_values()
 
     for i, m in enumerate(values):
         ops.append({"label": m[dataset]["metadata"]["date"] + " - " + m[dataset]["metadata"]["tag"], "value": i})
@@ -41,13 +41,13 @@ def get_form():
 
 
 def get_cert_name(cert_id):
-    return redisUtil.get_certificate_info()[cert_id]['display_name']
+    return dbUtils.get_certificate_info()[cert_id]['display_name']
 
 
 def generate_cert_table(id, show_explanation=True):
     rows = []
-    if len(redisUtil.get_certificate_values()) > 0:
-        for k, v in redisUtil.get_certificate_values()[id].items():
+    if len(dbUtils.get_certificate_values()) > 0:
+        for k, v in dbUtils.get_certificate_values().items():
             if v['value']:
                 status = html.Div([
                     "Passed ", html.I(className="fa-solid fa-check",
@@ -65,8 +65,8 @@ def generate_cert_table(id, show_explanation=True):
     return dbc.Table(
         children=[
             html.Thead(
-                html.Tr([html.Th("Cetrificate"), html.Th("Explanation"), html.Th("Status")] if show_explanation else
-                        [html.Th("Cetrificate"), html.Th("Status")])
+                html.Tr([html.Th("Certificate"), html.Th("Explanation"), html.Th("Status")] if show_explanation else
+                        [html.Th("Certificate"), html.Th("Status")])
             ),
             html.Tbody(rows)
         ], striped=True

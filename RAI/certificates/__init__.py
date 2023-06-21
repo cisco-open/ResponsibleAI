@@ -14,5 +14,5 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-from .certificate import Certificate
-from .certificate_manager import CertificateManager
+from .certificate import Certificate  # noqa : W401
+from .certificate_manager import CertificateManager  # noqa : W401

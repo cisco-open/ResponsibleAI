@@ -17,7 +17,7 @@
 import logging
 import dash_bootstrap_components as dbc
 from dash import html
-from server import redisUtil
+from server import dbUtils
 import dash_daq as daq
 from certificate_page import generate_cert_table
 import numpy as np
@@ -54,7 +54,7 @@ def get_card(t1, t2, t3, ic, n, id, c):
 
 
 def get_home_page():
-    certs = redisUtil.get_certificate_info()
+    certs = dbUtils.get_certificate_info()
     explain = []
     robust = []
     fair = []
@@ -63,24 +63,22 @@ def get_home_page():
     score_robust = []
     score_fair = []
     score_perform = []
-    cert_values = []
-    if len(redisUtil.get_certificate_values()) > 0:
-        cert_values = redisUtil.get_certificate_values()[-1]
+    cert_values = dbUtils.get_certificate_values()
 
     for c in certs:
         for t in certs[c]["tags"]:
             if "explain" in t.lower():
                 explain.append(c)
-                score_explain.append(1 if cert_values[c]["value"] else 0)
+                score_explain.append(1 if cert_values.get(c, {}).get("value") else 0)
             if "robust" in t.lower():
                 robust.append(c)
-                score_robust.append(1 if cert_values[c]["value"] else 0)
+                score_robust.append(1 if cert_values.get(c, {}).get("value") else 0)
             if "perform" in t.lower():
                 perform.append(c)
-                score_perform.append(1 if cert_values[c]["value"] else 0)
+                score_perform.append(1 if cert_values.get(c, {}).get("value") else 0)
             if "fair" in t.lower():
                 fair.append(c)
-                score_fair.append(1 if cert_values[c]["value"] else 0)
+                score_fair.append(1 if cert_values.get(c, {}).get("value") else 0)
 
     gauges = [dbc.Row(
         [
@@ -93,8 +91,8 @@ def get_home_page():
                 get_card("Performance", "success rate", "details", "fa-solid fa-trophy", score_perform, "c3", "red"),
                 get_card("Fairness", "success rate", "details", "fa-solid fa-scale-balanced", score_fair, "c4",
                          "darkgreen"),
-            ]
-        )]
+            ])
+    ]
     return html.Div([
         dbc.Row([
             dbc.Row(gauges),

@@ -45,7 +45,7 @@ class Metric:
 
         :param config: Config details
 
-        :return: None 
+        :return: None
 
         """
         if "tags" in config:

@@ -25,7 +25,7 @@ import numpy as np
 class ImageGenerationInception(MetricGroup, class_location=os.path.abspath(__file__)):
     def __init__(self, ai_system) -> None:
         super().__init__(ai_system)
-        
+
     def update(self, data):
         pass
 

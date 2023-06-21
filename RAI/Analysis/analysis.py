@@ -23,7 +23,7 @@ import json
 
 
 class Analysis(ABC):
-    def __init__(self, ai_system: AISystem, dataset: str, tag: str=None):
+    def __init__(self, ai_system: AISystem, dataset: str, tag: str = None):
         self.ai_system = ai_system
         self.analysis = {}
         self.dataset = dataset
@@ -49,20 +49,21 @@ class Analysis(ABC):
 
         Returns the classifier and sklearn object data
         """
-        compatible = cls.config["compatibility"]["task_type"] is None or cls.config["compatibility"]["task_type"] == [] \
-                     or ai_system.task in cls.config["compatibility"]["task_type"] \
-                     or ("classification" in cls.config["compatibility"]["task_type"]
-                         and ai_system.task == "binary_classification")
+        compatible = cls.config["compatibility"]["task_type"] is None \
+            or cls.config["compatibility"]["task_type"] == [] \
+            or ai_system.task in cls.config["compatibility"]["task_type"] \
+            or ("classification" in cls.config["compatibility"]["task_type"]
+                and ai_system.task == "binary_classification")  # noqa: W503
         compatible = compatible and (cls.config["compatibility"]["data_type"] is None or cls.config["compatibility"][
             "data_type"] == [] or all(item in ai_system.meta_database.data_format
                                       for item in cls.config["compatibility"]["data_type"]))
-        compatible = compatible and (cls.config["compatibility"]["output_requirements"] is None or
+        compatible = compatible and (cls.config["compatibility"]["output_requirements"] is None or  # noqa: W503, W504
                                      all(item in ai_system.data_dict for item in
-                                         cls.config["compatibility"]["output_requirements"]))
-        compatible = compatible and (cls.config["compatibility"]["dataset_requirements"] is None or
+                                         cls.config["compatibility"]["output_requirements"]))  # noqa: W503, W504
+        compatible = compatible and (cls.config["compatibility"]["dataset_requirements"] is None or  # noqa: W503, W504
                                      all(item in ai_system.meta_database.stored_data for item in
-                                         cls.config["compatibility"]["dataset_requirements"]))
-        compatible = compatible and (cls.config["compatibility"]["data_requirements"] == [] or
+                                         cls.config["compatibility"]["dataset_requirements"]))  # noqa: W503, W504
+        compatible = compatible and (cls.config["compatibility"]["data_requirements"] == [] or  # noqa: W503, W504
                                      all(type(item).__name__ in cls.config["compatibility"]["data_requirements"] for
                                          item in ai_system.dataset.data_dict.values()))
         compatible = compatible and compare_runtimes(ai_system.metric_manager.user_config.get("time_complexity"),
@@ -92,10 +93,10 @@ class Analysis(ABC):
         :return: None
 
         On every compute it changes the current_tick value
-        
+
         """
         self.current_tick += 1
-        percentage_complete = min(100, int(100*self.current_tick/self.max_progress_tick))
+        percentage_complete = min(100, int(100 * self.current_tick / self.max_progress_tick))
         if self.connection is not None:
             self.connection(str(percentage_complete))
 

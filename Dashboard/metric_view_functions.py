@@ -16,11 +16,9 @@
 
 
 import logging
-import pandas as pd
 from dash import html
-from server import redisUtil
+from server import dbUtils
 from dash import dcc
-import plotly.express as px
 import dash_bootstrap_components as dbc
 from display_types.display_factory import is_compatible
 
@@ -31,7 +29,7 @@ __all__ = ['get_nonempty_groups', 'get_valid_metrics', 'get_search_options', 'ge
 
 
 def get_nonempty_groups(requirements):
-    metric_info = redisUtil.get_metric_info()
+    metric_info = dbUtils.get_metric_info()
     valid_groups = []
     for group in metric_info:
         for metric in metric_info[group]:
@@ -42,7 +40,7 @@ def get_nonempty_groups(requirements):
 
 
 def get_valid_metrics(group, requirements):
-    metric_info = redisUtil.get_metric_info()
+    metric_info = dbUtils.get_metric_info()
     valid_metrics = []
     for metric in metric_info[group]:
         if "type" in metric_info[group][metric] and is_compatible(metric_info[group][metric]["type"], requirements):
@@ -51,20 +49,19 @@ def get_valid_metrics(group, requirements):
 
 
 def get_search_options(requirements):
-    metric_info = redisUtil.get_metric_info()
+    metric_info = dbUtils.get_metric_info()
     valid_searches = []
     for group in metric_info:
         for metric in metric_info[group]:
             if "type" in metric_info[group][metric] and is_compatible(metric_info[group][metric]["type"], requirements):
-                valid_searches.append({'label': metric_info[group][metric]['display_name'] +
-                                                ' | ' + metric_info[group]['meta']['display_name'],
-                                       'value': metric + " | " + group})
+                label = f"{metric_info[group][metric]['display_name']} | {metric_info[group]['meta']['display_name']}"
+                valid_searches.append({
+                    'label': label,
+                    'value': metric + " | " + group})
     return valid_searches
 
 
 def get_graph(prefix):
-    d = {"x": [], "value": [], "tag": [], "metric": []}
-    fig = px.line(pd.DataFrame(d), x="x", y="value", color="metric", markers="True")
     return html.Div(
         html.Div(id=prefix + 'graph_cnt', children=[], style={"margin": "1"}),
         style={
@@ -84,7 +81,7 @@ def get_display(prefix, selectors):
             n_intervals=0),
         html.Div(html.Div([selectors])),
         get_graph(prefix),
-        html.Div(id=prefix+"metric_info", children=[])])
+        html.Div(id=prefix + "metric_info", children=[])])
 
 
 def get_reset_button(prefix):
@@ -93,16 +90,16 @@ def get_reset_button(prefix):
 
 
 def analysis_update_cause(ctx, prefix):
-    is_time_update = any(prefix+'interval-component.n_intervals' in i['prop_id'] for i in ctx.triggered)
+    is_time_update = any(prefix + 'interval-component.n_intervals' in i['prop_id'] for i in ctx.triggered)
     is_button_click = any('run_analysis_button.n_clicks' in i['prop_id'] for i in ctx.triggered)
     is_value = any('analysis_selector.value' == i['prop_id'] for i in ctx.triggered)
     return is_time_update, is_button_click, is_value
 
 
 def get_graph_update_purpose(ctx, prefix):
-    is_new_data = any(prefix+'legend_data.data' in i['prop_id'] for i in ctx.triggered)
-    is_time_update = any(prefix+'interval-component.n_intervals' in i['prop_id'] for i in ctx.triggered)
-    is_new_tag = any(prefix+'select_metric_tag.value' in i['prop_id'] for i in ctx.triggered)
+    is_new_data = any(prefix + 'legend_data.data' in i['prop_id'] for i in ctx.triggered)
+    is_time_update = any(prefix + 'interval-component.n_intervals' in i['prop_id'] for i in ctx.triggered)
+    is_new_tag = any(prefix + 'select_metric_tag.value' in i['prop_id'] for i in ctx.triggered)
     return is_new_data, is_time_update, is_new_tag
 
 

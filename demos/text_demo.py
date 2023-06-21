@@ -29,11 +29,11 @@ from datasets import load_dataset
 import random
 import numpy as np
 import pandas as pd
-
+from dotenv import load_dotenv
 
 # importing RAI modules
 from RAI.AISystem import AISystem, Model
-from RAI.redis import RaiRedis
+from RAI.db.service import RaiDB
 from RAI.dataset import Dataset, Feature, NumpyData
 from RAI.utils import df_to_RAI
 
@@ -41,6 +41,8 @@ from RAI.utils import df_to_RAI
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
+load_dotenv(f'{currentdir}/../.env')
+
 
 def main():
     random.seed(0)
@@ -83,9 +85,8 @@ def main():
 
     ai.compute({"test": {"predict": preds}}, tag='initial_preds')
 
-    r = RaiRedis(ai)
-    r.connect()
-    r.reset_redis()
+    r = RaiDB(ai)
+    r.reset_data()
     r.add_measurement()
     r.export_metadata()
     r.export_visualizations("test", "test")

@@ -20,7 +20,7 @@ import dash
 import dash_bootstrap_components as dbc
 import pandas as pd
 from dash import Input, Output, html, State
-from server import app, redisUtil
+from server import app, dbUtils
 from dash import dcc
 import plotly.express as px
 import plotly.graph_objs as go
@@ -29,7 +29,7 @@ logger = logging.getLogger(__name__)
 
 def get_selectors():
     groups = []
-    for g in redisUtil.get_metric_info():
+    for g in dbUtils.get_metric_info():
         groups.append(g)
     return html.Div(
         dbc.Form([
@@ -53,7 +53,7 @@ def get_selectors():
         ], style={"background-color": "rgb(240,250,255)", "width": "100%  ", "border": "solid",
                   "border-color": "silver", "border-radius": "5px", "padding": "50px"}
         ),
-        style={"margin": "2px", "margin-bottom": "20px",}
+        style={"margin": "2px", "margin-bottom": "20px"}
     )
 
 
@@ -93,20 +93,19 @@ def update_metrics(value):
         return [], None
         # return dcc.Dropdown([], id='select_metrics', persistence=True, persistence_type='session')
     metrics = []
-    for m in redisUtil.get_metric_info()[value]:
+    for m in dbUtils.get_metric_info()[value]:
         if m == "meta":
             continue
-        if redisUtil.get_metric_info()[value][m]["type"] in ["numeric"]:
+        if dbUtils.get_metric_info()[value][m]["type"] in ["numeric"]:
             metrics.append(m)
 
     return metrics, metrics[0]
-    # return  dcc.Dropdown( metrics,  id='select_metrics',persistence=True, persistence_type='session') 
 
 
 def get_trc_data(group, metric):
     d = {"x": [], "y": [], "tag": [], "metric": [], "text": []}
-    dataset = redisUtil.get_current_dataset()
-    for i, data in enumerate(redisUtil.get_metric_values()[dataset]):
+    dataset = dbUtils.get_current_dataset()
+    for i, data in enumerate(dbUtils.get_metric_values()[dataset]):
         d["x"].append(i + 1)
         d["y"].append(data[group][metric])
         d["tag"].append(data["metadata"]["tag"])
@@ -132,15 +131,14 @@ def get_trc_data(group, metric):
 )
 def update_graph(n, metric, group, nC, old):
     ctx = dash.callback_context
-    dataset = redisUtil.get_current_dataset()
 
     if 'prop_id' in ctx.triggered[0] and ctx.triggered[0]['prop_id'] == 'reset_graph.n_clicks':
         old["data"] = []
         return old
     if 'prop_id' in ctx.triggered[0] and ctx.triggered[0]['prop_id'] == 'interval-component.n_intervals':
-        if redisUtil.has_update("metric_graph", reset=True):
+        if dbUtils.has_update("metric_graph", reset=True):
             logger.info("new data")
-            redisUtil._subscribers["metric_graph"] = False
+            dbUtils._subscribers["metric_graph"] = False
         else:
             return old
 
@@ -163,7 +161,8 @@ def update_graph(n, metric, group, nC, old):
         tags, sc_data = get_trc_data(g, m)
         fig.add_traces(go.Scatter(**sc_data))
     fig.update_traces(textposition="top center")
-    fig.update_layout(xaxis=dict(tickmode='array', tickvals=sc_data["x"], ticktext=tags),
+    fig.update_layout(
+        xaxis=dict(tickmode='array', tickvals=sc_data["x"], ticktext=tags),
         legend=dict(title_font_family="Times New Roman",
                     font=dict(family="Times New Roman", size=14, color="black"),
                     bgcolor="Azure", bordercolor="Black", borderwidth=1))

@@ -15,9 +15,9 @@ Note:
 Documentation is available online: [https://responsibleai.readthedocs.io/en/latest/](https://responsibleai.readthedocs.io/en/latest/)
 
 # To Install
-1) Project Requires Redis. Redis can be downloaded using the .msi file at: https://github.com/microsoftarchive/redis/releases/tag/win-3.2.100  
+1) The project uses sqlite as storage and requires no additional installation for this.
 
-2) Please also run pip install -r requirements.txt.
+2) Please run pip install -r requirements.txt.
 
 3) Please first install the required packages found in requirements.txt. RAI can then be installed using "pip install --editable .".
 

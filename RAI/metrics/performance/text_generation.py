@@ -26,7 +26,7 @@ class TextGeneration(MetricGroup, class_location=os.path.abspath(__file__)):
     def __init__(self, ai_system) -> None:
         super().__init__(ai_system)
         self.max_samples = 500
-        
+
     def update(self, data):
         pass
 
@@ -53,9 +53,11 @@ def _rouge(gt_text, gen_text):
     result_l = {"measure": result['rougeL_fmeasure'].item(),
                 "precision": result['rougeL_precision'].item(),
                 "recall": result['rougeL_recall'].item()}
-    result_l_sum = {"measure": result['rougeLsum_fmeasure'].item(),
-                "precision": result['rougeLsum_precision'].item(),
-                "recall": result['rougeLsum_recall'].item()}
+    result_l_sum = {
+        "measure": result['rougeLsum_fmeasure'].item(),
+        "precision": result['rougeLsum_precision'].item(),
+        "recall": result['rougeLsum_recall'].item()
+    }
     return result_1, result_2, result_l, result_l_sum
 
 
