@@ -43,7 +43,6 @@ parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
 load_dotenv(f'{currentdir}/../.env')
 
-
 def main():
     random.seed(0)
     np.random.seed(10)

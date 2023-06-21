@@ -48,6 +48,7 @@ np.random.seed(21)
 
 # Configuration
 data_path = f"{currentdir}/../data/adult/"
+
 # loading train and test data
 train_data = pd.read_csv(data_path + "train.csv", header=0,
                          skipinitialspace=True, na_values="?")

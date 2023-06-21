@@ -77,6 +77,7 @@ if use_dashboard:
     r.reset_data()
 
 
+
 #  function to evaluate each model  
 def test_model(mdl, name):
     mdl.fit(xTrain, yTrain)
