@@ -32,7 +32,7 @@ class VectorElement(DisplayElement):
             print("Setting header")
             self._data["header"] = [{"name": ["Measurement Tag"], "id": '0'}]
             for i in range(len(metric_data)):
-                self._data["header"].append({"name": [''], "id": str(i+1)})
+                self._data["header"].append({"name": [''], "id": str(i + 1)})
         dict_result = {'0': tag}
         for i in range(len(metric_data)):
             dict_result[str(i + 1)] = metric_data[i]

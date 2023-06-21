@@ -30,6 +30,3 @@ class ImageElement(DisplayElement):
 
     def to_display(self):
         pass
-
-
-

@@ -15,4 +15,4 @@
 # SPDX-License-Identifier: Apache-2.0
 
 
-from .fairness_analysis import FairnessAnalysis
+from .fairness_analysis import FairnessAnalysis  # noqa: F401

@@ -14,7 +14,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-from .group_fairness import GroupFairnessMetricGroup
-from .individual_fairness import IndividualFairnessMetricGroup
-from .general_dataset_fairness import GeneralDatasetFairnessGroup
-from .general_prediction_fairness import GeneralPredictionFairnessGroup
+from .group_fairness import GroupFairnessMetricGroup  # noqa: F401
+from .individual_fairness import IndividualFairnessMetricGroup  # noqa: F401
+from .general_dataset_fairness import GeneralDatasetFairnessGroup  # noqa: F401
+from .general_prediction_fairness import GeneralPredictionFairnessGroup  # noqa: F401

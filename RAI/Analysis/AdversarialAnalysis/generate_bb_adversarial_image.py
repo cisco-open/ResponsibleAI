@@ -36,7 +36,7 @@ class GenerateBrendelBethgeAdversarialImage(Analysis, class_location=os.path.abs
         self.dataset = dataset
         self.tag = tag
         self.total_images = 3
-        self.max_progress_tick = self.total_images*2 + 5
+        self.max_progress_tick = self.total_images * 2 + 5
         self.eps = 0.1
 
     def initialize(self):
@@ -58,8 +58,9 @@ class GenerateBrendelBethgeAdversarialImage(Analysis, class_location=os.path.abs
             balanced_classifications = self._get_balanced_correct_classifications(self.ai_system.model.predict_fun,
                                                                                   data.X, data.y, output_features)
         elif isinstance(data, IteratorData):
-            balanced_classifications, shape = self._get_balanced_correct_classifications_iterative(self.ai_system.model.predict_fun,
-                                                                                            data, output_features)
+            balanced_classifications, shape = self._get_balanced_correct_classifications_iterative(
+                self.ai_system.model.predict_fun, data, output_features
+            )
         classifier = PyTorchClassifier(model=self.ai_system.model.agent, loss=self.ai_system.model.loss_function,
                                        optimizer=self.ai_system.model.optimizer, input_shape=shape, nb_classes=numClasses)
         input_selections = self._remove_none(balanced_classifications)
@@ -184,8 +185,9 @@ class GenerateBrendelBethgeAdversarialImage(Analysis, class_location=os.path.abs
         result.append(html.P("One image is selected across each class (max 10), an an adversarial example is "
                              "generated for each.", style=ts))
         result.append(html.Br())
-        result.append(html.B("For this analysis, " + str(total_images) + " images were evenly selected across " + \
-                  str(total_classes) + " classes.", style=ts))
+        result.append(html.B(
+            f"For this analysis, {total_images} images were evenly selected across {total_classes} classes.",
+            style=ts))
 
         cats = ["Initial Image", "Initial Prediction", "Perturbation", "Adversarial Image", "Final Prediction"]
         table_header = [html.Thead(html.Tr([html.Th(i) for i in cats]))]
@@ -200,7 +202,7 @@ class GenerateBrendelBethgeAdversarialImage(Analysis, class_location=os.path.abs
                                       html.Td(pert_dis), html.Td(adv_img), html.Td(html.B(self.output_features[final_pred]))]))
         result.append(html.Br())
         width = 70
-        small_width = str((100-width)/2) + "%"
+        small_width = str((100 - width) / 2) + "%"
         result.append(html.Div(style={"display": "inline-block", "width": small_width}))
         table = dbc.Table(table_header + [html.Tbody(data_rows)], striped=True, bordered=True)
         result.append(html.Div([table], style={"display": "inline-block", "width": str(width) + "%"}))

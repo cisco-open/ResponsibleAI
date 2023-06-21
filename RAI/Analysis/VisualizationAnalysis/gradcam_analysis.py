@@ -60,7 +60,7 @@ class GradCamAnalysis(Analysis, class_location=os.path.abspath(__file__)):
         self.all_classes_num = [i for i in self.output_map if self.output_map[i] in self.all_classes]
         self.n_classes = len(self.all_classes)
         self.n_img = 2
-        self.max_progress_tick = self.n_classes*self.n_img*2*3 + 1
+        self.max_progress_tick = self.n_classes * self.n_img * 2 * 3 + 1
 
     def initialize(self):
         if self.result is None:
@@ -93,7 +93,7 @@ class GradCamAnalysis(Analysis, class_location=os.path.abspath(__file__)):
             imgs = imgs.squeeze()
 
             # if there are no relevant images, or all images have been sampled, move on
-            if not any(i in self.all_classes_num and sum(counts[self.output_map[i]]) < self.n_img*2 for i in data.y):
+            if not any(i in self.all_classes_num and sum(counts[self.output_map[i]]) < self.n_img * 2 for i in data.y):
                 continue
 
             _, predicted = torch.max(self.net(imgs), 1)
@@ -123,7 +123,7 @@ class GradCamAnalysis(Analysis, class_location=os.path.abspath(__file__)):
         random.shuffle(r)
         output_fun = self.ai_system.model.predict_fun
         for i in r:
-            if not data.y[i] in self.all_classes_num or sum(counts[self.output_map[data.y[i]]]) >= self.n_img*2:
+            if not data.y[i] in self.all_classes_num or sum(counts[self.output_map[data.y[i]]]) >= self.n_img * 2:
                 continue
             img = data.rawX[i]
             pred = output_fun(img.unsqueeze(0))[0]
@@ -317,4 +317,3 @@ class GradCAMModel(nn.Module):
 
     def get_activations(self, x):
         return self.features_conv(x)
-

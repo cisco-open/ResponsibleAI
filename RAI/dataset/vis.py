@@ -14,15 +14,12 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-import numpy as np
-
 
 class DataSummarizer:
     def __init__(self, dataset, task, output_features):
         self.dataset = dataset
         self.label_name_dict = {str(val): output_features[0].values[val] for val in output_features[0].values} \
             if output_features[0].values is not None else {}
-        # print("label name dict: ", self.label_name_dict)
         self.task = task
         self.train_data = self.dataset.data_dict.get("train", None)
         self.test_data = self.dataset.data_dict.get("train", None)
@@ -44,10 +41,10 @@ class DataSummarizer:
         self.label_dist_dict = None
 
         if self.task in ("binary_classification", "classification") and self.y_name is not None:
-            self.label_name_dict = {l: self.y_name[int(l)] for l in self.labels}
+            self.label_name_dict = {lab: self.y_name[int(lab)] for lab in self.labels}
             self.y_name = self.output_features[0].values
             self.n_label = len(self.y_name)
-            self.labels = [str(l) for l in range(self.n_label)]
+            self.labels = [str(nl) for nl in range(self.n_label)]
 
     def setLabelDistribution(self):
         # dict with "train": distribution, "test": distribution
@@ -59,13 +56,12 @@ class DataSummarizer:
                 l_name = label
                 if self.label_name_dict is not None:
                     l_name = self.label_name_dict[label]
-                train_y_dict[l_name] = int((self.train_y==int(label)).sum())
-                test_y_dict[l_name] = int((self.test_y==int(label)).sum())
+                train_y_dict[l_name] = int((self.train_y == int(label)).sum())
+                test_y_dict[l_name] = int((self.test_y == int(label)).sum())
             self.label_dist_dict = {"train": train_y_dict, "test": test_y_dict}
 
-
     def getLabels(self):
-        return self.labels 
+        return self.labels
 
     def getLabelDistribution(self):
         return self.label_dist_dict

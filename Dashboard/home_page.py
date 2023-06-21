@@ -91,8 +91,8 @@ def get_home_page():
                 get_card("Performance", "success rate", "details", "fa-solid fa-trophy", score_perform, "c3", "red"),
                 get_card("Fairness", "success rate", "details", "fa-solid fa-scale-balanced", score_fair, "c4",
                          "darkgreen"),
-            ]
-        )]
+            ])
+    ]
     return html.Div([
         dbc.Row([
             dbc.Row(gauges),

@@ -14,4 +14,4 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-from RAI.metrics.ai360_helper.AI360_helper import *
+from RAI.metrics.ai360_helper.AI360_helper import *  # noqa : F401, F403

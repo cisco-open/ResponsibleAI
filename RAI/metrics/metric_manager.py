@@ -15,8 +15,6 @@
 # SPDX-License-Identifier: Apache-2.0
 
 
-import os.path
-import site
 from typing import List
 from RAI import utils
 from RAI.all_types import all_output_requirements, all_complexity_classes, all_dataset_requirements, \
@@ -58,7 +56,7 @@ class MetricManager(object):
         Accepts user config values and make in standard group
 
         :param user_config(dict): user config data
-        :return: None 
+        :return: None
         """
         if "fairness" in user_config:
             protected_classes = []
@@ -77,10 +75,10 @@ class MetricManager(object):
         :param user_config(dict): user config data
         :param metric_groups: metric groups data as a list
         :param max_complexity: default linear
-    
-        :return: None 
+
+        :return: None
         """
-    
+
         if user_config:
             self.standardize_user_config(user_config)
             for key in user_config:
@@ -142,9 +140,8 @@ class MetricManager(object):
         Reset all the certificate, metric, sample and time_stamp values
 
         :param self: None
-        
+
         :return: None
-        
 
         """
         for metric_group_name in self.metric_groups:
@@ -160,7 +157,7 @@ class MetricManager(object):
         Return the metric group metadata information
 
         :param self: None
-        
+
         :return: dict-Metadata
 
         """
@@ -183,7 +180,7 @@ class MetricManager(object):
         Returns the metric info
 
         :param self: None
-        
+
         :return: Returns the metric info data in dict
         """
         result = {}
@@ -200,7 +197,7 @@ class MetricManager(object):
         Perform computation on metric objects and returns the value as a metric group in dict format
 
         :param data_dict: Accepts the data dict metric object
-        
+
         :return: returns the value as a metric group
         """
         for metric_group_name in self.metric_groups:
@@ -262,12 +259,12 @@ class MetricManager(object):
     # Searches all metrics. Queries based on Metric Name, Metric Group Name, Category, and Tags.
     def search(self, query: str) -> dict:
         """
-        Searches all metrics.Queries based on Metric Name, Metric Group Name, Category, and Tags 
+        Searches all metrics.Queries based on Metric Name, Metric Group Name, Category, and Tags
 
         :param query: query(str) group data information as input
-        
+
         :return:  Returns the search results based on the query
-        
+
         """
         query = query.lower()
         results = {}
@@ -294,9 +291,9 @@ class MetricManager(object):
         assert "compatibility" in config, \
             config["name"] + " must contain compatibility details"
 
-        assert "task_type" in config["compatibility"] and (config["compatibility"]["task_type"] == [] or
-                all(i in all_task_types for i in config["compatibility"]["task_type"])),\
-            config["name"] + "['compatibility']['task_type'] must be empty or one of " + str(all_task_types)
+        assert "task_type" in config["compatibility"] and (config["compatibility"]["task_type"] == [] or  # noqa : W504
+               all(i in all_task_types for i in config["compatibility"]["task_type"])), \
+            config["name"] + "['compatibility']['task_type'] must be empty or one of " + str(all_task_types)  # noqa : E128
 
         assert "data_type" in config["compatibility"] and all(x in all_data_types for x in config["compatibility"]["data_type"]), \
             config["name"] + "['compatibility']['data_type'] must be one of " + str(all_data_types)
@@ -335,10 +332,11 @@ class MetricManager(object):
                    isinstance(config["metrics"][metric]["has_range"], bool), \
                 metric + " must contain a boolean for has_range."
 
-            assert "range" in config["metrics"][metric] and (config["metrics"][metric]["range"] is None or
-                   (isinstance(config["metrics"][metric]["range"], list) and
-                   len(config["metrics"][metric]["range"]) == 2 and (x in {None, False, True} for x in
-                   config["metrics"][metric]["range"]))), \
+            assert "range" in config["metrics"][metric] and (
+                config["metrics"][metric]["range"] is None or (
+                    isinstance(config["metrics"][metric]["range"], list) and  # noqa : W504
+                    len(config["metrics"][metric]["range"]) == 2 and (
+                        x in {None, False, True} for x in config["metrics"][metric]["range"]))), \
                 metric + " must contain a valid list of length 2 consisting of null, false or true."
 
             assert "explanation" in config["metrics"][metric] and \

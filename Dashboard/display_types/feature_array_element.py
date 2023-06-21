@@ -27,12 +27,12 @@ class FeatureArrayElement(DisplayElement, requirements=['features']):
         self._data["features"] = [{"name": "Measurement tag", "id": '0'}]
         self._data["row"] = []
         for i, feature in enumerate(features):
-            self._data["features"].append({"name": feature, "id": str(i+1)})
+            self._data["features"].append({"name": feature, "id": str(i + 1)})
 
     def append(self, metric_data: list, tag: str):
         new_dict = {'0': tag}
         for i in range(len(metric_data)):
-            new_dict[str(i+1)] = metric_data[i]
+            new_dict[str(i + 1)] = metric_data[i]
         self._data["row"].append(new_dict)
 
     def to_string(self):

@@ -15,5 +15,5 @@
 # SPDX-License-Identifier: Apache-2.0
 
 
-from .metadata import MetadataGroup
-from .tree_models import TreeModels
+from .metadata import MetadataGroup  # noqa: F401
+from .tree_models import TreeModels  # noqa: F401

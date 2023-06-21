@@ -16,7 +16,6 @@
 
 import json
 import os.path
-import site
 from .certificate import Certificate
 
 __all__ = ['CertificateManager']
@@ -47,9 +46,9 @@ class CertificateManager(object):
         """
         Loads all certificates found in the stock certificate file
 
-        :param self: None  
-        
-        :return: None 
+        :param self: None
+
+        :return: None
         """
         f = open(cert_list_file_name, "r")
         data = json.load(f)
@@ -65,11 +64,11 @@ class CertificateManager(object):
     def load_custom_certificates(self, filename):
         """
         Loads all certificates found in a custom filepath
- 
+
         :param filename: where we need to get the details
 
         :return: None
-        
+
         """
         f = open(filename, "r")
         data = json.load(f)

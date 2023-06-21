@@ -15,14 +15,10 @@
 # SPDX-License-Identifier: Apache-2.0
 
 
-import random
-import numpy as np
 from RAI.AISystem import AISystem
 from RAI.Analysis import Analysis
-from RAI.dataset import IteratorData, NumpyData
 import os
 from dash import html, dcc
-import dash_bootstrap_components as dbc
 import plotly.graph_objs as go
 
 
@@ -118,7 +114,6 @@ class DataVisualization(Analysis, class_location=os.path.abspath(__file__)):
             result.append(fig)
         return html.Div(result)
 
-
     def to_string(self):
         result = "\n==== Data Interpretation ====\n"
         result += "Please view this analysis in the Dashboard."
@@ -137,4 +132,3 @@ class DataVisualization(Analysis, class_location=os.path.abspath(__file__)):
                 out_html.append(html.Br())
         out_html = html.Div(out_html)
         return out_html
-

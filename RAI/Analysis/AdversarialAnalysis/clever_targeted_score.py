@@ -48,7 +48,7 @@ class CleverTargetedScore(Analysis, class_location=os.path.abspath(__file__)):
         output_features = self.ai_system.model.output_features[0].values
         self.output_features = output_features.copy()
         numClasses = len(output_features)
-        self.max_progress_tick = self.EXAMPLES_PER_CLASS*numClasses*(numClasses-1) + 2
+        self.max_progress_tick = self.EXAMPLES_PER_CLASS * numClasses * (numClasses - 1) + 2
         self.progress_tick()
 
         data = self.ai_system.get_data(self.dataset)
@@ -85,7 +85,7 @@ class CleverTargetedScore(Analysis, class_location=os.path.abspath(__file__)):
 
     def _get_balanced_correct_classifications(self, predict_fun, xData, yData, class_values):
         result_balanced = {i: [] for i in class_values}
-        total_images = len(class_values)*self.EXAMPLES_PER_CLASS
+        total_images = len(class_values) * self.EXAMPLES_PER_CLASS
         added = 0
         r = list(range(len(yData)))
         random.shuffle(r)
@@ -99,9 +99,9 @@ class CleverTargetedScore(Analysis, class_location=os.path.abspath(__file__)):
                         break
         return result_balanced
 
-    def _get_balanced_correct_classifications_iterative(self, predict_fun, data:IteratorData, class_values):
+    def _get_balanced_correct_classifications_iterative(self, predict_fun, data: IteratorData, class_values):
         result_balanced = {i: [] for i in class_values}
-        total_images = len(class_values)*self.EXAMPLES_PER_CLASS
+        total_images = len(class_values) * self.EXAMPLES_PER_CLASS
         added = 0
         shape = None
         data.reset()
@@ -121,7 +121,8 @@ class CleverTargetedScore(Analysis, class_location=os.path.abspath(__file__)):
             return result_balanced, shape
 
     def _result_stats(self, res):
-        return "Average Value " + str(sum(res)/len(res)) + ", Minimum Value: " + str(min(res)) + ", Maximum Value: " + str(max(res))
+        return "Average Value " + str(sum(res) / len(res)) + ", Minimum Value: " +\
+            str(min(res)) + ", Maximum Value: " + str(max(res))
 
     def to_string(self):
         result = "\n==== CLEVER Targeted Score Analysis ====\nCLEVER Score is an attack independent robustness metric " \
@@ -151,7 +152,7 @@ class CleverTargetedScore(Analysis, class_location=os.path.abspath(__file__)):
 
     def i_to_data(self, i, data_dict):
         return {0: self.output_features[i],
-                1: round(sum(data_dict[i])/len(data_dict[i]), 4),
+                1: round(sum(data_dict[i]) / len(data_dict[i]), 4),
                 2: round(min(data_dict[i]), 4),
                 3: round(max(data_dict[i]), 4)}
 
@@ -162,7 +163,7 @@ class CleverTargetedScore(Analysis, class_location=os.path.abspath(__file__)):
         return res
 
     def get_fancy_figure(self, data_dict):
-        avgs = [sum(data_dict[i])/len(data_dict[i]) for i in data_dict]
+        avgs = [sum(data_dict[i]) / len(data_dict[i]) for i in data_dict]
         maxs = [max(data_dict[i]) for i in data_dict]
         mins = [min(data_dict[i]) for i in data_dict]
         layout = go.Layout(margin=go.layout.Margin(l=0, r=0, b=0, t=0))
@@ -194,19 +195,14 @@ class CleverTargetedScore(Analysis, class_location=os.path.abspath(__file__)):
         result.append(html.P("CLEVER targeted scores describe attacks where the adversary attempts to trick the "
                              "classifier to pick a specific class", style=ts))
         result.append(html.Br())
-        result.append(html.B("For this analysis, " + str(total_images) + " images were evenly selected across " + \
-                  str(total_classes) + " classes.", style=ts))
+        result.append(html.B(
+            f"For this analysis, {total_images} images were evenly selected across {total_classes} classes.",
+            style=ts))
         result.append(html.B("For a subset of images, Targeted Clever Scores were calculated to see how easily the "
                              "classifier can be tricked into selecting a given class.", style=ts))
         result.append(html.Br())
         result.append(html.H4("L1 Perturbations", style=ts))
         result.append(html.P("L1 Perturbations describes the sum of the perturbation size.", style=ts))
-
-        cats = ["Class", "Average L1 Score", "Minimum L1 Score", "Maximum L1 Score"]
-        cols = [{'name': [name], 'id': i} for i, name in enumerate(cats)]
-
-        # table = self.get_table(cols, l1_score)
-        # result.append(html.Div(table))
 
         fig_graph = self.get_fancy_figure(l1_score)
         result.append(fig_graph)

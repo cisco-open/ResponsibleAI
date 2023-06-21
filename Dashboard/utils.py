@@ -83,6 +83,4 @@ def process_cell(v, list_vertical=True):
 
     if isinstance(v, dict):
         return dict_to_table(v, list_vertical)
-        # return pp.pformat(v)
-        return json.dumps(v, indent=4)
     return to_str(v)

@@ -18,15 +18,12 @@
 import logging
 import dash
 import dash_bootstrap_components as dbc
-import config
+import config  # noqa: F401
 from db_utils import DBUtils
 
 logger = logging.getLogger(__name__)
 external_stylesheets = [dbc.themes.BOOTSTRAP, dbc.icons.FONT_AWESOME]
 
-try:
-    t = type(dbUtils)
-except:
-    dbUtils = DBUtils()
+dbUtils = DBUtils()
 
 app = dash.Dash(external_stylesheets=external_stylesheets, suppress_callback_exceptions=True)

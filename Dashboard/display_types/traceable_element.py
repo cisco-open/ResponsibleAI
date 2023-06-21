@@ -41,11 +41,13 @@ class TraceableElement(DisplayElement, metaclass=ABCMeta):
                           "borderwidth": 1}
 
     def _get_sc_data(self):
-        return {'mode': self._settings["mode"], 'name': f"{self._name}",
-                   'orientation': self._settings["orientation"], 'showlegend': self._settings["showlegend"],
-                   'text': self._data["text"], 'x': self._data["x"], 'xaxis': 'x', 'y': self._data['y'], 'yaxis': 'y',
-                   'type': self._settings["type"], 'textposition': self._settings["textposition"],
-                   'hovertemplate': 'metric=' + self._name + '<br>x=%{x}<br>value=%{y}<br>text=%{text}<extra></extra>'}
+        return {
+            'mode': self._settings["mode"], 'name': f"{self._name}",
+            'orientation': self._settings["orientation"], 'showlegend': self._settings["showlegend"],
+            'text': self._data["text"], 'x': self._data["x"], 'xaxis': 'x', 'y': self._data['y'], 'yaxis': 'y',
+            'type': self._settings["type"], 'textposition': self._settings["textposition"],
+            'hovertemplate': 'metric=' + self._name + '<br>x=%{x}<br>value=%{y}<br>text=%{text}<extra></extra>'
+        }
 
     def _update_layout(self, fig, tickvals):
         fig.update_layout(

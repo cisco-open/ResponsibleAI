@@ -92,8 +92,9 @@ def get_analysis_updates(timer, btn, analysis_choice, analysis_choices, analysis
             return dbUtils.get_available_analysis(), [html.P("Requesting Analysis..")], analysis_choice
 
     # Extra condition was added because dash would not always update when changing to/from a large analysis
-    if force_new_display or is_value or (analysis_choice and analysis_display==[]) \
-            or ((len(analysis_display) > 1 and analysis_choice != analysis_display[1].get("props", {}).get("children", {}))):
+    if force_new_display or is_value or (analysis_choice and analysis_display == []) or (
+            (len(analysis_display) > 1 and analysis_choice != analysis_display[1].get("props", {}).get("children", {}))
+    ):
         analysis_display = [dbUtils.get_analysis(analysis_choice),
                             html.P(analysis_choice, style={"display": "none"})]
         should_update = True
@@ -102,4 +103,3 @@ def get_analysis_updates(timer, btn, analysis_choice, analysis_choices, analysis
         raise PreventUpdate
 
     return analysis_choices, analysis_display, analysis_choice
-

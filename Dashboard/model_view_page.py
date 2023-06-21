@@ -21,7 +21,6 @@ from dash import Input, Output, dcc, html
 from server import app, dbUtils
 import sklearn
 import pickle
-from sklearn.tree import plot_tree
 import io
 import base64
 import matplotlib.pyplot as plt

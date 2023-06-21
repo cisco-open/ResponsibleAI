@@ -28,7 +28,7 @@ class PerformanceClassificationMetricGroup(MetricGroup, class_location=os.path.a
         super().__init__(ai_system)
         self._y_data = []
         self._preds = []
-        
+
     def update(self, data):
         pass
 
@@ -53,7 +53,9 @@ class PerformanceClassificationMetricGroup(MetricGroup, class_location=os.path.a
         self.metrics["f1"].value = sklearn.metrics.f1_score(y_data, preds, average=None, **args.get("f1", {}))
         self.metrics["f1_avg"].value = np.mean(self.metrics["f1"].value)
 
-        self.metrics["jaccard_score"].value = np.nan_to_num(sklearn.metrics.jaccard_score(y_data, preds, average=None, **args.get("jaccard_score", {})),  nan=0)
+        self.metrics["jaccard_score"].value = np.nan_to_num(sklearn.metrics.jaccard_score(
+            y_data, preds, average=None, **args.get("jaccard_score", {})), nan=0
+        )
         self.metrics["jaccard_score_avg"].value = np.mean(self.metrics["jaccard_score"].value)
 
         self.metrics["precision_score"].value = sklearn.metrics.precision_score(y_data, preds, average=None)
@@ -94,7 +96,7 @@ def get_fptn(confusion_matrix):
 
 
 def _fp_rate(fptn):
-        return fptn['fp'] / (fptn['fp'] + fptn['tn'])
+    return fptn['fp'] / (fptn['fp'] + fptn['tn'])
 
 
 def _tp_rate(fptn):

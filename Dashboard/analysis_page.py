@@ -18,7 +18,6 @@ import logging
 from dash import dcc
 import dash
 from server import app, dbUtils
-import metric_view_functions as mvf
 from dash import Input, Output, html, State
 from dash.exceptions import PreventUpdate
 
@@ -77,8 +76,9 @@ def get_analysis_updates(timer, btn, analysis_choice, analysis_choices, analysis
             return dbUtils.get_available_analysis(), [html.P("Requesting Analysis..")]
 
     # Extra condition was added because dash would not always update when changing to/from a large analysis
-    if is_value or (len(analysis_display) > 1 and analysis_choice !=
-                    analysis_display[1].get("props", {}).get("children", {})):
+    if is_value or (
+            len(analysis_display) > 1 and analysis_choice != analysis_display[1].get("props", {}).get("children", {})
+    ):
         analysis_display = [dbUtils.get_analysis(analysis_choice),
                             html.P(analysis_choice, style={"display": "none"})]
         should_update = True
@@ -87,4 +87,3 @@ def get_analysis_updates(timer, btn, analysis_choice, analysis_choices, analysis
         raise PreventUpdate
 
     return analysis_choices, analysis_display
-

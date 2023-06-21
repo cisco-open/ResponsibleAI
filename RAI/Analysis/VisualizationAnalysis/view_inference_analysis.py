@@ -201,4 +201,3 @@ class ViewInferenceAnalysis(Analysis, class_location=os.path.abspath(__file__)):
         result.append(html.Div(table, style={"width": "100%", "height": "100%", "overflow": "scroll"}))
         result = html.Div(result)
         return result
-

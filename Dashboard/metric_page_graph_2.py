@@ -53,7 +53,7 @@ def get_selectors():
         ], style={"background-color": "rgb(240,250,255)", "width": "100%  ", "border": "solid",
                   "border-color": "silver", "border-radius": "5px", "padding": "50px"}
         ),
-        style={"margin": "2px", "margin-bottom": "20px",}
+        style={"margin": "2px", "margin-bottom": "20px"}
     )
 
 
@@ -100,7 +100,6 @@ def update_metrics(value):
             metrics.append(m)
 
     return metrics, metrics[0]
-    # return  dcc.Dropdown( metrics,  id='select_metrics',persistence=True, persistence_type='session') 
 
 
 def get_trc_data(group, metric):
@@ -132,7 +131,6 @@ def get_trc_data(group, metric):
 )
 def update_graph(n, metric, group, nC, old):
     ctx = dash.callback_context
-    dataset = dbUtils.get_current_dataset()
 
     if 'prop_id' in ctx.triggered[0] and ctx.triggered[0]['prop_id'] == 'reset_graph.n_clicks':
         old["data"] = []
@@ -163,7 +161,8 @@ def update_graph(n, metric, group, nC, old):
         tags, sc_data = get_trc_data(g, m)
         fig.add_traces(go.Scatter(**sc_data))
     fig.update_traces(textposition="top center")
-    fig.update_layout(xaxis=dict(tickmode='array', tickvals=sc_data["x"], ticktext=tags),
+    fig.update_layout(
+        xaxis=dict(tickmode='array', tickvals=sc_data["x"], ticktext=tags),
         legend=dict(title_font_family="Times New Roman",
                     font=dict(family="Times New Roman", size=14, color="black"),
                     bgcolor="Azure", bordercolor="Black", borderwidth=1))

@@ -59,7 +59,7 @@ class DBUtils(object):
         return val
 
     def has_analysis_update(self, analysis, reset=True):
-        current = self.db.get(f'analysis_update', {})
+        current = self.db.get('analysis_update', {})
         if current and current.get(analysis) and current.get(analysis, {}).get('update') is True:
             current[analysis]['update'] = False
             self.db['analysis_update'] = current

@@ -49,8 +49,8 @@ class Certificate(object):
     def evaluate(self, metrics, certs):
         """
         From the certificate json file condition key is selected and based on that evalutions will happen
-        
-        
+
+
         :param metrics: metrics data is provided based on that evaluation will happen
         :param certs: certificate data is provided based on that evaluation will happen
 

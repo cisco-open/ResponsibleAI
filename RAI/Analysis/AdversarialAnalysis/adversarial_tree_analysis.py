@@ -73,9 +73,9 @@ class AdversarialTreeAnalysis(Analysis, class_location=os.path.abspath(__file__)
                   "minimum L-infinity adversarial distortion averaged over all test examples.\n"
         result += "Adversarial Tree Verification Lower Bound: " + str(self.result['adversarial_tree_verification_bound'])\
                   + '\n'
-        result += "\nAdversarial Tree Verified Error is the upper bound of error under any attacks.\n" \
-                  "Verified Error guarantees that within a L-infinity distortion norm of " + str(self.distortion_size)+\
-                  ", that no attacks can achieve over X% error on test sets.\n"
+        result += f"\nAdversarial Tree Verified Error is the upper bound of error under any attacks.\n" \
+                  f"Verified Error guarantees that within a L-infinity distortion norm of {str(self.distortion_size)}" \
+                  f", that no attacks can achieve over X% error on test sets.\n"
         result += "Adversarial Tree Verified Error: " + str(self.result['adversarial_tree_verification_error']) + "\n"
         return result
 
@@ -94,9 +94,10 @@ class AdversarialTreeAnalysis(Analysis, class_location=os.path.abspath(__file__)
         result.append(html.Br())
         result.append(html.B("Adversarial Tree Verified Error: " + str(error)))
         result.append(html.Br())
-        result.append(html.P("Adversarial Tree Verified Error is the upper bound of error under any attacks. "
-                             "Verified Error guarantees that within a L-infinity distortion norm of " +
-                             str(self.distortion_size) + ", that no attacks can achieve over X% error on test sets."))
+        result.append(html.P(
+            f"Adversarial Tree Verified Error is the upper bound of error under any attacks. "
+            f"Verified Error guarantees that within a L-infinity distortion norm of {str(self.distortion_size)}"
+            ", that no attacks can achieve over X% error on test sets."))
 
         fig = go.Figure([go.Bar(x=["Lower Bound", "Verified Error"], y=[bound, error])])
         fig.update_layout(title={'text': "Adversarial Tree Results", 'y': 0.9, 'x': 0.5, 'xanchor': 'center', 'yanchor': 'top'})

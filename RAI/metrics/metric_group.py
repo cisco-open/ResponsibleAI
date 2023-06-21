@@ -46,25 +46,23 @@ class MetricGroup(ABC):
         :param: ai_system
 
         :return: Compatible object
-    
-    
-      
+
         """
-        
-        compatible = cls.config["compatibility"]["task_type"] == [] \
-                     or any(i == ai_system.task for i in cls.config["compatibility"]["task_type"]) \
-                     or (any(i == "classification" for i in cls.config["compatibility"]["task_type"])
-                          and ai_system.task == "binary_classification")
+
+        compatible = cls.config["compatibility"]["task_type"] == []\
+            or any(i == ai_system.task for i in cls.config["compatibility"]["task_type"])\
+            or (any(i == "classification" for i in cls.config["compatibility"]["task_type"])
+                and ai_system.task == "binary_classification")  # noqa : W503
         compatible = compatible and (cls.config["compatibility"]["data_type"] is None or cls.config["compatibility"][
             "data_type"] == [] or all(item in ai_system.meta_database.data_format
                                       for item in cls.config["compatibility"]["data_type"]))
-        compatible = compatible and (cls.config["compatibility"]["output_requirements"] == [] or
-                                     all(item in ai_system.data_dict for item in
-                                         cls.config["compatibility"]["output_requirements"]))
-        compatible = compatible and (cls.config["compatibility"]["dataset_requirements"] is None or
+        compatible = compatible and (cls.config["compatibility"]["output_requirements"] == [] or  # noqa : W504
+                                     all(item in ai_system.data_dict for item in  # noqa : W504
+                                         cls.config["compatibility"]["output_requirements"]))  # noqa : W504
+        compatible = compatible and (cls.config["compatibility"]["dataset_requirements"] is None or  # noqa : W504
                                      all(item in ai_system.meta_database.stored_data for item in
                                          cls.config["compatibility"]["dataset_requirements"]))
-        compatible = compatible and (cls.config["compatibility"]["data_requirements"] == [] or
+        compatible = compatible and (cls.config["compatibility"]["data_requirements"] == [] or  # noqa : W504
                                      all(type(item).__name__ in cls.config["compatibility"]["data_requirements"] for
                                          item in ai_system.dataset.data_dict.values()))
         compatible = compatible and compare_runtimes(ai_system.metric_manager.user_config.get("time_complexity"),
@@ -97,18 +95,13 @@ class MetricGroup(ABC):
             self.status = "BAD"
 
     def reset(self):
-
-        
         """
         Reset the status
-
 
         :param: None
 
         :return: None
-    
-    
-      
+
         """
         if self.status == "BAD":
             return
@@ -118,18 +111,14 @@ class MetricGroup(ABC):
         self.status = "OK"
 
     def load_config(self, config):
-
         """
         Fetch the metric data from config
-
 
         :param: config
 
         :return: Boolean
-    
-    
-      
-        """ 
+
+        """
         if "tags" in config:
             self.tags = config["tags"]
         if "dependency_list" in config:
@@ -150,14 +139,11 @@ class MetricGroup(ABC):
         """
         Create the metric and assign name and tags to it
 
-
         :param: metrics_config
 
         :return: None
-    
-    
-      
-        """ 
+
+        """
         for metric_name in metrics_config:
             self.metrics[metric_name] = Metric(metric_name, metrics_config[metric_name])
             self.metrics[metric_name].unique_name = self.name + " > " + metric_name
@@ -167,14 +153,11 @@ class MetricGroup(ABC):
         """
         Returns the metric with the name and its corresponding value
 
-
         :param: None
 
         :return: dict
-    
-    
-      
-        """ 
+
+        """
         results = {}
         for metric_name in self.metrics:
             if self.metrics[metric_name].type == 'vector':
@@ -196,14 +179,11 @@ class MetricGroup(ABC):
         """
         Returns the metric with the name and its corresponding value
 
-
         :param: None
 
         :return: dict
-    
-    
-      
-        """ 
+
+        """
         results = {}
         for metric_name in self.metrics:
             if self.metrics[metric_name].type == 'vector':

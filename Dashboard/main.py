@@ -48,9 +48,9 @@ def handler(signum, frame):
     dbUtils.close()
     print("after closing")
     exit()
-signal.signal(signal.SIGINT, handler)
-        
 
+
+signal.signal(signal.SIGINT, handler)
 
 np.seterr(invalid='raise')
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
@@ -89,20 +89,21 @@ def get_sidebar():
     sidebar = html.Div(
         [
             dbc.Nav(
-                [   html.Img(src="./assets/img/rai_logo_blue3.png", style={  "margin-left":"40px",   "width": "100px","height": "60px" }),
+                [
+                    html.Img(src="./assets/img/rai_logo_blue3.png", style={
+                        "margin-left": "40px", "width": "100px", "height": "60px"
+                    }),
                     html.Div([
-                    
-                    html.Hr( className="nav_div" ), #style={"border": "2px solid green", "border-radius": "1px"}),
-                    html.P("Select the active project"),
-                    html.Div(id="dummy_div", style={"display": "no"}),
-                    dcc.Dropdown(
-                        id="project_selector",
-                        options=dbUtils.get_projects_list(),
-                        value=dbUtils._current_project_name,
-                        persistence=True,
-                        persistence_type="session"),
-                        ]),
-                    html.Hr( className="nav_div" ),
+                        html.Hr(className="nav_div"),
+                        html.P("Select the active project"),
+                        html.Div(id="dummy_div", style={"display": "no"}),
+                        dcc.Dropdown(
+                            id="project_selector",
+                            options=dbUtils.get_projects_list(),
+                            value=dbUtils._current_project_name,
+                            persistence=True,
+                            persistence_type="session"), ]),
+                    html.Hr(className="nav_div"),
                     html.P("Select the dataset"),
                     html.Div(id="dummy_div_2", style={"display": "no"}),
                     dcc.Dropdown(
@@ -111,10 +112,10 @@ def get_sidebar():
                         value=dbUtils.get_dataset_list()[0] if len(dbUtils.get_dataset_list()) > 0 else None,
                         persistence=True),
                     html.Hr(className="nav_div"),
-                    dbc.NavLink(  
+                    dbc.NavLink(
                         iconify("Home", "fa-solid fa-home", "25px"),
                         href="/", active="exact"),
-                    dbc.NavLink(  
+                    dbc.NavLink(
                         iconify("Settings", "fa-solid fa-gear", "25px"),
                         href="/settings", active="exact"),
                     dbc.NavLink(
@@ -123,11 +124,11 @@ def get_sidebar():
                     dbc.NavLink(
                         iconify("Metrics Info", "fa-solid fa-file-lines", "50px"),
                         href="/metricsInfo", active="exact"),
-                     dbc.NavLink( 
+                    dbc.NavLink(
                         iconify("Certificates Info", "fa-solid fa-check-double", "20px"),
                         href="/certificateInfo", active="exact"),
-                    html.Hr( className="nav_div" ),
-                    dbc.NavLink( 
+                    html.Hr(className="nav_div"),
+                    dbc.NavLink(
                         iconify("Metrics Details", "fas fa-table fas-10x", "18px"),
                         href="/metrics_details", active="exact"),
                     dbc.NavLink(
@@ -139,15 +140,15 @@ def get_sidebar():
                     dbc.NavLink(
                         iconify("Certificates", "fa-solid fa-list-check", "45px"),
                         href="/certificates", active="exact"),
-                    html.Hr( className="nav_div" ),
-                    
+                    html.Hr(className="nav_div"),
+
                     dbc.NavLink(
                         iconify("Model View", "fa-solid fa-eye", "50px"),
                         href="/modelView", active="exact"),
-                   dbc.NavLink( 
+                    dbc.NavLink(
                         iconify("Data Summary", "fa-solid fa-newspaper", "20px"),
                         href="/dataSummary", active="exact"),
-                    dbc.NavLink( 
+                    dbc.NavLink(
                         iconify("Model Interpretation", "fa-solid fa-microscope", "20px"),
                         href="/modelInterpretation", active="exact"),
                     dbc.NavLink(
@@ -280,8 +281,11 @@ if __name__ == "__main__":
     dbUtils.set_current_project(project_list[0]) if len(project_list) > 0 else None
     if len(dbUtils.get_dataset_list()) > 0:
         dbUtils.set_current_dataset(dbUtils.get_dataset_list()[0])
-    app.layout = html.Div([dcc.Location(id="url"), dcc.Interval(
-                id='main-page-interval-component', interval=2500),
-                dbc.Button(id='main_refresh_reminder', style={"display": "None"}), get_sidebar(), content])
+    app.layout = html.Div([
+        dcc.Location(id="url"),
+        dcc.Interval(id='main-page-interval-component', interval=2500),
+        dbc.Button(id='main_refresh_reminder', style={"display": "None"}),
+        get_sidebar(),
+        content])
     app.run_server(debug=True)
     dbUtils.close()

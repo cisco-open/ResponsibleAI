@@ -32,7 +32,6 @@ selector_height = "350px"
 
 
 def populate_display_obj(group, metric):
-    d = {"x": [], "y": [], "tag": [], "metric": [], "text": []}
     dataset = dbUtils.get_current_dataset()
     metric_values = dbUtils.get_metric_values()
     metric_type = dbUtils.get_metric_info()
@@ -55,16 +54,18 @@ def get_grouped_radio_buttons():
         ]
 
     return html.Div([
-            html.Details([
-                html.Summary([html.P([metric_info[group]['meta']['display_name']],
-                                     style={"display": "inline-block", "margin-bottom": "0px"})]),
-                dcc.RadioItems(
-                    id={"type": prefix+"child-checkbox", "group": group},
-                    options=radio_items(group, requirements),
-                    labelStyle={"display": "block"},
-                    inputStyle={"margin-right": "5px"},
-                    style={"padding-left": "40px"}
-                )]) for group in groups], style={"margin-left": "35%", "height": "100%", "overflow-y": "scroll"})
+        html.Details([
+            html.Summary([
+                html.P([
+                    metric_info[group]['meta']['display_name']],
+                    style={"display": "inline-block", "margin-bottom": "0px"})]),
+            dcc.RadioItems(
+                id={"type": prefix + "child-checkbox", "group": group},
+                options=radio_items(group, requirements),
+                labelStyle={"display": "block"},
+                inputStyle={"margin-right": "5px"},
+                style={"padding-left": "40px"}
+            )]) for group in groups], style={"margin-left": "35%", "height": "100%", "overflow-y": "scroll"})
 
 
 def get_search_and_selection_interface():
@@ -85,7 +86,7 @@ def get_search_and_selection_interface():
                 dcc.Tab(label='Metric Search', children=[
                     dbc.Row([
                         dbc.Col([
-                            dcc.Dropdown(mvf.get_search_options(requirements), id=prefix+'metric_search',
+                            dcc.Dropdown(mvf.get_search_options(requirements), id=prefix + 'metric_search',
                                          value=None, placeholder="Search Metrics"),
                         ], style={"position": "relative"}),
                         dbc.Col([mvf.get_reset_button(prefix)], style={"position": "relative"})
@@ -95,10 +96,10 @@ def get_search_and_selection_interface():
             dbc.Row([dbc.Col([
                 html.Br(),
                 dbc.Label("Select Tag", html_for="select_metric_tag"),
-                dcc.Dropdown([], id=prefix+'select_metric_tag', value=None, placeholder="Select a tag",
-                             persistence=True, persistence_type='session')], id=prefix+"select_metric_tag_col",
+                dcc.Dropdown([], id=prefix + 'select_metric_tag', value=None, placeholder="Select a tag",
+                             persistence=True, persistence_type='session')], id=prefix + "select_metric_tag_col",
                 style={"display": 'none'})],
-                id=prefix+"tag_selector_row")
+                id=prefix + "tag_selector_row")
         ], style=mvf.get_selection_form_style()),
         style=mvf.get_selection_div_style()
     )
@@ -121,23 +122,23 @@ def get_metric_info_display(group, metric, metric_info):
 
 
 @app.callback(
-    Output(prefix+'legend_data', 'data'),
-    Output({'type': prefix+'child-checkbox', 'group': ALL}, 'value'),
-    Output(prefix+'metric_search', 'value'),
-    Input({'type': prefix+'child-checkbox', 'group': ALL}, 'value'),
-    Input(prefix+'reset_graph', "n_clicks"),
-    Input(prefix+'metric_search', 'value'),
-    State({'type': prefix+'child-checkbox', 'group': ALL}, 'options'),
-    State({'type': prefix+'child-checkbox', 'group': ALL}, 'value'),
-    State({'type': prefix+'child-checkbox', 'group': ALL}, 'id'),
-    State(prefix+'legend_data', 'data'),
+    Output(prefix + 'legend_data', 'data'),
+    Output({'type': prefix + 'child-checkbox', 'group': ALL}, 'value'),
+    Output(prefix + 'metric_search', 'value'),
+    Input({'type': prefix + 'child-checkbox', 'group': ALL}, 'value'),
+    Input(prefix + 'reset_graph', "n_clicks"),
+    Input(prefix + 'metric_search', 'value'),
+    State({'type': prefix + 'child-checkbox', 'group': ALL}, 'options'),
+    State({'type': prefix + 'child-checkbox', 'group': ALL}, 'value'),
+    State({'type': prefix + 'child-checkbox', 'group': ALL}, 'id'),
+    State(prefix + 'legend_data', 'data'),
     prevent_initial_call=True
 )
 def update_metric_choice(c_selected, reset_button, metric_search, c_options, c_val, c_ids, options):
     c_val = [val if not isinstance(val, list) else False for val in c_val]
     ctx = dash.callback_context.triggered
     ids = [c_ids[i]['group'] for i in range(len(c_ids))]
-    if any(prefix+'reset_graph.n_clicks' in i['prop_id'] for i in ctx):
+    if any(prefix + 'reset_graph.n_clicks' in i['prop_id'] for i in ctx):
         to_c_val = [False for _ in range(len(c_val))]
         return "", to_c_val, None
     if any(prefix + 'metric_search.value' in i['prop_id'] for i in ctx):
@@ -156,7 +157,7 @@ def update_metric_choice(c_selected, reset_button, metric_search, c_options, c_v
             return options, c_val, metric_search
     group = dash.callback_context.triggered_id["group"]
     parent_index = ids.index(group)
-    if any("\"type\":\"" + prefix +"child-checkbox" in i['prop_id'] for i in ctx):
+    if any("\"type\":\"" + prefix + "child-checkbox" in i['prop_id'] for i in ctx):
         metric = c_val[parent_index]
         print('metric', metric)
         options = group + "," + c_val[parent_index] if c_val[parent_index] else group + ','
@@ -167,19 +168,19 @@ def update_metric_choice(c_selected, reset_button, metric_search, c_options, c_v
 
 
 @app.callback(
-    Output(prefix+'graph_cnt', 'children'),
-    Output(prefix+'select_metric_tag_col', 'style'),
-    Output(prefix+'select_metric_tag', 'options'),
-    Output(prefix+'select_metric_tag', 'value'),
-    Output(prefix+'metric_info', 'children'),
-    Input(prefix+'interval-component', 'n_intervals'),
-    Input(prefix+'legend_data', 'data'),
-    Input(prefix+'select_metric_tag', 'value'),
-    State(prefix+'graph_cnt', 'children'),
-    State(prefix+'select_metric_tag_col', 'style'),
-    State(prefix+'select_metric_tag', 'options'),
-    State(prefix+'select_metric_tag', 'value'),
-    State(prefix+'metric_info', 'children')
+    Output(prefix + 'graph_cnt', 'children'),
+    Output(prefix + 'select_metric_tag_col', 'style'),
+    Output(prefix + 'select_metric_tag', 'options'),
+    Output(prefix + 'select_metric_tag', 'value'),
+    Output(prefix + 'metric_info', 'children'),
+    Input(prefix + 'interval-component', 'n_intervals'),
+    Input(prefix + 'legend_data', 'data'),
+    Input(prefix + 'select_metric_tag', 'value'),
+    State(prefix + 'graph_cnt', 'children'),
+    State(prefix + 'select_metric_tag_col', 'style'),
+    State(prefix + 'select_metric_tag', 'options'),
+    State(prefix + 'select_metric_tag', 'value'),
+    State(prefix + 'metric_info', 'children')
 )
 def update_display(n, options, tag_selection, old_graph, old_style, old_children, old_tag_selection, old_info):
     ctx = dash.callback_context

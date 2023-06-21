@@ -18,5 +18,4 @@
 import RAI.AISystem
 import RAI.metrics
 import RAI.dataset
-import RAI.certificates
-
+import RAI.certificates  # noqa : W401
