@@ -34,7 +34,7 @@ setup(name='rai',
       install_requires=[
           'sqlitedict~=2.1.0',
           'scikit-learn~=1.0.2',
-          'numpy~=1.20.3',
+          'numpy~=1.23.5',
           'pandas~=1.3.5',
           'apscheduler',
           'adversarial-robustness-toolbox',
