@@ -27,7 +27,7 @@ class ImageStatsGroup(MetricGroup, class_location=os.path.abspath(__file__)):
         self._batch_total_examples = 0
         self._batch_average = [0, 0, 0]
         self._batch_d_squared = [0.0, 0.0, 0.0]
-        
+
     def update(self, data):
         pass
 

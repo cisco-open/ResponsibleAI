@@ -15,8 +15,8 @@
 # SPDX-License-Identifier: Apache-2.0
 
 
-from .analysis import Analysis
-from .analysis_manager import AnalysisManager
-import RAI.Analysis.FairnessAnalysis
-import RAI.Analysis.AdversarialAnalysis
-import RAI.Analysis.VisualizationAnalysis
+from .analysis import Analysis  # noqa: F401
+from .analysis_manager import AnalysisManager  # noqa: F401
+import RAI.Analysis.FairnessAnalysis  # noqa: F401
+import RAI.Analysis.AdversarialAnalysis  # noqa: F401
+import RAI.Analysis.VisualizationAnalysis  # noqa: F401

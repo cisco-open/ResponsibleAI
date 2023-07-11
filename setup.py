@@ -32,10 +32,18 @@ setup(name='rai',
       description="Responsible AI framework.",
       long_description=open('README.md').read(),
       install_requires=[
-          'redis~=4.0.2',
-          'scikit-learn~=0.0',
-          'numpy~=1.20.3',
+          'aif360~=0.4.0',
+          'fairlearn~=0.7.0',
+          'sqlitedict~=2.1.0',
+          'scikit-learn~=1.0.2',
+          'numpy~=1.23.5',
+          'nltk~=3.7',
           'pandas~=1.3.5',
           'apscheduler',
           'adversarial-robustness-toolbox',
-      ])
+          'tensorflow~=2.9.1',
+          'torch~=1.11.0',
+          'torchvision~=0.12.0',
+          'torchmetrics~=0.9.3'
+      ]
+)

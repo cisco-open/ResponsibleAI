@@ -56,4 +56,4 @@ class MatrixElement(SingleDisplayElement):
         return [dcc.Graph(figure=go.Figure(data=[go.Table(header=dict(values=header), cells=dict(values=data))]))]
 
     def to_display(self):
-        return self.display_tag_num(len(self._data["tag"])-1)
+        return self.display_tag_num(len(self._data["tag"]) - 1)

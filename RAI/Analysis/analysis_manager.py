@@ -47,9 +47,9 @@ class AnalysisManager:
         :param AISystem: input the ai_system obj
         :param dataset: input the dataset
         :param tag: By default None else given tag Name
-        :param analysis_names: analysis_names data set 
+        :param analysis_names: analysis_names data set
         :param connection: By default None
-    
+
         :Returns: Dict.
 
         Returns the analysis data result analysis
@@ -65,9 +65,7 @@ class AnalysisManager:
                 analysis_result.initialize()
                 result[analysis_name] = analysis_result
         return result
-        
-        
-   
+
     def run_all(self, ai_system: AISystem, dataset: str, tag: str):
         """
         :param AISystem: input the ai_system obj
@@ -80,4 +78,3 @@ class AnalysisManager:
 
         """
         return self.run_analysis(ai_system, dataset, self.get_available_analysis(ai_system, dataset), tag)
-    

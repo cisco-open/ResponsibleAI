@@ -14,5 +14,4 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-from .moments import StatMomentGroup
-
+from .moments import StatMomentGroup  # noqa : F401

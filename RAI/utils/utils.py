@@ -21,6 +21,8 @@ import numpy as np
 import pandas as pd
 import torch
 import torch.utils.data
+
+from threading import Timer
 from sklearn.preprocessing import StandardScaler
 from RAI.dataset.dataset import Feature, MetaDatabase
 import torchvision.transforms as transforms
@@ -92,11 +94,11 @@ def df_to_meta_database(df, categorical_values=None, protected_attribute_names=N
     for col in df.columns:
         categorical = categorical_values is not None and col in categorical_values
         features.append(Feature(col, "float32", col, categorical=categorical, values=categorical_values.get(col, None)))
-    if protected_attribute_names != None:
+    if protected_attribute_names is not None:
         fairness_config["protected_attributes"] = protected_attribute_names
-    if privileged_info != None:
+    if privileged_info is not None:
         fairness_config["priv_group"] = privileged_info
-    if positive_label != None:
+    if positive_label is not None:
         fairness_config["positive_label"] = positive_label
     meta = MetaDatabase(features)
     return meta, fairness_config
@@ -172,8 +174,10 @@ def df_to_RAI(df, target_column=None, clear_nans=True, extra_symbols="?", normal
             y = y.tolist()
         elif categorical:
             fact = y.factorize(sort=True)
-            f = Feature(y.name, "numeric", y.name, categorical=True,
-                    values={i: v for i, v in enumerate(fact[1])})
+            f = Feature(
+                y.name, "numeric", y.name, categorical=True,
+                values={i: v for i, v in enumerate(fact[1])}
+            )
             y, _ = y.factorize(sort=True)
         else:
             f = Feature(y.name, "numeric", y.name)
@@ -190,18 +194,24 @@ def df_to_RAI(df, target_column=None, clear_nans=True, extra_symbols="?", normal
         elif str(df.dtypes[c]) in ["object", "category"]:
             fact = df[c].factorize(sort=True)
             df[c] = fact[0]
-            f = Feature(c, "numeric", c, categorical=True,
-                        values={i: v for i, v in enumerate(fact[1])})
+            f = Feature(
+                c, "numeric", c, categorical=True,
+                values={i: v for i, v in enumerate(fact[1])}
+            )
         elif "float" in str(df.dtypes[c]):
             f = Feature(c, "numeric", c)
         features.append(f)
     return MetaDatabase(features), df.to_numpy(), y, output_feature
 
 
-# Converts a pandas dataframe with numeric data and text, as well as image dictionaries to a Rai Metadatabase and X and y data.
+# Converts a pandas dataframe with numeric data and text,
+# as well as image dictionaries to a Rai Metadatabase and X and y data.
 # TODO: This needs to be formalized for multi modal data
-def modals_to_RAI(df, df_target_column=None, image_X: dict = {}, image_y: dict = {}, clear_nans=True, extra_symbols="?", normalize=None,
-              max_categorical_threshold=None, text_columns=[]):
+def modals_to_RAI(
+        df, df_target_column=None, image_X: dict = {},
+        image_y: dict = {}, clear_nans=True, extra_symbols="?", normalize=None,
+        max_categorical_threshold=None, text_columns=[]
+):
     if max_categorical_threshold:
         for col in df:
             if len(df[col].unique()) > max_categorical_threshold:
@@ -222,8 +232,10 @@ def modals_to_RAI(df, df_target_column=None, image_X: dict = {}, image_y: dict =
             y = y.tolist()
         elif categorical:
             fact = y.factorize(sort=True)
-            f = Feature(y.name, "numeric", y.name, categorical=True,
-                    values={i: v for i, v in enumerate(fact[1])})
+            f = Feature(
+                y.name, "numeric", y.name, categorical=True,
+                values={i: v for i, v in enumerate(fact[1])}
+            )
             y, _ = y.factorize(sort=True)
         else:
             f = Feature(y.name, "numeric", y.name)
@@ -329,3 +341,29 @@ def convert_float32_to_float64(values):
             values[key] = convert_float32_to_float64(values[key])
         return values
     return values
+
+
+class MonitoringTimer(object):
+    def __init__(self, interval, function, *args, **kwargs):
+        self._timer = None
+        self.interval = interval
+        self.function = function
+        self.args = args
+        self.kwargs = kwargs
+        self.is_running = False
+        self.start()
+
+    def _run(self):
+        self.is_running = False
+        self.start()
+        self.function(*self.args, **self.kwargs)
+
+    def start(self):
+        if not self.is_running:
+            self._timer = Timer(self.interval, self._run)
+            self._timer.start()
+            self.is_running = True
+
+    def stop(self):
+        self._timer.cancel()
+        self.is_running = False

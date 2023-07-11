@@ -27,7 +27,7 @@ class ImageGeneration(MetricGroup, class_location=os.path.abspath(__file__)):
     def __init__(self, ai_system) -> None:
         super().__init__(ai_system)
         self.max_samples = 500
-        
+
     def update(self, data):
         pass
 

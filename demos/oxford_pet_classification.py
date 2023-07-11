@@ -28,17 +28,21 @@ import torchvision
 import torchvision.transforms as transforms
 import torch.nn as nn
 import torch.optim as optim
+
+from dotenv import load_dotenv
 from torchvision.models import regnet_y_800mf
 
 # importing RAI modules
 from RAI.AISystem import AISystem, Model
-from RAI.redis import RaiRedis
+from RAI.db.service import RaiDB
 from RAI.dataset import MetaDatabase, Feature, Dataset, IteratorData
 
 # setup path
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
+load_dotenv(f'{currentdir}/../.env')
+
 
 def main():
     # Configuration
@@ -155,9 +159,8 @@ def main():
 
     # View the dashboard
     net.eval()
-    r = RaiRedis(ai)
-    r.connect()
-    r.reset_redis()
+    r = RaiDB(ai)
+    r.reset_data()
     r.add_measurement()
     r.export_metadata()
     r.export_visualizations("test", "test")

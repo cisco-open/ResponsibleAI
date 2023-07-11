@@ -35,10 +35,10 @@ class BasicExplainablityGroup(MetricGroup, class_location=os.path.abspath(__file
                 args = self.ai_system.metric_manager.user_config["stats"]["args"]
 
             scalar_data = data_dict["data"].scalar
-            mean_v = np.mean(scalar_data, **args.get("mean", {}), axis=0, keepdims=True)
-            std_v = np.std(scalar_data, **args.get("covariance", {}), axis=0, keepdims=True)
-            max_v = np.max(scalar_data, axis=0, keepdims=True)
-            min_v = np.min(scalar_data, axis=0, keepdims=True)
+            mean_v = np.mean(scalar_data, **args.get("mean", {}), axis=0, keepdims=True)  # noqa: F841
+            std_v = np.std(scalar_data, **args.get("covariance", {}), axis=0, keepdims=True)  # noqa: F841
+            max_v = np.max(scalar_data, axis=0, keepdims=True)  # noqa: F841
+            min_v = np.min(scalar_data, axis=0, keepdims=True)  # noqa: F841
 
             self.metrics["explainable_model"].value = True
 

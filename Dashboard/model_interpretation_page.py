@@ -18,8 +18,7 @@
 import logging
 from dash import dcc
 import dash
-from server import app, redisUtil
-import metric_view_functions as mvf
+from server import app, dbUtils
 from dash import Input, Output, html, State
 from dash.exceptions import PreventUpdate
 INTERPRETATION_ANALYSIS = ["GradCamAnalysis"]
@@ -33,8 +32,8 @@ def get_available_options(options):
 
 
 def get_model_interpretation_page():
-    redisUtil.request_available_analysis()
-    options = redisUtil.get_available_analysis()
+    dbUtils.request_available_analysis()
+    options = dbUtils.get_available_analysis()
     options = get_available_options(options)
     choice = options[0] if (options is not None and len(options) > 0) else None
     result = html.Div([
@@ -71,31 +70,32 @@ def get_analysis_updates(timer, btn, analysis_choice, analysis_choices, analysis
     should_update = False
     force_new_display = False
 
-    if analysis_choices != get_available_options(redisUtil.get_available_analysis()):
-        analysis_choices = get_available_options(redisUtil.get_available_analysis())
+    if analysis_choices != get_available_options(dbUtils.get_available_analysis()):
+        analysis_choices = get_available_options(dbUtils.get_available_analysis())
         should_update = True
     if analysis_choice is None and (analysis_choices is not None and len(analysis_choices) > 0):
         analysis_choice = analysis_choices[0]
         force_new_display = True
 
     if is_time_update and analysis_choice is not None:
-        if redisUtil.has_analysis_update(analysis_choice, reset=True):
+        if dbUtils.has_analysis_update(analysis_choice, reset=True):
             print("Analysis update: ")
-            analysis_display = [redisUtil.get_analysis(analysis_choice),
+            analysis_display = [dbUtils.get_analysis(analysis_choice),
                                 html.P(analysis_choice, style={"display": "none"})]
             return analysis_choices, analysis_display
     if is_button:
         if analysis_choice is None or analysis_choice == "":
             return analysis_choices, [html.P("Please select an analysis")]
         else:
-            redisUtil.request_start_analysis(analysis_choice)
-            return redisUtil.get_available_analysis(), [html.P("Requesting Analysis..")]
+            dbUtils.request_start_analysis(analysis_choice)
+            return dbUtils.get_available_analysis(), [html.P("Requesting Analysis..")]
 
     # Extra condition was added because dash would not always update when changing to/from a large analysis
-    if force_new_display or is_value or (analysis_choice and analysis_display==[]) \
-            or ((len(analysis_display) > 1 and analysis_choice != analysis_display[1].get("props", {}).get("children", {}))):
+    if force_new_display or is_value or (analysis_choice and analysis_display == []) \
+            or ((len(analysis_display) > 1
+                 and analysis_choice != analysis_display[1].get("props", {}).get("children", {}))):  # noqa: W503
         print("Value triggered")
-        analysis_display = [redisUtil.get_analysis(analysis_choice),
+        analysis_display = [dbUtils.get_analysis(analysis_choice),
                             html.P(analysis_choice, style={"display": "none"})]
         should_update = True
 
@@ -103,4 +103,3 @@ def get_analysis_updates(timer, btn, analysis_choice, analysis_choices, analysis
         raise PreventUpdate
 
     return analysis_choices, analysis_display
-

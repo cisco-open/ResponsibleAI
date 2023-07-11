@@ -30,14 +30,14 @@ xTrain, xTest, yTrain, yTest = train_test_split(x, y)
 dataset = Dataset({"train": NumpyData(xTrain, yTrain), "test": NumpyData(xTest, yTest)})
 
 features = [
-    Feature("MedInc", 'float', "Median Income"),
-    Feature("HouseAge", 'float', "Median House age in Block Group"),
-    Feature("AveRooms", 'float', "Average number of rooms per household"),
-    Feature("AveBedrms", 'float', "Average number of bedrooms per household"),
-    Feature("Population", 'float', "Block group population"),
-    Feature("AveOccup", 'float', "Average Number of Household members"),
-    Feature("Latitude", 'float', "Block group Latitude"),
-    Feature("Longitude", 'float', "Block group Longitude")
+    Feature("MedInc", 'numeric', "Median Income"),
+    Feature("HouseAge", 'numeric', "Median House age in Block Group"),
+    Feature("AveRooms", 'numeric', "Average number of rooms per household"),
+    Feature("AveBedrms", 'numeric', "Average number of bedrooms per household"),
+    Feature("Population", 'numeric', "Block group population"),
+    Feature("AveOccup", 'numeric', "Average Number of Household members"),
+    Feature("Latitude", 'numeric', "Block group Latitude"),
+    Feature("Longitude", 'numeric', "Block group Longitude")
 ]
 meta = MetaDatabase(features)
 

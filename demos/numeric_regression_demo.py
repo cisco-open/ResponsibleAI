@@ -23,6 +23,7 @@ import os
 import sys
 import inspect
 import numpy as np
+from dotenv import load_dotenv
 from sklearn.datasets import fetch_california_housing
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
@@ -31,13 +32,16 @@ from sklearn.ensemble import RandomForestRegressor
 # importing RAI modules
 from RAI.dataset import NumpyData, Dataset
 from RAI.AISystem import AISystem, Model
-from RAI.redis import RaiRedis
+from RAI.db.service import RaiDB
 from RAI.utils import df_to_RAI
 
 # setup path
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
+
+load_dotenv(f'{currentdir}/../.env')
+
 use_dashboard = True
 
 np.random.seed(21)
@@ -69,9 +73,8 @@ predictions = reg.predict(xTest)
 ai.compute({"test": {"predict": predictions}}, tag="regression")
 
 if use_dashboard:
-    r = RaiRedis(ai)
-    r.connect()
-    r.reset_redis()
+    r = RaiDB(ai)
+    r.reset_data()
     r.add_measurement()
     r.export_metadata()
     r.export_visualizations("test", "test")

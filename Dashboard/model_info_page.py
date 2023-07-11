@@ -18,14 +18,14 @@
 import logging
 import dash_bootstrap_components as dbc
 from dash import html
-from server import redisUtil
+from server import dbUtils
 from utils import process_cell
 logger = logging.getLogger(__name__)
 
 
 def generate_table():
     rows = []
-    for k, v in redisUtil.get_project_info().items():
+    for k, v in dbUtils.get_project_info().items():
         rows.append(html.Tr(
             [html.Th(k), html.Td(process_cell(v))]
         ))

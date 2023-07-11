@@ -24,7 +24,7 @@ import copy
 class TreeModels(MetricGroup, class_location=os.path.abspath(__file__)):
     def __init__(self, ai_system) -> None:
         super().__init__(ai_system)
-        
+
     def update(self, data):
         pass
 
@@ -52,4 +52,9 @@ class TreeModels(MetricGroup, class_location=os.path.abspath(__file__)):
 
     def _get_time(self):
         now = datetime.datetime.now()
-        return "{:02d}".format(now.year) + "-" + "{:02d}".format(now.month) + "-" + "{:02d}".format(now.day) + " " + "{:02d}".format(now.hour) + ":" + "{:02d}".format(now.minute) + ":" + "{:02d}".format(now.second)
+        return "{:02d}".format(now.year) \
+            + "-" + "{:02d}".format(now.month) \
+            + "-" + "{:02d}".format(now.day) \
+            + " " + "{:02d}".format(now.hour) \
+            + ":" + "{:02d}".format(now.minute) \
+            + ":" + "{:02d}".format(now.second)

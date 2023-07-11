@@ -24,13 +24,14 @@ import os
 import sys
 import inspect
 import pandas as pd
+from dotenv import load_dotenv
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 
 # importing RAI modules
 from RAI.AISystem import AISystem, Model
 from RAI.dataset import NumpyData, Dataset
-from RAI.redis import RaiRedis
+from RAI.db.service import RaiDB
 from RAI.utils import df_to_RAI
 
 # setup path
@@ -40,6 +41,8 @@ sys.path.insert(0, parentdir)
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Configuration
+load_dotenv(f'{currentdir}/../.env')
+
 use_dashboard = True
 data_path = "../data/adult/"
 
@@ -70,9 +73,9 @@ ai = AISystem("Adult_rfc_selection", task='binary_classification', meta_database
 ai.initialize(user_config=configuration)
 
 if use_dashboard:
-    r = RaiRedis(ai)
-    r.connect()
-    r.reset_redis()
+    r = RaiDB(ai)
+    r.reset_data()
+
 
 
 #  function to evaluate each model  

@@ -17,6 +17,7 @@
 
 registry = {}
 
+
 def register_class(class_name, class_object):
     if class_name != "":
         if class_name in registry:

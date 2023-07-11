@@ -1,0 +1,5 @@
+[flake8]
+ignore = C901
+max-line-length = 160
+exclude = tests/* venv/ docs/ demos/
+max-complexity = 10

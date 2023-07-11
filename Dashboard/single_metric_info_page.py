@@ -18,12 +18,12 @@
 import logging
 import dash_bootstrap_components as dbc
 from dash import html
-from server import redisUtil
+from server import dbUtils
 logger = logging.getLogger(__name__)
 
 
 def generate_table(group_name, metric_name):
-    gr = redisUtil.get_metric_info()[group_name]
+    gr = dbUtils.get_metric_info()[group_name]
     rows = []
     rows.append(html.Tr([html.Th("Group Name"), html.Th(group_name)]))
     rows.append(html.Tr([html.Th("Group Tag"), html.Th(gr["meta"]["tags"])]))

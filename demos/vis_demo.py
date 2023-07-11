@@ -19,17 +19,21 @@ import os
 import sys
 import inspect
 
+from dotenv import load_dotenv
+
 from tensorflow.keras.datasets import cifar10
 
 # importing RAI modules
 from RAI.AISystem import AISystem
 from RAI.dataset import NumpyData, Dataset
-from RAI.redis import RaiRedis
+from RAI.db.service import RaiDB
 
 # setup path
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
+
+load_dotenv(f'{currentdir}/../.env')
 
 # Configuration
 use_dashboard = True 
@@ -45,6 +49,8 @@ ai = AISystem(name="cifar-10", dataset=dataset)
 ai.initialize(user_config=configuration)
 
 if use_dashboard:
-    r = RaiRedis(ai)
-    r.connect()
-    r.reset_redis()
+    r = RaiDB(ai)
+    r.reset_data()
+    r.add_measurement()
+    r.export_metadata()
+    r.export_visualizations("test", "test")

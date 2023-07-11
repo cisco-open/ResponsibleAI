@@ -15,7 +15,5 @@
 # SPDX-License-Identifier: Apache-2.0
 
 
-from .basic_robustness import BasicRobustMetricGroup
-# from .noise_robustness import NoiseRobustnessMetricGroup
-from .adversarial_robustness import AdversarialRobustnessMetricGroup
-# from .art_trees import ArtAdversarialRobustnessTreeGroup
+from .basic_robustness import BasicRobustMetricGroup  # noqa : F401
+from .adversarial_robustness import AdversarialRobustnessMetricGroup  # noqa : F401

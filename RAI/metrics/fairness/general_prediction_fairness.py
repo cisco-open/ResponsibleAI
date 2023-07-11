@@ -16,7 +16,6 @@
 
 
 from RAI.metrics.metric_group import MetricGroup
-import pandas as pd
 from RAI.metrics.ai360_helper import get_classification_dataset
 import os
 
@@ -24,7 +23,7 @@ import os
 class GeneralPredictionFairnessGroup(MetricGroup, class_location=os.path.abspath(__file__)):
     def __init__(self, ai_system) -> None:
         super().__init__(ai_system)
-        
+
     def update(self, data):
         pass
 

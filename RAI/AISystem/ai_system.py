@@ -20,19 +20,21 @@ from RAI.dataset.dataset import Data, NumpyData, IteratorData, Dataset, MetaData
 from RAI.metrics import MetricManager
 from RAI.all_types import all_output_requirements, all_task_types, all_metric_types
 
+
 class AISystem:
     """
     AI Systems are the main class users interact with in RAI.
     When constructed, AISystems are passed a name, a task type, a MetaDatabase, a Dataset and a Model.
 
-    :param name: Create a new string object from the given object. If encoding or errors is specified, then the object must expose a data buffer that will be decoded using the given encoding and error handler. Otherwise, returns the result of object.__str__() (if defined) or repr(object). encoding defaults to sys.getdefaultencoding(). errors defaults to 'strict'.
+    :param name: Create a new string object from the given object.
+     If encoding or errors is specified, then the object must expose a data buffer that will be decoded using the given encoding and error handler. Otherwise, returns the result of object.__str__() (if defined) or repr(object). encoding defaults to sys.getdefaultencoding(). errors defaults to 'strict'.
     :param task: Create a new string object from the given object. If encoding or errors is specified, then the object must expose a data buffer that will be decoded using the given encoding and error handler. Otherwise, returns the result of object.__str__() (if defined) or repr(object). encoding defaults to sys.getdefaultencoding(). errors defaults to 'strict'.
     :param meta_database: The RAI MetaDatabase class holds Meta information about the Dataset. It includes information about the features, and contains maps and masks to quick get access to the different feature data of different information.
-    :param dataset: The RAI Dataset class holds a dictionary of RAI Data classes, for example {'train': trainData, 'test': testData}, where trainData and testData are RAI Data objects
-    :param model: Model is RAIs abstraction for the ML Model performing inferences. When constructed, models are optionally passed the name, the models functions for inferences, its name, the model, its optimizer, its loss function, its class and a description. Attributes of the model are used to determine which metrics are relevant. 
-    :param enable_certificates: Returns True when the argument x is true, False otherwise. The builtins True and False are the only two instances of the class bool. The class bool is a subclass of the class int, and cannot be subclassed. 
+    :param dataset: The RAI Dataset class holds a dictionary of RAI Data classes, for example {'train': trainData, 'test': testData}, where trainData and testData are RAI Data objects.
+    :param model: Model is RAIs abstraction for the ML Model performing inferences. When constructed, models are optionally passed the name, the models functions for inferences, its name, the model, its optimizer, its loss function, its class and a description. Attributes of the model are used to determine which metrics are relevant.
+    :param enable_certificates: Returns True when the argument x is true, False otherwise. The builtins True and False are the only two instances of the class bool. The class bool is a subclass of the class int, and cannot be subclassed.
 
-    """
+    """  # noqa: E501
 
     def __init__(self,
                  name: str,
@@ -59,11 +61,10 @@ class AISystem:
 
     def initialize(self, user_config: dict = {}, custom_certificate_location: str = None, **kw_args):
         """
-    
-        :param user_config(dict): Takes user config as a dict
-        :param custom_certificate_location(str): certificate path by default it is None
-    
-        :return: None 
+        :param user_config: Takes user config as a dict
+        :param custom_certificate_location: certificate path by default it is None
+
+        :return: None
         """
         self.user_config = user_config
         masks = {"scalar": self.meta_database.scalar_mask, "categorical": self.meta_database.categorical_mask,
@@ -83,19 +84,18 @@ class AISystem:
 
         :param self: None
         :return: last metric values(dict)
-        
 
         """
         return self._last_metric_values
 
     def display_metric_values(self, display_detailed=False):
         """
-        :param display_detailed(boolean): if True we need to display metric explanation if False we don't have to display 
-    
+        :param display_detailed(boolean): if True we need to display metric explanation if False we don't have to display
+
         :return: None
 
         Displays the metric values
-        """
+        """  # noqa: E501
         vals = self._last_metric_values
         info = self.get_metric_info()
         for dataset in vals:
@@ -103,17 +103,17 @@ class AISystem:
             for group in vals[dataset]:
                 print("\n----- " + info[group]['meta']["display_name"] + " Metrics -----")
                 for metric in vals[dataset][group]:
-                    if(info[group][metric]["type"] in all_metric_types):
+                    if info[group][metric]["type"] in all_metric_types:
                         print(info[group][metric]["display_name"] + ": ", vals[dataset][group][metric])
                         if display_detailed:
-                            print(info[group][metric]["display_name"] + " is " + info[group][metric]["explanation"], "\n")
+                            print(f'{info[group][metric]["display_name"]} is {info[group][metric]["explanation"]}\n')
 
     def get_certificate_values(self) -> dict:
         """
         Returns the last used certificate information
 
         :param self:  None
-    
+
         :return: Certificate infomation(dict)
          Returns the last used certificate information
         """
@@ -124,7 +124,7 @@ class AISystem:
         get_data accepts data_type and returns the data object information
 
         :param data_type(str):  Get the data type information
-    
+
         :return: Dataset datatype information(str)
 
         """
@@ -133,12 +133,11 @@ class AISystem:
     def get_project_info(self) -> dict:
         """
         Fetch the project information like name, configuration, metric user config and Returns the project details
-         
+
         :param self:  None
-    
+
         :return: Project details(dict)
 
-        
         """
         result = {"id": self.name,
                   "task_type": self.task, "configuration": self.metric_manager.user_config, "features": [],
@@ -155,13 +154,14 @@ class AISystem:
         process the data and returns the summary consisting of prediction, label details
 
         :param self:  None
-    
+
         :return: Data Summary(Dict)
 
         """
-        pred_target = self.data_summarizer.target 
+
+        pred_target = self.data_summarizer.target
         label_name = self.data_summarizer.label_name_dict
-        labels = self.data_summarizer.labels 
+        labels = self.data_summarizer.labels
         label_dist_dict = self.data_summarizer.getLabelDistribution()
         if label_name is None:
             label_name = ""
@@ -173,9 +173,9 @@ class AISystem:
             "label_dist": label_dist_dict,
         }
         return summary
-    
+
     def _single_compute(self, predictions: dict, data_type: str = "test", tag=None) -> None:
-    # Single compute accepts predictions and the name of a dataset, and then calculates metrics for that dataset.
+        # Single compute accepts predictions and the name of a dataset, and then calculates metrics for that dataset.
         self.auto_id += 1
         if tag is None:
             tag = f"{self.auto_id}"
@@ -204,7 +204,7 @@ class AISystem:
         """
         Compute will tell RAI to compute metric values across each dataset which predictions were made on
 
-        :param predictions(dict): Prediction value from the classifier 
+        :param predictions(dict): Prediction value from the classifier
         :param tag: by default None
         :return: None
         """
@@ -213,8 +213,8 @@ class AISystem:
             for key in predictions.keys():
                 self._single_compute(predictions, None, tag=tag)
                 return
-        elif not (isinstance(predictions, dict) and all(isinstance(v, dict) for v in predictions.values()) \
-                and all(isinstance(k, str) for k in predictions.keys())):
+        elif not (isinstance(predictions, dict) and all(isinstance(v, dict) for v in predictions.values())
+                  and all(isinstance(k, str) for k in predictions.keys())):  # noqa: W503
             raise Exception("Prediction dictionary should be in the form [dataset][output_type] -> nd.array")
         for key in predictions.keys():
             if key in self.dataset.data_dict.keys():
@@ -226,9 +226,9 @@ class AISystem:
         Run Compute automatically generates outputs from the model, and compute metrics based on those outputs
 
         :param tag: tag by default None or we can pass model as a string
-    
+
         :return: Data Summary(Dict)
-        
+
         """
         self._last_metric_values = {}
         preds = {}
@@ -257,13 +257,10 @@ class AISystem:
         :param self: None
 
         :return: Certificate info from certificate_manager
-    
-    
-      
+
         """
         return self.certificate_manager.get_metadata()
 
     # we have not implemented the incremental update as of now and each call to compute process all the data
     def update(self, data):
-        raise NotImplemented()
-
+        raise NotImplementedError
