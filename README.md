@@ -17,9 +17,11 @@ Documentation is available online: [https://responsibleai.readthedocs.io/en/late
 # To Install
 1) The project uses sqlite as storage and requires no additional installation for this.
 
-2) Please run pip install -r requirements.txt.
+2) Use <code> pip install rai </code>
 
-3) Please first install the required packages found in requirements.txt. RAI can then be installed using "pip install --editable .".
+3) If you need to use the dashboard as well you must <code> clone</code> the project locally and install the additional requirements
+
+4) Use <code>pip install -r requirements.txt</code>
 
 # Demos:
     We have added a few demo projects to showcase some of the capabilities of RAI.

@@ -122,7 +122,7 @@
  - Analyses are easy to create allowing users to quickly and easily make their own custom Analyses for their specific needs using any attribute of the AISystem.  
 
 - **Interaction** 
- - Analyses are managed by the AnalysisManger and are given access to the AISystem and Dataset through the RAIRedis class. 
+ - Analyses are managed by the AnalysisManger and are given access to the AISystem and Dataset through the RaiDB class.
  - Similar to MetricManagers, AnalysisManagers check compatibility between Analyses and AISystems and handle the computation of Analyses.
  - Running specific analyses is done through the run_analysis function. 
 
