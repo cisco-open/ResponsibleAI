@@ -1,7 +1,7 @@
  
 
 
-<img src="docs/images/rai_logo_blue3.png" alt="flame logo" width="200"/>
+<img src="https://github.com/cisco-open/ResponsibleAI/assets/133206530/63da11f5-f340-4694-9cde-998c28cf4624" alt="flame logo" width="200"/>
 
 RAI is a python library that is designed to help AI developers in various aspects of responsible AI development. It consists of a core API and a corresponding web-based dashboard application. RAI can easily be integrated into AI development projects and measures various metrics for an AI project during each phase of AI development, from data quality assessment to model selection based on performance, fairness and robustness criteria. In addition, it provides interactive tools and visualizations to understand and explain AI models and provides a generic framework to perform various types of analysis including adversarial robustness.  
 
