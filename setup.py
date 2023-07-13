@@ -45,5 +45,4 @@ setup(name='rai',
           'torch~=1.11.0',
           'torchvision~=0.12.0',
           'torchmetrics~=0.9.3'
-      ]
-)
+      ])
