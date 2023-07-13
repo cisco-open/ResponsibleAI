@@ -51,7 +51,7 @@ The goal is to provide a generic framework to perform various types of analysis,
 **Interaction of RAI Dashboard**
 ================================
 
-**How it links to RAI project (via redis..)**
+**How it links to RAI project (via sqlite..)**
 
 
 .. figure:: ../images/Dashboard_page.png
