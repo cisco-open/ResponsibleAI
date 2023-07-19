@@ -27,9 +27,9 @@ unique_id = [1]
 full = {}
 
 
-def iconify(txt, icon, margin="10px", style=None):
-    style = {"margin-right": 15}
-    return html.Div([html.I(className=icon, style=style), txt])
+def iconify(txt, icon, margin_right="10px", margin_left="0px"):
+    style = {"margin-right": margin_right or 15, "margin-left": margin_left}
+    return html.Div([html.I(className=icon, style=style), html.Span(txt, className='custom-icon')])
 
 
 def dict_to_table(d, list_vertical=True):

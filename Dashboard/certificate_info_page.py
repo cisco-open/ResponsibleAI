@@ -50,8 +50,9 @@ def get_accordion():
         items.append(
             dbc.AccordionItem(
                 children=detail,
-                title=c['display_name'],
-                item_id=c['display_name']))
+                title=c['display_name'].title(),
+                item_id=c['display_name'],
+            ))
     if len(certs) > 0:
         acc = dbc.Accordion(items, active_item=items[0].item_id)
     else:
