@@ -37,7 +37,7 @@ def get_model_interpretation_page():
     options = get_available_options(options)
     choice = options[0] if (options is not None and len(options) > 0) else None
     result = html.Div([
-        html.H4("Run analysis"),
+        html.H4("Select The Analysis"),
         dcc.Interval(
             id=prefix + 'interval-component',
             interval=1 * 3000,  # in milliseconds

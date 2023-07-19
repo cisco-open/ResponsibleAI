@@ -59,8 +59,8 @@ def generate_cert_table(id, show_explanation=True):
                                      style={"width": "30px", "height": "30px", "margin-left": "25px", "color": "red"})
                 ])
             rows.append(html.Tr(
-                [html.Td(get_cert_name(k)), html.Td(v['explanation']), html.Td(status)] if show_explanation else
-                [html.Td(get_cert_name(k)), html.Td(status)]
+                [html.Td(get_cert_name(k).title()), html.Td(v['explanation']), html.Td(status)] if show_explanation else
+                [html.Td(get_cert_name(k).title()), html.Td(status)]
             ))
     return dbc.Table(
         children=[

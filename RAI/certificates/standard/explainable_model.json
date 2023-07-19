@@ -1,7 +1,7 @@
 {
     "meta":{
         "display_name": "explainable model",
-        "description":"certifies that weather or not all the model is explainable",
+        "description":"certifies that whether or not all the model is explainable",
         "tags": ["explainability"],
         "level":["1"]
     },

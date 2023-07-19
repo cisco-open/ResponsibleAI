@@ -42,5 +42,6 @@ def generate_table():
 
 def get_model_info_page():
     return html.Div([
+        html.H4("Project Info"),
         generate_table()
     ])

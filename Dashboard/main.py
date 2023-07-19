@@ -90,7 +90,7 @@ def get_sidebar():
         [
             dbc.Nav(
                 [
-                    html.Img(src="./assets/img/rai_logo_blue3.png", style={
+                    html.Img(src="assets/img/rai_logo_blue3_v2.png", style={
                         "margin-left": "40px", "width": "100px", "height": "60px"
                     }),
                     html.Div([
@@ -99,7 +99,7 @@ def get_sidebar():
                         html.Div(id="dummy_div", style={"display": "no"}),
                         dcc.Dropdown(
                             id="project_selector",
-                            options=dbUtils.get_projects_list(),
+                            options=dbUtils.get_sorted_projects_list(),
                             value=dbUtils._current_project_name,
                             persistence=True,
                             persistence_type="session"), ]),
@@ -113,46 +113,46 @@ def get_sidebar():
                         persistence=True),
                     html.Hr(className="nav_div"),
                     dbc.NavLink(
-                        iconify("Home", "fa-solid fa-home", "25px"),
+                        iconify("Home", "fa-solid fa-home custom-icon", "13px"),
                         href="/", active="exact"),
                     dbc.NavLink(
-                        iconify("Settings", "fa-solid fa-gear", "25px"),
+                        iconify("Settings", "fa-solid fa-gear custom-icon", "15px"),
                         href="/settings", active="exact"),
                     dbc.NavLink(
-                        iconify("Project Info", "fa-solid fa-circle-info", "55px"),
+                        iconify("Project Info", "fa-solid fa-circle-info custom-icon", "15px"),
                         href="/modelInfo", active="exact"),
                     dbc.NavLink(
-                        iconify("Metrics Info", "fa-solid fa-file-lines", "50px"),
+                        iconify("Metrics Info", "fa-solid fa-file-lines custom-icon", "17px", "2px"),
                         href="/metricsInfo", active="exact"),
                     dbc.NavLink(
-                        iconify("Certificates Info", "fa-solid fa-check-double", "20px"),
+                        iconify("Certificates Info", "fa-solid fa-check-double custom-icon", "16px", "1px"),
                         href="/certificateInfo", active="exact"),
                     html.Hr(className="nav_div"),
                     dbc.NavLink(
-                        iconify("Metrics Details", "fas fa-table fas-10x", "18px"),
+                        iconify("Metrics Details", "fas fa-table fas-10x custom-icon", "15px"),
                         href="/metrics_details", active="exact"),
                     dbc.NavLink(
-                        iconify("Metrics Graphs", "fa-solid fa-chart-gantt", "18px"),
+                        iconify("Metrics Graphs", "fa-solid fa-chart-gantt custom-icon", "15px"),
                         href="/metrics_graphs", active="exact"),
                     dbc.NavLink(
-                        iconify("Individual Metric View", "fa-solid fa-chart-gantt", "18px"),
+                        iconify("Individual Metric View", "fa-solid fa-chart-gantt custom-icon", "15px"),
                         href="/individual_metric_view", active="exact"),
                     dbc.NavLink(
-                        iconify("Certificates", "fa-solid fa-list-check", "45px"),
+                        iconify("Certificates", "fa-solid fa-list-check custom-icon", "15px"),
                         href="/certificates", active="exact"),
                     html.Hr(className="nav_div"),
 
                     dbc.NavLink(
-                        iconify("Model View", "fa-solid fa-eye", "50px"),
+                        iconify("Model View", "fa-solid fa-eye custom-icon", "13px"),
                         href="/modelView", active="exact"),
                     dbc.NavLink(
-                        iconify("Data Summary", "fa-solid fa-newspaper", "20px"),
+                        iconify("Data Summary", "fa-solid fa-newspaper custom-icon", "15px"),
                         href="/dataSummary", active="exact"),
                     dbc.NavLink(
-                        iconify("Model Interpretation", "fa-solid fa-microscope", "20px"),
+                        iconify("Model Interpretation", "fa-solid fa-microscope custom-icon", "15px"),
                         href="/modelInterpretation", active="exact"),
                     dbc.NavLink(
-                        iconify("Analysis", "fa-solid fa-flask-vial", "20px"),
+                        iconify("Analysis", "fa-solid fa-flask-vial custom-icon", "12px"),
                         href="/analysis", active="exact"),
                 ],
                 vertical=True,
@@ -276,7 +276,7 @@ def change_page(pathname, search, reminder):
 if __name__ == "__main__":
     if len(sys.argv) == 2:
         model_name = sys.argv[1]
-    project_list = dbUtils.get_projects_list()
+    project_list = dbUtils.get_sorted_projects_list()
     print(project_list)
     dbUtils.set_current_project(project_list[0]) if len(project_list) > 0 else None
     if len(dbUtils.get_dataset_list()) > 0:

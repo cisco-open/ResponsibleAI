@@ -256,6 +256,9 @@ class DBUtils(object):
     def get_projects_list(self):
         return self._projects
 
+    def get_sorted_projects_list(self):
+        return sorted(self._projects) if self._projects else []
+
     def get_dataset_list(self):
         return self._current_project.get("dataset_values", [])
 
