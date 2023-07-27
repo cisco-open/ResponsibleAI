@@ -66,7 +66,7 @@ All packages are successfully installed.
 
 .. code-block:: bash
 
-  pip install rai
+  pip install py-rai
 
 
 **Description**: when you are developing it on your system any changes to the original package would reflect directly in your environment.
