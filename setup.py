@@ -19,8 +19,8 @@
 
 from setuptools import find_packages, setup
 
-setup(name='rai',
-      version='0.0.1',
+setup(name='py-rai',
+      version='1.0.0',
       author='Ali Payani',
       author_email='apayani@cisco.com',
       include_package_data=True,

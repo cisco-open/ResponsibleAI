@@ -26,7 +26,7 @@ To Install
 1) The project uses sqlite as storage and requires no additional
    installation for this.
 
-    ``pip install rai``
+    ``pip install py-rai``
 
 2) If you need to use the dashboard as well you must clone the project
    locally and install the additional requirements
