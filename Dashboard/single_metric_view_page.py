@@ -35,7 +35,7 @@ def populate_display_obj(group, metric):
     dataset = dbUtils.get_current_dataset()
     metric_values = dbUtils.get_metric_values()
     metric_type = dbUtils.get_metric_info()
-    type = metric_type[group][metric]["type"]
+    type = metric_type[group][metric].get("type", "numeric")
     display_obj = get_display(metric, type, dbUtils)
     for i, data in enumerate(metric_values):
         data = data[dataset]
@@ -113,8 +113,8 @@ def get_metric_info_display(group, metric, metric_info):
     return [html.Div([
         html.H3(metric_info[group][metric]['display_name'], style={"text-align": "center"}),
         html.Br(),
-        html.P(metric_info[group][metric]['explanation'], style={'whiteSpace': 'pre-wrap', "text-align": "center"}),
-        html.P("Citation: \n" + metric_info[group][metric]['citation'], style={'whiteSpace': 'pre-wrap'})],
+        html.P(metric_info[group][metric].get('explanation', ''), style={'whiteSpace': 'pre-wrap', "text-align": "center"}),
+        html.P("Citation: \n" + metric_info[group][metric].get('citation', ''), style={'whiteSpace': 'pre-wrap'})],
         style={"background-color": "rgb(240,250,255)", "width": "70%", "border": "solid",
                "border-color": "silver", "border-radius": "5px", "padding": "10px 50px 10px 50px",
                "display": "block", "margin-left": "auto", "margin-right": "auto", "margin-top": "50px"}
