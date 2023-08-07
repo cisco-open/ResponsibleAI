@@ -15,7 +15,7 @@ class AvailableMetrics:
                 'metrics': {
                     metric: {'display_name': values['display_name'], 'type': values['type']}
                     for metric, values in data['metrics'].items()
-                    }
+                }
             }
 
     @classmethod
