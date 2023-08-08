@@ -36,7 +36,11 @@ def add_trace_to_fig(fig, group, metric):
     dataset = dbUtils.get_current_dataset()
     metric_values = dbUtils.get_metric_values()
     metric_type = dbUtils.get_metric_info()
-    type = metric_type[group][metric]["type"]
+    if group not in metric_type:
+        return
+    if metric not in metric_type[group]:
+        return
+    type = metric_type[group][metric].get("type", "numeric")
     display_obj = get_display(metric, type, dbUtils)
     if display_obj is not None:
         for i, data in enumerate(metric_values):
@@ -55,13 +59,17 @@ def update_metric_selections(group: str, selected: list, options: list):
 
 
 def get_grouped_checklist():
+    def entire_group_selected(group):
+        return len(options.get(group, [])) == len([i for i in mvf.get_valid_metrics(group, requirements)])
     groups = mvf.get_nonempty_groups(requirements)
     metric_info = dbUtils.get_metric_info()
+    options = dbUtils.config_db.get('options', {})
     return html.Div([
         html.Details([
             html.Summary([dcc.Checklist(
                 id={"type": prefix + "group-checkbox", "group": group},
                 options=[{"label": metric_info[group]['meta']['display_name'], "value": group}],
+                value=[group if entire_group_selected(group) else None],
                 labelStyle={"display": "inline-block"},
                 style={"display": "inline-block"},
                 inputStyle={"margin-right": "5px"}
@@ -71,10 +79,13 @@ def get_grouped_checklist():
                 options=[
                     {"label": metric_info[group][i]['display_name'], "value": i}
                     for i in mvf.get_valid_metrics(group, requirements)],
+                value=options.get(group, []),
                 labelStyle={"display": "block"},
                 inputStyle={"margin-right": "5px"},
                 style={"padding-left": "40px"}
-            )]) for group in groups], style={"margin-left": "35%", "height": "100%", "overflow-y": "scroll"})
+            )],
+            open=True if options.get(group) else False,
+        ) for group in groups], style={"margin-left": "35%", "height": "100%", "overflow-y": "scroll"})
 
 
 def get_search_and_selection_interface():
@@ -114,6 +125,22 @@ def get_metric_page_graph():
     return mvf.get_display(prefix, get_search_and_selection_interface())
 
 
+def update_metrics_config(func):
+    def wrapper(*args, **kwargs):
+        options, p_val, c_val, metric_search = func(*args, **kwargs)
+        data = {}
+        for option in options:
+            group, metric = option.split(',')
+            if group in data:
+                data[group].append(metric)
+            else:
+                data[group] = [metric]
+        dbUtils._metrics_config = data
+        dbUtils.config_db['options'] = dbUtils._metrics_config
+        return options, p_val, c_val, metric_search
+    return wrapper
+
+
 # Unfortunately, we can't just use MATCH, as that also requires matching on output
 @app.callback(
     Output(prefix + 'legend_data', 'data'),
@@ -131,12 +158,18 @@ def get_metric_page_graph():
     State(prefix + 'legend_data', 'data'),
     prevent_initial_call=True
 )
+@update_metrics_config
 def update_metric_choices(p_selected, c_selected, reset_button, metric_search, p_options, c_options, p_val, c_val, options):
     c_val = [el if el is not None else [] for el in c_val]
     p_val = [el if el is not None else [] for el in p_val]
     ctx = dash.callback_context.triggered
     metric_info = dbUtils.get_metric_info()
+    options_value = dbUtils.config_db.get('options', {})
     options = [] if options is None else options
+    for k, v in options_value.items():
+        for item in v:
+            options.append(f'{k},{item}')
+    options = list(set(options))
     if any(prefix + 'reset_graph.n_clicks' in i["prop_id"] for i in ctx):
         to_p_val = [[] for _ in range(len(p_val))]
         to_c_val = [[] for _ in range(len(p_val))]
@@ -180,6 +213,13 @@ def update_metric_choices(p_selected, c_selected, reset_button, metric_search, p
     State(prefix + 'graph_cnt', 'children')
 )
 def update_graph(n, options, old_container):
+    def options_from_db():
+        opt = []
+        db_options = dbUtils._metrics_config
+        for k, v in db_options.items():
+            for item in v:
+                opt.append(f'{k},{item}')
+        return opt
     ctx = dash.callback_context
     is_new_data, is_time_update, _ = mvf.get_graph_update_purpose(ctx, prefix)
     if is_time_update:
@@ -188,10 +228,10 @@ def update_graph(n, options, old_container):
             dbUtils._subscribers["metric_graph"] = False
             is_new_data = True
 
-    if is_new_data:
+    if is_new_data or options_from_db():
         fig = go.Figure()
         if options is None:
-            options = []
+            options = options_from_db()
         if len(options) == 0:
             return []
         for item in options:

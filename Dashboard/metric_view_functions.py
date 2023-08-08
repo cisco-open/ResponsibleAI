@@ -36,6 +36,8 @@ def get_nonempty_groups(requirements):
             if "type" in metric_info[group][metric] and is_compatible(metric_info[group][metric]["type"], requirements):
                 valid_groups.append(group)
                 break
+        if group == "Custom":
+            valid_groups.append('Custom')
     return valid_groups
 
 
@@ -44,6 +46,8 @@ def get_valid_metrics(group, requirements):
     valid_metrics = []
     for metric in metric_info[group]:
         if "type" in metric_info[group][metric] and is_compatible(metric_info[group][metric]["type"], requirements):
+            valid_metrics.append(metric)
+        elif group == 'Custom' and metric != 'meta':
             valid_metrics.append(metric)
     return valid_metrics
 

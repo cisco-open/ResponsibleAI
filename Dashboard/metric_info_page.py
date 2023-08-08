@@ -25,14 +25,15 @@ logger = logging.getLogger(__name__)
 
 def get_header_table(group_name, group):
     rows = []
-    rows.append(html.Tr(
-        [
-            html.Td(process_cell(group["meta"]["tags"])),
-            html.Td(process_cell(group["meta"]["complexity_class"])),
-            html.Td(process_cell(group["meta"]["compatiblity"])),
-            html.Td(process_cell(group["meta"]["dependency_list"]))
-        ]
-    ))
+    if group_name != 'Custom':
+        rows.append(html.Tr(
+            [
+                html.Td(process_cell(group["meta"]["tags"])),
+                html.Td(process_cell(group["meta"]["complexity_class"])),
+                html.Td(process_cell(group["meta"]["compatiblity"])),
+                html.Td(process_cell(group["meta"]["dependency_list"]))
+            ]
+        ))
 
     return dbc.Table(
         children=[

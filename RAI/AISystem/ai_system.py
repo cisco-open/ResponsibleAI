@@ -14,6 +14,9 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
+from copy import deepcopy
+
+
 from RAI.AISystem.model import Model
 from RAI.certificates import CertificateManager
 from RAI.dataset.dataset import Data, NumpyData, IteratorData, Dataset, MetaDatabase
@@ -58,15 +61,25 @@ class AISystem:
         self.data_summarizer = None
         self.user_config = None
         self.data_dict = {}
+        self.custom_metrics = {}
+        self.custom_functions = []
 
-    def initialize(self, user_config: dict = {}, custom_certificate_location: str = None, **kw_args):
+    def initialize(self, user_config: dict = {},
+                   custom_certificate_location: str = None,
+                   custom_metrics: dict = {},
+                   custom_functions: list = None,
+                   **kw_args):
         """
         :param user_config: Takes user config as a dict
         :param custom_certificate_location: certificate path by default it is None
+        :param custom_metrics: dict of custom metrics you want to display on the dashboard
+        :param custom_functions: list of custom functions that take the dictionary of data as input and return a value
 
         :return: None
         """
         self.user_config = user_config
+        self.custom_metrics = custom_metrics
+        self.custom_functions = custom_functions
         masks = {"scalar": self.meta_database.scalar_mask, "categorical": self.meta_database.categorical_mask,
                  "image": self.meta_database.image_mask, "text": self.meta_database.text_mask}
         self.dataset.separate_data(masks)
@@ -87,6 +100,49 @@ class AISystem:
 
         """
         return self._last_metric_values
+
+    def add_custom_metrics(self, metrics: dict):
+        """
+        Return last metrics values plus the custom metrics computation
+        :param self
+        :param metrics: last metrics
+
+        :return: metrics values(dict)
+        """
+        class ActiveMetrics(object):
+            def __init__(self, group):
+                self.group = group
+
+            def __getattr__(self, item):
+                raise AttributeError(f'{self.group} group has no attribute {item}')
+
+        for metric_group in self._last_metric_values:
+            metrics[metric_group]['Custom'] = {}
+            for metric, metrics_values in metrics[metric_group].items():
+                exec(f'{metric} = ActiveMetrics("{metric}")')
+                for individual_metric, individual_metric_value in metrics_values.items():
+                    try:
+                        exec(f'setattr({metric}, "{individual_metric}", {individual_metric_value})')
+                    except Exception:
+                        pass
+            for custom_metric, custom_metric_expression in self.custom_metrics.items():
+                try:
+                    metrics[metric_group]['Custom'][custom_metric] = eval(custom_metric_expression)
+                except Exception as e:
+                    print(f'\nUnable to calculate custom metric {custom_metric}.\n'
+                          f'Make sure to use the correct metric with the correct group association.\n')
+                    raise e
+            if self.custom_functions:
+                data = deepcopy(metrics[metric_group])
+                for func in self.custom_functions:
+                    try:
+                        metrics[metric_group]['Custom'][func.__name__] = func(data)
+                    except Exception as e:
+                        print(f'\nUnable to calculate custom metric from {func.__name__}.\n'
+                              f'Make sure to implement a function that takes a dict parameter as input.\n')
+                        raise e
+        self._last_metric_values = metrics
+        return metrics
 
     def display_metric_values(self, display_detailed=False):
         """

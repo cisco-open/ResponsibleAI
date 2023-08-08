@@ -31,7 +31,7 @@ def get_mdl_image(nM, nD):
     dataset = dbUtils.get_current_dataset()
     vs = dbUtils.get_metric_values()
     rf = pickle.loads(vs[nM][dataset]['tree_model_metadata']['estimator_params'][nD].encode('ISO-8859-1'))
-    if rf.max_depth > 5:
+    if rf.max_depth and rf.max_depth > 5:
         return html.Div([
             html.Br(),
             html.H5("The graphical view is disabled due to size limitation")],)
