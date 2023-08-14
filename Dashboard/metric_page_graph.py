@@ -29,7 +29,7 @@ logger = logging.getLogger(__name__)
 
 requirements = ["Traceable"]
 prefix = "grouped_"
-selector_height = "350px"
+selector_height = "320px"
 
 
 def add_trace_to_fig(fig, group, metric):
@@ -82,7 +82,8 @@ def get_grouped_checklist():
                 value=options.get(group, []),
                 labelStyle={"display": "block"},
                 inputStyle={"margin-right": "5px"},
-                style={"padding-left": "40px"}
+                style={"padding-left": "40px"},
+                inputClassName="grouped-checklist-input"
             )],
             open=True if options.get(group) else False,
         ) for group in groups], style={"margin-left": "35%", "height": "100%", "overflow-y": "scroll"})
@@ -97,12 +98,12 @@ def get_search_and_selection_interface():
                         dbc.Col([
                             get_grouped_checklist(),
                         ], style={"position": "relative", "height": selector_height}),
-                        dbc.Col([
-                            dbc.Button("Reset Graph", id=prefix + "reset_graph", color="secondary",
-                                       style={"position": "absolute", "bottom": "0"}),
-                        ], style={"position": "relative"}),
+                        dbc.Col(html.Br()),
                     ], style={"width": "100%", "margin-top": "20px"}),
-                ], selected_style=mvf.get_selection_tab_selected_style(), style=mvf.get_selection_tab_style()),
+                ],
+                    selected_style=mvf.get_selection_tab_selected_style(),
+                    style=mvf.get_selection_tab_style(),
+                    className='metric_selector'),
                 dcc.Tab(label='Metric Search', children=[
                     dbc.Row([
                         dbc.Col([
@@ -121,8 +122,25 @@ def get_search_and_selection_interface():
     )
 
 
+def get_full_interface():
+    return html.Div(
+        [
+            get_search_and_selection_interface(),
+            html.Div(
+                [
+                    dbc.Button(
+                        "Reset Graph", id=prefix + "reset_graph", color="secondary",
+                        style={"position": "relative", "left": "42%"}),
+                ],
+                className='grouped_reset_graph_div',
+                style={'padding-bottom': '3px'}
+            ),
+        ]
+    )
+
+
 def get_metric_page_graph():
-    return mvf.get_display(prefix, get_search_and_selection_interface())
+    return mvf.get_display(prefix, get_full_interface())
 
 
 def update_metrics_config(func):
@@ -186,7 +204,7 @@ def update_metric_choices(p_selected, c_selected, reset_button, metric_search, p
             if metric_name not in options:
                 options.append(metric_name)
                 if len(c_val[parent_index]) == len(c_options[parent_index]) - 1:
-                    p_val[parent_index] = group
+                    p_val[parent_index] = [group]
                 c_val[parent_index].append(metric)
             return options, p_val, c_val, metric_search
     group = dash.callback_context.triggered_id["group"]

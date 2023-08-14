@@ -158,6 +158,14 @@ class RaiDB:
 
     def export_metadata(self) -> None:
         metric_info = self.ai_system.get_metric_info()
+        certificate_info = self.ai_system.get_certificate_info()
+
+        if certificate_info:
+            metric_info['Certificates'] = {'meta': {'display_name': 'Certificates'}}
+            for certificate in certificate_info:
+                display_name = certificate_info[certificate]['display_name'].title()
+                metric_info['Certificates'][display_name] = {'display_name': display_name}
+
         if self.ai_system.custom_metrics or self.ai_system.custom_functions:
             metric_info['Custom'] = {'meta': {'display_name': 'Custom'}}
             for metric in self.ai_system.custom_metrics:
@@ -165,7 +173,7 @@ class RaiDB:
             if self.ai_system.custom_functions:
                 for func in self.ai_system.custom_functions:
                     metric_info['Custom'][func.__name__] = {'display_name': func.__name__}
-        certificate_info = self.ai_system.get_certificate_info()
+
         project_info = self.ai_system.get_project_info()
 
         projects = self.projects_db.get(PROJECTS, [])
@@ -207,7 +215,6 @@ class RaiDB:
     def add_measurement(self) -> None:
         certificates = self.ai_system.get_certificate_values()
         metrics = self.ai_system.get_metric_values()
-        metrics = self.ai_system.add_custom_metrics(metrics)
         print("Sharing: ", self.ai_system.name)
         self.db['certificate_values'] = json.dumps(certificates)
         # Leaving this for now.
