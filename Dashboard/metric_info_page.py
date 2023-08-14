@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 def get_header_table(group_name, group):
     rows = []
-    if group_name != 'Custom':
+    if group_name not in ['Custom', 'Certificates']:
         rows.append(html.Tr(
             [
                 html.Td(process_cell(group["meta"]["tags"])),

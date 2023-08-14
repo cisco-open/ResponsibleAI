@@ -30,7 +30,11 @@ class AvailableMetrics:
         return metrics
 
     @classmethod
-    def info(cls):
+    def get(cls):
+        return cls._get_available_metrics()
+
+    @classmethod
+    def display(cls):
         metrics = cls._get_available_metrics()
         print('\nAvailable Metrics:\n'
               '----------------------\n\n'

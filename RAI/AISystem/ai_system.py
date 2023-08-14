@@ -67,13 +67,13 @@ class AISystem:
     def initialize(self, user_config: dict = {},
                    custom_certificate_location: str = None,
                    custom_metrics: dict = {},
-                   custom_functions: list = None,
-                   **kw_args):
+                   custom_functions: list = None
+                   ):
         """
         :param user_config: Takes user config as a dict
         :param custom_certificate_location: certificate path by default it is None
         :param custom_metrics: dict of custom metrics you want to display on the dashboard
-        :param custom_functions: list of custom functions that take the dictionary of data as input and return a value
+        :param custom_functions: list of custom functions that take the existing metrics as input and return a value
 
         :return: None
         """
@@ -89,7 +89,6 @@ class AISystem:
         self.certificate_manager.load_stock_certificates()
         if custom_certificate_location is not None:
             self.certificate_manager.load_custom_certificates(custom_certificate_location)
-        # self.data_summarizer = DataSummarizer(self.dataset, self.model.output_features[0].possibleValues, self.task)
 
     def get_metric_values(self) -> dict:
         """
@@ -101,13 +100,26 @@ class AISystem:
         """
         return self._last_metric_values
 
-    def add_custom_metrics(self, metrics: dict):
+    def add_certificates(self):
         """
-        Return last metrics values plus the custom metrics computation
-        :param self
-        :param metrics: last metrics
+        Add certificates values to the existing metrics
+        :return: None
+        """
+        certificates = self.get_certificate_values()
+        if not certificates:
+            return
+        certificate_info = self.get_certificate_info()
+        for metric_group in self._last_metric_values:
+            self._last_metric_values[metric_group]['Certificates'] = {}
+            for certificate in certificates:
+                name = certificate_info.get(certificate, {}).get('display_name', '-').title()
+                self._last_metric_values[metric_group]['Certificates'][name] = certificates[certificate]['value']
 
-        :return: metrics values(dict)
+    def add_custom_metrics(self):
+        """
+        Add custom metrics to existing metrics
+
+        :return: None
         """
         class ActiveMetrics(object):
             def __init__(self, group):
@@ -116,9 +128,12 @@ class AISystem:
             def __getattr__(self, item):
                 raise AttributeError(f'{self.group} group has no attribute {item}')
 
+        if not any([self.custom_metrics, self.custom_functions]):
+            return
+
         for metric_group in self._last_metric_values:
-            metrics[metric_group]['Custom'] = {}
-            for metric, metrics_values in metrics[metric_group].items():
+            self._last_metric_values[metric_group]['Custom'] = {}
+            for metric, metrics_values in self._last_metric_values[metric_group].items():
                 exec(f'{metric} = ActiveMetrics("{metric}")')
                 for individual_metric, individual_metric_value in metrics_values.items():
                     try:
@@ -127,26 +142,24 @@ class AISystem:
                         pass
             for custom_metric, custom_metric_expression in self.custom_metrics.items():
                 try:
-                    metrics[metric_group]['Custom'][custom_metric] = eval(custom_metric_expression)
+                    self._last_metric_values[metric_group]['Custom'][custom_metric] = eval(custom_metric_expression)
                 except Exception as e:
                     print(f'\nUnable to calculate custom metric {custom_metric}.\n'
                           f'Make sure to use the correct metric with the correct group association.\n')
                     raise e
             if self.custom_functions:
-                data = deepcopy(metrics[metric_group])
+                data = deepcopy(self._last_metric_values[metric_group])
                 for func in self.custom_functions:
                     try:
-                        metrics[metric_group]['Custom'][func.__name__] = func(data)
+                        self._last_metric_values[metric_group]['Custom'][func.__name__] = func(data)
                     except Exception as e:
                         print(f'\nUnable to calculate custom metric from {func.__name__}.\n'
                               f'Make sure to implement a function that takes a dict parameter as input.\n')
                         raise e
-        self._last_metric_values = metrics
-        return metrics
 
-    def display_metric_values(self, display_detailed=False):
+    def display_metric_values(self, display_detailed: bool = False):
         """
-        :param display_detailed(boolean): if True we need to display metric explanation if False we don't have to display
+        :param display_detailed: if True we need to display metric explanation if False we don't have to display
 
         :return: None
 
@@ -275,6 +288,9 @@ class AISystem:
         for key in predictions.keys():
             if key in self.dataset.data_dict.keys():
                 self._single_compute(predictions[key], key, tag=tag)
+
+        self.add_certificates()
+        self.add_custom_metrics()
 
     # Run Compute automatically generates outputs from the model, and compute metrics based on those outputs
     def run_compute(self, tag=None) -> None:

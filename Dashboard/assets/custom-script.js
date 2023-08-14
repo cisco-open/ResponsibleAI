@@ -14,5 +14,44 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
- 
-// alert('If you see this alert, then your custom JavaScript script has run!')
+function inputsChecked(inputs){
+    for (var i = 0; i < inputs.length; i++) {
+       if (inputs[i].checked == true){
+            return true
+       }
+    }
+    return false
+}
+
+function setButtonState(inputs, button){
+    var isChecked = inputsChecked(inputs);
+    if (button) {
+        if (isChecked){
+            button.style.visibility = 'visible';
+        }
+        else {
+            button.style.visibility = 'hidden';
+        }
+    }
+}
+
+
+function groupedMetricsGraph() {
+    var inputs = document.getElementsByClassName("grouped-checklist-input");
+    var button = document.getElementsByClassName("grouped_reset_graph_div")[0];
+    setButtonState(inputs, button)
+
+}
+
+function singleMetricGraph() {
+    var inputs = document.getElementsByClassName("single-radio-input");
+    var button = document.getElementsByClassName("single_reset_graph_div")[0];
+    setButtonState(inputs, button)
+}
+
+setInterval(function() {
+    groupedMetricsGraph()
+    singleMetricGraph()
+
+
+}, 300);
