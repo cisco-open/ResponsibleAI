@@ -28,14 +28,14 @@ logger = logging.getLogger(__name__)
 
 requirements = []
 prefix = "indiv_"
-selector_height = "350px"
+selector_height = "380px"
 
 
 def populate_display_obj(group, metric):
     dataset = dbUtils.get_current_dataset()
     metric_values = dbUtils.get_metric_values()
     metric_type = dbUtils.get_metric_info()
-    type = metric_type[group][metric]["type"]
+    type = metric_type[group][metric].get("type", "numeric")
     display_obj = get_display(metric, type, dbUtils)
     for i, data in enumerate(metric_values):
         data = data[dataset]
@@ -64,7 +64,9 @@ def get_grouped_radio_buttons():
                 options=radio_items(group, requirements),
                 labelStyle={"display": "block"},
                 inputStyle={"margin-right": "5px"},
-                style={"padding-left": "40px"}
+                style={"padding-left": "40px"},
+                inputClassName="single-radio-input",
+                value=False
             )]) for group in groups], style={"margin-left": "35%", "height": "100%", "overflow-y": "scroll"})
 
 
@@ -80,7 +82,7 @@ def get_search_and_selection_interface():
                     dbc.Row([
                         dbc.Col([get_grouped_radio_buttons()], style={"position": "relative",
                                                                       "height": selector_height}),
-                        dbc.Col([mvf.get_reset_button(prefix)], style={"position": "relative"}),
+                        dbc.Col(html.Br()),
                     ], style={"width": "100%", "margin-top": "20px"}),
                 ], selected_style=mvf.get_selection_tab_selected_style(), style=mvf.get_selection_tab_style()),
                 dcc.Tab(label='Metric Search', children=[
@@ -105,16 +107,33 @@ def get_search_and_selection_interface():
     )
 
 
+def get_full_interface():
+    return html.Div(
+        [
+            get_search_and_selection_interface(),
+            html.Div(
+                [
+                    dbc.Button(
+                        "Reset Graph", id=prefix + "reset_graph", color="secondary",
+                        style={"position": "relative", "left": "42%"}),
+                ],
+                className='single_reset_graph_div',
+                style={'padding-bottom': '3px'}
+            ),
+        ]
+    )
+
+
 def get_single_metric_display():
-    return mvf.get_display(prefix, get_search_and_selection_interface())
+    return mvf.get_display(prefix, get_full_interface())
 
 
 def get_metric_info_display(group, metric, metric_info):
     return [html.Div([
         html.H3(metric_info[group][metric]['display_name'], style={"text-align": "center"}),
         html.Br(),
-        html.P(metric_info[group][metric]['explanation'], style={'whiteSpace': 'pre-wrap', "text-align": "center"}),
-        html.P("Citation: \n" + metric_info[group][metric]['citation'], style={'whiteSpace': 'pre-wrap'})],
+        html.P(metric_info[group][metric].get('explanation', ''), style={'whiteSpace': 'pre-wrap', "text-align": "center"}),
+        html.P("Citation: \n" + metric_info[group][metric].get('citation', ''), style={'whiteSpace': 'pre-wrap'})],
         style={"background-color": "rgb(240,250,255)", "width": "70%", "border": "solid",
                "border-color": "silver", "border-radius": "5px", "padding": "10px 50px 10px 50px",
                "display": "block", "margin-left": "auto", "margin-right": "auto", "margin-top": "50px"}
@@ -152,7 +171,7 @@ def update_metric_choice(c_selected, reset_button, metric_search, c_options, c_v
             parent_index = ids.index(group)
             if metric_name != options:
                 options = metric_name
-                c_val = [[] for _ in range(len(c_val))]
+                c_val = [False for _ in range(len(c_val))]
                 c_val[parent_index] = metric
             return options, c_val, metric_search
     group = dash.callback_context.triggered_id["group"]

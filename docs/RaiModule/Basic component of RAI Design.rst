@@ -19,7 +19,8 @@
  - After making an AISystem, users can use the compute function to generate all relevant metrics related to their model and dataset.
  - The Model, Task Type and MetaDatabase are RAI classes which provide critical information to the AISystem, allowing it to determine which metrics and analyses are relevant. 
  - After computing metrics, users can get retrieve metric values using the get_metric_values function.
- - When provided a network's functions to generate predictions or values, AISystems can use models and run evaluations without requiring user involvement.  
+ - When provided a network's functions to generate predictions or values, AISystems can use models and run evaluations without requiring user involvement.
+ - You can provide custom expressions or functions as metrics that will be evaluated for every measurement.
 
 
 **Example**:
@@ -122,7 +123,7 @@
  - Analyses are easy to create allowing users to quickly and easily make their own custom Analyses for their specific needs using any attribute of the AISystem.  
 
 - **Interaction** 
- - Analyses are managed by the AnalysisManger and are given access to the AISystem and Dataset through the RAIRedis class. 
+ - Analyses are managed by the AnalysisManger and are given access to the AISystem and Dataset through the RaiDB class.
  - Similar to MetricManagers, AnalysisManagers check compatibility between Analyses and AISystems and handle the computation of Analyses.
  - Running specific analyses is done through the run_analysis function. 
 

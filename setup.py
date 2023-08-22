@@ -19,8 +19,8 @@
 
 from setuptools import find_packages, setup
 
-setup(name='rai',
-      version='0.0.1',
+setup(name='py-rai',
+      version='1.0.0',
       author='Ali Payani',
       author_email='apayani@cisco.com',
       include_package_data=True,
@@ -30,7 +30,7 @@ setup(name='rai',
       url='',
       license='',
       description="Responsible AI framework.",
-      long_description=open('README.md').read(),
+      long_description=open('README.rst').read(),
       install_requires=[
           'aif360~=0.4.0',
           'fairlearn~=0.7.0',
@@ -45,5 +45,4 @@ setup(name='rai',
           'torch~=1.11.0',
           'torchvision~=0.12.0',
           'torchmetrics~=0.9.3'
-      ]
-)
+      ])

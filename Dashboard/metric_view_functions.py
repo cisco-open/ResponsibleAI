@@ -36,6 +36,8 @@ def get_nonempty_groups(requirements):
             if "type" in metric_info[group][metric] and is_compatible(metric_info[group][metric]["type"], requirements):
                 valid_groups.append(group)
                 break
+        if group in ["Custom", "Certificates"]:
+            valid_groups.append(group)
     return valid_groups
 
 
@@ -44,6 +46,8 @@ def get_valid_metrics(group, requirements):
     valid_metrics = []
     for metric in metric_info[group]:
         if "type" in metric_info[group][metric] and is_compatible(metric_info[group][metric]["type"], requirements):
+            valid_metrics.append(metric)
+        elif group in ['Custom', 'Certificates'] and metric != 'meta':
             valid_metrics.append(metric)
     return valid_metrics
 
@@ -111,7 +115,7 @@ def get_selection_form_style():
 
 
 def get_selection_div_style():
-    return {"margin": "2px", "margin-bottom": "20px"}
+    return {"margin": "2px"}
 
 
 def get_selection_tab_style():

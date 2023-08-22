@@ -47,7 +47,9 @@ class DBUtils(object):
         self._last_current_project_name = None
         self._load_analysis_storage = {}
         self._projects = []
+        self._metrics_config = {}
         self.db = None
+        self.config_db = None
         self.projects_db = self._get_db()
         self._init_monitoring()
         self._update_projects()
@@ -74,8 +76,6 @@ class DBUtils(object):
         if name is None:
             name = 'rai_internal'
         db = f'{folder}/{name}.sqlite'
-        if self.db:
-            self.db.close()
         return SqliteDict(db, encode=json.dumps, decode=json.loads, autocommit=True)
 
     def _init_monitoring(self):
@@ -221,6 +221,12 @@ class DBUtils(object):
         if self._current_project_name == project_name:
             return
         self._current_project_name = project_name
+        if self.config_db:
+            self.config_db.close()
+        self.config_db = self._get_db(f'{project_name}_config')
+        self._metrics_config = self.config_db.get('options', {})
+        if self.db:
+            self.db.close()
         self.db = self._get_db(project_name)
         self._current_project = {}
         self._update_info()
@@ -255,6 +261,9 @@ class DBUtils(object):
 
     def get_projects_list(self):
         return self._projects
+
+    def get_sorted_projects_list(self):
+        return sorted(self._projects) if self._projects else []
 
     def get_dataset_list(self):
         return self._current_project.get("dataset_values", [])

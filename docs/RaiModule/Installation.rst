@@ -32,11 +32,6 @@ Some packages uses Visual C++ 14.0 BuildTools. You can also install the build to
    
       https://github.com/cisco-open/ResponsibleAI.git
 
-   .. group-tab:: Redis
-
-     Downloaded using the .msi file at https://github.com/microsoftarchive/redis/releases/tag/win-3.2.100
-
-
  
 .. note::
 
@@ -71,7 +66,7 @@ All packages are successfully installed.
 
 .. code-block:: bash
 
-  pip install ``--editable``
+  pip install py-rai
 
 
 **Description**: when you are developing it on your system any changes to the original package would reflect directly in your environment.
