@@ -20,7 +20,7 @@ import dash
 import dash_bootstrap_components as dbc
 from dash import Input, Output, State
 from dash import html
-from server import app, dbUtils
+from .server import app, dbUtils
 
 logger = logging.getLogger(__name__)
 unique_id = [1]

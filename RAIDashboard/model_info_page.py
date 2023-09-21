@@ -16,14 +16,32 @@
 
 
 import logging
-import dash
 import dash_bootstrap_components as dbc
-import config  # noqa: F401
-from db_utils import DBUtils
-
+from dash import html
+from .server import dbUtils
+from .utils import process_cell
 logger = logging.getLogger(__name__)
-external_stylesheets = [dbc.themes.BOOTSTRAP, dbc.icons.FONT_AWESOME]
 
-dbUtils = DBUtils()
 
-app = dash.Dash(external_stylesheets=external_stylesheets, suppress_callback_exceptions=True)
+def generate_table():
+    rows = []
+    for k, v in dbUtils.get_project_info().items():
+        rows.append(html.Tr(
+            [html.Th(k), html.Td(process_cell(v))]
+        ))
+    return dbc.Table(
+        children=[
+            html.Thead(html.Tr([html.Th("Property Name"), html.Th("Property Value")])),
+            html.Tbody(rows)
+        ],
+        bordered=False,
+        striped=True,
+        style={}
+    )
+
+
+def get_model_info_page():
+    return html.Div([
+        html.H4("Project Info"),
+        generate_table()
+    ])

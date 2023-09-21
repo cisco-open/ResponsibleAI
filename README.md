@@ -15,13 +15,22 @@ Note:
 Documentation is available online: [https://responsibleai.readthedocs.io/en/latest/](https://responsibleai.readthedocs.io/en/latest/)
 
 # To Install
-1) The project uses sqlite as storage and requires no additional installation for this.
+1) The project uses sqlite as storage and requires no additional
+   installation for this.
 
-2) Use <code> pip install py-rai </code>
+    ``pip install py-rai``
 
-3) If you need to use the dashboard as well you must <code> clone</code> the project locally and install the additional requirements
+2) If you need to use the dashboard as well you must install the additional requirements.
 
-4) Use <code>pip install -r requirements.txt</code>
+    ``pip install py-rai[dashboard]``
+
+3) To start using the library you must configure the folder where the results will be stored and be used by the dashboard.
+
+    ``export DATABASE_FOLDER=YOUR_LOCATION``
+
+4) To start the dashboard server use the following command:
+
+    ``python3 -m RAIDashboard``
 
 # Demos:
     We have added a few demo projects to showcase some of the capabilities of RAI.

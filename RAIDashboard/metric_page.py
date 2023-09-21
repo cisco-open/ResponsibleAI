@@ -17,10 +17,10 @@
 
 import logging
 from dash import Input, Output, html
-from server import app
+from .server import app
 from dash import dcc
-from metric_page_details import get_metric_page_details
-from metric_page_graph import get_metric_page_graph
+from .metric_page_details import get_metric_page_details
+from .metric_page_graph import get_metric_page_graph
 logger = logging.getLogger(__name__)
 
 

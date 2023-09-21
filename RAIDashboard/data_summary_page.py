@@ -17,7 +17,7 @@
 import logging
 from dash import dcc
 import dash
-from server import app, dbUtils
+from .server import app, dbUtils
 from dash import Input, Output, html, State
 from dash.exceptions import PreventUpdate
 
