@@ -25,12 +25,22 @@ setup(name='py-rai',
       author_email='apayani@cisco.com',
       include_package_data=True,
       packages=find_packages(),
-      data_files=[],
+      package_data={
+          '': ['*.json'],  # Include all JSON files in the package
+      },
       scripts=[],
       url='',
       license='',
       description="Responsible AI framework.",
       long_description=open('README.rst').read(),
+      extras_require={
+          'dashboard': [
+              'dash~=2.5.0',
+              'dash_bootstrap_components~=1.1.0',
+              'dash-daq~=0.5.0',
+              'flask==2.2.4'
+          ],
+      },
       install_requires=[
           'aif360~=0.4.0',
           'fairlearn~=0.7.0',
@@ -41,6 +51,7 @@ setup(name='py-rai',
           'pandas~=1.3.5',
           'apscheduler',
           'adversarial-robustness-toolbox',
+          'python-dotenv==1.0.0',
           'tensorflow~=2.9.1',
           'torch~=1.11.0',
           'torchvision~=0.12.0',

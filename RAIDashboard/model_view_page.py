@@ -18,7 +18,7 @@
 import logging
 import dash_bootstrap_components as dbc
 from dash import Input, Output, dcc, html
-from server import app, dbUtils
+from .server import app, dbUtils
 import sklearn
 import pickle
 import io

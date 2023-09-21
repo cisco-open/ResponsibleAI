@@ -20,7 +20,7 @@ import dash
 import dash_bootstrap_components as dbc
 import pandas as pd
 from dash import Input, Output, html, State
-from server import app, dbUtils
+from .server import app, dbUtils
 from dash import dcc
 import plotly.express as px
 import plotly.graph_objs as go

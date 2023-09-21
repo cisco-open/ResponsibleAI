@@ -89,7 +89,7 @@ def f1_max(data):
 
 
 # Uncomment this if you need to see all the metrics
-AvailableMetrics.display()
+# AvailableMetrics.display()
 
 # initialize RAI
 ai = AISystem("Custom_metrics", task='binary_classification', meta_database=meta, dataset=dataset, model=model)

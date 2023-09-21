@@ -19,10 +19,10 @@ import logging
 import dash
 import dash_bootstrap_components as dbc
 from dash import Input, Output, html, State
-from server import app, dbUtils
+from .server import app, dbUtils
 from dash import dcc, ALL
-from display_types import get_display
-import metric_view_functions as mvf
+from .display_types import get_display
+import RAIDashboard.metric_view_functions as mvf
 from dash.exceptions import PreventUpdate
 logger = logging.getLogger(__name__)
 

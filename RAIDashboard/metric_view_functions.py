@@ -17,10 +17,10 @@
 
 import logging
 from dash import html
-from server import dbUtils
+from .server import dbUtils
 from dash import dcc
 import dash_bootstrap_components as dbc
-from display_types.display_factory import is_compatible
+from .display_types.display_factory import is_compatible
 
 logger = logging.getLogger(__name__)
 

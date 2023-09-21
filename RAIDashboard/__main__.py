@@ -20,23 +20,25 @@ import numpy as np
 import dash
 import dash_bootstrap_components as dbc
 from dash import Input, Output, dcc, html, State
-from server import app, dbUtils
-from home_page import get_home_page
-from model_info_page import get_model_info_page
-from certificate_page import get_certificate_page
-from metric_page import get_metric_page
-from metric_info_page import get_metric_info_page
-from single_metric_info_page import get_single_model_info_page
-from certificate_info_page import get_certificate_info_page
-from metric_page_details import get_metric_page_details
-from metric_page_graph import get_metric_page_graph
-from single_metric_view_page import get_single_metric_display
-from setting_page import get_setting_page
-from model_view_page import get_model_view_page
-from data_summary_page import get_data_summary_page
-from model_interpretation_page import get_model_interpretation_page
-from analysis_page import get_analysis_page
-from utils import iconify
+
+
+from .server import app, dbUtils
+from .home_page import get_home_page
+from .model_info_page import get_model_info_page
+from .certificate_page import get_certificate_page
+from .metric_page import get_metric_page
+from .metric_info_page import get_metric_info_page
+from .single_metric_info_page import get_single_model_info_page
+from .certificate_info_page import get_certificate_info_page
+from .metric_page_details import get_metric_page_details
+from .metric_page_graph import get_metric_page_graph
+from .single_metric_view_page import get_single_metric_display
+from .setting_page import get_setting_page
+from .model_view_page import get_model_view_page
+from .data_summary_page import get_data_summary_page
+from .model_interpretation_page import get_model_interpretation_page
+from .analysis_page import get_analysis_page
+from .utils import iconify
 import urllib
 import sys
 from dash.exceptions import PreventUpdate

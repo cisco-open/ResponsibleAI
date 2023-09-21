@@ -28,10 +28,18 @@ To Install
 
     ``pip install py-rai``
 
-2) If you need to use the dashboard as well you must clone the project
-   locally and install the additional requirements
+2) If you need to use the dashboard as well you must  install the additional requirements
 
-    ``pip install -r requirements.txt``
+    ``pip install py-rai[dashboard]``
+
+3) To start using the library you must configure the folder where the results will be stored and be used by the dashboard
+
+    ``export DATABASE_FOLDER=YOUR_LOCATION``
+
+4) To start the dashboard server use the following command:
+
+    ``python3 -m RAIDashboard``
+
 
 Demos:
 ======

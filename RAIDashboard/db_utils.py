@@ -25,7 +25,7 @@ import dash_bootstrap_components as dbc
 from dash import html
 from sqlitedict import SqliteDict
 
-from timer import DashboardTimer
+from .timer import DashboardTimer
 
 logger = logging.getLogger(__name__)
 

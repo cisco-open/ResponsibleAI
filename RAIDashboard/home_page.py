@@ -17,9 +17,9 @@
 import logging
 import dash_bootstrap_components as dbc
 from dash import html
-from server import dbUtils
+from .server import dbUtils
 import dash_daq as daq
-from certificate_page import generate_cert_table
+from .certificate_page import generate_cert_table
 import numpy as np
 logger = logging.getLogger(__name__)
 

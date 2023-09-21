@@ -18,8 +18,8 @@
 import logging
 import dash_bootstrap_components as dbc
 from dash import html
-from server import dbUtils
-from utils import process_cell
+from .server import dbUtils
+from .utils import process_cell
 logger = logging.getLogger(__name__)
 
 
