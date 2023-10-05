@@ -20,7 +20,7 @@
 from setuptools import find_packages, setup
 
 setup(name='openrai',
-      version='0.0.1',
+      version='0.0.6',
       author='Ali Payani',
       author_email='apayani@cisco.com',
       include_package_data=True,

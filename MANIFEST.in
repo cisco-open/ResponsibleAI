@@ -1,1 +1,4 @@
 include RAI/certificates/standard/*.json
+include RAI/metrics/*/*.json
+include RAI/metrics/stats/moments/*.json
+include RAI/Analysis/*/*.json
