@@ -19,14 +19,16 @@
 
 from setuptools import find_packages, setup
 
-setup(name='py-rai',
-      version='1.0.0',
+setup(name='openrai',
+      version='0.0.1',
       author='Ali Payani',
       author_email='apayani@cisco.com',
       include_package_data=True,
       packages=find_packages(),
       package_data={
           '': ['*.json'],  # Include all JSON files in the package
+          'logos': ['*.png'],
+          'js': ['*.js'],
       },
       scripts=[],
       url='',

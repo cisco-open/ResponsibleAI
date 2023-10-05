@@ -1,8 +1,8 @@
 .. image:: https://raw.githubusercontent.com/cisco-open/ResponsibleAI/main/docs/images/rai_logo_blue3.png
 
-RAI is a python library that is designed to help AI developers in
+OpenRAI is a python library that is designed to help AI developers in
 various aspects of responsible AI development. It consists of a core API
-and a corresponding web-based dashboard application. RAI can easily be
+and a corresponding web-based dashboard application. OpenRAI can easily be
 integrated into AI development projects and measures various metrics for
 an AI project during each phase of AI development, from data quality
 assessment to model selection based on performance, fairness and
@@ -26,11 +26,11 @@ To Install
 1) The project uses sqlite as storage and requires no additional
    installation for this.
 
-    ``pip install py-rai``
+    ``pip install openrai``
 
 2) If you need to use the dashboard as well you must  install the additional requirements
 
-    ``pip install py-rai[dashboard]``
+    ``pip install openrai[dashboard]``
 
 3) To start using the library you must configure the folder where the results will be stored and be used by the dashboard
 
@@ -46,28 +46,28 @@ Demos:
 
 ::
 
-   We have added a few demo projects to showcase some of the capabilities of RAI.
+   We have added a few demo projects to showcase some of the capabilities of OpenRAI.
    to run any of the demos please use 'python demo_filename'. For instance : 
    python ./demos/adult_demo_grid_search.py
 
    below is a short description of the provided demos:
 
    File: adult_demo_grid_search.py 
-   Description: This demo uses the Adults dataset (https://archive.ics.uci.edu/ml/datasets/adult) to show how RAI can be used in model selection
+   Description: This demo uses the Adults dataset (https://archive.ics.uci.edu/ml/datasets/adult) to show how OpenRAI can be used in model selection
 
    File: image_class_analysis.py 
-   Description: this demo uses Cifar10 dataset and shows how RAI can be used to evaluate image classification tasks
+   Description: this demo uses Cifar10 dataset and shows how openRAI can be used to evaluate image classification tasks
 
    File: image_class_training.py 
-   Description: this demo uses Cifar10 dataset and shows how RAI can be used monitor image processing tasks during training
+   Description: this demo uses Cifar10 dataset and shows how openRAI can be used monitor image processing tasks during training
 
 
    File: tabular_class_console.py 
-   Description: this demo shows how RAI can be used without the dashboard to calculate and report on the metrics for a machine learning task
+   Description: this demo shows how openRAI can be used without the dashboard to calculate and report on the metrics for a machine learning task
 
    File: text.py 
    File: text_output.py 
-   Description: these demos show how RAI and its dashboard can be used for evaluating the natural language modeling tasks
+   Description: these demos show how openRAI and its dashboard can be used for evaluating the natural language modeling tasks
 
     
 
