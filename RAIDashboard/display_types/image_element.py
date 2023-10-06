@@ -15,7 +15,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 
-from display_object import DisplayElement
+from .display_object import DisplayElement
 
 
 # TODO: Implement once we have an image

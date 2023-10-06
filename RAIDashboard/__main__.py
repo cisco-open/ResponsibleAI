@@ -92,11 +92,10 @@ def get_sidebar():
         [
             dbc.Nav(
                 [
-                    html.Img(src="assets/img/rai_logo_blue3_v2.png", style={
-                        "margin-left": "40px", "width": "100px", "height": "60px"
+                    html.Img(src="assets/img/openrai_logo.png", style={
+                        "margin-left": "0px", "width": "230px", "height": "120px", "object-fit": "cover",
                     }),
                     html.Div([
-                        html.Hr(className="nav_div"),
                         html.P("Select the active project"),
                         html.Div(id="dummy_div", style={"display": "no"}),
                         dcc.Dropdown(

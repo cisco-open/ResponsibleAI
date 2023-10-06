@@ -1,4 +1,4 @@
-#Dependencies for RAI
+#Dependencies for OpenRAI
 adversarial-robustness-toolbox~=1.10.3
 aif360~=0.4.0
 apscheduler~=3.9.1

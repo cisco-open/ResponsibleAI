@@ -104,14 +104,14 @@ class DBUtils(object):
                         'seen': True,
                     }
                     res = self.db.get('analysis_update')
-                    if analysis in res:
-                        res[analysis]['update'] = True
-                    else:
-                        res[analysis] = {'update': True, 'progress': 100}
-                    self.db['analysis_update'] = res
+                    if not res.get(analysis):
+                        res[analysis] = {'progress': 0}
                     self.set_analysis_progress(self._current_project_name, analysis, html.Div(json.loads(val)))
                     self._subscribers["analysis_update|" + self._current_project_name + "|" + analysis] = True
-                    keep_alive = False
+                    if res[analysis]['progress'] == 100:
+                        keep_alive = False
+                    res[analysis] = {'update': True, 'progress': 100}
+                    self.db['analysis_update'] = res
             except Exception as e:
                 print(f'handler_analysis timer failed: {e}', traceback.print_exc())
             finally:
@@ -123,10 +123,10 @@ class DBUtils(object):
                 request = self.db.get('analysis_update')
                 if request and request.get(analysis):
                     progress = request[analysis]['progress']
-                    if progress != 100:
-                        self.set_analysis_progress(self._current_project_name, analysis, self._progress_to_html(progress))
+                    self.set_analysis_progress(self._current_project_name, analysis, self._progress_to_html(progress))
+                    if progress == 100:
+                        keep_alive = False
                     self._subscribers["analysis_update|" + self._current_project_name + "|" + analysis] = True
-                    keep_alive = False
             except Exception as e:
                 print(f'handler_progress timer failed: {e}')
             finally:
@@ -139,7 +139,7 @@ class DBUtils(object):
             'analysis': analysis,
             'seen': False
         }
-        DashboardTimer(1, handler_analysis)
+        DashboardTimer(1.2, handler_analysis)
         DashboardTimer(1, handler_progress)
 
     def request_available_analysis(self):
