@@ -37,10 +37,10 @@ setup(name='openrai',
       long_description=open('README.rst').read(),
       extras_require={
           'dashboard': [
-              'dash~=2.5.0',
+              'dash>=2.5,<2.17',
               'dash_bootstrap_components~=1.1.0',
               'dash-daq~=0.5.0',
-              'flask==2.2.4'
+              'flask==2.2.5'
           ],
       },
       install_requires=[
@@ -54,8 +54,8 @@ setup(name='openrai',
           'apscheduler',
           'adversarial-robustness-toolbox',
           'python-dotenv==1.0.0',
-          'tensorflow~=2.9.1',
-          'torch~=1.11.0',
+          'tensorflow>=2.9.1,<2.17.0',
+          'torch>=1.11,<2.3',
           'torchvision~=0.12.0',
           'torchmetrics~=0.9.3'
       ])
